@@ -1,0 +1,82 @@
+@import "../../../app/global.scss";
+
+.talentFeatures__section {
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: 16px;
+
+    .features__container {
+        display: grid;
+        place-items: center;
+
+        .features__cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            width: 90%;
+            margin: 2rem auto 0;
+            
+            @media screen and (min-width: $breakpoint-4) {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .card {
+                background-color: #fafafa;
+                border: 1px solid #dbe6fd;
+                padding: 1rem;
+                height: 200px;
+                border-radius: 16px;
+                display: grid;
+                place-items: center;
+                max-width: 300px;
+
+                @media screen and (max-width: $breakpoint-4) {
+                    width: 100%;
+                }
+
+                .features__card {
+                    display: grid;
+                    // place-items: fl;
+                    align-content: flex-start;
+                    justify-content: center;
+                    // text-align: center;
+
+                    .card__icon {
+                        width: 70px;
+                        height: 70px;
+                        margin-bottom: 1rem;
+                        color: $primary;
+                    }
+
+                    .title{
+                        display: flex;
+                        align-items: baseline;
+                        margin-bottom: 1rem;
+                        
+                        .number__title {
+                            font-size: $font-fiftySix;
+                            font-weight: 500;
+                            line-height: 1;
+                            color: $primary;
+                        }
+                        
+                        .text__title{
+                            color: $black;
+                            font-size: $font-sixteen;
+                            font-weight: 500;
+                        }
+                    }
+
+                    
+                    .card__description {
+                        font-size: $font-eighteen;
+                        font-weight: 400;
+                        margin-bottom: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}

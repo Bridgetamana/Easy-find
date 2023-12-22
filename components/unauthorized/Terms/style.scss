@@ -1,0 +1,70 @@
+@import "../../../app/global.scss";
+
+.terms__page {
+    width: 90%;
+    margin: 2rem auto;
+
+    .terms__container {
+        
+        @media screen and (min-width: $breakpoint-4) {
+            padding: 2rem;
+        }
+        
+        .terms__header {
+            margin-bottom: 2rem;
+            
+            .terms__title {
+                @include title;
+            }
+        }
+        
+        .terms__content {
+            margin-left: 1rem;
+            .terms__list {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+                .list__item {
+                    &::marker {
+                        font-size: $font-twenty;
+                        font-weight: $font-weight-600;
+                    }
+
+                    .list__head {
+                        font-size: $font-twenty;
+                        font-weight: $font-weight-600;
+                        color: $black;
+                    }
+
+                    p{
+                        font-size: $font-sixteen;
+                        margin-top: .5rem;
+                    }
+                }
+
+            }
+        }
+        .buttons__wrap{
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+
+            .accept__btn{
+                @include button;
+                width: 10rem;
+            }
+
+            .close__btn{
+                @include button;
+                width: 10rem;
+                background-color: $accent;
+                color: $black;
+
+                &:hover{
+                    background: darken($accent , 10%);
+                }
+            }
+        }
+    }
+}
