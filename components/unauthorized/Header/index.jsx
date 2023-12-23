@@ -5,7 +5,7 @@ import { BsChevronDown } from "react-icons/bs";
 import { RxDividerVertical } from "react-icons/rx";
 import Link from "next/link";
 import "./style.scss";
-import HireTalent from "../Dropdowns/HireTalent/";
+import HireTalent from "../Dropdowns/HireTalent";
 import FindJob from "../Dropdowns/FindJob";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import Button from "@/components/utils/Button";
@@ -76,19 +76,15 @@ export default function UnauthorizedHeader() {
               </Link>
             </li>
             <li className="nav__item">
-              {/* <Link href="/signup" className="nav__button">
-                Get Started
-              </Link> */}
+              <Link href="/signup" passHref>
+                <Button
+                  type="button"
+                  title="Get Started"
+                  variant="nav__button"
+                  icon={<HiOutlineArrowNarrowRight className="search__icon" />}
+                />
+              </Link>
             </li>
-            <Button
-              type="button"
-              title="Get Started"
-              variant="nav__button"
-              icon={<HiOutlineArrowNarrowRight className="search__icon" />}
-              onClick={() => {
-                console.log("Clicked");
-              }}
-            />
           </ul>
         </nav>
       </div>
