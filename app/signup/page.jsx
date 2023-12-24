@@ -8,8 +8,9 @@ require("dotenv").config();
 export default function Signup() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [activeTab, setActiveTab] = useState("talents");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [alert, setAlert] = useState(null);
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   // State for talent
   const [talentFormData, setTalentFormData] = useState({
@@ -35,105 +36,8 @@ export default function Signup() {
     }
   };
 
-  const handleTalentSub = async (talentFormData) => {
-    const fullName = talentFormData.firstName + " " + talentFormData.lastName;
-    if (passwordMatch) {
-      try {
-        const { fullName, email, password } = talentFormData;
-  
-        const payload = {
-          fullName,
-          email,
-          password,
-        };
-  
-        const response = await axios.post(
-          `${apiUrl}/auth/local/register`,
-          payload
-        );
-  
-        const userId = response.data.user.id; // Get the user ID from the signup response
-  
-        const talentData = {
-          data: {
-            ...payload,
-            userId,
-          },
-        };
-  
-        const data = await axios.post(
-          `${apiUrl}/talents`,
-          talentData
-        );
-  
-        console.log(data.data);
-        // Send email confirmation
-        await sendEmailConfirmation(email);
-        setSuccess("Signup successful, check email for confirmation.")
-        setTimeout(() => {
-          setSuccess("");
-        }, 3000);
-        // Redirect to the login page
-        window.location.href = "/login";
-        router.push("/login");
-      } catch (error) {
-        if (error.response && error.response.data) {
-          const { message } = error.response.data;
-          console.error(message);
-          setError(message);
-          setTimeout(() => {
-            setError("");
-          }, 4000);
-          // Display error message to the user (e.g., set it to state and show it in the UI)
-        } else {
-          console.error("An error occurred during registration.");
-        }
-      }
-    }
-  };
 
-  const handleTalentSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const responseData = await fetcher(
-        `${apiUrl}/auth/local/register`,
-        {
-          headers: {
-            'Content Type' : 'application/json',
-          },
-          body: JSON.stringify({
-            email: talentFormData.email,
-            password: talentFormData.password,
-            username: talentFormData.username
-          }),
-          method: 'POST',
-        }
-      );
-      // const data = await response.json();
-      setToken(responseData);
-      router.redirect('/talent/profile')
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  
-  const handleCompanySub = async (companyFormData) => {
-    if (passwordMatch) {
-      try {
-        const response = await axios.post(
-          "https://minujob.com/companies",
-          companyFormData
-        );
-        console.log(response.data); // Do something with the response
-      } catch (error) {
-        console.log(error); // Handle the error
-      }
-    }
-  };
-
-  const [passwordMatch, setPasswordMatch] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
-
+ 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };

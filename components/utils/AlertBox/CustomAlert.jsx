@@ -4,7 +4,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { MdError } from "react-icons/md";
 import './style.scss';
 
-const CustomAlert = ({ type, title, message, showCloseButton }) => {
+export const CustomAlert = ({ type, title, message, showCloseButton }) => {
   const getIcon = () => {
     switch (type) {
       case 'success':
@@ -30,4 +30,18 @@ const CustomAlert = ({ type, title, message, showCloseButton }) => {
   );
 };
 
-export default CustomAlert;
+
+export default function showAlert ({ type, title, message, showCloseButton = false }) {
+  return new Promise((resolve) => {
+    const handleClose = () => {
+      setAlert(null);
+      resolve(false); // Resolving with false when the close button is clicked
+    };
+
+    const alertComponent = (
+      <CustomAlert type={type} title={title} message={message} showCloseButton={showCloseButton} />
+    );
+
+    setAlert({ component: alertComponent, handleClose });
+  });
+};
