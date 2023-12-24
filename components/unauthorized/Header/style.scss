@@ -189,20 +189,12 @@
             margin: 0 auto;
 
             .header__logo {
-                height: 2rem;
+                // height: 2rem;
                 display: flex;
                 align-items: center;
 
                 .logo {
-                    width: 2rem;
-                }
-
-                .logo__name {
-                    color: $primary;
-                    font-family: $font-logo;
-                    font-size: $font-twentySix;
-                    font-weight: $font-weight-700;
-                    margin-left: 0.5rem;
+                    width: 6rem;
                 }
             }
 

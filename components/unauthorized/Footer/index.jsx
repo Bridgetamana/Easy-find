@@ -21,17 +21,7 @@ export default function Footer() {
             </li>
             <li className="footer__list_item">
               <Link href="/" className="footer__link">
-                Salary Estimator
-              </Link>
-            </li>
-            <li className="footer__list_item">
-              <Link href="/" className="footer__link">
                   Submit Resume
-              </Link>
-            </li>
-            <li className="footer__list_item">
-              <Link href="/" className="footer__link">
-              Job Alerts
               </Link>
             </li>
           </ul>
@@ -47,22 +37,12 @@ export default function Footer() {
             </li>
             <li className="footer__list_item">
               <Link href="/" className="footer__link">
-              Browse Categories
-              </Link>
-            </li>
-            <li className="footer__list_item">
-              <Link href="/" className="footer__link">
               Employer Dashboard
               </Link>
             </li>
             <li className="footer__list_item">
               <Link href="/" className="footer__link">
                 Post Job
-              </Link>
-            </li>
-            <li className="footer__list_item">
-              <Link href="/" className="footer__link">
-                Job Packages
               </Link>
             </li>
           </ul>

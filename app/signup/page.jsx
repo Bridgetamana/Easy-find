@@ -11,8 +11,9 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // State for talent
   const [talentFormData, setTalentFormData] = useState({
-    username: "",
+    fullName: "",
     email: "",
     password: "",
   });

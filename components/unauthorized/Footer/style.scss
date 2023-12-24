@@ -8,23 +8,22 @@
     width: 100%;
 
     .footer__top {
-        display: flex;
+        display: none;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        align-items: flex-start;
         padding: 1rem;
         gap: 2rem;
         max-width: 1140px;
+        padding: 2rem;
 
         @media screen and (min-width: $breakpoint-3) {
-           display: grid;
-            grid-template-columns: repeat(4, 23%);
-            padding: 2rem;
+            flex-direction: row;
+            justify-content: space-evenly;
         }
 
         @media screen and (min-width: $breakpoint-4) {
-            width: 90%;
+            width: 95%;
             margin: 0 auto;
         }
 
@@ -34,13 +33,13 @@
 
             .title {
                 font-family: $font-text;
-                font-size: $font-eighteen;
+                font-size: $font-sixteen;
                 font-weight: $font-weight-500;
-                margin-bottom: 1rem;
+                margin-bottom: .75rem;
                 text-align: left;
 
                 @media screen and (min-width: $breakpoint-4) {
-                    font-size: $font-twenty;
+                    text-align: center;
                 }
             }
 
@@ -50,13 +49,17 @@
                 justify-content: center;
                 align-items: flex-start;
 
+                @media screen and (min-width: $breakpoint-4) {
+                    align-items: center;
+                }
+
                 .footer__list_item {
                     cursor: pointer;
                     transition: all 0.3s ease-in-out;
                     margin-right: 0.5rem;
 
                     @media screen and (min-width: $breakpoint-4) {
-                        margin-right: 2rem;
+                        margin-right: 0rem;
                     }
 
                     &:hover {
@@ -72,7 +75,7 @@
                         text-align: left;
 
                         @media screen and (min-width: $breakpoint-4) {
-                            font-size: $font-sixteen;
+                            font-size: $font-fourteen;
                         }
                     }
                 }
@@ -86,13 +89,13 @@
         justify-content: space-between;
         align-items: center;
         border-top: 1px solid $border;
-        padding: 1rem;
+        padding: 2rem;
         max-width: 1140px;
         margin: 0 auto;
 
         @media screen and (min-width: $breakpoint-4) {
             flex-direction: row;
-            padding: 1rem 3rem;
+            // padding: 3rem;
         }
 
         .footer__right {
