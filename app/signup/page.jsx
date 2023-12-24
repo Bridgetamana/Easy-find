@@ -36,12 +36,13 @@ export default function Signup() {
   };
 
   const handleTalentSub = async (talentFormData) => {
+    const fullName = talentFormData.firstName + " " + talentFormData.lastName;
     if (passwordMatch) {
       try {
-        const { username, email, password } = talentFormData;
+        const { fullName, email, password } = talentFormData;
   
         const payload = {
-          username,
+          fullName,
           email,
           password,
         };
@@ -202,7 +203,7 @@ export default function Signup() {
     <section className="registeration__form">
       <div className="registeration__form_container">
         <div className="registeration__signin">
-          <h1 className="title">Welcome To MinuJobs!</h1>
+          <h1 className="title">Welcome To EasyFind!</h1>
           <p className="subtitle">
             Become our member and get access to over{" "}
             {activeTab === "talents" ? "a 100 companies" : "3,000 talents"} in
@@ -242,14 +243,24 @@ export default function Signup() {
             </div>
             {activeTab === "talents" && (
               <form className="form__wrap" onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Full Name"
-                  className="input__field"
-                  value={talentFormData.username}
-                  onChange={handleChange}
-                />
+                <div className="input__group">
+                  <input
+                    type="text"
+                    name="firstName"
+                    placeholder="First Name"
+                    className="input__field"
+                    value={talentFormData.firstName}
+                    onChange={handleChange}
+                  />
+                  <input
+                    type="text"
+                    name="lastName"
+                    placeholder="Last Name"
+                    className="input__field"
+                    value={talentFormData.lastName}
+                    onChange={handleChange}
+                  />
+                </div>
                 <input
                   type="email"
                   name="email"
