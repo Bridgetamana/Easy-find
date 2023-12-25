@@ -85,6 +85,21 @@ export const registerTalent = async (fullName, email, password) => {
   }
 };
 
+//Handle Login Talent
+export const loginTalent = async (email, password) => {
+  const auth = getAuth();
+  try {
+    const userCredential = await auth.signInWithEmailAndPassword(
+      email,
+      password
+    );
+    const user = userCredential.user;
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
 //Update Talent
 export const updateTalent = async (talent) => {
   const docRef = doc(db, TALENT, talent.id);

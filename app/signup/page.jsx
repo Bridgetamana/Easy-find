@@ -88,6 +88,56 @@ export default function Signup() {
     }
   };
 
+  //handle company submit
+  const handleCompanySub = async (companyFormData) => {
+    setIsLoading(true);
+
+    const companyName = companyFormData.companyName;
+    const companyEmail = companyFormData.companyEmail;
+    const password = companyFormData.password;
+
+    try {
+      const result = await registerCompany(
+        companyName,
+        companyEmail,
+        password
+      );
+      if (result) {
+        setCompanyFormData({
+          companyName: "",
+          companyEmail: "",
+          password: "",
+          confirmPassword: "",
+        });
+        await showAlert({
+            type: "success",
+            title: "Success!",
+            message: "Registeration completed successfully!",
+            showCloseButton: false,
+            handleClose: () => setAlert(null),
+            timeout: 3000,
+          },
+          setAlert
+        );
+        router.push("/signin");
+      }
+    } catch (error) {
+      const errorMessage = error.message || "An error occurred";
+      await showAlert({
+        type: "error",
+        title: "Error",
+        message: errorMessage,
+        showCloseButton: false,
+        timeout: 4000,
+        handleClose: () => setAlert(null),
+      },
+      setAlert
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };

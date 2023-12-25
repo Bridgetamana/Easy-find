@@ -1,61 +1,71 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import axios from "axios";
-require('dotenv').config();
 import "./style.scss";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
+import { loginTalent } from "@/firebaseConfig/talentStore";
 
-export default function LoginPage() {
+export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [token, setToken] = useState("");
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
-    // Debugging
-    console.log(`Attempting to login with email: ${email} and password: ${password}`);
-    
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
-      
-      const response = await axios.post(
-        `${apiUrl}/auth/local`,
-        {
-          identifier: email,
-          password: password,
-        }
+      await setPersistence(auth, browserSessionPersistence);
+      const userCredential = await loginTalent(
+        email,
+        password
       );
-      
-      const token = response.data.jwt;
-      setToken(token);
-      localStorage.setItem("token", token);
-      window.location.href = "/talent/profile-form";
-      console.log("Logged in successfully!");
-    } catch (error) {
-      setIsLoading(false);
-      
-      if (error.response && error.response.data) {
-        const errorMessage = error.response.data.message;
-        setError(errorMessage);
-        setTimeout(() => {
-          setError("");
-        }, 4000);
-        console.error("Login failed:", errorMessage);
-      } else {
-        setError("An error occurred during login");
-        setTimeout(() => {
-          setError("");
-        }, 4000);
-        console.error("Login failed:", error);
+      const user = userCredential.user;
+      const userUID = user.uid;
+
+      // Fetch the user's details from Firestore
+      const userRef = doc(db, "users", userUID);
+      const userDoc = await getDoc(userRef);
+
+      if (!userDoc.exists()) {
+        await showAlert(
+          {
+            type: "error",
+            title: "Error",
+            message: "User not found. Please sign up.",
+            showCloseButton: false,
+            timeout: 4000,
+            handleClose: () => setAlert(null),
+          },
+          setAlert
+        );
+        setIsLoading(false);
+        return;
       }
+
+      const userData = userDoc.data();
+      const nameParts = userData.fullName;
+
+      // Store the user's first name in secure storage
+      secureLocalStorage.setItem("user_firstName", nameParts);
+      setIsLoading(false);
+      navigate("/talent");
+    } catch (error) {
+     await showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: error.message,
+          showCloseButton: false,
+          timeout: 4000,
+          handleClose: () => setAlert(null),
+        },
+        setAlert
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
-  
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -78,6 +88,7 @@ export default function LoginPage() {
             </p>
           </div>
           <form className="form__wrap" onSubmit={handleLogin}>
+            
             <input
               type="text"
               name="email"
