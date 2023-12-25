@@ -13,65 +13,86 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    onSnapshot,
-    orderBy,
-    query,
-    serverTimestamp,
-    setDoc,
-    updateDoc,
-  } from "firebase/firestore";
-  import { db } from "./firebase";
-  import { getAuth, signOut } from "firebase/auth";
-//   import { useNavigate } from "react-router-dom";
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "./firebase";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  sendEmailVerification,
+  signOut,
+} from "firebase/auth";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
 const TALENT = "talentCollection";
-  
-export const talentStore = {
-    // Talent Store
-    async getTalentStore() {
-        const q = query(collection(db, TALENT), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        const talentStore = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-        return talentStore;
-    },
 
-    async getTalentStoreById(id) {
-        const docRef = doc(db, TALENT, id);
-        const docSnap = await getDoc(docRef);
-        return docSnap.data();
-    }
-}
+export const talentStore = {
+  // Talent Store
+  async getTalentStore() {
+    const q = query(collection(db, TALENT), orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const talentStore = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return talentStore;
+  },
+
+  async getTalentStoreById(id) {
+    const docRef = doc(db, TALENT, id);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  },
+};
 
 //Add New Talent
-export const addNewTalent = async (talent) => {
-    const user = getAuth().currentUser;
-    const createdAt = serverTimestamp();
-    const newTalent = {
-        ...talent,
-        createdAt,
-        // createdBy: user.uid,
-    };
-    const docRef = await addDoc(collection(db, TALENT), newTalent);
-    return docRef.id;
+export const registerTalent = async (fullName, email, password) => {
+  const auth = getAuth();
+  try {
+    // Step 1: Create the user with Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = userCredential.user;
+
+    // Step 2: Send email verification
+    await sendEmailVerification(user);
+
+    // Step 3: Create the user in Firestore
+    const newUserId = userCredential.user.uid;
+    await setDoc(doc(db, TALENT, newUserId), {
+      fullName: fullName,
+      email: email,
+      user: "talent",
+    });
+    return newUserId;
+  } catch (error) {
+    throw error;
+  }
 };
 
 //Update Talent
 export const updateTalent = async (talent) => {
-    const docRef = doc(db, TALENT, talent.id);
-    await updateDoc(docRef, talent);
+  const docRef = doc(db, TALENT, talent.id);
+  await updateDoc(docRef, talent);
 };
 
 //Delete Talent
 export const deleteTalent = async (id) => {
-    const docRef = doc(db, TALENT, id);
-    await deleteDoc(docRef);
+  const docRef = doc(db, TALENT, id);
+  await deleteDoc(docRef);
 };

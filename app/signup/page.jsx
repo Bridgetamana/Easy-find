@@ -2,11 +2,13 @@
 import React, { useState } from "react";
 import "./style.scss";
 import Link from "next/link";
-import { addNewTalent } from "@/firebaseConfig/talentStore";
+import { registerTalent } from "@/firebaseConfig/talentStore";
 import Spinner from "@/components/utils/Loaders/Spinner";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import ErrorMessage from "@/components/utils/Responses/Error";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
+// import { sendEmailVerification } from "firebase/auth";
 
 export default function Signup() {
   const [activeTab, setActiveTab] = useState("talents");
@@ -48,10 +50,8 @@ export default function Signup() {
     const password = talentFormData.password;
 
     try {
-      const result = await addNewTalent(fullName, email, password);
-      console.log(result);
+      const result = await registerTalent(fullName, email, password);
       if (result) {
-        await sendEmailVerification(result);
         setTalentFormData({
           firstName: "",
           lastName: "",
@@ -60,15 +60,29 @@ export default function Signup() {
           confirmPassword: "",
         });
         await showAlert({
-          type: "success",
-          title: "Success",
-          message: "Operation completed successfully!",
-          showCloseButton: true,
-        });
-        router.push("/sigin");
+            type: "success",
+            title: "Success!",
+            message: "Operation completed successfully!",
+            showCloseButton: false,
+            handleClose: () => setAlert(null),
+            timeout: 3000,
+          },
+          setAlert
+        );
+        router.push("/signin");
       }
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.message || "An error occurred";
+      await showAlert({
+        type: "error",
+        title: "Error",
+        message: errorMessage,
+        showCloseButton: false,
+        timeout: 4000,
+        handleClose: () => setAlert(null),
+      },
+      setAlert
+      );
     } finally {
       setIsLoading(false);
     }
