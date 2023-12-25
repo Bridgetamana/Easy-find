@@ -2,16 +2,19 @@
 import React, { useState } from "react";
 import "./style.scss";
 import Link from "next/link";
-import axios from "axios";
-require("dotenv").config();
+import { addNewTalent } from "@/firebaseConfig/talentStore";
+import Spinner from "@/components/utils/Loaders/Spinner";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+import ErrorMessage from "@/components/utils/Responses/Error";
+import { useRouter } from "next/router";
 
 export default function Signup() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [activeTab, setActiveTab] = useState("talents");
   const [alert, setAlert] = useState(null);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   // State for talent
   const [talentFormData, setTalentFormData] = useState({
     fullName: "",
@@ -36,8 +39,41 @@ export default function Signup() {
     }
   };
 
+  //handle talent submit
+  const handleTalentSub = async (talentFormData) => {
+    setIsLoading(true);
 
- 
+    const fullName = talentFormData.firstName + " " + talentFormData.lastName;
+    const email = talentFormData.email;
+    const password = talentFormData.password;
+
+    try {
+      const result = await addNewTalent(fullName, email, password);
+      console.log(result);
+      if (result) {
+        await sendEmailVerification(result);
+        setTalentFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+        await showAlert({
+          type: "success",
+          title: "Success",
+          message: "Operation completed successfully!",
+          showCloseButton: true,
+        });
+        router.push("/sigin");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -90,21 +126,9 @@ export default function Signup() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  //handle email confirmation
-  const sendEmailConfirmation = async (email) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:1337/api/auth/send-email-confirmation",
-        { email }
-      );
-      console.log("Email confirmation sent successfully:", response.data);
-    } catch (error) {
-      console.error("Failed to send email confirmation:", error);
-    }
-  };
-
   return (
     <section className="registeration__form">
+      {alert && alert.component}
       <div className="registeration__form_container">
         <div className="registeration__signin">
           <h1 className="title">Welcome To EasyFind!</h1>
@@ -173,24 +197,30 @@ export default function Signup() {
                   value={talentFormData.email}
                   onChange={handleChange}
                 />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Password"
-                  className="input__field"
-                  value={talentFormData.password}
-                  onChange={handlePasswordChange}
-                />
-                <div className="show__password">
+                <div className="password_field">
                   <input
-                    type="checkbox"
-                    id="showPassword"
-                    name="showPassword"
-                    checked={showPassword}
-                    onChange={handleTogglePasswordVisibility}
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    className="pass_field"
+                    value={talentFormData.password}
+                    onChange={handleChange}
+                    required
+                    disabled={isLoading}
                   />
-                  <label htmlFor="showPassword">Show Password</label>
+                  {showPassword ? (
+                    <IoEye
+                      className="password_icon"
+                      onClick={handleTogglePasswordVisibility}
+                    />
+                  ) : (
+                    <IoEyeOff
+                      className="password_icon"
+                      onClick={handleTogglePasswordVisibility}
+                    />
+                  )}
                 </div>
+
                 <input
                   type={showPassword ? "text" : "password"}
                   name="confirmPassword"
@@ -200,25 +230,29 @@ export default function Signup() {
                   onChange={handlePasswordChange}
                 />
                 {!passwordMatch && (
-                  <p className="error">
-                    {talentFormData.password.length < 6 &&
-                      "Password must be at least 6 characters long. "}
-                    {!/[A-Z]/.test(talentFormData.password) &&
-                      "Password must contain an uppercase letter. "}
-                    {!/\d/.test(talentFormData.password) &&
-                      "Password must contain a number. "}
-                    {talentFormData.confirmPassword &&
-                      talentFormData.password !==
-                        talentFormData.confirmPassword &&
-                      "Password does not match. "}
-                  </p>
+                  <ErrorMessage
+                    text={
+                      talentFormData.password.length < 6
+                        ? "Password must be at least 6 characters long. "
+                        : !/[A-Z]/.test(talentFormData.password)
+                        ? "Password must contain an uppercase letter. "
+                        : !/\d/.test(talentFormData.password)
+                        ? "Password must contain a number. "
+                        : talentFormData.confirmPassword &&
+                          talentFormData.password !==
+                            talentFormData.confirmPassword
+                        ? "Password does not match. "
+                        : ""
+                    }
+                  />
                 )}
+
                 <button
                   className="signup__btn"
                   type="submit"
                   disabled={!passwordMatch}
                 >
-                  Sign Up as Talent
+                  {isLoading ? <Spinner /> : "Sign Up as Talent"}
                 </button>
                 <div className="signin__info">
                   <p className="text">Already have an account?</p>{" "}
@@ -228,6 +262,7 @@ export default function Signup() {
                 </div>
               </form>
             )}
+            {/* company form */}
             {activeTab === "companies" && (
               <form className="form__wrap" onSubmit={handleSubmit}>
                 <input
@@ -286,12 +321,8 @@ export default function Signup() {
                       "Password does not match. "}
                   </p>
                 )}
-                {
-                  error && <p className="error">{error}</p>
-                }
-                {
-                  success && <p className="success">{success}</p>
-                }
+                {error && <p className="error">{error}</p>}
+                {success && <p className="success">{success}</p>}
                 <button
                   className="signup__btn"
                   type="submit"

@@ -1,3 +1,5 @@
+@import "../../../app/global.scss";
+
 .loadingScreen {
     position: fixed;
     top: 0;
@@ -37,7 +39,7 @@
     border-radius: 50%;
     animation: spinner-rotate 1s infinite linear;
     border-top-color: $accent;; 
-
+    margin: 0 auto;
 }
 
 @keyframes spinner-rotate {

@@ -191,11 +191,48 @@
                         }
                     }
 
-                    .error{
+                    .password_field {
+                        position: relative;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 8px;
+                        width: 100%;
+                        height: 3.5rem;
+                        background-color: #ebedf8e8;
+                        border-radius: 10px;
+                        border: none;
+                        margin-bottom: 1rem;
+                        font-size: $font-sixteen;
+                        font-weight: $font-weight-400;
+                        color: $black;
+                        line-height: $line-height-1-2;
+                        transition: all 0.3s ease-in-out;
+                        
+                        .password_icon {
+                            width: 20px;
+                            cursor: pointer;
+                            transition: all 0.3s ease-in-out;
+                        }
+
+                        .pass_field {
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                            outline: none;
+                            background-color: transparent;
+                            font-size: var(--font-sixteen);
+                            font-weight: 400;
+                            color: var(--text);
+                            line-height: 1.2;
+                        }
+                    }
+
+                    .error {
                         @include errorMsg;
                     }
-                    
-                    .success{
+
+                    .success {
                         @include successMsg;
                     }
 
@@ -219,19 +256,19 @@
                         }
                     }
 
-                    .show__password{
+                    .show__password {
                         width: 100%;
                         display: flex;
-                        gap: .5rem;
+                        gap: 0.5rem;
                         align-items: flex-start;
                         justify-content: flex-start;
                         margin: 0 0 1rem;
 
-                        input{
+                        input {
                             margin-top: 2px;
                         }
 
-                        label{
+                        label {
                             font-size: $font-fourteen;
                             font-weight: $font-weight-400;
                             color: $gray;
@@ -240,17 +277,17 @@
                         }
                     }
 
-                    .checkbox__field{
+                    .checkbox__field {
                         display: flex;
-                        gap: .5rem;
+                        gap: 0.5rem;
                         align-items: flex-start;
                         justify-content: center;
 
-                        input{
+                        input {
                             margin-top: 2px;
                         }
 
-                        label{
+                        label {
                             font-size: $font-fourteen;
                             font-weight: $font-weight-400;
                             color: $gray;
