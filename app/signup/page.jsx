@@ -8,6 +8,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import ErrorMessage from "@/components/utils/Responses/Error";
 import { useRouter } from "next/navigation";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
+import { registerCompany } from "@/firebaseConfig/companyStore";
 // import { sendEmailVerification } from "firebase/auth";
 
 export default function Signup() {
@@ -284,7 +285,6 @@ export default function Signup() {
                     />
                   )}
                 </div>
-
                 <input
                   type={showPassword ? "text" : "password"}
                   name="confirmPassword"
@@ -345,23 +345,28 @@ export default function Signup() {
                   value={companyFormData.companyEmail}
                   onChange={handleChange}
                 />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Password"
-                  className="input__field"
-                  value={companyFormData.password}
-                  onChange={handlePasswordChange}
-                />
-                <div className="show__password">
+                <div className="password_field">
                   <input
-                    type="checkbox"
-                    id="showPassword"
-                    name="showPassword"
-                    checked={showPassword}
-                    onChange={handleTogglePasswordVisibility}
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    className="pass_field"
+                    value={companyFormData.password}
+                    onChange={handleChange}
+                    required
+                    disabled={isLoading}
                   />
-                  <label htmlFor="showPassword">Show Password</label>
+                  {showPassword ? (
+                    <IoEye
+                      className="password_icon"
+                      onClick={handleTogglePasswordVisibility}
+                    />
+                  ) : (
+                    <IoEyeOff
+                      className="password_icon"
+                      onClick={handleTogglePasswordVisibility}
+                    />
+                  )}
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -372,31 +377,32 @@ export default function Signup() {
                   onChange={handlePasswordChange}
                 />
                 {!passwordMatch && (
-                  <p className="error">
-                    {companyFormData.password.length < 6 &&
-                      "Password must be at least 6 characters long. "}
-                    {!/[A-Z]/.test(companyFormData.password) &&
-                      "Password must contain an uppercase letter. "}
-                    {!/\d/.test(companyFormData.password) &&
-                      "Password must contain a number. "}
-                    {companyFormData.confirmPassword &&
-                      companyFormData.password !==
-                        companyFormData.confirmPassword &&
-                      "Password does not match. "}
-                  </p>
+                  <ErrorMessage
+                    text={
+                      companyFormData.password.length < 6
+                        ? "Password must be at least 6 characters long. "
+                        : !/[A-Z]/.test(companyFormData.password)
+                        ? "Password must contain an uppercase letter. "
+                        : !/\d/.test(companyFormData.password)
+                        ? "Password must contain a number. "
+                        : companyFormData.confirmPassword &&
+                          companyFormData.password !==
+                            companyFormData.confirmPassword
+                        ? "Password does not match. "
+                        : ""
+                    }
+                  />
                 )}
-                {error && <p className="error">{error}</p>}
-                {success && <p className="success">{success}</p>}
                 <button
                   className="signup__btn"
                   type="submit"
                   disabled={!passwordMatch}
                 >
-                  Sign Up as Company
+                 {isLoading ? <Spinner /> : "Sign Up as Company"}
                 </button>
                 <div className="signin__info">
                   <p className="text">Already have an account?</p>{" "}
-                  <Link href={"/login"} className="signin__text">
+                  <Link href={"/signin"} className="signin__text">
                     Sign In
                   </Link>
                 </div>
