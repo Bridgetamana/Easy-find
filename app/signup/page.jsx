@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import "./style.scss";
 import Link from "next/link";
 import { registerTalent } from "@/firebaseConfig/talentStore";
 import Spinner from "@/components/utils/Loaders/Spinner";
@@ -9,7 +8,7 @@ import ErrorMessage from "@/components/utils/Responses/Error";
 import { useRouter } from "next/navigation";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { registerCompany } from "@/firebaseConfig/companyStore";
-// import { sendEmailVerification } from "firebase/auth";
+import "./style.scss";
 
 export default function Signup() {
   const [activeTab, setActiveTab] = useState("talents");

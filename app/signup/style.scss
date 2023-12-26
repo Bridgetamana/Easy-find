@@ -224,14 +224,6 @@
                         }
                     }
 
-                    .error {
-                        @include errorMsg;
-                    }
-
-                    .success {
-                        @include successMsg;
-                    }
-
                     .signup__btn {
                         background-color: $primary;
                         color: $white;
