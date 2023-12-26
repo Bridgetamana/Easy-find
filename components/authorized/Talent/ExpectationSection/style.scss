@@ -1,0 +1,102 @@
+@import "../../../../app/global.scss";
+
+.expect__section{
+    background-color: $white;
+    padding: 3rem;
+    margin: 3rem auto;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 1rem;
+
+    .expect__header{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 2rem;
+        
+        .expect__title {
+            font-size: $font-twentyEight;
+            color: $black;
+            font-weight: 600;
+        
+            @media screen and (min-width: $breakpoint-3) {
+                font-size: $font-thirtyTwo;
+            }
+    
+            @media screen and (min-width: $breakpoint-4) {
+                font-size: $font-thirtySix;
+            }
+        }
+        
+        .expect__subtitle {
+            font-size: $font-twenty;
+            color: $gray;
+            font-weight: 400;
+        
+            @media screen and (min-width: $breakpoint-3) {
+                font-size: $font-twenty;
+            }
+            
+            @media screen and (min-width: $breakpoint-4) {
+                font-size: $font-twentyTwo;
+            }
+        }
+    }
+    
+    .expect__list{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        text-align: left;
+        gap: 1rem;
+        
+        .expect__step{
+            font-size: $font-twenty;
+            color: $gray;
+            font-weight: 400;
+        
+            @media screen and (min-width: $breakpoint-3) {
+                font-size: $font-twenty;
+            }
+            
+            @media screen and (min-width: $breakpoint-4) {
+                font-size: $font-twentyTwo;
+            }
+
+            .step__head{
+                font-size: $font-twenty;
+                color: $black;
+                font-weight: 600;
+                margin-bottom: 1rem;
+            }
+
+            .step__text{
+                font-size: $font-sixteen;
+                color: $black;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .learn__more{
+        font-size: $font-eighteen;
+        font-weight: 500;
+        color: $white;
+        background: $primary;
+        padding: .75rem 1rem;
+        border-radius: 10px;
+        margin-top: 2rem;
+    
+        @media screen and (min-width: $breakpoint-4) {
+            font-size: $font-twenty;
+        }
+    }
+
+}

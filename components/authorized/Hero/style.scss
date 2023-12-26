@@ -1,0 +1,94 @@
+@import "../../../app/global.scss";
+
+.hero__section{
+
+    .hero__content{
+        background-color: $accent;
+        padding: 2rem;
+        border-radius: 1rem;
+        width: 90%;
+        margin: 0 auto;
+
+        .content__header{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+
+            .hero__title{
+                font-size: $font-forty;
+                font-weight: 500;
+                font-family: $font-logo;
+                color: $black;
+                line-height: 1;
+    
+                .title__span{
+                    color: $primary;
+                }
+            }
+    
+            .hero__text{
+                font-size: $font-eighteen;
+                font-weight: 400;
+                color: $black;
+                line-height: 1.2;
+                margin-top: .5rem;
+            }
+        }
+        
+        .content__boxes{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1rem;
+
+            @media screen and (min-width: $breakpoint-3) {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                align-items: center;
+            }
+
+            @media screen and (min-width: $breakpoint-4) {
+                gap: 2rem;
+            }
+
+            .content__box{
+                display: flex;
+                flex-direction: column;
+                padding: 1rem;
+                border-radius: 1rem;
+                background-color: $secondary;
+                width: 100%;
+                // max-width: 300px;
+                height: 160px;
+                transition: all .3s ease-in-out;
+                cursor: pointer;
+
+                &:hover{
+                    transform: scale(1.05);
+                }
+
+                .box__title{
+                    font-size: $font-twenty;
+                    font-weight: 500;
+                    color: $black;
+                    margin-top: 1rem;
+                    text-align: left;
+                }
+
+                .box__text{
+                    font-size: $font-sixteen;
+                    font-weight: 400;
+                    color: $black;
+                    margin-top: .75rem;
+                    text-align: left;
+                    line-height: 1.2;
+                }
+            }
+        }
+
+
+    }
+}

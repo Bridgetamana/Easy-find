@@ -1,0 +1,159 @@
+@import "../../../../app/global.scss";
+
+.profile__page {
+    margin: 2rem auto;
+    width: 95%;
+
+    @media screen and (min-width: $breakpoint-3) {
+        width: 90%
+    }
+
+    .profile__form {
+        border: 1px solid $accent;
+        border-radius: 10px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 700px;
+
+        @media screen and (min-width: $breakpoint-3) {
+            padding: 2rem;
+        }
+
+        .profile__image {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            background: $secondary;
+            position: relative;
+
+            img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+            }
+
+            .edit__image {
+                position: absolute;
+                bottom: 0.75rem;
+                right: -0.5rem;
+                background: $offWhite;
+                border-radius: 50%;
+                display: grid;
+                place-items: center;
+                height: 1.75rem;
+                width: 1.75rem;
+                cursor: pointer;
+
+                input {
+                    position: absolute;
+                    opacity: 0;
+                    top: 0;
+                    width: 1rem;
+                    height: 1rem;
+                }
+
+                svg {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .profile__text {
+            font-size: $font-sixteen;
+        }
+
+        .form__group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            label {
+                font-size: $font-sixteen;
+                font-weight: $font-weight-500;
+            }
+
+            .form__input {
+                font-size: $font-sixteen;
+                font-weight: $font-weight-400;
+                font-family: inherit;
+                border: none;
+                outline: none;
+                border-radius: 10px;
+                padding: 1rem;
+                background: $secondary;
+                height: 3rem;
+            }
+
+            .form__select {
+                font-size: 16px;
+                font-weight: 400;
+                font-family: inherit;
+                border: none;
+                outline: none;
+                border-radius: 10px;
+                padding: 0 1rem;
+                background: rgb(238, 242, 255);
+                height: 3rem;
+            }
+
+            .form__text {
+                font-size: $font-sixteen;
+                font-weight: $font-weight-400;
+                font-family: inherit;
+                border: none;
+                outline: none;
+                border-radius: 10px;
+                padding: 1rem;
+                background: $secondary;
+                height: 5rem;
+            }
+
+            .gender__wrap {
+                display: flex;
+                gap: 2rem;
+
+                .gender__label {
+                    font-size: $font-sixteen;
+                    font-weight: $font-weight-500;
+
+                    display: flex;
+                    align-items: flex-start;
+                    flex-direction: column;
+
+                    .gender__input {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .success{
+            @include successMsg;
+            text-align: center
+        }
+
+        .error{
+            @include errorMsg;
+            text-align: center;
+        }
+
+        .save__button {
+            width: 100%;
+            // height: 3rem;
+            background: $primary;
+            color: $white;
+            padding: 1rem;
+            font-size: $font-sixteen;
+            font-weight: $font-weight-500;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+        }
+    }
+}

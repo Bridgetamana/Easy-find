@@ -1,0 +1,340 @@
+@import "../../../../app/global.scss";
+
+
+@keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .sticky__menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #e0e6f6;
+    animation: fadeInDown 0.7s ease-in-out 0s 1 normal none running;
+    transition: all 0.7s ease 0s;
+  }
+  
+  .authorized__header {
+    background-color: $backdrop;
+    width: 100%;
+    
+    .desktop__header {
+        display: none;
+    }
+
+    .mobile__header {
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0 auto;
+
+        .header__logo {
+            display: flex;
+            align-items: center;
+
+            .logo {
+                width: 2rem;
+            }
+
+            .logo__name {
+                color: $primary;
+                font-family: $font-logo;
+                font-size: $font-twentySix;
+                font-weight: $font-weight-700;
+                margin-left: 0.5rem;
+                line-height: 0;
+            }
+        }
+
+        .menu__button {
+            height: -webkit-fit-content;
+            height: -moz-fit-content;
+            height: fit-content;
+            background: none;
+            border: none;
+            outline: none;
+            line-height: 0;
+        }
+
+        .nav__bar {
+            display: grid;
+            height: 78vh;
+            grid-template-rows: repeat(4, 1fr);
+            gap: 3rem;
+            width: 100vw;
+            position: fixed;
+            overflow: scroll;
+            z-index: 2;
+            left: -120%;
+            top: 0;
+            background: $white;
+            border-bottom: 3px solid $primary;
+            text-align: left;
+            padding: 1.5rem 1rem 1rem;
+            transition: left 0.5s ease-out;
+
+            @media screen and (min-width: 414px) {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .nav__header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .logo__name {
+                    color: $primary;
+                    font-family: $font-logo;
+                    font-size: $font-twentySix;
+                    font-weight: $font-weight-700;
+                    line-height: 0;
+                }
+                .close__menu {
+                    height: 40px;
+                    width: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: $primary;
+                    color: $white;
+                    border-radius: 5px;
+                    margin-left: auto;
+                    margin-right: 0;
+                    border: none;
+                    outline: none;
+
+                    &:hover {
+                        background: $primary;
+                    }
+                }
+            }
+
+            .dropdown__list {
+                .nav__head {
+                    color: $black;
+                    font-size: $font-eighteen;
+                    font-weight: 500;
+                    text-transform: capitalize;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+
+                .dropdown__link {
+                    .link {
+                        display: flex;
+                        align-items: center;
+                        font-weight: $font-weight-400;
+                        font-size: $font-sixteen;
+                        color: $black;
+
+                        &:hover {
+                            color: $primary;
+                        }
+                    }
+                }
+            }
+
+            .nav__list {
+                
+                .pd_btm{
+                    padding-bottom: 2rem;
+                }
+                
+                .nav__item {
+
+                    .nav__title {
+                        color: $primary;
+                        font-size: $font-twentyFour;
+                        font-weight: 500;
+                        text-transform: none;
+                    }
+
+                    .nav__link {
+                        color: $black;
+                        font-size: $font-eighteen;
+                        font-weight: 500;
+                        text-transform: capitalize;
+
+                        &:hover {
+                            color: $primary;
+                        }
+                    }
+
+                    .active__link {
+                        color: $primary;
+                        font-size: $font-eighteen;
+                        font-weight: 600;
+                        text-transform: capitalize;
+                    }
+
+                    .nav__button {
+                        padding: 0.75rem 1rem;
+                        width: 7.5rem;
+                        display: block;
+                        border-radius: 0.5rem;
+                        background-color: $primary;
+                        color: $white;
+                        font-size: $font-eighteen;
+                        font-weight: $font-weight-500;
+                        transition: all 0.3s ease-in-out;
+                    }
+                }
+            }
+        }
+
+        .show__navbar {
+            top: 0;
+            transition: left 0.5s ease-in-out;
+            left: 0%;
+        }
+    }
+
+    @media screen and (min-width: $breakpoint-4) {
+        .desktop__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            width: 90%;
+            margin: 0 auto;
+
+            .header__logo {
+                height: 2rem;
+                display: flex;
+                align-items: center;
+
+                .logo {
+                    width: 2rem;
+                }
+
+                .logo__name {
+                    color: $primary;
+                    font-family: $font-logo;
+                    font-size: $font-twentySix;
+                    font-weight: $font-weight-700;
+                    margin-left: 0.5rem;
+                }
+            }
+
+            .nav__bar {
+                .nav__list {
+                    display: flex;
+                    align-items: center;
+                    gap: 1.5rem;
+
+                    .nav__item {
+                        .nav__link {
+                            color: $black;
+                            font-size: $font-sixteen;
+                            font-weight: $font-weight-500;
+                            line-height: $line-height-1-6;
+                            transition: all 0.3s ease-in-out;
+
+                            &:hover {
+                                color: $primary;
+                            }
+                        }
+
+                        .active__link {
+                            color: $primary;
+                        }
+
+                        .nav__button {
+                            padding: 0.5rem 1rem;
+                            border-radius: 0.5rem;
+                            background-color: $primary;
+                            color: $white;
+                            font-size: $font-sixteen;
+                            font-weight: $font-weight-500;
+                            transition: all 0.3s ease-in-out;
+                            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px;
+                            text-align: center;
+                        }
+                    }
+
+                    .nav__menu {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.35rem;
+                        color: $black;
+                        font-size: $font-sixteen;
+                        font-weight: $font-weight-500;
+                        line-height: $line-height-1-6;
+                        transition: all 0.3s ease-in-out;
+                        color: $black;
+                        cursor: pointer;
+
+                        &:hover {
+                            color: $primary;
+                        }
+                    }
+
+                    .active__menu {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.35rem;
+                        color: $black;
+                        font-size: $font-sixteen;
+                        font-weight: $font-weight-500;
+                        line-height: $line-height-1-6;
+                        transition: all 0.3s ease-in-out;
+                        color: $primary;
+                    }
+
+                    .nav__button {
+                        padding: 0.5rem 1rem;
+                        width: 9rem;
+                        display: block;
+                        border-radius: 0.5rem;
+                        background-color: $primary;
+                        color: $white;
+                        font-size: $font-eighteen;
+                        font-weight: $font-weight-500;
+                        transition: all 0.3s ease-in-out;
+                    }
+
+                    .account__modal {
+                        position: absolute;
+                        opacity: 1;
+                        visibility: visible;
+                        top: 5rem;
+                        transition: 0.3s ease-in-out;
+                        transition: 0.3s ease-in-out;
+                        z-index: 20;
+                    }
+
+                    .no__show {
+                        position: absolute;
+                        opacity: 0;
+                        visibility: hidden;
+                        top: 5rem;
+                        transition: 0.3s ease-in-out;
+                        z-index: 20;
+                    }
+                }
+            }
+        }
+
+        .mobile__header {
+            display: none;
+        }
+    }
+}

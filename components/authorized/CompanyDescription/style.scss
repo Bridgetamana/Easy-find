@@ -1,0 +1,22 @@
+@import "../../../app/global.scss";
+
+.companyDescription__section{
+    margin-top: 2rem;
+
+    .description__header{
+        display: block;
+
+        .description__title{
+            font-size: $font-twentyFour;
+            font-weight: $font-weight-600;
+            color: $black;
+            margin-bottom: 1rem;
+        }
+    }
+
+    .description__text{
+        font-size: $font-sixteen;
+        font-weight: $font-weight-500;
+        color: $gray;
+    }
+}
