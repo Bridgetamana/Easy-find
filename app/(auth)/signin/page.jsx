@@ -4,7 +4,11 @@ import Link from "next/link";
 import Spinner from "@/components/utils/Loaders/Spinner";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import { loginTalent } from "@/firebaseConfig/talentStore";
+import { loginUser } from "@/firebaseConfig/talentStore";
+import { db } from "@/firebaseConfig/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import secureLocalStorage from "react-secure-storage";
+import { useRouter } from "next/navigation";
 import "./style.scss";
 
 export default function Signin() {
@@ -15,70 +19,73 @@ export default function Signin() {
   const [isTalent, setIsTalent] = useState(false);
   const [isCompany, setIsCompany] = useState(false);
   const [alert, setAlert] = useState(null);
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
   
     try {
-      await setPersistence(auth, browserSessionPersistence);
-  
       const userCredential = await loginUser(email, password);
-  
-      const user = userCredential.user;
+      const user = userCredential;
       const userUID = user.uid;
   
       // Determine the collection based on user type
       const userCollection = isTalent ? "talentCollection" : "companyCollection";
-      
+  
       // Fetch the user's details from the corresponding Firestore collection
       const userRef = doc(db, userCollection, userUID);
       const userDoc = await getDoc(userRef);
   
+      // Check if the user's type matches the selected checkbox
+      const userData = userDoc.data();
+      if (userUID && userDoc.exists() === false ) {
+        await showAlert({
+          type: "error",
+          title: "Error",
+          message: "Wrong checkbox selected! Kindly check the right box and try again",
+          showCloseButton: false,
+          timeout: 4000,
+          handleClose: () => setAlert(null),
+        }, setAlert);
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if the user document exists
       if (!userDoc.exists()) {
         await showAlert({
           type: "error",
           title: "Error",
-          message: "User not found. Please sign up.",
+          message: "User not found. Kindly change the user selection or sign up.",
           showCloseButton: false,
           timeout: 4000,
           handleClose: () => setAlert(null),
-        });
+        }, setAlert);
         setIsLoading(false);
         return;
       }
   
-      // Check if the user's type matches the selected checkbox
-      const userData = userDoc.data();
-      const userType = userData.userType;
-  
-      if ((isTalent && userType === "company") || (isCompany && userType === "talent")) {
-        // Show an error message if the user checked the wrong box
-        await showAlert({
-          type: "error",
-          title: "Error",
-          message: `This user isn't a ${isTalent ? 'talent' : 'company'} but a ${userType.toLowerCase()}, check the right box and try again`,
-          showCloseButton: false,
-          timeout: 4000,
-          handleClose: () => setAlert(null),
-        });
-        setIsLoading(false);
-        return;
-      }
-  
-      const nameParts = userData.fullName;
+      
   
       // Store the user's first name in secure storage
-      secureLocalStorage.setItem("user_firstName", nameParts);
-      setIsLoading(false);
+      secureLocalStorage.setItem("user_firstName", userData.fullName);
   
       // Navigate based on user type
       if (isTalent) {
-        navigate("/talent");
+        router.push("/talent");
       } else if (isCompany) {
-        navigate("/company");
+        router.push("/company");
       }
+  
+      // Reset form fields and checkboxes
+      setEmail("");
+      setPassword("");
+      setIsTalent(false);
+      setIsCompany(false);
+  
     } catch (error) {
+      console.error("Login error:", error);
       await showAlert({
         type: "error",
         title: "Error",
@@ -86,11 +93,12 @@ export default function Signin() {
         showCloseButton: false,
         timeout: 4000,
         handleClose: () => setAlert(null),
-      });
+      }, setAlert);
     } finally {
       setIsLoading(false);
     }
   };
+  
   
 
   const handleInputChange = (e) => {
@@ -115,6 +123,7 @@ export default function Signin() {
 
   return (
     <section className="login__form">
+      {alert && alert.component}
       <div className="login__form__container">
         <div className="login__signin">
           <div className="header">

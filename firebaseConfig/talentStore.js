@@ -31,7 +31,9 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
-  signOut,
+  signInWithEmailAndPassword,
+    setPersistence,
+    browserSessionPersistence,
 } from "firebase/auth";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
@@ -87,19 +89,20 @@ export const registerTalent = async (fullName, email, password) => {
 
 //Handle Login Talent
 export const loginUser = async (email, password) => {
-    const auth = getAuth();
-    try {
-      const userCredential = await auth.signInWithEmailAndPassword(
-        email,
-        password
-      );
-      const user = userCredential.user;
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  };
-  
+  const auth = getAuth();
+  await setPersistence(auth, browserSessionPersistence);
+  const userCredential = await signInWithEmailAndPassword(
+      auth,
+    email,
+    password
+  );
+  const user = userCredential.user;
+  return user;
+//   try {
+//   } catch (error) {
+//     throw error;
+//   }
+};
 
 //Update Talent
 export const updateTalent = async (talent) => {

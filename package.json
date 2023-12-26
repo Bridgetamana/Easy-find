@@ -20,5 +20,9 @@
     "react-slick": "^0.29.0",
     "sass": "^1.69.5",
     "slick-carousel": "^1.8.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.45",
+    "typescript": "5.3.3"
   }
 }
