@@ -33,11 +33,9 @@
                 }
             }
 
-            .logo__name {
-                font-family: $font-logo;
-                font-size: $font-fourteen;
-                font-weight: $font-weight-500;
-                color: $primary;
+            .logo {
+                display: block;
+                width: 6rem;
             }
         }
         .footer__left {

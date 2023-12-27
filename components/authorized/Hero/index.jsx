@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.scss";
 
-export default function Hero() {
+export default function Hero () {
   return (
     <section className="hero__section">
       <div className="hero__content">
