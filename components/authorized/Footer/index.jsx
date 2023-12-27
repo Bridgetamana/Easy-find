@@ -6,8 +6,8 @@ export default function Footer() {
   return (
     <footer className="authorized__footer">
       <div className="footer__bottom">
-         <div className="footer__right">
-             <svg
+        <div className="footer__right">
+          <svg
             className="logo"
             aria-hidden="true"
             viewBox="0 0 109 40"
@@ -40,9 +40,11 @@ export default function Footer() {
               fill="#0F172A"
             ></path>
           </svg>
-         </div>
-         <p className="footer__left">&copy; {new Date().getFullYear()} MinuJobs. All rights reserved</p>
-       </div>
+        </div>
+        <p className="footer__left">
+          &copy; {new Date().getFullYear()} MinuJobs. All rights reserved
+        </p>
+      </div>
     </footer>
   );
 }

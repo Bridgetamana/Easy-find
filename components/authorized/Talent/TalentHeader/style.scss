@@ -40,22 +40,13 @@
         margin: 0 auto;
 
         .header__logo {
-            display: flex;
-            align-items: center;
+               display: flex;
+               align-items: center;
 
-            .logo {
-                width: 2rem;
-            }
-
-            .logo__name {
-                color: $primary;
-                font-family: $font-logo;
-                font-size: $font-twentySix;
-                font-weight: $font-weight-700;
-                margin-left: 0.5rem;
-                line-height: 0;
-            }
-        }
+               .logo {
+                   width: 6rem;
+               }
+           }
 
         .menu__button {
             height: -webkit-fit-content;
@@ -217,22 +208,14 @@
             margin: 0 auto;
 
             .header__logo {
-                height: 2rem;
                 display: flex;
                 align-items: center;
-
+ 
                 .logo {
-                    width: 2rem;
-                }
-
-                .logo__name {
-                    color: $primary;
-                    font-family: $font-logo;
-                    font-size: $font-twentySix;
-                    font-weight: $font-weight-700;
-                    margin-left: 0.5rem;
+                    width: 6rem;
                 }
             }
+ 
 
             .nav__bar {
                 .nav__list {
@@ -265,7 +248,7 @@
                             font-size: $font-sixteen;
                             font-weight: $font-weight-500;
                             transition: all 0.3s ease-in-out;
-                            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px;
+                            // box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px;
                             text-align: center;
                         }
                     }

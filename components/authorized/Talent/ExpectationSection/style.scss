@@ -27,23 +27,15 @@
             @media screen and (min-width: $breakpoint-3) {
                 font-size: $font-thirtyTwo;
             }
-    
-            @media screen and (min-width: $breakpoint-4) {
-                font-size: $font-thirtySix;
-            }
         }
         
         .expect__subtitle {
-            font-size: $font-twenty;
+            font-size: $font-eighteen;
             color: $gray;
             font-weight: 400;
         
             @media screen and (min-width: $breakpoint-3) {
                 font-size: $font-twenty;
-            }
-            
-            @media screen and (min-width: $breakpoint-4) {
-                font-size: $font-twentyTwo;
             }
         }
     }
