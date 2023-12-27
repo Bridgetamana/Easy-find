@@ -22,7 +22,7 @@
         .expect__title {
             font-size: $font-twentyEight;
             color: $black;
-            font-weight: 600;
+            font-weight: 500;
         
             @media screen and (min-width: $breakpoint-3) {
                 font-size: $font-thirtyTwo;
