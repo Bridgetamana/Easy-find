@@ -1,5 +1,5 @@
 import React from "react";
-import TalentHeader from "@/components/authorized/Talent/TalentHeader";
+import TalentHeader from "@/components/authorized/TalentComponents/TalentHeader";
 import Footer from "@/components/authorized/Footer";
 
 export const metadata = {
