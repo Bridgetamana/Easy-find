@@ -5,9 +5,9 @@ export default function ExpectationSection() {
   return (
     <section className="expect__section">
       <div className="expect__header">
-        <h2 className="expect__title">What to expect on Hired</h2>
+        <h2 className="expect__title">What to expect on EasyFind</h2>
         <p className="expect__subtitle">
-          We’re here to help you get a job you love. Here’s how Hired works, in
+          We’re here to help you get a job you love. Here’s how EasyFind works, in
           a nutshell:
         </p>
       </div>

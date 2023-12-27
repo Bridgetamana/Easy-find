@@ -1,7 +1,6 @@
 import React from "react";
-import "./style.scss";
 import Image from 'next/image'
-import Link from "next/link";
+import "./style.scss";
 
 export default function Footer() {
   return (
@@ -14,6 +13,7 @@ export default function Footer() {
         width={100}
         height={100}
         layout="fixed"
+        className="logo"
       />
       </div>
         <p className="footer__left">

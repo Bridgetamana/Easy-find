@@ -35,7 +35,9 @@
 
             .logo {
                 display: block;
+                height: 2rem;
                 width: 6rem;
+                object-fit: cover;
             }
         }
         .footer__left {
