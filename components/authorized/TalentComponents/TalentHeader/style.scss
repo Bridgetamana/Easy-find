@@ -1,18 +1,17 @@
 @import "../../../../app/global.scss";
 
-
 @keyframes fadeInDown {
     0% {
-      opacity: 0;
-      transform: translateY(-20px);
+        opacity: 0;
+        transform: translateY(-20px);
     }
     100% {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
-  }
-  
-  .sticky__menu {
+}
+
+.sticky__menu {
     position: fixed;
     top: 0;
     left: 0;
@@ -22,31 +21,33 @@
     border-bottom: 1px solid #e0e6f6;
     animation: fadeInDown 0.7s ease-in-out 0s 1 normal none running;
     transition: all 0.7s ease 0s;
-  }
-  
-  .authorized__header {
+}
+
+.authorized__header {
     background-color: $backdrop;
     width: 100%;
-    
+
     .desktop__header {
         display: none;
     }
 
     .mobile__header {
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
         display: flex;
         justify-content: space-between;
         width: 100%;
         margin: 0 auto;
 
         .header__logo {
-               display: flex;
-               align-items: center;
+            display: flex;
+            align-items: center;
 
-               .logo {
-                   width: 6rem;
-               }
-           }
+            .logo {
+                height: 2rem;
+                width: 6rem;
+                object-fit: cover;
+            }
+        }
 
         .menu__button {
             height: -webkit-fit-content;
@@ -85,13 +86,12 @@
                 align-items: center;
                 justify-content: space-between;
 
-                .logo__name {
-                    color: $primary;
-                    font-family: $font-logo;
-                    font-size: $font-twentySix;
-                    font-weight: $font-weight-700;
-                    line-height: 0;
+                .logo{
+                height: 2rem;
+                width: 6rem;
+                object-fit: cover;
                 }
+
                 .close__menu {
                     height: 40px;
                     width: 40px;
@@ -144,13 +144,11 @@
             }
 
             .nav__list {
-                
-                .pd_btm{
+                .pd_btm {
                     padding-bottom: 2rem;
                 }
-                
-                .nav__item {
 
+                .nav__item {
                     .nav__title {
                         color: $primary;
                         font-size: $font-twentyFour;
@@ -210,12 +208,13 @@
             .header__logo {
                 display: flex;
                 align-items: center;
- 
+
                 .logo {
+                    height: 2rem;
                     width: 6rem;
+                    object-fit: cover;
                 }
             }
- 
 
             .nav__bar {
                 .nav__list {
