@@ -42,7 +42,7 @@ export default function Footer() {
           </svg>
         </div>
         <p className="footer__left">
-          &copy; {new Date().getFullYear()} MinuJobs. All rights reserved
+          &copy; {new Date().getFullYear()} EasyFind. All rights reserved
         </p>
       </div>
     </footer>
