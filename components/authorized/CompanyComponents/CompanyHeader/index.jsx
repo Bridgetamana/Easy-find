@@ -31,7 +31,8 @@ export default function CompanyHeader() {
   const [isSticky, setIsSticky] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
       const shouldBeSticky = scrollTop > 150;
 
       setIsSticky(shouldBeSticky);
@@ -48,7 +49,15 @@ export default function CompanyHeader() {
       {/* Desktop Header */}
       <div className="desktop__header">
         <div className="header__logo">
-          <h2 className="logo__name">MinuJobs</h2>
+          <Image
+            src="/assets/images/EasyFind.svg"
+            alt="Logo"
+            sizes="100px"
+            width={100}
+            height={10}
+            layout="fixed"
+            className="logo"
+          />
         </div>
         <nav className="nav__bar">
           <ul className="nav__list">
@@ -56,7 +65,9 @@ export default function CompanyHeader() {
               <Link
                 href="/company/"
                 onClick={() => handleMenuClick("home")}
-                className={`nav__link ${active === "home" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "home" ? "active__link" : ""
+                }`}
               >
                 Home
               </Link>
@@ -67,7 +78,9 @@ export default function CompanyHeader() {
             >
               Account
               <BsChevronDown fill="#827f7f" size={10} />
-              <div className={`${accountDropdown ? "account__modal" : "no__show"}`}>
+              <div
+                className={`${accountDropdown ? "account__modal" : "no__show"}`}
+              >
                 <CompanyDropdown />
               </div>
             </li>
@@ -75,7 +88,9 @@ export default function CompanyHeader() {
               <Link
                 href="/company/testimonials"
                 onClick={() => handleMenuClick("jobs")}
-                className={`nav__link ${active === "jobs" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "jobs" ? "active__link" : ""
+                }`}
               >
                 Testimonials
               </Link>
@@ -84,7 +99,9 @@ export default function CompanyHeader() {
               <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
-                className={`nav__link ${active === "blog" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "blog" ? "active__link" : ""
+                }`}
               >
                 Blog
               </Link>
@@ -119,7 +136,9 @@ export default function CompanyHeader() {
               <Link
                 href="/company/"
                 onClick={() => handleMenuClick("home")}
-                className={`nav__link ${active === "home" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "home" ? "active__link" : ""
+                }`}
               >
                 Home
               </Link>
@@ -128,7 +147,9 @@ export default function CompanyHeader() {
               <Link
                 href="/company/testimonials"
                 onClick={() => handleMenuClick("testimonials")}
-                className={`nav__link ${active === "testimonials" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "testimonials" ? "active__link" : ""
+                }`}
               >
                 Testimonials
               </Link>
@@ -140,17 +161,29 @@ export default function CompanyHeader() {
               <BsChevronDown fill="#827f7f" size={10} />
             </h4>
             <li className="dropdown__link">
-              <Link href="/company/profile" className="link" onClick={closeMenu}>
+              <Link
+                href="/company/profile"
+                className="link"
+                onClick={closeMenu}
+              >
                 Profile
               </Link>
             </li>
             <li className="dropdown__link">
-              <Link href="/company/dashboard" className="link" onClick={closeMenu}>
+              <Link
+                href="/company/dashboard"
+                className="link"
+                onClick={closeMenu}
+              >
                 Dashboard
               </Link>
             </li>
             <li className="dropdown__link">
-              <Link href="/company/settings" className="link" onClick={closeMenu}>
+              <Link
+                href="/company/settings"
+                className="link"
+                onClick={closeMenu}
+              >
                 Settings
               </Link>
             </li>
@@ -160,7 +193,9 @@ export default function CompanyHeader() {
               <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
-                className={`nav__link ${active === "blog" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "blog" ? "active__link" : ""
+                }`}
               >
                 Blog
               </Link>

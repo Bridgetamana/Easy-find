@@ -291,7 +291,7 @@ const JobGrid = () => {
                       {timePostedFormatted}
                     </p>
                   </div>
-                  <p className="card__description">{job.description}</p>
+                  {/* <p className="card__description">{job.description}</p> */}
                   {/* <ul className="card__tags">
               {jobTags.map((tag) => (
                 <li key={tag}>{tag}</li>
@@ -302,11 +302,11 @@ const JobGrid = () => {
                   <p className="company__pay">
                     ${salaryMinFormatted} - ${salaryMaxFormatted}{" "}
                   </p>
-                  <Link
+                  {/* <Link
                     href={`/talent/jobs/details/${generateJobHash(job.id)}`}
                   >
                     <button className="apply__button">View More</button>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             );

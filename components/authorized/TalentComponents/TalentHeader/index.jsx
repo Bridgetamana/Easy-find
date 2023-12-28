@@ -32,7 +32,8 @@ export default function TalentHeader() {
   const [isSticky, setIsSticky] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
       const shouldBeSticky = scrollTop > 150;
 
       setIsSticky(shouldBeSticky);
@@ -49,15 +50,15 @@ export default function TalentHeader() {
       {/* Desktop Header */}
       <div className="desktop__header">
         <div className="header__logo">
-        <Image
-        src="/assets/images/EasyFind.svg"
-        alt="Logo"
-        sizes="100px"
-        width={100}
-        height={10}
-        layout="fixed"
-        className="logo"
-      />
+          <Image
+            src="/assets/images/EasyFind.svg"
+            alt="Logo"
+            sizes="100px"
+            width={100}
+            height={10}
+            layout="fixed"
+            className="logo"
+          />
         </div>
         <nav className="nav__bar">
           <ul className="nav__list">
@@ -65,7 +66,9 @@ export default function TalentHeader() {
               <Link
                 href="/talent/"
                 onClick={() => handleMenuClick("home")}
-                className={`nav__link ${active === "home" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "home" ? "active__link" : ""
+                }`}
               >
                 Home
               </Link>
@@ -74,7 +77,9 @@ export default function TalentHeader() {
               <Link
                 href="/talent/jobs"
                 onClick={() => handleMenuClick("jobs")}
-                className={`nav__link ${active === "jobs" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "jobs" ? "active__link" : ""
+                }`}
               >
                 Jobs
               </Link>
@@ -83,7 +88,9 @@ export default function TalentHeader() {
               <Link
                 href="/talent/companies"
                 onClick={() => handleMenuClick("companies")}
-                className={`nav__link ${active === "companies" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "companies" ? "active__link" : ""
+                }`}
               >
                 Companies
               </Link>
@@ -94,7 +101,9 @@ export default function TalentHeader() {
             >
               Account
               <BsChevronDown fill="#827f7f" size={10} />
-              <div className={`${accountDropdown ? "account__modal" : "no__show"}`}>
+              <div
+                className={`${accountDropdown ? "account__modal" : "no__show"}`}
+              >
                 <AccountDropdown />
               </div>
             </li>
@@ -102,7 +111,9 @@ export default function TalentHeader() {
               <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
-                className={`nav__link ${active === "blog" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "blog" ? "active__link" : ""
+                }`}
               >
                 Blog
               </Link>
@@ -119,30 +130,30 @@ export default function TalentHeader() {
       {/* Mobile Header */}
       <div className="mobile__header">
         <div className="header__logo">
-        <Image
-        src="/assets/images/EasyFind.svg"
-        alt="Logo"
-        sizes="100px"
-        width={100}
-        height={10}
-        layout="fixed"
-        className="logo"
-      />
+          <Image
+            src="/assets/images/EasyFind.svg"
+            alt="Logo"
+            sizes="100px"
+            width={100}
+            height={10}
+            layout="fixed"
+            className="logo"
+          />
         </div>
         <button type="button" className="menu__button" onClick={toggleMenu}>
           <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
         </button>
         <nav className={`nav__bar ${showMenu ? "show__navbar" : "nav__bar"}`}>
           <div className="nav__header">
-          <Image
-        src="/assets/images/EasyFind.svg"
-        alt="Logo"
-        sizes="100px"
-        width={100}
-        height={10}
-        layout="fixed"
-        className="logo"
-      />
+            <Image
+              src="/assets/images/EasyFind.svg"
+              alt="Logo"
+              sizes="100px"
+              width={100}
+              height={10}
+              layout="fixed"
+              className="logo"
+            />
             <button type="button" className="close__menu" onClick={closeMenu}>
               <CgClose size={24} />
             </button>
@@ -153,7 +164,9 @@ export default function TalentHeader() {
               <Link
                 href="/talent/"
                 onClick={() => handleMenuClick("home")}
-                className={`nav__link ${active === "home" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "home" ? "active__link" : ""
+                }`}
               >
                 Home
               </Link>
@@ -162,7 +175,9 @@ export default function TalentHeader() {
               <Link
                 href="/talent/jobs"
                 onClick={() => handleMenuClick("jobs")}
-                className={`nav__link ${active === "jobs" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "jobs" ? "active__link" : ""
+                }`}
               >
                 Jobs
               </Link>
@@ -171,7 +186,9 @@ export default function TalentHeader() {
               <Link
                 href="/talent/companies"
                 onClick={() => handleMenuClick("companies")}
-                className={`nav__link ${active === "companies" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "companies" ? "active__link" : ""
+                }`}
               >
                 Companies
               </Link>
@@ -188,12 +205,20 @@ export default function TalentHeader() {
               </Link>
             </li>
             <li className="dropdown__link">
-              <Link href="/talent/settings" className="link" onClick={closeMenu}>
+              <Link
+                href="/talent/settings"
+                className="link"
+                onClick={closeMenu}
+              >
                 Settings
               </Link>
             </li>
             <li className="dropdown__link">
-              <Link href="/talent/testimonials" className="link" onClick={closeMenu}>
+              <Link
+                href="/talent/testimonials"
+                className="link"
+                onClick={closeMenu}
+              >
                 Testimonials
               </Link>
             </li>
@@ -203,7 +228,9 @@ export default function TalentHeader() {
               <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
-                className={`nav__link ${active === "blog" ? "active__link" : ""}`}
+                className={`nav__link ${
+                  active === "blog" ? "active__link" : ""
+                }`}
               >
                 Blog
               </Link>

@@ -3,7 +3,6 @@ import { AiOutlineClockCircle, AiOutlineEnvironment } from "react-icons/ai";
 import { BiBadgeCheck } from "react-icons/bi";
 import { BsCheck2Circle, BsHeart } from "react-icons/bs";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import { getJobById } from "@/firebaseConfig/talentStore";
@@ -12,8 +11,6 @@ import "./style.scss";
 export default function JobDetails() {
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
-  const router = useRouter();
-  const { jobIdHash } = router.query;
 
   const handleSaveJob = () => {
     setIsSaved(!isSaved);
@@ -38,7 +35,7 @@ export default function JobDetails() {
 
   useEffect(() => {
     fetchJobDetails();
-  }, [jobIdHash]); // Add jobIdHash to the dependency array
+  }, []); 
 
   return (
     <div className="jobDetails__section">

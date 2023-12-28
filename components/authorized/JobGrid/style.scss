@@ -148,6 +148,7 @@
                         height: 3rem;
                         border-radius: 10px;
                         background-color: $secondary;
+                        object-fit: contain;
                     }
 
                     .company__info {
@@ -229,7 +230,7 @@
 
                 .company__pay {
                     color: $primary;
-                    font-size: $font-eighteen;
+                    font-size: $font-twelve;
                     font-weight: $font-weight-600;
                     line-height: 1.2;
                 }
