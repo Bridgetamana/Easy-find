@@ -267,7 +267,7 @@ input {
 }
 
 .app {
-    // height: 100vh;
+    min-height: calc(100vh - 10rem);
     width: 100vw;
     position: relative;
     overflow: hidden;

@@ -7,7 +7,7 @@ export default function JobListingsPage() {
 
   return (
     <div className="job__page">
-      <JobHero/>
+      {/* <JobHero/> */}
       <JobGrid/>
     </div>
   );

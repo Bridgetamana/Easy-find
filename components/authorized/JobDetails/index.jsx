@@ -6,32 +6,8 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
-import { generateJobHash } from "../JobGrid";
 import { getJobById } from "@/firebaseConfig/talentStore";
 import "./style.scss";
-
-export async function getServerSideProps({ query }) {
-  const { jobIdHash } = query;
-
-  try {
-    // Decode the hash to get the actual job ID
-    const jobId = generateJobHash(jobIdHash);
-
-    // Fetch the job details from your Firebase database using the decoded job ID
-    const response = await getJobById(jobId);
-
-    return {
-      props: {
-        jobDetails: response,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching job details:", error);
-    return {
-      notFound: true,
-    };
-  }
-}
 
 export default function JobDetails() {
   const [isSaved, setIsSaved] = useState(false);
@@ -48,31 +24,20 @@ export default function JobDetails() {
     return <LoadingScreen />;
   }
 
-  console.log("Job ID hash:", jobIdHash);
 
-  const decodeHashAndFetchJobDetails = async () => {
-    if (jobIdHash) {
-      try {
-        console.log("Job ID hash:", jobIdHash);
-        // Decode the hash to get the actual job ID
-        const jobId = generateJobHash(jobIdHash);
-        console.log("Job ID:", jobId);
-        // Fetch the job details from your Firebase database using the decoded job ID
-        const response = await getJobById(w7eWo0VaITWFHoulgf0x);
-        // const data = await response.json();
-
-        // Set the job details in the state
+  const fetchJobDetails = async () => {
+    try {
+        const response = await getJobById(jobId); // <-- Pass jobId here
         setJobDetails(response);
         console.log("Job details:", response);
       } catch (error) {
         console.error("Error fetching job details:", error);
-        // Handle the error as needed
       }
-    }
   };
+  
 
   useEffect(() => {
-    decodeHashAndFetchJobDetails();
+    fetchJobDetails();
   }, [jobIdHash]); // Add jobIdHash to the dependency array
 
   return (
