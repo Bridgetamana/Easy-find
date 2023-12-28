@@ -1,4 +1,4 @@
-@import "../../../../global.scss";
+@import "../../../app/global.scss";
 
 .jobDetails__section {
     margin: 1rem auto;
@@ -189,9 +189,5 @@
         color: $white;
         border-radius: 10px;
         background-color: $primary;
-
-        // &:hover {
-        //     transform: scale(.99);
-        // }
     }
 }

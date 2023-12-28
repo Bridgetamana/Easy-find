@@ -112,26 +112,9 @@
         gap: 1rem;
         margin-top: 2rem;
 
-        @media screen and (min-width: 768px) {
-            display: grid;
-            width: 100%;
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        @media screen and (min-width: 1024px) {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        @media screen and (min-width: 1200px) {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-        }
-
-
         .jobs__card {
             width: 100%;
-            border: 1px solid #e0e6f7;
+            border: 2px solid #f1f1f1;
             overflow: hidden;
             margin-bottom: 24px;
             position: relative;
@@ -145,12 +128,7 @@
             cursor: pointer;
 
             &:hover{
-                transform: scale(.95);
                 border: 1px solid $primary;
-            }
-
-            @media screen and (min-width: 900px) {
-                max-width: 320px;
             }
 
             .card__company {

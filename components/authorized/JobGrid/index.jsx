@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { AiOutlineClockCircle, AiOutlineEnvironment } from "react-icons/ai";
 import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
+import { getJobs } from "@/firebaseConfig/talentStore";
+import LoadingScreen from "@/components/utils/Loaders/Loader";
+import crypto from "crypto";
 import "./style.scss";
+
+// Function to generate a hash from the job ID
+export const generateJobHash = (jobId) => {
+  const hash = crypto.createHash("sha256");
+  hash.update(jobId);
+  const hashedJobId = hash.digest("hex");
+  console.log(hashedJobId);
+  return hashedJobId;
+};
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);
   const [toggleSort, setToggleSort] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 8;
@@ -17,13 +29,14 @@ const JobGrid = () => {
   }, []);
 
   const fetchJobs = async () => {
+    setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:1337/api/jobs");
-      const fetchedJobs = response.data;
-      setJobs(fetchedJobs.data);
-      console.log(fetchedJobs.data);
+      const response = await getJobs();
+      setJobs(response);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -238,48 +251,47 @@ const JobGrid = () => {
           </div>
         </div>
       </div>
-
+      {isLoading && <LoadingScreen />}
       {/* Job listings */}
-      {jobs.length > 0 ? (
+      {jobs.length > 0 && (
         <div className="grid__body">
-
           {currentJobs.map((job) => {
-      const salaryMinFormatted = job.attributes.salaryMin.toLocaleString();
-      const salaryMaxFormatted = job.attributes.salaryMax.toLocaleString();
-      const timePostedFormatted = new Date(job.attributes.timePosted).toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-      });
+            const salaryMinFormatted = job.minSalary.toLocaleString();
+            const salaryMaxFormatted = job.maxSalary.toLocaleString();
+            const timePostedFormatted = new Date(
+              job.datePosted
+            ).toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            });
             return (
               <div className="jobs__card" key={job.id}>
                 <div className="card__info">
                   <div className="card__company">
                     <div className="card__logo">
-                      <img src={job.attributes.companyLogo} alt={job.attributes.companyName} />
+                      <img src={job.companyLogo} alt={job.companyName} />
                       <div className="company__info">
-                        <h5 className="company__name">{job.attributes.companyName}</h5>
+                        <h5 className="company__name">{job.companyName}</h5>
                         <p className="company__location">
                           <AiOutlineEnvironment />
-                          {job.attributes.location}
+                          {job.location}
                         </p>
                       </div>
                     </div>
                   </div>
-                  <h4 className="card__title">{job.attributes.title}</h4>
+                  <h4 className="card__title">{job.title}</h4>
                   <div className="card__flex">
                     <p className="card__location">
                       <CgBriefcase />
-                      {job.attributes.jobType}
+                      {job.jobType}
                     </p>
                     <p className="card__time">
                       <AiOutlineClockCircle />
                       {timePostedFormatted}
                     </p>
                   </div>
-                  <p className="card__description">
-                    {job.attributes.description}
-                  </p>
+                  <p className="card__description">{job.description}</p>
                   {/* <ul className="card__tags">
               {jobTags.map((tag) => (
                 <li key={tag}>{tag}</li>
@@ -290,20 +302,18 @@ const JobGrid = () => {
                   <p className="company__pay">
                     ${salaryMinFormatted} - ${salaryMaxFormatted}{" "}
                   </p>
-                  <Link href="/talent/jobs/details">
-                    <button className="apply__button">
-                      {/* <Link to={`/job/${job.id}`}>Apply Now</Link> */}
-                      View More
-                    </button>
+                  <Link
+                    href={`/talent/jobs/details/${generateJobHash(job.id)}`}
+                  >
+                    <button className="apply__button">View More</button>
                   </Link>
                 </div>
               </div>
             );
           })}
         </div>
-      ) : (
-        <p className="no__jobs">No jobs found.</p>
       )}
+      {jobs.length === 0 && <p className="no__jobs">No jobs found.</p>}
 
       {/* Pagination */}
       <div className="pagination">
@@ -340,26 +350,5 @@ const JobGrid = () => {
     </section>
   );
 };
-
-export async function getServerSideProps() {
-  try {
-    const response = await axios.get("http://localhost:1337/api/jobs");
-    const jobs = response.data;
-
-    return {
-      props: {
-        jobs,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      props: {
-        jobs: [],
-      },
-    };
-  }
-}
 
 export default JobGrid;

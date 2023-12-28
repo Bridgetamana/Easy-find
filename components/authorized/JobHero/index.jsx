@@ -7,7 +7,7 @@ export default function JobHero() {
   return (
     <div className="jobHero__section">
         <div className="jobHero__content">
-        <h1 className="hero__title">Find your dream job</h1>
+        <h1 className="hero__title">Find your next career today within minutes.</h1>
         <p className="hero__text">
           We have over 100,000 jobs available for you
         </p>

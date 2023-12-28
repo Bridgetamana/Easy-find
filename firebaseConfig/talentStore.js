@@ -32,8 +32,8 @@ import {
   getAuth,
   sendEmailVerification,
   signInWithEmailAndPassword,
-    setPersistence,
-    browserSessionPersistence,
+  setPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
@@ -90,18 +90,18 @@ export const registerTalent = async (fullName, email, password) => {
 //Handle Login Talent
 export const loginUser = async (email, password) => {
   const auth = getAuth();
-  await setPersistence(auth, browserSessionPersistence);
-  const userCredential = await signInWithEmailAndPassword(
+  try {
+    await setPersistence(auth, browserSessionPersistence);
+    const userCredential = await signInWithEmailAndPassword(
       auth,
-    email,
-    password
-  );
-  const user = userCredential.user;
-  return user;
-//   try {
-//   } catch (error) {
-//     throw error;
-//   }
+      email,
+      password
+    );
+    const user = userCredential.user;
+    return user;
+  } catch (error) {
+    throw error;
+  }
 };
 
 //Update Talent
@@ -114,4 +114,23 @@ export const updateTalent = async (talent) => {
 export const deleteTalent = async (id) => {
   const docRef = doc(db, TALENT, id);
   await deleteDoc(docRef);
+};
+
+const JOBS = "jobListings";
+//Fetch jobs
+export const getJobs = async () => {
+  const q = query(collection(db, JOBS), orderBy("datePosted", "desc"));
+  const querySnapshot = await getDocs(q);
+  const jobs = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  return jobs;
+};
+
+//Fetch jobs by id
+export const getJobById = async (id) => {
+  const docRef = doc(db, JOBS, id);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data();
 };
