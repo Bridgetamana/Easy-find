@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import React from 'react';
 // import ExpectationSection from '@components/authorized/ExpectationSection';
 import Hero from '@/components/authorized/Hero';

@@ -13,7 +13,7 @@ export default function TalentFeatures() {
             <div className="card">
           <div className="features__card">
               <div className="title">
-                <span className="text__title">Step Up</span>
+                <span className="text__title">Step</span>
                 <h4 className="number__title">1</h4>
               </div>
               <p className="card__description">
@@ -24,7 +24,7 @@ export default function TalentFeatures() {
             <div className="card">
           <div className="features__card">
               <div className="title">
-                <span className="text__title">Step Up</span>
+                <span className="text__title">Step</span>
                 <h4 className="number__title">2</h4>
               </div>
               <p className="card__description">
@@ -35,7 +35,7 @@ export default function TalentFeatures() {
             <div className="card">
           <div className="features__card">
               <div className="title">
-                <span className="text__title">Step Up</span>
+                <span className="text__title">Step</span>
                 <h4 className="number__title">3</h4>
               </div>
               <p className="card__description">

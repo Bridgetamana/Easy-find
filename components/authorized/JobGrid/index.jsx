@@ -4,17 +4,7 @@ import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
 import { getJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
-import crypto from "crypto";
 import "./style.scss";
-
-// Function to generate a hash from the job ID
-export const generateJobHash = (jobId) => {
-  const hash = crypto.createHash("sha256");
-  hash.update(jobId);
-  const hashedJobId = hash.digest("hex");
-  console.log(hashedJobId);
-  return hashedJobId;
-};
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);
