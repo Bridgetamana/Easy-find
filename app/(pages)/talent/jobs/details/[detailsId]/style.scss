@@ -1,15 +1,26 @@
-@import "../../../app/global.scss";
+@import "../../../../../global.scss";
 
 .jobDetails__section {
-    margin: 1rem auto;
-    // width: 90%;
+    margin: 2rem auto;
+
+    width: 90%;
 
     .details__header {
         display: block;
         margin-bottom: 3rem;
 
+        .details__back {
+            border: $border 1px solid;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            font-size: $font-fourteen;
+            font-weight: $font-weight-500;
+            color: $black;
+        }
+
         .details__title {
             @include title;
+            margin-top: 1.5rem;
         }
 
         .details__flex {

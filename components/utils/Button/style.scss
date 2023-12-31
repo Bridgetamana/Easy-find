@@ -10,6 +10,9 @@ button {
     // width: 144px;
     cursor: pointer;
     transition: all 500ms ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
     &:hover {
         transform: scale(.95, .99);

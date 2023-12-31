@@ -6,7 +6,7 @@ import { getJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import "./style.scss";
 import JobDetails from "../JobDetails";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);
@@ -302,20 +302,15 @@ const JobGrid = () => {
                   <p className="company__pay">
                     ${salaryMinFormatted} - ${salaryMaxFormatted}{" "}
                   </p>
-                  {/* <Link
+                  <Link
                     href={`/talent/jobs/details/${job.id}`}
                   >
-                    View
-                  </Link> */}
                   <button
                     className="apply__button"
-                    onClick={
-                      () => 
-                      router.push(`/talent/jobs/details/${job.id}`)
-                      }
                   >
                     View More
                   </button>
+                  </Link>
                 </div>
               </div>
             );
