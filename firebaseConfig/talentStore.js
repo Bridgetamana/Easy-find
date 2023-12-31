@@ -134,3 +134,54 @@ export const getJobById = async (id) => {
   const docSnap = await getDoc(docRef);
   return docSnap.data();
 };
+
+// Readable Timestamp
+export function convertTimestamp(timestamp) {
+  if (!timestamp) {
+    return 'Invalid timestamp';
+  }
+
+  const now = new Date();
+  const timestampDate = timestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
+
+  const diff = now - timestampDate;
+  const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+
+  if (days >= 2) {
+    // More than 2 days, show the days ago
+    return `${days} days ago`;
+  } else if (days === 1) {
+    // Yesterday
+    return 'Yesterday';
+  } else {
+    // Today
+    return 'Today';
+  }
+}
+
+export function convertFutureTimestamp(timestamp) {
+  if (!timestamp) {
+    return 'Invalid timestamp';
+  }
+
+  const now = new Date();
+  const timestampDate = timestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
+
+  const diff = timestampDate - now;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (days >= 2) {
+    // More than 2 days in the future, show the full date
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    return timestampDate.toLocaleDateString(undefined, options);
+  } else if (days === 1) {
+    // Tomorrow
+    return 'Tomorrow';
+  } else if (days === 0) {
+    // Today
+    return 'Today';
+  } else {
+    // In the past
+    return `${-days} ${days === 1 ? 'day' : 'days'} ago`;
+  }
+}

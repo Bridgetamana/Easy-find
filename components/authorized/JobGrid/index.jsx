@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import "./style.scss";
+import JobDetails from "../JobDetails";
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);
@@ -12,6 +13,8 @@ const JobGrid = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [detailsPage, setDetailsPage] = useState(null);
+  const [selectedJob, setSelectedJob] = useState(null);
   const jobsPerPage = 8;
 
   useEffect(() => {
@@ -55,6 +58,11 @@ const JobGrid = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
+  };
+
+  const handleDetailsPage = (jobId) => {
+    setSelectedJob(jobId);
+    setDetailsPage(true);
   };
 
   return (
@@ -293,10 +301,10 @@ const JobGrid = () => {
                     ${salaryMinFormatted} - ${salaryMaxFormatted}{" "}
                   </p>
                   {/* <Link
-                    href={`/talent/jobs/details/${generateJobHash(job.id)}`}
+                    href={`/talent/jobs/details/${job.id}`}
                   >
-                    <button className="apply__button">View More</button>
                   </Link> */}
+                  <button className="apply__button"onClick={() => handleDetailsPage(job.id)} >View More</button>
                 </div>
               </div>
             );
@@ -337,6 +345,15 @@ const JobGrid = () => {
           Next
         </button>
       </div>
+      {detailsPage && (
+        <JobDetails
+          jobId={selectedJob}
+          onClose={() => {
+            setDetailsPage(false);
+            setSelectedJob(null);
+          }}
+        />
+      )}
     </section>
   );
 };

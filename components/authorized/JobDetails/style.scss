@@ -26,7 +26,7 @@
             }
         }
 
-        .save__button{
+        .save__button {
             margin-left: auto;
             display: flex;
             align-items: center;
@@ -37,7 +37,7 @@
             border: 1px solid $neutral;
             color: $black;
             font-size: $font-fourteen;
-            font-weight: $font-weight-500;  
+            font-weight: $font-weight-500;
 
             // &:hover {
             //     background-color: $neutral;
@@ -101,6 +101,11 @@
                         font-weight: $font-weight-500;
                         color: $black;
                     }
+                    .not__specified {
+                        font-size: $font-fourteen;
+                        font-weight: $font-weight-500;
+                        color: $primary;
+                    }
                 }
             }
         }
@@ -158,8 +163,7 @@
                         font-weight: $font-weight-500;
                         color: $gray;
 
-                        display: grid;
-                        grid-template-columns: 3% 97%;
+                        display: flex;
                         gap: 0.5rem;
                         align-items: flex-start;
                         line-height: 1;
@@ -175,12 +179,12 @@
     }
 
     //Application button
-    .apply__button{
+    .apply__button {
         margin-top: 2rem;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: .5rem;
+        gap: 0.5rem;
         width: 100%;
         height: 3rem;
         padding: 1rem 0;

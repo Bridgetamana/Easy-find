@@ -7,47 +7,48 @@ import Link from "next/link";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import { getJobById } from "@/firebaseConfig/talentStore";
 import "./style.scss";
+import { convertFutureTimestamp, convertTimestamp } from "../../../firebaseConfig/talentStore";
 
-export default function JobDetails() {
+export default function JobDetails({ jobId}) {
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
 
+    const fetchJobDetails = async () => {
+      try {
+        const response = await getJobById(jobId);
+        setJobDetails(response);
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+    
   const handleSaveJob = () => {
     setIsSaved(!isSaved);
   };
 
+  useEffect(() => {
+    if (jobId) {
+      fetchJobDetails();
+    }
+  }, [jobId]);
+
   if (!jobDetails) {
-    // You might want to render a loading state here
     return <LoadingScreen />;
   }
 
-
-  const fetchJobDetails = async () => {
-    try {
-        const response = await getJobById(jobId); // <-- Pass jobId here
-        setJobDetails(response);
-        console.log("Job details:", response);
-      } catch (error) {
-        console.error("Error fetching job details:", error);
-      }
-  };
-  
-
-  useEffect(() => {
-    fetchJobDetails();
-  }, []); 
+  const notSpecified = <span className="not__specified">Not Specified</span>
 
   return (
     <div className="jobDetails__section">
       <div className="details__header">
-        <h2 className="details__title">Senior Full-stack Developer</h2>
+        <h2 className="details__title">{jobDetails.title}</h2>
         <div className="details__flex">
           <p className="details__type">
             <AiOutlineEnvironment fill="#9d9d9d" />
             Full-time
           </p>
           <p className="details__posted">
-            <AiOutlineClockCircle fill="#9d9d9d" />3 days ago
+            <AiOutlineClockCircle fill="#9d9d9d" />{convertTimestamp(jobDetails.datePosted)}
           </p>
         </div>
         <button className="save__button" onClick={handleSaveJob}>
@@ -76,7 +77,7 @@ export default function JobDetails() {
             </div>
             <div className="info__right">
               <div className="info__text">
-                Mechanical / Auto / Automotive, Civil / Construction
+                {jobDetails?.industry || notSpecified}
               </div>
             </div>
           </div>
@@ -89,7 +90,7 @@ export default function JobDetails() {
               <p className="info__title">Job level</p>
             </div>
             <div className="info__right">
-              <div className="info__text">Entry Level</div>
+              <div className="info__text">{jobDetails.jobLevel || notSpecified}</div>
             </div>
           </div>
 
@@ -101,7 +102,7 @@ export default function JobDetails() {
               <p className="info__title">Qualification</p>
             </div>
             <div className="info__right">
-              <div className="info__text">Bachelor's Degree</div>
+              <div className="info__text">{jobDetails.qualifications || notSpecified}</div>
             </div>
           </div>
 
@@ -113,7 +114,7 @@ export default function JobDetails() {
               <p className="info__title">Salary</p>
             </div>
             <div className="info__right">
-              <div className="info__text">$500 - $1000</div>
+              <div className="info__text">{jobDetails.minSalary} - {jobDetails.maxSalary}</div>
             </div>
           </div>
 
@@ -137,7 +138,7 @@ export default function JobDetails() {
               <p className="info__title">Job type</p>
             </div>
             <div className="info__right">
-              <div className="info__text">Full-time</div>
+              <div className="info__text">{jobDetails.jobType}</div>
             </div>
           </div>
 
@@ -149,7 +150,7 @@ export default function JobDetails() {
               <p className="info__title">Deadline</p>
             </div>
             <div className="info__right">
-              <div className="info__text">30/10/2021</div>
+              <div className="info__text">{convertFutureTimestamp(jobDetails.deadline)}</div>
             </div>
           </div>
 
@@ -161,7 +162,7 @@ export default function JobDetails() {
               <p className="info__title">Location</p>
             </div>
             <div className="info__right">
-              <div className="info__text">San Gwann, Remote</div>
+              <div className="info__text">{jobDetails.location}</div>
             </div>
           </div>
         </div>
@@ -190,11 +191,7 @@ export default function JobDetails() {
           <h2 className="description__title">Job Description</h2>
         </div>
         <p className="description__text">
-          One of the main areas that I work on with my clients is shedding these
-          non-supportive beliefs and replacing them with beliefs that will help
-          them to accomplish their desires. It is truly amazing the damage that
-          we, as parents, can inflict on our children. So why do we do it? For
-          the most part, we don’t do it intentionally or with malice.
+          {jobDetails.description || notSpecified}
         </p>
       </section>
 
@@ -202,42 +199,25 @@ export default function JobDetails() {
       <section className="requiredSkills__section">
         <div className="skills__header">
           <h2 className="skills__title">
-            Required Knowledge, Skills, and Abilities
+            Requirements
           </h2>
         </div>
         <div className="skills__content">
           <ul className="skills__list">
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Commitment – understanding the price and having the willingness
-                to pay that price
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Courage – the ability to act in the face of fear
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                You will drift aimlessly until you arrive back at the original
-                dock
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                You will run aground and become hopelessly stuck in the mud
-              </p>
-            </li>
+            {
+              jobDetails.skills.map((skill, index) => (
+              <li className="skills__item" key={index}>
+                <p className="skills__text">
+                  <BsCheck2Circle fill="#66789c" />
+                  {skill}
+                </p>
+              </li>
+            ))}
           </ul>
         </div>
       </section>
 
-      <section className="requiredSkills__section">
+      {/* <section className="requiredSkills__section">
         <div className="skills__header">
           <h2 className="skills__title">Education + Experience</h2>
         </div>
@@ -250,30 +230,9 @@ export default function JobDetails() {
                 after which you will sink to the bottom.
               </p>
             </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Clarity – developing the Vision
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Give yourself the power of responsibility. Remind yourself the
-                only thing stopping you is yourself.
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Do it today. Remind yourself of someone you know who died
-                suddenly and the fact that there is no guarantee that tomorrow
-                will come.
-              </p>
-            </li>
           </ul>
         </div>
-      </section>
+      </section> */}
 
       {/* <JobBenefits/> */}
       <section className="requiredSkills__section">
@@ -282,34 +241,15 @@ export default function JobDetails() {
         </div>
         <div className="skills__content">
           <ul className="skills__list">
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                You will sail along until you collide with an immovable object,
-                after which you will sink to the bottom.
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Clarity – developing the Vision
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Give yourself the power of responsibility. Remind yourself the
-                only thing stopping you is yourself.
-              </p>
-            </li>
-            <li className="skills__item">
-              <p className="skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                Do it today. Remind yourself of someone you know who died
-                suddenly and the fact that there is no guarantee that tomorrow
-                will come.
-              </p>
-            </li>
+            {
+              jobDetails.benefits.map((benefit, index) => (
+              <li className="skills__item" key={index}>
+                <p className="skills__text">
+                  <BsCheck2Circle fill="#66789c" />
+                  {benefit}
+                </p>
+              </li>
+            ))}
           </ul>
         </div>
       </section>
