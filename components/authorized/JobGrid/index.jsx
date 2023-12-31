@@ -6,6 +6,7 @@ import { getJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import "./style.scss";
 import JobDetails from "../JobDetails";
+import { useRouter } from "next/router";
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);
@@ -16,6 +17,7 @@ const JobGrid = () => {
   const [detailsPage, setDetailsPage] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const jobsPerPage = 8;
+  const router = useRouter();
 
   useEffect(() => {
     fetchJobs();
@@ -303,8 +305,17 @@ const JobGrid = () => {
                   {/* <Link
                     href={`/talent/jobs/details/${job.id}`}
                   >
+                    View
                   </Link> */}
-                  <button className="apply__button"onClick={() => handleDetailsPage(job.id)} >View More</button>
+                  <button
+                    className="apply__button"
+                    onClick={
+                      () => 
+                      router.push(`/talent/jobs/details/${job.id}`)
+                      }
+                  >
+                    View More
+                  </button>
                 </div>
               </div>
             );

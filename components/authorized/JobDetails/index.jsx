@@ -8,10 +8,14 @@ import LoadingScreen from "@/components/utils/Loaders/Loader";
 import { getJobById } from "@/firebaseConfig/talentStore";
 import "./style.scss";
 import { convertFutureTimestamp, convertTimestamp } from "../../../firebaseConfig/talentStore";
+import { useRouter } from "next/router";
 
-export default function JobDetails({ jobId}) {
+export default function JobDetails() {
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
+  const router = useRouter();
+  const {jobId} = router.query.id;
+  console.log('jobId', jobId);
 
     const fetchJobDetails = async () => {
       try {
