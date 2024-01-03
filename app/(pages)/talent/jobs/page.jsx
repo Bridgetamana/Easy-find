@@ -9,11 +9,13 @@ import './style.scss';
 const JobListingsPage = () => {
 
   return (
+    <ProtectedRoute>
     <div className="job__page">
       <JobHero/>
         <JobGrid/>
     </div>
+    </ProtectedRoute>
   );
 }
 
-export default ProtectedRoute(JobListingsPage);
+export default JobListingsPage;

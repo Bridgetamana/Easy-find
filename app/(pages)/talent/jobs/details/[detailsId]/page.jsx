@@ -14,10 +14,11 @@ import Button from "@/components/utils/Button";
 import { BsCheck2Circle, BsHeart, BsHeartFill } from "react-icons/bs";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
+import ProtectedRoute from "@/utils/ProtectedRoute";
 import Link from "next/link";
 import "./style.scss";
 
-export default function JobDetails({ params }) {
+const JobDetails = ({ params }) => {
   const jobId = params.detailsId;
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
@@ -56,11 +57,10 @@ export default function JobDetails({ params }) {
     }
   };
 
-
   const notSpecified = <span className="not__specified">Not Specified</span>;
 
   return (
-    <>
+    <ProtectedRoute>
       {jobDetails && (
         <div className="jobDetails__section">
           <div className="details__header">
@@ -302,6 +302,8 @@ export default function JobDetails({ params }) {
           </Link>
         </div>
       )}
-    </>
+    </ProtectedRoute>
   );
 }
+
+export default JobDetails;
