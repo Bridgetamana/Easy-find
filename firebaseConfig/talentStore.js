@@ -26,7 +26,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { auth, db } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -185,3 +185,51 @@ export function convertFutureTimestamp(timestamp) {
     return `${-days} ${days === 1 ? 'day' : 'days'} ago`;
   }
 }
+
+// Function to save a job ID to the user's saved jobs array
+export const saveJob = async (jobId) => {
+  try {
+    // Ensure the user is authenticated
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+
+    // Get the user's document reference
+    const userDocRef = db.collection(TALENT).doc(user.uid);
+
+    // Update the user's document with the new saved job ID
+    await userDocRef.update({
+      saved: db.FieldValue.arrayUnion(jobId),
+    });
+
+    console.log('Job saved successfully!');
+  } catch (error) {
+    console.error('Error saving job:', error.message);
+    throw error;
+  }
+};
+
+// Function to unsave a job ID from the user's saved jobs array
+export const unsaveJob = async (jobId) => {
+  try {
+    // Ensure the user is authenticated
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+
+    // Get the user's document reference
+    const userDocRef = db.collection('users').doc(user.uid);
+
+    // Update the user's document to remove the job ID from the saved array
+    await userDocRef.update({
+      saved: db.FieldValue.arrayRemove(jobId),
+    });
+
+    console.log('Job unsaved successfully!');
+  } catch (error) {
+    console.error('Error unsaving job:', error.message);
+    throw error;
+  }
+};

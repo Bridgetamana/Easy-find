@@ -6,10 +6,12 @@ import {
   getJobById,
   convertFutureTimestamp,
   convertTimestamp,
+  unsaveJob,
+  saveJob,
 } from "@/firebaseConfig/talentStore";
 import { BiBadgeCheck } from "react-icons/bi";
 import Button from "@/components/utils/Button";
-import { BsCheck2Circle, BsHeart } from "react-icons/bs";
+import { BsCheck2Circle, BsHeart, BsHeartFill } from "react-icons/bs";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import Link from "next/link";
@@ -39,9 +41,21 @@ export default function JobDetails({ params }) {
     }
   }, [jobId]);
 
-  const handleSaveJob = () => {
-    setIsSaved(!isSaved);
+  const handleSaveJob = async () => {
+    try {
+      if (isSaved) {
+        await unsaveJob(jobDetails.id);
+      } else {
+        await saveJob(jobDetails.id);
+      }
+      // Toggle the save state
+      setIsSaved(!isSaved);
+    } catch (error) {
+      // Handle errors if necessary
+      console.error('Error handling save:', error.message);
+    }
   };
+
 
   const notSpecified = <span className="not__specified">Not Specified</span>;
 
@@ -50,7 +64,7 @@ export default function JobDetails({ params }) {
       {jobDetails && (
         <div className="jobDetails__section">
           <div className="details__header">
-            <Link href="/jobs">
+            <Link href="/talent/jobs">
               <Button
                 type="button"
                 title="Back to Jobs"
