@@ -7,8 +7,8 @@ function ProtectedRoute({ children }) {
   const router = useRouter();
 
   if (!user) {
-    router.push('/'); // Redirect to the home page if the user is not authenticated
-    return null; // Render nothing while redirecting
+    router.push('/'); 
+    return null; 
   }
 
   return children;
