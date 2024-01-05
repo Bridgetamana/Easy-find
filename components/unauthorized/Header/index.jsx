@@ -80,7 +80,7 @@ export default function UnauthorizedHeader() {
             </li>
             <RxDividerVertical size={24} />
             <li className="nav__item">
-              <Link href="/login" className="nav__link">
+              <Link href="/signin" className="nav__link">
                 Sign In
               </Link>
             </li>
@@ -117,7 +117,7 @@ export default function UnauthorizedHeader() {
 
         <nav className={`nav__bar ${showMenu ? "show__navbar" : "nav__bar"}`}>
           <div className="nav__header">
-            <div className="header__logo">
+            <Link href="/" className="header__logo">
               <Image
                 src="/assets/images/EasyFind.svg"
                 alt="Logo"
@@ -127,7 +127,7 @@ export default function UnauthorizedHeader() {
                 layout="fixed"
                 className="logo"
               />
-            </div>
+            </Link>
             <button type="button" className="close__menu" onClick={closeMenu}>
               <CgClose size={24} />
             </button>
@@ -195,7 +195,7 @@ export default function UnauthorizedHeader() {
               </Link>
             </li>
             <li className="nav__item">
-              <Link href="/login" className="nav__link">
+              <Link href="/signin" className="nav__link">
                 Sign In
               </Link>
             </li>
