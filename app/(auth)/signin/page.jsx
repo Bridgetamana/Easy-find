@@ -129,7 +129,7 @@ export default function Signin() {
           <div className="header">
             <h1 className="title">Sign In</h1>
             <p className="subtitle">
-              To keep connected with us please login with your personal info.
+              To keep connected with us please login with your details.
             </p>
           </div>
           <form className="form__wrap" onSubmit={handleLogin}>

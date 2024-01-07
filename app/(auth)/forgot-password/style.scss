@@ -1,0 +1,149 @@
+// forgot-password.scss
+@import "../../global.scss";
+
+.forgotPassword__form {
+    background-color: #f5f5f5;
+    width: 100%;
+    height: 100vh;
+    margin: auto;
+    display: grid;
+    place-items: center;
+
+    .forgotPassword-form__container {
+        width: 90%;
+        height: 450px;
+        background-color: $white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 2rem;
+        
+
+        @media screen and (min-width: 600px) {
+            width: 500px;
+            margin: auto;
+        }
+
+            .header {
+                .title {
+                    font-size: $font-forty;
+                    font-family: $font-logo;
+                    font-weight: $font-weight-500;
+                    color: $primary;
+                    line-height: $line-height-1-2;
+                    margin-top: 0.35rem;
+                    padding: 0;
+                    text-align: center;
+                }
+    
+                .subtitle {
+                    font-size: $font-eighteen;
+                    font-weight: $font-weight-400;
+                    color: $lightGray;
+                    text-align: center;
+                    line-height: $line-height-1-2;
+                    padding: 0;
+                }    
+            }
+
+            .form__wrap {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                .input__field {
+                    width: 100%;
+                    height: 3.5rem;
+                    background-color: #ebedf8e8;
+                    border-radius: 10px;
+                    border: none;
+                    padding: 0 1rem;
+                    margin-bottom: 1rem;
+                    font-size: $font-sixteen;
+                    font-weight: $font-weight-400;
+                    color: $black;
+                    line-height: $line-height-1-2;
+                    transition: all 0.3s ease-in-out;
+
+                    &:focus,
+                    &:active {
+                        background-color: #d9d6ee99;
+                    }
+
+                    &::placeholder {
+                        color: $placeholder;
+                    }
+                }
+
+                .flex {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    margin-bottom: 0.5rem;
+
+                    .forgot__password {
+                        border: none;
+                        background-color: transparent;
+                        color: $placeholder;
+                        font-weight: $font-weight-500;
+                        font-size: $font-twelve;
+
+                        @media screen and (min-width: 400px) {
+                            font-size: $font-fourteen;
+                        }
+
+                        &:hover {
+                            color: $lightGray;
+                            border-bottom: 1px solid $lightGray;
+                        }
+                    }
+                }
+
+                .reset-password__btn {
+                    background-color: $primary;
+                    color: $white;
+                    font-size: $font-twenty;
+                    font-weight: $font-weight-400;
+                    width: 100%;
+                    height: 3.5rem;
+                    display: grid;
+                    padding: 0.75rem;
+                    border-radius: 10px;
+                    margin-top: 0.5rem;
+                    cursor: pointer;
+                    transition: all 0.3s ease-in-out;
+                    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px;
+
+                    &:hover {
+                        transform: scale(0.95, 1);
+                    }
+                }
+            
+
+            .login__info {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                margin: 0.75rem auto;
+
+                .text {
+                    font-size: $font-fourteen;
+                    font-weight: $font-weight-400;
+                    color: $gray;
+                    margin-right: 0.5rem;
+                }
+
+                .signin__text {
+                    color: $primary;
+                    cursor: pointer;
+                    font-size: $font-fourteen;
+                    font-weight: $font-weight-400;
+                }
+            }
+        }
+    }
+}

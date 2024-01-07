@@ -104,6 +104,24 @@ export const loginUser = async (email, password) => {
   }
 };
 
+//Handle Password Reset
+export const resetPassword = async (oobCode, newPassword) => {
+  try {
+    // Confirm the action code is valid.
+    await auth.verifyPasswordResetCode(oobCode);
+
+    // Save the new password.
+    await auth.confirmPasswordReset(oobCode, newPassword);
+
+    console.log('Password reset successful.');
+
+    return true; // Password reset successful
+  } catch (error) {
+    console.error('Error resetting password:', error.message);
+    return false; // Password reset failed
+  }
+};
+
 //Update Talent
 export const updateTalent = async (talent) => {
   const docRef = doc(db, TALENT, talent.id);
