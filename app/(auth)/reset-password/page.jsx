@@ -6,18 +6,21 @@ import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { resetPassword } from "@/firebaseConfig/talentStore"; // Import your resetPassword function
 import "./style.scss";
 
-export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
+export default function ResetPassword() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-  
+
     try {
-      await sendPasswordResetEmail(auth, email);
-  
+      // Call the function to send a password reset email
+      await resetPassword(email);
+
+      // Show a success alert
       await showAlert({
         type: "success",
         title: "Success",
@@ -25,12 +28,13 @@ export default function ForgotPassword() {
         showCloseButton: false,
         timeout: 4000,
         handleClose: () => setAlert(null),
-      });
-      
-      setEmail("");
+      }, setAlert);
+
+      // Reset the form field
+      setPassword("");
+      setConfirmPassword("");
     } catch (error) {
       console.error("Password reset error:", error);
-  
       // Show an error alert
       await showAlert({
         type: "error",
@@ -39,11 +43,11 @@ export default function ForgotPassword() {
         showCloseButton: false,
         timeout: 4000,
         handleClose: () => setAlert(null),
-      });
+      }, setAlert);
     } finally {
       setIsLoading(false);
     }
-  }; 
+  };
 
   const handleInputChange = (e) => {
     const { value } = e.target;
@@ -51,27 +55,35 @@ export default function ForgotPassword() {
   };
 
   return (
-    <section className="forgotPassword__form">
+    <section className="resetPassword__form">
       {alert && alert.component}
-      <div className="forgotPassword-form__container">
+      <div className="resetPassword-form__container">
         <div className="header">
-          <h1 className="title">Forgot Password</h1>
+          <h1 className="title">Reset Password</h1>
           <p className="subtitle">
-            Enter your email address to reset your password.
+            Enter your new password.
           </p>
         </div>
         <form className="form__wrap" onSubmit={handleResetPassword}>
           <input
             type="text"
-            name="email"
-            placeholder="Email"
+            name="password"
+            placeholder="Password"
             className="input__field"
-            value={email}
+            value={password}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="confirm-password"
+            placeholder="Confirm Password"
+            className="input__field"
+            value={confirmPassword}
             onChange={handleInputChange}
           />
 
           <button className="reset-password__btn" type="submit">
-            {isLoading ? <Spinner /> : "Reset Password"}
+            {isLoading ? <Spinner /> : "Submit"}
           </button>
 
           <div className="login__info">
