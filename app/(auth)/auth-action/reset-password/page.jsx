@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Spinner from "@/components/utils/Loaders/Spinner";
-import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import "./style.scss";
@@ -14,7 +13,7 @@ export default function ResetPasswordForm({
   ACTIONS,
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -26,11 +25,10 @@ export default function ResetPasswordForm({
       }, 3000);
       return () => clearTimeout(clearErrorTimeout);
     }
-  }, [state.error, dispatch, ACTIONS]);
+  }, [ dispatch, ACTIONS]);
 
   return (
     <section className="resetPassword__form">
-      {alert && alert.component}
       <div className="resetPassword-form__container">
         <div className="header">
           <h1 className="title">Reset Password</h1>
@@ -43,10 +41,16 @@ export default function ResetPasswordForm({
               name="password"
               placeholder="Password"
               className="pass__field"
-              value={password}
-              onChange={handleInputChange}
+              // value={state.password}
+              onChange={(e) =>
+                dispatch({
+                  type: ACTIONS.PASSWORD_CHANGE,
+                  field: "password",
+                  value: e.target.value,
+                })
+              }
               required
-              disabled={isLoading}
+              // disabled={isLoading}
             />
             {showPassword ? (
               <IoEye
@@ -65,13 +69,21 @@ export default function ResetPasswordForm({
             name="confirm-password"
             placeholder="Confirm Password"
             className="input__field"
-            value={confirmPassword}
-            onChange={handleInputChange}
+            // value={state.confirmPassword}
+            onChange={(e) =>
+              dispatch({
+                type: ACTIONS.PASSWORD_CHANGE,
+                field: "confirmPassword",
+                value: e.target.value,
+              })
+            }
+            required
           />
 
+          {/* {state.error && <p className="error_msg">{state.error}</p>}
           <button className="reset-password__btn" type="submit">
-            {isLoading ? <Spinner /> : "Submit"}
-          </button>
+            {state.loading ? <Spinner /> : "Submit"}
+          </button> */}
 
           <div className="login__info">
             <p className="text">

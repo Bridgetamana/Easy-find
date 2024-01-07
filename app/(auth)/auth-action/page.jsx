@@ -1,8 +1,13 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth, applyActionCode, verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
+import {
+  getAuth,
+  applyActionCode,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
+} from "firebase/auth";
 import ResetPasswordForm from "./ResetPasswordForm";
-import ResetPasswordSuccess from "./ResetPasswordSuccess";
+// import ResetPasswordSuccess from "./ResetPasswordSuccess";
 
 // Define action types
 const ACTIONS = {
@@ -23,83 +28,80 @@ const initialState = {
 };
 
 function reducer(state, action) {
-    switch (action.type) {
-      case ACTIONS.PASSWORD_CHANGE:
-        return { ...state, [action.field]: action.value };
-      case ACTIONS.RESET_FORM:
-        return { ...initialState, stage: "form", loading: false };
-      case ACTIONS.SHOW_MESSAGE:
-        return {
-          ...state,
-          stage: "success",
-          message: action.message,
-          loading: false,
-        };
-      case ACTIONS.SHOW_ERROR:
-        return { ...state, stage: "form", error: action.error, loading: false };
-      case ACTIONS.LOADING:
-        return { ...state, loading: true };
-      default:
-        return state;
+  switch (action.type) {
+    case ACTIONS.PASSWORD_CHANGE:
+      return { ...state, [action.field]: action.value };
+    case ACTIONS.RESET_FORM:
+      return { ...initialState, stage: "form", loading: false };
+    case ACTIONS.SHOW_MESSAGE:
+      return {
+        ...state,
+        stage: "success",
+        message: action.message,
+        loading: false,
+      };
+    case ACTIONS.SHOW_ERROR:
+      return { ...state, stage: "form", error: action.error, loading: false };
+    case ACTIONS.LOADING:
+      return { ...state, loading: true };
+    default:
+      return state;
+  }
+}
+
+function validatePassword(pass, isStrongPolicy) {
+    if (isStrongPolicy) {
+      const regex = /^(?=.*\d)(?=.*[\W_]).{8,}$/;
+      return regex.test(pass);
+    } else {
+      return pass.length >= 6;
     }
   }
 
 export default function AuthAction() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [message, setMessage] = useState("Verifying your email... ");
+  const [showTooltip, setShowTooltip] = useState(false);
   const router = useRouter();
+  const auth = getAuth();
+  const [isStrongPasswordPolicy, setIsStrongPasswordPolicy] = useState(true);
+  const location = useLocation();
+  const [action, setAction] = useState("");
+  const [oobCode, setOobCode] = useState("");
 
   useEffect(() => {
     const auth = getAuth();
-    const { mode, oobCode } = router.query;
-  
-    const handleNoActionSpecified = async () => {
-      console.error("No action specified.");
-      await showAlert({
-        type: "error",
-        title: "Error",
-        message: "No action specified.",
-        showCloseButton: false,
-        timeout: 4000,
-        handleClose: () => setAlert(null),
-      }, setAlert);
-    };
-  
+    const urlParams = new URLSearchParams(location.search);
+    const mode = urlParams.get("mode");
+    const actionCode = urlParams.get("oobCode");
+    setOobCode(actionCode);
+
     switch (mode) {
       case "verifyEmail":
-        handleVerifyEmail(auth, oobCode);
+        setAction("verifyEmail");
+        handleVerifyEmail(auth, actionCode);
         break;
       case "resetPassword":
-        handleResetPassword(auth, oobCode)
-          .then(() => dispatch({ type: ACTIONS.SHOW_MESSAGE, message: "Please enter your new password." }))
-          .catch(() => dispatch({ type: ACTIONS.SHOW_ERROR, error: "Invalid or expired link for password reset." }));
+        setAction("resetPassword");
+        handleResetPassword(auth, actionCode)
+          .then(() => setMessage("Please enter your new password."))
+          .catch((error) =>
+            setMessage("Invalid or expired link for password reset.")
+          );
         break;
       default:
-        handleNoActionSpecified();
+        console.error("No action specified.");
         break;
     }
-  }, [router.query]);
-  
+  }, [router, location.search, auth]);
+
   const handleVerifyEmail = async (auth, actionCode) => {
     try {
       await applyActionCode(auth, actionCode);
-      await showAlert({
-        type: "success",
-        title: "Success",
-        message: "Email verified successfully. Proceed to login.",
-        showCloseButton: false,
-        timeout: 3000,
-        handleClose: () => setAlert(null),
-        }, setAlert);
-        navigate("/");
+      setMessage("Your email has been verified. You can now log in.");
+      setTimeout(() => router.push("/"), 3000);
     } catch (error) {
-      await showAlert({
-        type: "error",
-        title: "Error",
-        message: "Error verifying email. Please try again.",
-        showCloseButton: false,
-        timeout: 4000,
-        handleClose: () => setAlert(null),
-        }, setAlert);
+      setMessage("Error verifying email. Please try again.");
     }
   };
 
@@ -138,15 +140,6 @@ export default function AuthAction() {
       dispatch({
         type: ACTIONS.SHOW_ERROR,
         error: "New password and confirm password do not match.",
-      });
-      return false;
-    }
-    if (!validatePassword(state.password, isStrongPasswordPolicy)) {
-      dispatch({
-        type: ACTIONS.SHOW_ERROR,
-        error: isStrongPasswordPolicy
-          ? "Password must be at least 8 characters long, must contain at least one number and a special character."
-          : "Password must be at least 6 digits long.",
       });
       return false;
     }
