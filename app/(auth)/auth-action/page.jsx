@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useReducer } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -7,7 +8,7 @@ import {
   confirmPasswordReset,
 } from "firebase/auth";
 import ResetPasswordForm from "./ResetPasswordForm";
-// import ResetPasswordSuccess from "./ResetPasswordSuccess";
+import ResetPasswordSuccess from "./ResetPasswordSuccess";
 
 // Define action types
 const ACTIONS = {
@@ -187,7 +188,7 @@ export default function AuthAction() {
       )}
 
       {state.stage === "success" && (
-        <ResetPasswordSuccess state={state} navigate={navigate} />
+        <ResetPasswordSuccess state={state} navigate={router} />
       )}
     </>
   );
