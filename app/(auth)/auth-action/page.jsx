@@ -187,7 +187,7 @@ export default function AuthAction() {
         />
       )}
 
-      {state.stage === "success" && (
+      {state.stage && (
         <ResetPasswordSuccess state={state} navigate={router} />
       )}
     </>

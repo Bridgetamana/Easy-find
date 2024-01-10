@@ -10,6 +10,7 @@ export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState(""); 
   const [alert, setAlert] = useState(null);
 
   const handleResetPassword = async (e) => {
