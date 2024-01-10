@@ -4,9 +4,9 @@ import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
 import { getJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
-import "./style.scss";
 import JobDetails from "../JobDetails";
 import { useRouter } from "next/navigation";
+import "./style.scss";
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);
@@ -16,8 +16,8 @@ const JobGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [detailsPage, setDetailsPage] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
-  const jobsPerPage = 8;
   const router = useRouter();
+  const jobsPerPage = 8;
 
   useEffect(() => {
     fetchJobs();

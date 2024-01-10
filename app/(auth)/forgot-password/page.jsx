@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Spinner from "@/components/utils/Loaders/Spinner";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
-import { resetPassword } from "@/firebaseConfig/talentStore"; // Import your resetPassword function
+import { sendPasswordResetEmail } from "firebase/auth"; 
+// import { auth } from "firebase/auth";
+import { auth } from "@/firebaseConfig/firebase";
 import "./style.scss";
 
 export default function ForgotPassword() {
@@ -25,7 +27,7 @@ export default function ForgotPassword() {
         showCloseButton: false,
         timeout: 4000,
         handleClose: () => setAlert(null),
-      });
+      }, setAlert);
       
       setEmail("");
     } catch (error) {
@@ -37,9 +39,9 @@ export default function ForgotPassword() {
         title: "Error",
         message: error.message,
         showCloseButton: false,
-        timeout: 4000,
+        timeout: 14000,
         handleClose: () => setAlert(null),
-      });
+      }, setAlert);
     } finally {
       setIsLoading(false);
     }
