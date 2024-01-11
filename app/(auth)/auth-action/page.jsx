@@ -63,7 +63,6 @@ function validatePassword(pass, isStrongPolicy) {
 export default function AuthAction() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [message, setMessage] = useState("Verifying your email... ");
-  const [showTooltip, setShowTooltip] = useState(false);
   const router = useRouter();
   const auth = getAuth();
   const location = useLocation();
@@ -110,36 +109,6 @@ export default function AuthAction() {
       setMessage("Error verifying email. Please try again.");
     }
   };
-
-  async function handleResetPassword(auth, actionCode) {
-    try {
-      const userEmail = await verifyPasswordResetCode(auth, actionCode);
-      return userEmail;
-    } catch (error) {
-      dispatch({
-        type: ACTIONS.SHOW_ERROR,
-        error: "Error verifying the password reset token.",
-      });
-      console.error("Error verifying the password reset token:", error);
-      return null;
-    }
-  }
-
-  async function updatePasswordForUser(code, newPassword) {
-    try {
-      await confirmPasswordReset(auth, code, newPassword);
-      dispatch({
-        type: ACTIONS.SHOW_MESSAGE,
-        message: "Password updated successfully.",
-      });
-    } catch (error) {
-      dispatch({
-        type: ACTIONS.SHOW_ERROR,
-        error: "Error updating the password. Please try again.",
-      });
-      console.error("Error updating password:", error);
-    }
-  }
 
   const validatePasswords = () => {
     if (state.password !== state.confirmPassword) {

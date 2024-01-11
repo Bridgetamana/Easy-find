@@ -27,24 +27,51 @@ export default function ResetPassword() {
     setShowPassword(!showPassword);
   };
 
+  const validatePassword = (pass) => {
+    const regex = /^(?=.*\d)[\w]{8,}$/;
+    return regex.test(pass);
+  };
+  
+  const validatePasswords = () => {
+    if (password !== confirmPassword) {
+      showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: "Password and confirm password don't match.",
+          showCloseButton: false,
+          timeout: 4000,
+          handleClose: () => setAlert(null),
+        },
+        setAlert
+      );
+      return false;
+    }
+    return true;
+  };
+  
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
+    if (!validatePasswords() || !validatePassword(password)) {
+      // Return if either password validation fails
+      setIsLoading(false);
+      return;
+    }
+  
     if (oobCode) {
-      setIsLoading(true);
-
       try {
         // Perform the password reset confirmation
         const success = await resetPassword(oobCode, password);
-
+  
         if (success) {
           // Show a success alert
           await showAlert(
             {
               type: "success",
               title: "Success",
-              message: "Password reset was Successfulx.",
+              message: "Password reset was successful.",
               showCloseButton: false,
               timeout: 3000,
               handleClose: () => setAlert(null),
@@ -52,6 +79,7 @@ export default function ResetPassword() {
             setAlert
           );
         } else {
+          // Show an error alert if password reset fails
           await showAlert(
             {
               type: "error",
@@ -65,6 +93,7 @@ export default function ResetPassword() {
           );
         }
       } catch (error) {
+        // Show an error alert for any unexpected errors
         await showAlert(
           {
             type: "error",
@@ -76,10 +105,7 @@ export default function ResetPassword() {
           },
           setAlert
         );
-        console.error(
-          "Error during password reset confirmation:",
-          error.message
-        );
+        console.error("Error during password reset confirmation:", error.message);
       } finally {
         setIsLoading(false);
         setPassword("");
@@ -87,6 +113,7 @@ export default function ResetPassword() {
       }
     }
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
