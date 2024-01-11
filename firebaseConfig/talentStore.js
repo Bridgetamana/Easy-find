@@ -33,9 +33,10 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword,
   setPersistence,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
   browserSessionPersistence,
 } from "firebase/auth";
-import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
 const TALENT = "talentCollection";
 
@@ -107,11 +108,9 @@ export const loginUser = async (email, password) => {
 //Handle Password Reset
 export const resetPassword = async (oobCode, newPassword) => {
   try {
-    // Confirm the action code is valid.
-    await auth.verifyPasswordResetCode(oobCode);
+    await verifyPasswordResetCode(auth, oobCode, newPassword);
 
-    // Save the new password.
-    await auth.confirmPasswordReset(oobCode, newPassword);
+    await confirmPasswordReset(auth, oobCode, newPassword);
 
     console.log('Password reset successful.');
 

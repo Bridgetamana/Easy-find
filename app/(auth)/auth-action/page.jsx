@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useReducer } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useLocation } from "next/navigation";
 import {
   getAuth,
   applyActionCode,
@@ -42,6 +42,7 @@ function reducer(state, action) {
         loading: false,
       };
     case ACTIONS.SHOW_ERROR:
+      console.log(action.error)
       return { ...state, stage: "form", error: action.error, loading: false };
     case ACTIONS.LOADING:
       return { ...state, loading: true };
@@ -65,7 +66,6 @@ export default function AuthAction() {
   const [showTooltip, setShowTooltip] = useState(false);
   const router = useRouter();
   const auth = getAuth();
-  const [isStrongPasswordPolicy, setIsStrongPasswordPolicy] = useState(true);
   const location = useLocation();
   const [action, setAction] = useState("");
   const [oobCode, setOobCode] = useState("");
@@ -87,7 +87,12 @@ export default function AuthAction() {
         handleResetPassword(auth, actionCode)
           .then(() => setMessage("Please enter your new password."))
           .catch((error) =>
-            setMessage("Invalid or expired link for password reset.")
+          // setMessage("Invalid or expired link for password reset.")
+          console.log(error)
+          // dispatch({
+          //   type: ACTIONS.SHOW_ERROR,
+          //   error: "Invalid or expired link for password reset.",
+          // })
           );
         break;
       default:

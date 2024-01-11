@@ -98,8 +98,6 @@ export default function Signin() {
       setIsLoading(false);
     }
   };
-  
-  
 
   const handleInputChange = (e) => {
     const { name, value, checked } = e.target;
