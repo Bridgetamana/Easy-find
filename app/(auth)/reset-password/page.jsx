@@ -6,7 +6,6 @@ import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { resetPassword } from "@/firebaseConfig/talentStore";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import "./style.scss";
-import { useRouter } from "next/navigation";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -17,7 +16,6 @@ export default function ResetPassword() {
   const [oobCode, setOobCode] = useState("");
 
   useEffect(() => {
-    // Get oobCode from the URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const actionCode = urlParams.get("oobCode");
     setOobCode(actionCode);
@@ -55,14 +53,12 @@ export default function ResetPassword() {
     setIsLoading(true);
   
     if (!validatePasswords() || !validatePassword(password)) {
-      // Return if either password validation fails
       setIsLoading(false);
       return;
     }
   
     if (oobCode) {
       try {
-        // Perform the password reset confirmation
         const success = await resetPassword(oobCode, password);
   
         if (success) {

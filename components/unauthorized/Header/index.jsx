@@ -100,17 +100,17 @@ export default function UnauthorizedHeader() {
 
       {/* Mobile Header */}
       <div className="mobile__header">
-      <div className="header__logo">
-              <Image
-                src="/assets/images/EasyFind.svg"
-                alt="Logo"
-                sizes="100px"
-                width={100}
-                height={10}
-                layout="fixed"
-                className="logo"
-              />
-            </div>
+        <div className="header__logo">
+          <Image
+            src="/assets/images/EasyFind.svg"
+            alt="Logo"
+            sizes="100px"
+            width={100}
+            height={10}
+            layout="fixed"
+            className="logo"
+          />
+        </div>
         <button type="button" className="menu__button" onClick={toggleMenu}>
           <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
         </button>
@@ -129,7 +129,7 @@ export default function UnauthorizedHeader() {
               />
             </Link>
             <button type="button" className="close__menu" onClick={closeMenu}>
-              <CgClose size={24} />
+              <CgClose size={20} />
             </button>
           </div>
 
