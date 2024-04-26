@@ -1,11 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import jobSeeker from "../../public/assets/images/job_seekers.jpg";
+import Stats from "./Hero/Stats";
 
 export default function Heroine() {
   return (
-    <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 lg:mt-32 min-h-[calc(100vh_-80px_)]">
+    <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 lg:mt-24 min-h-[calc(100vh_-_80px_)] lg:min-h-[calc(100vh_-_120px_)]">
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
         <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
           <h1>
@@ -43,69 +42,28 @@ export default function Heroine() {
               </button>
             </form>
             <p className="mt-3 text-sm text-gray-500">
-              We care about the protection of your data. Read our{" "}
-              <a href="#" className="font-medium text-gray-900 underline">
-                Privacy Policy
-              </a>
-              .
+              <span  className="font-medium text-gray-900">
+              Suggestions: {" "}
+              </span>
+              Designer, Programming, Full-time, Remote, Meta
             </p>
           </div>
         </div>
         <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
-          <svg
-            className="absolute left-1/2 top-0 origin-top -translate-x-1/2 -translate-y-8 scale-75 transform sm:scale-100 lg:hidden"
-            width={640}
-            height={784}
-            fill="none"
-            viewBox="0 0 640 784"
-            aria-hidden="true"
-          >
-            <defs>
-              <pattern
-                id="4f4f415c-a0e9-44c2-9601-6ded5a34a13e"
-                x={118}
-                y={0}
-                width={20}
-                height={20}
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x={0}
-                  y={0}
-                  width={4}
-                  height={4}
-                  className="text-gray-200"
-                  fill="currentColor"
-                />
-              </pattern>
-            </defs>
-            <rect
-              y={72}
-              width={640}
-              height={640}
-              className="text-gray-50"
-              fill="currentColor"
-            />
-            <rect
-              x={118}
-              width={404}
-              height={784}
-              fill="url(#4f4f415c-a0e9-44c2-9601-6ded5a34a13e)"
-            />
-          </svg>
-          <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
+          <div className="relative mx-auto w-full rounded-lg shadow-lg ">
             <div className="relative block w-full overflow-hidden rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
               <Image
                 src="/assets/images/job_seekers.jpg"
                 alt="Job seekers"
-                width={640} 
-                height={360} 
+                width={640}
+                height={360}
                 layout="responsive"
               />
             </div>
           </div>
         </div>
       </div>
+      <Stats />
     </main>
   );
 }
