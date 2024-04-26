@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
-import './global.scss';
+import "./global.scss";
 
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import UnauthorizedHeader from "@/components/unauthorized/Header";
-import Hero from "@/components/unauthorized/Hero";
+
+// import Hero from "@/components/unauthorized/Hero";
+import Heroine from "@/components/unauthorized/Heroine";
 import TalentFeatures from "@/components/unauthorized/Features";
 import BrowseJobs from "@/components/unauthorized/Jobs";
 import TestimonialsSection from "@/components/unauthorized/Testimonials";
@@ -17,12 +19,13 @@ export default function LandingPage() {
     <div className="main">
       <div className="hero__main">
         <UnauthorizedHeader />
-        <Hero />
+        {/* <Hero /> */}
+       <Heroine />
       </div>
-      <TalentFeatures/>
+      <TalentFeatures />
       {/* <BrowseJobs /> */}
       <CallToAction />
-      <TestimonialsSection/>
+      <TestimonialsSection />
       <Footer />
     </div>
   );

@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
 
 /* Define CSS variables with the minutheme colors */
@@ -226,22 +227,22 @@ img {
     height: auto;
 }
 
-button {
-    border: none;
-    outline: none;
-    cursor: pointer;
-    transition: 0.5s ease-in-out;
-    font-family: $font-text;
+// button {
+//     border: none;
+//     outline: none;
+//     cursor: pointer;
+//     transition: 0.5s ease-in-out;
+//     font-family: $font-text;
 
-    &:hover {
-        transform: scale(0.99, 1);
-    }
-}
+//     &:hover {
+//         transform: scale(0.99, 1);
+//     }
+// }
 
-input {
-    border: none;
-    outline: none;
-}
+// input {
+//     border: none;
+//     outline: none;
+// }
 
 .container {
     width: 100%;

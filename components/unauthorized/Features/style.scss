@@ -78,5 +78,71 @@
                 }
             }
         }
+
+        .features__card {
+            margin-top: 5rem; // Equivalent to mt-20 in Tailwind
+          
+            .features-grid {
+              display: grid;
+              grid-template-columns: repeat(1, 1fr);
+              gap: 3rem; // Equivalent to gap-12 in Tailwind
+          
+              @media (min-width: 640px) { // sm breakpoint
+                grid-template-columns: repeat(2, 1fr);
+              }
+          
+              @media (min-width: 1024px) { // lg breakpoint
+                grid-template-columns: repeat(3, 1fr);
+              }
+            }
+          
+            .feature {
+              padding-top: 1.5rem; // Equivalent to pt-6 in Tailwind
+          
+              .card {
+                background-color: #f9fafb; // bg-gray-50 in Tailwind
+                border-radius: 0.5rem; // rounded-lg in Tailwind
+                padding: 1.5rem; // px-6 in Tailwind
+                padding-bottom: 2rem; // pb-8 in Tailwind
+                position: relative;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); // shadow-lg in Tailwind
+          
+                .feature-icon-wrapper {
+                  margin-top: -1.5rem; // -mt-6 in Tailwind
+          
+                  .icon-circle {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #6366f1; // bg-indigo-500 in Tailwind
+                    height: 3rem; // p-3 in Tailwind
+                    width: 3rem; // p-3 in Tailwind
+                    border-radius: 1.25rem; // rounded-xl in Tailwind
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); // shadow-lg in Tailwind
+          
+                    .icon {
+                      color: #ffffff; font-size: 18px; font-weight: 600;
+                    }
+                  }
+                }
+          
+                .feature-title {
+                  margin-top: 2rem; // mt-8 in Tailwind
+                  font-size: 1.125rem; // text-lg in Tailwind
+                  font-weight: 600; // font-semibold in Tailwind
+                  color: #1f2937; // text-gray-900 in Tailwind
+                  line-height: 1.25; // leading-8 in Tailwind
+                }
+          
+                .feature-description {
+                  margin-top: 1.25rem; // mt-5 in Tailwind
+                  font-size: 1rem; // text-base in Tailwind
+                  line-height: 1.75; // leading-7 in Tailwind
+                  color: #4b5563; // text-gray-600 in Tailwind
+                }
+              }
+            }
+          }
+          
     }
 }

@@ -1,4 +1,5 @@
 import './global.scss'
+import './index.scss'
 
 export const metadata = {
   title: "EasyFind",

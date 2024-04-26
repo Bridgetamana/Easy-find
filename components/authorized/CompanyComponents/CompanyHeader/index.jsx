@@ -4,6 +4,7 @@ import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
 import { BsChevronDown } from "react-icons/bs";
 import CompanyDropdown from "../AccountDropdown";
+import Image from 'next/image';
 import Link from "next/link";
 import "./style.scss";
 
