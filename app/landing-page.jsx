@@ -5,7 +5,9 @@ import "./global.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import UnauthorizedHeader from "@/components/unauthorized/Header";
-import Heroine from "@/components/unauthorized/Heroine";
+import Hero from "@/components/unauthorized/Hero";
+import TargetAudience from "@/components/unauthorized/TargetAudience";
+import JobGrid from "@/components/authorized/JobGrid";
 import TalentFeatures from "@/components/unauthorized/Features";
 import BrowseJobs from "@/components/unauthorized/Jobs";
 import TestimonialsSection from "@/components/unauthorized/Testimonials";
@@ -17,10 +19,12 @@ export default function LandingPage() {
     <div className="main">
       <div className="hero__main">
         <UnauthorizedHeader />
-       <Heroine />
+       <Hero />
       </div>
-      <TalentFeatures />
-      <BrowseJobs />
+      <TargetAudience />
+      {/* <TalentFeatures /> */}
+      <JobGrid />
+      {/* <BrowseJobs /> */}
       <CallToAction />
       <TestimonialsSection />
       <Footer />

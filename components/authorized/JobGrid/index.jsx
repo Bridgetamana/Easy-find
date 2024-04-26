@@ -69,6 +69,7 @@ const JobGrid = () => {
 
   return (
     <section className="job__grid">
+      
       <div className="grid__header">
         <div className="header__left">
           <h5 className="total__jobs">
