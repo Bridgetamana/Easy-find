@@ -6,7 +6,7 @@ export default function TargetAudience() {
     <div className="mx-auto mt-16 max-w-8xl px-4 sm:px-12 sm:mt-24 lg:mt-24 ">
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
         <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
-            <div className="relative block w-full overflow-hidden p-8 rounded-2xl bg-cyan-100 hover:ring-blue-500 shadow-sm">
+            <div className="relative block w-full overflow-hidden p-8 rounded-2xl bg-blue-100 hover:ring-blue-500 shadow-sm">
               <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
                 <h1>
                   <span className="block text-base font-semibold text-blue-500 sm:text-lg lg:text-base xl:text-lg">
@@ -25,7 +25,7 @@ export default function TargetAudience() {
             </div>
         </div>
         <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
-            <div className="relative block w-full overflow-hidden p-8 rounded-2xl bg-blue-100 hover:ring-blue-500 shadow-sm">
+            <div className="relative block w-full overflow-hidden p-8 rounded-2xl bg-cyan-100 hover:ring-blue-500 shadow-sm">
               <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
                 <h1>
                   <span className="block text-base font-semibold text-blue-500 sm:text-lg lg:text-base xl:text-lg">

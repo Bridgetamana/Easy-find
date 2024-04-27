@@ -1,6 +1,6 @@
 const stats = [
     { id: 1, name: 'Users on the platform', value: '8,000+' },
-    { id: 2, name: 'Hiring company', value: '9,800' },
+    { id: 2, name: 'Hiring companies', value: '9,800' },
     { id: 3, name: 'Available jobs', value: '10,756' },
     { id: 4, name: 'Hiring rate', value: '89%' },
   ]

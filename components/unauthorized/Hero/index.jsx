@@ -17,7 +17,7 @@ export default function Heroine() {
             </h1>
           </h1>
           <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-            Looking for a new role? Create a profile on Hired to connect
+            Looking for a new role? Create a profile on EasyFind to connect
             directly with growing tech teams. Hiring? We're the go-to platform
             for sourcing the best tech talent out there.
           </p>

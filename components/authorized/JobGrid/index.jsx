@@ -261,7 +261,7 @@ const JobGrid = () => {
       {isLoading && <LoadingScreen />}
       {/* Job listings */}
       {jobs.length > 0 && (
-        <div className="grid__body">
+        <div className="grid__body  grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
           {currentJobs.map((job) => {
             const salaryMinFormatted = job.minSalary.toLocaleString();
             const salaryMaxFormatted = job.maxSalary.toLocaleString();
@@ -273,7 +273,7 @@ const JobGrid = () => {
               hour12: true,
             });
             return (
-              <div className="jobs__card" key={job.id}>
+              <div className="jobs__card overflow-hidden rounded-xl border border-gray-200" key={job.id}>
                 <div className="card__info">
                   <div className="card__company">
                     <div className="card__logo">
