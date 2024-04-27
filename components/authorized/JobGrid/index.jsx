@@ -68,8 +68,14 @@ const JobGrid = () => {
   };
 
   return (
-    <section className="job__grid">
-      
+    <section className="job__grid py-12 my-24 bg-white">
+      <div className="w-[90%] m-auto">
+       <div className="mx-auto max-w-xl text-center my-6">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Explore the latest job openings
+          </p>
+          <h2 className="text-lg font-semibold leading-8 tracking-tight text-indigo-600">Discover jobs most relevant to you</h2>
+        </div>
       <div className="grid__header">
         <div className="header__left">
           <h5 className="total__jobs">
@@ -361,6 +367,7 @@ const JobGrid = () => {
           }}
         />
       )}
+      </div>
     </section>
   );
 };
