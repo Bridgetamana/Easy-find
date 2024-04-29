@@ -39,7 +39,7 @@ export default function Footer() {
                </a>
              </li>
            </ul> */}
-         <p className="footer__text">&copy; {new Date().getFullYear()} MinuJobs. All rights reserved</p>
+         <p className="footer__text">&copy; {new Date().getFullYear()} EasyFind. All rights reserved</p>
          </div>
        </div>
     </footer>
