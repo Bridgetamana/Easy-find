@@ -1,6 +1,6 @@
 import React from "react";
 import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
-import "./style.scss";
+import "./style.module.scss";
 
 export default function TestimonialsLayout({ data, handleClick, handleNextClick, handlePreviousClick, currentPage, pageNumbers }) {
   return (

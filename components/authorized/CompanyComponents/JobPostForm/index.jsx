@@ -3,7 +3,7 @@ import axios from "axios";
 require('dotenv').config();
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "./style.scss";
+import "./style.module.scss";
 
 const removeImmutable = (data) => {
   if (typeof data === "object" && data !== null) {

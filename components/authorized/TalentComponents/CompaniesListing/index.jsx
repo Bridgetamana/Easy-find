@@ -3,7 +3,7 @@ import { AiOutlineEnvironment } from "react-icons/ai";
 import Link from "next/link";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { BsBriefcase } from "react-icons/bs";
-import "./style.scss";
+import "./style.module.scss";
 
 const companiesPostings = [
   {

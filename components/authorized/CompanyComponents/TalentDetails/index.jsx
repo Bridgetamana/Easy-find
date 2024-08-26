@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { AiOutlineEnvironment } from "react-icons/ai";
-import "./style.scss";
+import "./style.module.scss";
 
 export default function TalentDetails() {
   const [formData, setFormData] = useState({

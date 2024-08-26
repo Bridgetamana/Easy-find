@@ -6,7 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import AccountDropdown from "../AccountDropdown";
 import Link from "next/link";
 import Image from "next/image";
-import "./style.scss";
+import "./style.module.scss";
 
 export default function TalentHeader() {
   const [showMenu, setShowMenu] = useState(false);

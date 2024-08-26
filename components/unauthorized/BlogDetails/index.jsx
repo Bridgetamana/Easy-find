@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Posts } from "../BlogList";
-import "./style.scss";
+import "./style.module.scss";
 
 const BlogDetails = () => {
   const router = useRouter();

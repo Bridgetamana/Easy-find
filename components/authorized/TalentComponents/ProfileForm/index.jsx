@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import axios from "axios";
-import "./style.scss";
+import "./style.module.scss";
 import { useRouter } from "next/navigation";
 
 export default function TalentProfileForm() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-import './style.scss';
+import styles from './style.module.scss';
 
 export default function JobHero() {
   return (

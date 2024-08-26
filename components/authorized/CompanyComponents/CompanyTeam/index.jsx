@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './style.scss';
+import styles from './style.module.scss';
 
 // Function to fetch random user data from randomuser.me API
 const fetchRandomUserData = async () => {

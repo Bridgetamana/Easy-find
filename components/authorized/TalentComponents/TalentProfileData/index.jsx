@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { AiOutlineEnvironment } from "react-icons/ai";
 require("dotenv").config();
-import "./style.scss";
+import "./style.module.scss";
 
 export default function TalentProfileData({ handleEditClick }) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;

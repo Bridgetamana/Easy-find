@@ -6,7 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import CompanyDropdown from "../AccountDropdown";
 import Image from 'next/image';
 import Link from "next/link";
-import "./style.scss";
+import "./style.module.scss";
 
 export default function CompanyHeader() {
   const [showMenu, setShowMenu] = useState(false);

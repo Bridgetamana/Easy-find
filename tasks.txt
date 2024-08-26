@@ -1,0 +1,4 @@
+- Make landing page look more real, remove lorem ipsum texts and add real texts.
+- All style modules, change the classnames to style modules classnames, e.g `className={styles.container}`.
+- Fix issues
+- Make a list of features to be added to the app after resolving all issues.

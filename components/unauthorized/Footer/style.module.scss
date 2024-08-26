@@ -1,0 +1,76 @@
+@import '../../../styles/variables.scss';
+
+.unauthorized__footer {
+    background-color: $black;
+    color: $white;
+    text-align: center;
+    font-size: 12px;
+    width: 100%;
+    background-color: $backdrop;
+
+    .footer__bottom {
+        display: flex;
+       flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid $border;
+        padding: 1rem;
+        
+        .footer__right {
+            width: 90%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .logo {
+                height: 2rem;
+                width: 6rem;
+                object-fit: cover;
+            }
+
+            .footer__list {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+
+                .footer__list_item {
+                    cursor: pointer;
+                    transition: all 0.3s ease-in-out;
+                    margin-right: 0.5rem;
+
+                    @media screen and (min-width: $breakpoint-4) {
+                        margin-right: 2rem;
+                    }
+
+                    &:hover {
+                        color: $primary;
+                    }
+
+                    .footer__link {
+                        font-family: $font-text;
+                        font-size: $font-twelve;
+                        font-weight: $font-weight-400;
+                        color: $gray;
+                        margin-bottom: 1rem;
+                        text-align: left;
+
+                    }
+                }
+            }
+        }
+
+        .footer__text {
+            font-size: $font-twelve;
+            font-weight: $font-weight-400;
+            text-align: right;
+            width: 100%;
+            color: $lightGray;
+
+            @media screen and (min-width: $breakpoint-4) {
+                width: 50%;
+            }
+        }
+    }
+}

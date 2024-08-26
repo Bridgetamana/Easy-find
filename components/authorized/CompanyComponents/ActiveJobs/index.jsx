@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import "./style.scss";
+import "./style.module.scss";
 
 export default function ActiveJobs() {
   const [jobs, setJobs] = useState([]);

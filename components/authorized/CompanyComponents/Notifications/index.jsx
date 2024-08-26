@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './style.scss';
+import styles from './style.module.scss';
 import { MdNotifications } from 'react-icons/md';
 
 const notificationsData = [
