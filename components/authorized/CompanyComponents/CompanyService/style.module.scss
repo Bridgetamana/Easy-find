@@ -1,0 +1,62 @@
+@import "../../../../app/global.scss";
+
+.services__section {
+  padding: 40px;
+  background-color: $backdrop;
+
+  .services__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .service__item {
+      width: 300px;
+      padding: 20px;
+      margin: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      display: grid;
+      place-items: center;
+
+      .service__image {
+        height: 100px;
+        width: 200px;
+        margin-bottom: 20px;
+        background-color: $border;
+
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .service__title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .service__description {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .service__button {
+        background-color: $primary;
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #204dbd;
+        }
+      }
+    }
+  }
+}
