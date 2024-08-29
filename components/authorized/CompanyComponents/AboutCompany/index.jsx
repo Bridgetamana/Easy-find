@@ -1,9 +1,9 @@
 import React from 'react';
-import style from './style.module.scss';
+import styles from './style.module.scss';
 
 export default function AboutCompany() {
   return (
-   <section className={style.aboutCompany__section}>
+   <section className={styles.aboutCompany__section}>
 
    </section>
   )

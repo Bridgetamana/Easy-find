@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CgBriefcase } from "react-icons/cg";
 import { AiOutlineClockCircle } from "react-icons/ai";
-import "./style.scss";
+import "./style.module.scss";
 
 const jobUrl = "https://minujob.com/job-listings/";
 

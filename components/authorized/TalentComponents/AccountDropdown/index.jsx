@@ -1,24 +1,24 @@
 import React from "react";
 import Link from "next/link";
-import "./style.scss";
+import styles from "./style.module.scss";
 
 export default function AccountDropdown() {
  
   return (
-    <div className="account__menu">
-      <ul className="dropdown__list">
-        <li className="dropdown__link">
-          <Link href="/talent/profile" className="link">
+    <div className={styles.account__menu}>
+      <ul className={styles.dropdown__list}>
+        <li className={styles.dropdown__link}>
+          <Link href="/talent/profile" className={styles.link}>
             Profile
           </Link>
         </li>
-        <li className="dropdown__link">
-          <Link href="/talent/settings" className="link">
+        <li className={styles.dropdown__link}>
+          <Link href="/talent/settings" className={styles.link}>
             Setting
           </Link>
         </li>
-        <li className="dropdown__link">
-          <Link href="/talent/testimonials" className="link">
+        <li className={styles.dropdown__link}>
+          <Link href="/talent/testimonials" className={styles.link}>
             Testimonials
           </Link>
         </li>

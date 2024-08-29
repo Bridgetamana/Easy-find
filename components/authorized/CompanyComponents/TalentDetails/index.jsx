@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { AiOutlineEnvironment } from "react-icons/ai";
-import style from "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function TalentDetails() {
   const [formData, setFormData] = useState({
@@ -54,122 +54,122 @@ export default function TalentDetails() {
   } = formData;
 
   return (
-    <section className={style.talent__detsPage}>
-      <div className={style.details__container}>
-        <div className={style.details__top}>
-          <div className={style.details__column}>
+    <section className={styles.talent__detsPage}>
+      <div className={styles.details__container}>
+        <div className={styles.details__top}>
+          <div className={styles.details__column}>
             {profileImage && (
               <img
                 src={profileImage}
                 alt="Profile"
-                className={style.details__image}
+                className={styles.details__image}
               />
             )}
 
-            <div className={style.details__row}>
-              <h4 className={style.user__name}>{name}</h4>
-              <p className={style.user__address}>
+            <div className={styles.details__row}>
+              <h4 className={styles.user__name}>{name}</h4>
+              <p className={styles.user__address}>
                 <AiOutlineEnvironment />
                 {address}
               </p>
             </div>
-            <p className={style.user__title}>{jobTitle}</p>
+            <p className={styles.user__title}>{jobTitle}</p>
           </div>
         </div>
 
-        <div className={style.details__bottom}>
-          <div className={style.details__box}>
-            <h4 className={style.title}>Personal Details</h4>
-            <p className={style.text}>
+        <div className={styles.details__bottom}>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Personal Details</h4>
+            <p className={styles.text}>
               <strong>Pronouns:</strong> {pronouns}
             </p>
-            <p className={style.text}>
+            <p className={styles.text}>
               <strong>Gender:</strong> {gender}
             </p>
-            <p className={style.text}>
+            <p className={styles.text}>
               <strong>DOB:</strong> {dob}
             </p>
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>About</h4>
-            <p className={style.text}>{bio}</p>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>About</h4>
+            <p className={styles.text}>{bio}</p>
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>Skills</h4>
-            <p className={style.text}>{skills}</p>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Skills</h4>
+            <p className={styles.text}>{skills}</p>
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>Education</h4>
-            <p className={style.text}>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Education</h4>
+            <p className={styles.text}>
               <strong>Institution: </strong>
               {institute}
             </p>
-            <p className={style.text}>
+            <p className={styles.text}>
               <strong>Degree: </strong>
               {degree}
             </p>
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>Experience</h4>
-            <p className={style.text}>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Experience</h4>
+            <p className={styles.text}>
               <strong>Company: </strong>
               {company}
             </p>
-            <p className={style.text}>
+            <p className={styles.text}>
               <strong>Position: </strong>
               {position}
             </p>
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>Contact</h4>
-            <p className={style.text}>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Contact</h4>
+            <p className={styles.text}>
               <strong>Email: </strong>
               {email}
             </p>
-            <p className={style.text}>
+            <p className={styles.text}>
               <strong>Phone: </strong>
               {phone}
             </p>
-            <p className={style.text}>
+            <p className={styles.text}>
               <strong>Mobile: </strong>
               {mobile}
             </p>
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>Social Links</h4>
-            <p className={style.text}>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Social Links</h4>
+            <p className={styles.text}>
               <strong>LinkedIn:</strong> {linkedInLink}
             </p>
-            <p className={style.text}>
+            <p className={styles.text}>
               <strong>Portfolio:</strong> {portfolioLink}
             </p>
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>Resume*</h4>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Resume*</h4>
             {resume === null ? (
-              <p className={style.text}>No resume uploaded</p>
+              <p className={styles.text}>No resume uploaded</p>
             ) : (
               <a
                 href={resume}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={style.text}
+                className={styles.text}
               >
                 View Resume
               </a>
             )}
           </div>
 
-          <div className={style.details__box}>
-            <h4 className={style.title}>Additional Information</h4>
-            <p className={style.text}>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Additional Information</h4>
+            <p className={styles.text}>
               <strong>Desired Salary:</strong> ${minSalary} - ${maxSalary}
             </p>
           </div>

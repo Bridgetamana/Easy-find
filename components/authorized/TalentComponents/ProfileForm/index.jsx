@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import axios from "axios";
-import "./style.scss";
+import styles from "./style.module.scss";
 import { useRouter } from "next/navigation";
 
 export default function TalentProfileForm() {
@@ -218,32 +218,32 @@ export default function TalentProfileForm() {
   };
 
   return (
-    <div className="profile__page">
-      <div className="profile__form">
-        <div className="profile__image">
-          <div className="edit__image">
+    <div className={styles.profile__page}>
+      <div className={styles.profile__form}>
+        <div className={styles.profile__image}>
+          <div className={styles.edit__image}>
             <MdEdit size={20} fill="#2563eb" />
             <input
               type="file"
               accept="image/*"
               name="photo"
               onChange={handleInputChange}
-              className="form__input"
+              className={styles.form__input}
               // value={formData.photo}
             />
           </div>
           {formData.photo && (
-            <img src={formData.photo} alt="Profile" className="image" />
+            <img src={formData.photo} alt="Profile" className={styles.image} />
           )}
         </div>
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="name">Name:</label>
           <input
             type="text"
             name="username"
             value={formData.username}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your name"
             title="Start with capital letter and use only letters"
             pattern="^[A-Z][a-z]+$"
@@ -251,49 +251,49 @@ export default function TalentProfileForm() {
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="email">Email:</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your email address"
             required
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="bio">Bio:</label>
           <input
             type="text"
             name="bio"
             value={formData.bio}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your bio"
             required
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="dob">Date of Birth:</label>
           <input
             type="date"
             name="dob"
             value={formData.dob}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your date of birth"
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="pronouns">Pronouns:</label>
           <select
             name="pronouns"
-            className="form__select"
+            className={styles.form__select}
             value={formData.pronouns}
             onChange={handleInputChange}
             required
@@ -305,11 +305,11 @@ export default function TalentProfileForm() {
           </select>
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="gender">Gender:</label>
           <select
             name="gender"
-            className="form__select"
+            className={styles.form__select}
             value={formData.gender}
             onChange={handleInputChange}
           >
@@ -320,114 +320,114 @@ export default function TalentProfileForm() {
           </select>
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="jobTitle">Job Title:</label>
           <input
             type="text"
             name="jobTitle"
             value={formData.jobTitle}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your job title"
             required
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="socialLinks">LinkedIn Link:</label>
           <input
             type="text"
             name="linkedin"
             value={formData.linkedin}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your LinkedIn link"
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="socialLinks">Portfolio Link:</label>
           <input
             type="link"
             name="portfolio"
             value={formData.portfolio}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your portfolio link"
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="address">Address:</label>
           <input
             type="text"
             name="address"
             value={formData.address}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your address"
             required
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="phone">Phone:</label>
           <input
             type="text"
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your phone number"
             required
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="mobile">Mobile:</label>
           <input
             type="text"
             name="mobile"
             value={formData.mobile}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your mobile number"
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="resume">Update Resume:</label>
           <input
             type="file"
             accept=".pdf,.doc,.docx"
             name="resume"
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Upload your resume"
             required
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="skills">Skills:</label>
           <input
             type="text"
             name="skills"
             value={formData.skills}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your skills"
             required
           />
         </div>
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="skills">Education:</label>
           <input
             type="text"
             name="institute"
             value={formData.institute}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your institute"
           />
           <input
@@ -435,20 +435,20 @@ export default function TalentProfileForm() {
             name="degree"
             value={formData.degree}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your degree"
             required
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="skills">Experience:</label>
           <input
             type="text"
             name="company"
             value={formData.company}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your company"
             required
           />
@@ -457,19 +457,19 @@ export default function TalentProfileForm() {
             name="position"
             value={formData.position}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your position"
           />
         </div>
 
-        <div className="form__group">
+        <div className={styles.form__group}>
           <label htmlFor="desiredSalary">Desired Salary:</label>
           <input
             type="number"
             name="minSalary"
             value={formData.minSalary}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your desired minimum salary"
           />
           <input
@@ -477,14 +477,14 @@ export default function TalentProfileForm() {
             name="maxSalary"
             value={formData.maxSalary}
             onChange={handleInputChange}
-            className="form__input"
+            className={styles.form__input}
             placeholder="Enter your desired maximum salary"
           />
         </div>
-        {errorMsg && <p className="error">{errorMsg}</p>}
-        {successMsg && <p className="success">{successMsg}</p>}
-        <button onClick={handleSaveClick} className="save__button">
-          {isLoading ? <div className="spinner"></div> : "Save"}
+        {errorMsg && <p className={styles.error}>{errorMsg}</p>}
+        {successMsg && <p className={styles.success}>{successMsg}</p>}
+        <button onClick={handleSaveClick} className={styles.save__button}>
+          {isLoading ? <div className={styles.spinner}></div> : "Save"}
         </button>
       </div>
     </div>

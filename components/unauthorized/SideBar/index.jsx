@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BsDot } from "react-icons/bs";
 import { Posts} from "../BlogList/index"
 import axios from "axios";
-import "./style.scss";
+import "./style.module.scss";
 import Link from "next/link";
 
 

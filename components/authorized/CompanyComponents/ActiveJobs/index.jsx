@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import style from "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function ActiveJobs() {
   const [jobs, setJobs] = useState([]);
@@ -61,60 +61,60 @@ export default function ActiveJobs() {
   };
   
   return (
-    <section className={style.activeJobs__section}>
-      <div className={style.activeJobs__container}>
-        <div className={style.section__header}>
-          <h2 className={style.section__title}>Active Jobs</h2>
+    <section className={styles.activeJobs__section}>
+      <div className={styles.activeJobs__container}>
+        <div className={styles.section__header}>
+          <h2 className={styles.section__title}>Active Jobs</h2>
         </div>
-        <div className={style.section__body}>
-          <ul className={style.activePostings__list}>
+        <div className={styles.section__body}>
+          <ul className={styles.activePostings__list}>
             {jobs.length > 0 ? (
               jobs.map((job) => (
-                <li className={style.jobPosting} key={job.id}>
-                  <div className={style.jobPosting__header}>
-                    <h4 className={style.jobPosting__title}>
+                <li className={styles.jobPosting} key={job.id}>
+                  <div className={styles.jobPosting__header}>
+                    <h4 className={styles.jobPosting__title}>
                       {job.attributes.title}
                     </h4>
-                    <button className={style.edit__button} onClick={() => handleEdit(job.id)}>Edit</button>
+                    <button className={styles.edit__button} onClick={() => handleEdit(job.id)}>Edit</button>
                   </div>
-                  <div className={style.job__description}>
-                    <h5 className={style.job__subtitle}>Description:</h5>
-                    <p className={style.job__text}>{job.attributes.description}</p>
+                  <div className={styles.job__description}>
+                    <h5 className={styles.job__subtitle}>Description:</h5>
+                    <p className={styles.job__text}>{job.attributes.description}</p>
                   </div>
-                  <div className={style.post__column}>
-                    <div className={style.post__container}>
-                      <h5 className={style.jobPosting__subtitle}>Employment Type:</h5>
-                      <ul className={style.jobPosting__listItem}>
+                  <div className={styles.post__column}>
+                    <div className={styles.post__container}>
+                      <h5 className={styles.jobPosting__subtitle}>Employment Type:</h5>
+                      <ul className={styles.jobPosting__listItem}>
                         <li>{job.attributes.jobType}</li>
                       </ul>
                     </div>
-                    <div className={style.post__container}>
-                      <h5 className={style.jobPosting__subtitle}>Location:</h5>
-                      <ul className={style.jobPosting__listItem}>
+                    <div className={styles.post__container}>
+                      <h5 className={styles.jobPosting__subtitle}>Location:</h5>
+                      <ul className={styles.jobPosting__listItem}>
                         <li>{job.attributes.location}</li>
                       </ul>
                     </div>
-                    <div className={style.post__container}>
-                      <h5 className={style.jobPosting__subtitle}>Salary:</h5>
-                      <ul className={style.jobPosting__listItem}>
+                    <div className={styles.post__container}>
+                      <h5 className={styles.jobPosting__subtitle}>Salary:</h5>
+                      <ul className={styles.jobPosting__listItem}>
                         <li>
                           ${job.attributes.salaryMin.toLocaleString()} - $
                           {job.attributes.salaryMax.toLocaleString()} per year
                         </li>
                       </ul>
                     </div>
-                    <div className={style.post__container}>
-                      <h5 className={style.jobPosting__subtitle}>Experience:</h5>
-                      <ul className={style.jobPosting__listItem}>
+                    <div className={styles.post__container}>
+                      <h5 className={styles.jobPosting__subtitle}>Experience:</h5>
+                      <ul className={styles.jobPosting__listItem}>
                         <li>{job.attributes.jobLevel}</li>
                       </ul>
                     </div>
                   </div>
                   {showDetails[job.id] && (
-                    <div className={style.post__row}>
-                      <div className={style.post__container}>
-                        <h5 className={style.jobPosting__subtitle}>Requirements:</h5>
-                        <ul className={style.jobPosting__listItem}>
+                    <div className={styles.post__row}>
+                      <div className={styles.post__container}>
+                        <h5 className={styles.jobPosting__subtitle}>Requirements:</h5>
+                        <ul className={styles.jobPosting__listItem}>
                           <li>Experience with HTML, CSS, and JavaScript</li>
                           <li>Strong problem-solving skills</li>
                           <li>
@@ -122,9 +122,9 @@ export default function ActiveJobs() {
                           </li>
                         </ul>
                       </div>
-                      <div className={style.post__container}>
-                        <h5 className={style.jobPosting__subtitle}>Benefits:</h5>
-                        <ul className={style.jobPosting__listItem}>
+                      <div className={styles.post__container}>
+                        <h5 className={styles.jobPosting__subtitle}>Benefits:</h5>
+                        <ul className={styles.jobPosting__listItem}>
                           <li>Healthcare coverage</li>
                           <li>Flexible work hours</li>
                           <li>401(k) retirement plan</li>
@@ -132,11 +132,11 @@ export default function ActiveJobs() {
                       </div>
                     </div>
                   )}
-                  <div className={style.jobPosting__actions}>
-                    <div className={style.candidate__info}>
-                      <p className={style.total__candidates}>2 candidates applied</p>
+                  <div className={styles.jobPosting__actions}>
+                    <div className={styles.candidate__info}>
+                      <p className={styles.total__candidates}>2 candidates applied</p>
                       <button
-                        className={style.view__button}
+                        className={styles.view__button}
                         onClick={() => handleViewMore(job.id)}
                       >
                         {showDetails[job.id] ? "View Less" : "View More"}
@@ -146,7 +146,7 @@ export default function ActiveJobs() {
                 </li>
               ))
             ) : (
-              <p className={style.no__jobs}>No active jobs found.</p>
+              <p className={styles.no__jobs}>No active jobs found.</p>
             )}
           </ul>
         </div>

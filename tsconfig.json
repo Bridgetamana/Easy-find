@@ -20,14 +20,17 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "app/not-found.jsx", "app/error.jsx"  ],
+    "**/*.tsx",
+    "pages/not-found.jsx",
+    "pages/_error.js"
+  ],
   "exclude": [
     "node_modules"
   ]

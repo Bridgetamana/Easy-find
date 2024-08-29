@@ -6,7 +6,7 @@
 // import Link from "next/link";
 // import LoadingScreen from "@/components/utils/Loaders/Loader";
 // import { getJobById } from "@/firebaseConfig/talentStore";
-// import "./style.scss";
+// import "./style.module.scss";
 // import { convertFutureTimestamp, convertTimestamp } from "../../../firebaseConfig/talentStore";
 // import { useRouter } from "next/router";
 

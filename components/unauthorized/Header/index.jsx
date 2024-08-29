@@ -9,7 +9,7 @@ import FindJob from "../Dropdowns/FindJob";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import Button from "@/components/utils/Button";
 import Image from "next/image";
-import "./style.scss";
+import styles from './style.module.scss';
 
 export default function UnauthorizedHeader() {
   const [showMenu, setShowMenu] = useState(false);

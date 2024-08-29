@@ -3,7 +3,7 @@ import axios from "axios";
 require('dotenv').config();
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import style from "./style.module.scss";
+import styles from "./style.module.scss";
 
 const removeImmutable = (data) => {
   if (typeof data === "object" && data !== null) {
@@ -123,19 +123,19 @@ const JobPostForm = () => {
   };
 
   return (
-    <section className={style.jobPostings__section}>
-      <div className={style.section__header}>
-        <h2 className={style.section__title}>Job Postings</h2>
-        <p className={style.section__subtitle}>
+    <section className={styles.jobPostings__section}>
+      <div className={styles.section__header}>
+        <h2 className={styles.section__title}>Job Postings</h2>
+        <p className={styles.section__subtitle}>
           Share the details of your job advert.
         </p>
       </div>
-      <form className={style.jobPosting__form} onSubmit={handleSaveClick}>
-        <div className={style.input__wrap}>
+      <form className={styles.jobPosting__form} onSubmit={handleSaveClick}>
+        <div className={styles.input__wrap}>
           <label htmlFor="job-title">Job Title:</label>
           <input
             type="text"
-            className={style.input__field}
+            className={styles.input__field}
             name="jobTitle"
             value={formData.jobTitle}
             onChange={handleChange}
@@ -144,11 +144,11 @@ const JobPostForm = () => {
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="job-description">Job Description:</label>
           <textarea
             name="jobDescription"
-            className={style.text__field}
+            className={styles.text__field}
             cols="30"
             rows="10"
             value={formData.jobDescription}
@@ -158,7 +158,7 @@ const JobPostForm = () => {
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="requirements">Requirements:</label>
           <Editor
             name="requirements"
@@ -170,12 +170,12 @@ const JobPostForm = () => {
               }))
             }
             required
-            wrapperClassName={style.wrapperClassName}
-            editorClassName={style.editorClassName}
+            wrapperClassName={styles.wrapperClassName}
+            editorClassName={styles.editorClassName}
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="benefits">Benefits:</label>
           <Editor
             name="benefits"
@@ -187,12 +187,12 @@ const JobPostForm = () => {
               }))
             }
             required
-            wrapperClassName={style.wrapperClassName}
-            editorClassName={style.editorClassName}
+            wrapperClassName={styles.wrapperClassName}
+            editorClassName={styles.editorClassName}
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="education-experience">Education & Experience:</label>
           <Editor
             name="educationExperience"
@@ -204,16 +204,16 @@ const JobPostForm = () => {
               }))
             }
             required
-            wrapperClassName={style.wrapperClassName}
-            editorClassName={style.editorClassName}
+            wrapperClassName={styles.wrapperClassName}
+            editorClassName={styles.editorClassName}
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="industry">Industry:</label>
           <input
             type="text"
-            className={style.input__field}
+            className={styles.input__field}
             name="industry"
             value={formData.industry}
             onChange={handleChange}
@@ -222,11 +222,11 @@ const JobPostForm = () => {
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="location">Location:</label>
           <input
             type="text"
-            className={style.input__field}
+            className={styles.input__field}
             name="location"
             value={formData.location}
             onChange={handleChange}
@@ -235,11 +235,11 @@ const JobPostForm = () => {
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="salary">Salary:</label>
           <input
             type="text"
-            className={style.input__field}
+            className={styles.input__field}
             name="salaryMin"
             value={formData.salaryMin}
             onChange={handleChange}
@@ -248,7 +248,7 @@ const JobPostForm = () => {
           />
           <input
             type="text"
-            className={style.input__field}
+            className={styles.input__field}
             name="salaryMax"
             value={formData.salaryMax}
             onChange={handleChange}
@@ -257,10 +257,10 @@ const JobPostForm = () => {
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="salary-type">Salary Type:</label>
           <select
-            className={style.select__field}
+            className={styles.select__field}
             id="salary-type"
             name="salaryType"
             value={formData.salaryType}
@@ -273,10 +273,10 @@ const JobPostForm = () => {
           </select>
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="employment-type">Employment Type:</label>
           <select
-            className={style.select__field}
+            className={styles.select__field}
             id="employment-type"
             name="employmentType"
             value={formData.employmentType}
@@ -290,10 +290,10 @@ const JobPostForm = () => {
           </select>
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="experience-level">Experience Level:</label>
           <select
-            className={style.select__field}
+            className={styles.select__field}
             id="experience-level"
             name="jobLevel"
             value={formData.jobLevel}
@@ -307,12 +307,12 @@ const JobPostForm = () => {
           </select>
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="experience">Years of Experience:</label>
           <input
             type="number"
             min={0}
-            className={style.input__field}
+            className={styles.input__field}
             name="experience"
             value={formData.experience}
             onChange={handleChange}
@@ -321,11 +321,11 @@ const JobPostForm = () => {
           />
         </div>
 
-        <div className={style.input__wrap}>
+        <div className={styles.input__wrap}>
           <label htmlFor="deadline">Deadline:</label>
           <input
             type="date"
-            className={style.input__field}
+            className={styles.input__field}
             name="deadline"
             value={formData.deadline}
             onChange={handleChange}
@@ -334,20 +334,20 @@ const JobPostForm = () => {
           />
         </div>
         {isEditMode ? (
-          <button type="submit" className={style.submit__button}>
-            {isLoading ? <div className={style.spinner}></div> : "Create Job Post"}
+          <button type="submit" className={styles.submit__button}>
+            {isLoading ? <div className={styles.spinner}></div> : "Create Job Post"}
           </button>
         ) : (
           <button
             type="button"
-            className={style.edit__button}
+            className={styles.edit__button}
             onClick={handleEditClick}
           >
             Edit
           </button>
         )}
         {isSuccess && (
-          <p className={style.success__msg}>Job Post Created Successfully</p>
+          <p className={styles.success__msg}>Job Post Created Successfully</p>
         )}
       </form>
     </section>
