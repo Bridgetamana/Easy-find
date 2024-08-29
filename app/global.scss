@@ -176,6 +176,18 @@ $breakpoint-9: 1920px;
     width: 100%;
 }
 
+@mixin button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
 *,
 *::before,
 *::after {
@@ -183,6 +195,10 @@ $breakpoint-9: 1920px;
     margin: 0;
     padding: 0;
 }
+
+html {
+    scroll-behavior: smooth;
+}  
 
 body {
     font-family: $font-text;

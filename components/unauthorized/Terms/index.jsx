@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import "./style.scss";
 
@@ -73,7 +75,7 @@ export default function Terms() {
           </ol>
           <div className='buttons__wrap'>
             <button onClick={() => console.log("Accepted")} className='accept__btn'>Accept</button>
-            <button onClick={() => console.log("Closed")} className='close__btn'>Close</button>
+            <button onClick={() => window.history.back()} className='close__btn'>Close</button>
           </div>
         </div>
       </div>

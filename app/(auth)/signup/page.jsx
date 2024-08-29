@@ -235,7 +235,6 @@ export default function Signup() {
             </div>
             {activeTab === "talents" && (
               <form className="form__wrap" onSubmit={handleSubmit}>
-                <div className="input__group">
                   <input
                     type="text"
                     name="firstName"
@@ -252,7 +251,6 @@ export default function Signup() {
                     value={talentFormData.lastName}
                     onChange={handleChange}
                   />
-                </div>
                 <input
                   type="email"
                   name="email"
@@ -319,7 +317,7 @@ export default function Signup() {
                 </button>
                 <div className="signin__info">
                   <p className="text">Already have an account?</p>{" "}
-                  <Link href={"/login"} className="signin__text">
+                  <Link href={"/signin"} className="signin__text">
                     Sign In
                   </Link>
                 </div>
@@ -401,7 +399,7 @@ export default function Signup() {
                 </button>
                 <div className="signin__info">
                   <p className="text">Already have an account?</p>{" "}
-                  <Link href={"/signin"} className="signin__text">
+                  <Link href="/signin" className="signin__text">
                     Sign In
                   </Link>
                 </div>

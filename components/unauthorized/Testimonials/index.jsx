@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const featuredTestimonial = {
   body: 'Integer id nunc sit semper purus. Bibendum at lacus ut arcu blandit montes vitae auctor libero. Hac condimentum dignissim nibh vulputate ut nunc. Amet nibh orci mi venenatis blandit vel et proin. Non hendrerit in vel ac diam.',
   author: {
@@ -106,7 +107,7 @@ function classNames(...classes) {
 
 export default function TestimonialsSection() {
   return (
-    <div className="relative isolate bg-white pb-32 pt-24 sm:pt-32">
+    <div id="testimonials" className="relative isolate bg-white pb-32 pt-24 sm:pt-32 scroll-smooth">
       <div
         className="absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 transform-gpu overflow-hidden opacity-30 blur-3xl"
         aria-hidden="true"
