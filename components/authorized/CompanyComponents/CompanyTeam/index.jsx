@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './style.scss';
+import style from './style.module.scss';
 
 // Function to fetch random user data from randomuser.me API
 const fetchRandomUserData = async () => {
@@ -37,17 +37,21 @@ export default function CompanyTeam() {
   };
 
   return (
-    <section className="team__section">
-      <div className="section__header">
-        <h2 className="section__title">Our Team</h2>
+    <section className={style.team__section}>
+      <div className={style.section__header}>
+        <h2 className={style.section__title}>Our Team</h2>
       </div>
 
-      <div className="team__container">
+      <div className={style.team__container}>
         {teamMembers.map((member, index) => (
-          <div key={index} className="team__member">
-            <img src={member.image} alt={member.name} className="member__image" />
-            <h3 className="member__name">{member.name}</h3>
-            <p className="member__position">{member.position}</p>
+          <div key={index} className={style.team__member}>
+            <img
+              src={member.image}
+              alt={member.name}
+              className={style.member__image}
+            />
+            <h3 className={style.member__name}>{member.name}</h3>
+            <p className={style.member__position}>{member.position}</p>
           </div>
         ))}
       </div>
