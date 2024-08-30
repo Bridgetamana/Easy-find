@@ -7,7 +7,7 @@ export default function Heroine() {
     <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 lg:mt-24 min-h-[calc(100vh_-_80px_)] lg:min-h-[calc(100vh_-_120px_)]">
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
         <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
-          <h1>
+          <>
             <span className="block text-base font-semibold text-gray-500 sm:text-lg lg:text-base xl:text-lg">
               Coming soon
             </span>
@@ -15,7 +15,7 @@ export default function Heroine() {
               <span className="block text-gray-900">Hire a rising talent</span>
               <span className="block text-blue-600">Find your dream job</span>
             </h1>
-          </h1>
+          </>
           <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
             Looking for a new role? Create a profile on EasyFind to connect
             directly with growing tech teams. Hiring? We're the go-to platform

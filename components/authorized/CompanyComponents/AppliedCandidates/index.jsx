@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./style.module.scss";
 
 export default function AppliedCandidates() {
   // Mock data for applied candidates
@@ -19,23 +20,23 @@ export default function AppliedCandidates() {
   ];
 
   return (
-    <section className="appliedCandidates__section">
-      <div className="appliedCandidates__container">
-        <div className="section__header">
-          <h2 className="section__title">Applied Candidates</h2>
+    <section className={styles.appliedCandidates__section}>
+      <div className={styles.appliedCandidates__container}>
+        <div className={styles.section__header}>
+          <h2 className={styles.section__title}>Applied Candidates</h2>
         </div>
-        <div className="section__body">
+        <div className={styles.section__body}>
           {candidates.length > 0 ? (
-            <ul className="candidate__list">
+            <ul className={styles.candidate__list}>
               {candidates.map((candidate) => (
-                <li key={candidate.id} className="candidate__item">
-                  <h4 className="candidate__name">{candidate.name}</h4>
-                  <p className="candidate__email">{candidate.email}</p>
+                <li key={candidate.id} className={styles.candidate__item}>
+                  <h4 className={styles.candidate__name}>{candidate.name}</h4>
+                  <p className={styles.candidate__email}>{candidate.email}</p>
                   <a
                     href={candidate.resume}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="candidate__resume"
+                    className={styles.candidate__resume}
                   >
                     View Resume
                   </a>

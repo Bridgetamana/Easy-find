@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import "./style.scss";
+import styles from "./style.module.scss";
 
 const sections = [
   { id: 'testimonials' },
@@ -55,25 +55,25 @@ export default function FindJob() {
   }, []);
  
   return (
-    <div className="findJob__menu" ref={findJobRef}>
-      <ul className="dropdown__list">
-        <li className="dropdown__link">
-          <Link href="/minu" className="link">
+    <div className={styles.findJob__menu} ref={findJobRef}>
+      <ul className={styles.dropdown__list}>
+        <li className={styles.dropdown__link}>
+          <Link href="/minu" className={styles.link}>
             Browse Jobs
           </Link>
         </li>
-        <li className="dropdown__link">
-          <Link href="/become-talent" className="link">
+        <li className={styles.dropdown__link}>
+          <Link href="/become-talent" className={styles.link}>
             Find Companies
           </Link>
         </li>
-        <li className="dropdown__link">
-          <Link href='#testimonials' className="link">
+        <li className={styles.dropdown__link}>
+          <Link href='#testimonials' className={styles.link}>
             Testimonials
           </Link>
         </li>
-        <li className="dropdown__link">
-          <Link href="/terms" className="link">
+        <li className={styles.dropdown__link}>
+          <Link href="/terms" className={styles.link}>
             Terms
           </Link>
         </li>

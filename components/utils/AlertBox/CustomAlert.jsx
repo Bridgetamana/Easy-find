@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BiSolidError } from "react-icons/bi";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdError } from "react-icons/md";
-import "./style.scss";
+import "./style.module.scss";
 
 export const CustomAlert = ({
   type,

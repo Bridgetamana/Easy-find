@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import "./style.scss";
+import "./style.module.scss";
 
 export default function Terms() {
   return (
