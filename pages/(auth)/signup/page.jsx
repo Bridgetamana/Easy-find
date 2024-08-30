@@ -8,7 +8,7 @@ import ErrorMessage from "@/components/utils/Responses/Error";
 import { useRouter } from "next/navigation";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { registerCompany } from "@/firebaseConfig/companyStore";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function Signup() {
   const [activeTab, setActiveTab] = useState("talents");
@@ -191,55 +191,57 @@ export default function Signup() {
   };
 
   return (
-    <section className="registeration__form">
+    <section className={styles.registeration__form}>
       {alert && alert.component}
-      <div className="registeration__form_container">
-        <div className="registeration__signin">
-          <h1 className="title">Welcome To EasyFind!</h1>
-          <p className="subtitle">
+      <div className={styles.registeration__form_container}>
+        <div className={styles.registeration__signin}>
+          <h1 className={styles.title}>Welcome To EasyFind!</h1>
+          <p className={styles.subtitle}>
             Become our member and get access to over{" "}
             {activeTab === "talents" ? "a 100 companies" : "3,000 talents"} in
             Malta.
           </p>
-          <Link href={"/signin"} className="signin__btn">
+          <Link href={"/signin"} className={styles.signin__btn}>
             Sign In
           </Link>
         </div>
 
-        <div className="registeration__signup">
-          <div className="registeration__tabs">
+        <div className={styles.registeration__signup}>
+          <div className={styles.registeration__tabs}>
             <div
-              className={`tab ${activeTab === "talents" ? "active" : ""}`}
+              className={`${styles.tab} ${activeTab === "talents" ? styles.active : ''}`}
+
               onClick={() => handleTabChange("talents")}
             >
               For Talents
             </div>
             <div
-              className={`tab ${activeTab === "companies" ? "active" : ""}`}
+              className={`${styles.tab} ${activeTab === "companies" ? styles.active : ''}`}
+
               onClick={() => handleTabChange("companies")}
             >
               For Companies
             </div>
           </div>
-          <div className="signup__form">
-            <div className="header">
-              <h1 className="title">
+          <div className={styles.signup__form}>
+            <div className={styles.header}>
+              <h1 className={styles.title}>
                 Sign Up
                 {/* {activeTab === "talents" ? "Talent Sign Up" : "Company Sign Up"} */}
               </h1>
-              <p className="subtitle">
+              <p className={styles.subtitle}>
                 To join us as{" "}
                 {activeTab === "talents" ? "a talent" : "a company"}, kindly
                 fill in your info below.
               </p>
             </div>
             {activeTab === "talents" && (
-              <form className="form__wrap" onSubmit={handleSubmit}>
+              <form className={styles.form__wrap} onSubmit={handleSubmit}>
                   <input
                     type="text"
                     name="firstName"
                     placeholder="First Name"
-                    className="input__field"
+                    className={styles.input__field}
                     value={talentFormData.firstName}
                     onChange={handleChange}
                   />
@@ -247,7 +249,7 @@ export default function Signup() {
                     type="text"
                     name="lastName"
                     placeholder="Last Name"
-                    className="input__field"
+                    className={styles.input__field}
                     value={talentFormData.lastName}
                     onChange={handleChange}
                   />
@@ -255,16 +257,16 @@ export default function Signup() {
                   type="email"
                   name="email"
                   placeholder="Email"
-                  className="input__field"
+                  className={styles.input__field}
                   value={talentFormData.email}
                   onChange={handleChange}
                 />
-                <div className="password_field">
+                <div className={styles.password_field}>
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Password"
-                    className="pass_field"
+                    className={styles.pass_field}
                     value={talentFormData.password}
                     onChange={handleChange}
                     required
@@ -272,12 +274,12 @@ export default function Signup() {
                   />
                   {showPassword ? (
                     <IoEye
-                      className="password_icon"
+                      className={styles.password_icon}
                       onClick={handleTogglePasswordVisibility}
                     />
                   ) : (
                     <IoEyeOff
-                      className="password_icon"
+                      className={styles.password_icon}
                       onClick={handleTogglePasswordVisibility}
                     />
                   )}
@@ -286,7 +288,7 @@ export default function Signup() {
                   type={showPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="Confirm Password"
-                  className="input__field"
+                  className={styles.input__field}
                   value={talentFormData.confirmPassword}
                   onChange={handlePasswordChange}
                 />
@@ -309,15 +311,15 @@ export default function Signup() {
                 )}
 
                 <button
-                  className="signup__btn"
+                  className={styles.signup__btn}
                   type="submit"
                   disabled={!passwordMatch}
                 >
                   {isLoading ? <Spinner /> : "Sign Up as Talent"}
                 </button>
-                <div className="signin__info">
-                  <p className="text">Already have an account?</p>{" "}
-                  <Link href={"/signin"} className="signin__text">
+                <div className={styles.signin__info}>
+                  <p className={styles.text}>Already have an account?</p>{" "}
+                  <Link href={"/signin"} className={styles.signin__text}>
                     Sign In
                   </Link>
                 </div>
@@ -325,12 +327,12 @@ export default function Signup() {
             )}
             {/* company form */}
             {activeTab === "companies" && (
-              <form className="form__wrap" onSubmit={handleSubmit}>
+              <form className={styles.form__wrap} onSubmit={handleSubmit}>
                 <input
                   type="text"
                   name="companyName"
                   placeholder="Company Name"
-                  className="input__field"
+                  className={styles.input__field}
                   value={companyFormData.companyName}
                   onChange={handleChange}
                 />
@@ -338,16 +340,16 @@ export default function Signup() {
                   type="email"
                   name="companyEmail"
                   placeholder="Company Email"
-                  className="input__field"
+                  className={styles.input__field}
                   value={companyFormData.companyEmail}
                   onChange={handleChange}
                 />
-                <div className="password_field">
+                <div className={styles.password_field}>
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Password"
-                    className="pass_field"
+                    className={styles.pass_field}
                     value={companyFormData.password}
                     onChange={handleChange}
                     required
@@ -355,12 +357,12 @@ export default function Signup() {
                   />
                   {showPassword ? (
                     <IoEye
-                      className="password_icon"
+                      className={styles.password_icon}
                       onClick={handleTogglePasswordVisibility}
                     />
                   ) : (
                     <IoEyeOff
-                      className="password_icon"
+                      className={styles.password_icon}
                       onClick={handleTogglePasswordVisibility}
                     />
                   )}
@@ -369,7 +371,7 @@ export default function Signup() {
                   type={showPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="Confirm Password"
-                  className="input__field"
+                  className={styles.input__field}
                   value={companyFormData.confirmPassword}
                   onChange={handlePasswordChange}
                 />
@@ -391,15 +393,15 @@ export default function Signup() {
                   />
                 )}
                 <button
-                  className="signup__btn"
+                  className={styles.signup__btn}
                   type="submit"
                   disabled={!passwordMatch}
                 >
                  {isLoading ? <Spinner /> : "Sign Up as Company"}
                 </button>
-                <div className="signin__info">
-                  <p className="text">Already have an account?</p>{" "}
-                  <Link href="/signin" className="signin__text">
+                <div className={styles.signin__info}>
+                  <p className={styles.text}>Already have an account?</p>{" "}
+                  <Link href="/signin" className={styles.signin__text}>
                     Sign In
                   </Link>
                 </div>

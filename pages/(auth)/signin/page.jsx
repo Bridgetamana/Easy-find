@@ -9,7 +9,7 @@ import { db } from "@/firebaseConfig/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import secureLocalStorage from "react-secure-storage";
 import { useRouter } from "next/navigation";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -120,21 +120,21 @@ export default function Signin() {
   };
 
   return (
-    <section className="login__form">
+    <section className={styles.login__form}>
       {alert && alert.component}
-      <div className="login__form__container">
-        <div className="login__signin">
-          <div className="header">
-            <h1 className="title">Sign In</h1>
-            <p className="subtitle">
+      <div className={styles.login__form__container}>
+        <div className={styles.login__signin}>
+          <div className={styles.header}>
+            <h1 className={styles.title}>Sign In</h1>
+            <p className={styles.subtitle}>
               To keep connected with us please login with your details.
             </p>
           </div>
-          <form className="form__wrap" onSubmit={handleLogin}>
-            <div className="checkbox__group">
-              <div className="checkbox__item">
+          <form className={styles.form__wrap} onSubmit={handleLogin}>
+            <div className={styles.checkbox__group}>
+              <div className={styles.checkbox__item}>
                 <input
-                  className="checkbox"
+                  className={styles.checkbox}
                   type="checkbox"
                   name="talent"
                   id="talentCheckbox"
@@ -143,9 +143,9 @@ export default function Signin() {
                 />
                 <label htmlFor="talentCheckbox">I am a Talent</label>
               </div>
-              <div className="checkbox__item">
+              <div className={styles.checkbox__item}>
                 <input
-                  className="checkbox"
+                  className={styles.checkbox}
                   type="checkbox"
                   name="company"
                   id="companyCheckbox"
@@ -159,16 +159,16 @@ export default function Signin() {
               type="text"
               name="email"
               placeholder="Email"
-              className="input__field"
+              className={styles.input__field}
               value={email}
               onChange={handleInputChange}
             />
-            <div className="password_field">
+            <div className={styles.password_field}>
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
-                className="pass_field"
+                className={styles.pass_field}
                 value={password}
                 onChange={handleInputChange}
                 required
@@ -176,43 +176,43 @@ export default function Signin() {
               />
               {showPassword ? (
                 <IoEye
-                  className="password_icon"
+                  className={styles.password_icon}
                   onClick={handleTogglePasswordVisibility}
                 />
               ) : (
                 <IoEyeOff
-                  className="password_icon"
+                  className={styles.password_icon}
                   onClick={handleTogglePasswordVisibility}
                 />
               )}
             </div>
-            <div className="flex">
-              <div className="remember__me">
+            <div className={styles.flex}>
+              <div className={styles.remember__me}>
                 <input type="checkbox" name="remember" id="remember" />
-                <label htmlFor="remember" className="remember__me__text">
+                <label htmlFor="remember" className={styles.remember__me__text}>
                   Remember Me
                 </label>
               </div>
-              <Link href="/forgot-password" className="forgot__password">
+              <Link href="/forgot-password" className={styles.forgot__password}>
                 Forgot your password?
               </Link>
             </div>
 
-            <button className="signin__btn" type="submit">
+            <button className={styles.signin__btn} type="submit">
               {isLoading ? <Spinner /> : "Sign In"}
             </button>
 
-            <div className="signup__info">
-              <p className="text">Do not have an account?</p>{" "}
-              <Link href={"/signup"} className="signup__text">
+            <div className={styles.signup__info}>
+              <p className={styles.text}>Do not have an account?</p>{" "}
+              <Link href="/signup" className={styles.signup__text}>
                 Sign Up
               </Link>
             </div>
           </form>
         </div>
-        <div className="login__signup">
-          <h1 className="title">Hello Friend!</h1>
-          <p className="subtitle">
+        <div className={styles.login__signup}>
+          <h1 className={styles.title}>Hello Friend!</h1>
+          <p className={styles.subtitle}>
             Discover new talents, become a talent, and connect with the
             community.
           </p>

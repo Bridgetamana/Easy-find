@@ -9,7 +9,7 @@ const Button = ({ type, title, icon, variant, onClick }) => {
       onClick={onClick}
       id='button'
       >
-      <span className="label">{title}</span>
+      <span className={styles.label}>{title}</span>
       {icon}
     </button>
   );

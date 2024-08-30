@@ -53,7 +53,7 @@ export default function FindJob() {
       window.removeEventListener("scroll", updateActiveIndex);
     };
   }, []);
- 
+  
   return (
     <div className={styles.findJob__menu} ref={findJobRef}>
       <ul className={styles.dropdown__list}>

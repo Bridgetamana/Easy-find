@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from "react";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function VerifyEmail() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,18 +29,18 @@ export default function VerifyEmail() {
 
 
   return (
-    <section className="verifyEmail__form">
+    <section className={styles.verifyEmail__form}>
       {alert && alert.component}
-      <div className="verifyEmail-form__container">
-        <div className="header">
-          <h1 className="title">Verify Email</h1>
-          <p className="subtitle">
+      <div className={styles.verifyEmail-form__container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Verify Email</h1>
+          <p className={styles.subtitle}>
             {message}
           </p>
         </div>
         {message ===
               "Your email has been verified. You can now log in." && (
-              <p className="text">Redirecting to the login page...</p>
+              <p className={styles.text}>Redirecting to the login page...</p>
             )}
       </div>
     </section>

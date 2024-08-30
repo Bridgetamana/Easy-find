@@ -1,5 +1,5 @@
 'use client';
-
+import styles from '../../../styles/global.scss'
 import React from 'react';
 import ProtectedRoute from '@/utils/ProtectedRoute';
 import Hero from '@/components/authorized/Hero';
@@ -11,7 +11,7 @@ import UserName from '@/components/authorized/TalentComponents/UserName';
 const HomePage = () => {
   return (
     <ProtectedRoute>
-    <div className='main'>
+    <div className={styles.main}>
       <UserName />
       <Hero />
       <ExpectationSection/>

@@ -16,7 +16,7 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import Link from "next/link";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 const JobDetails = ({ params }) => {
   const jobId = params.detailsId;
@@ -57,13 +57,13 @@ const JobDetails = ({ params }) => {
     }
   };
 
-  const notSpecified = <span className="not__specified">Not Specified</span>;
+  const notSpecified = <span className={styles.not__specified}>Not Specified</span>;
 
   return (
     <ProtectedRoute>
       {jobDetails && (
-        <div className="jobDetails__section">
-          <div className="details__header">
+        <div className={styles.jobDetails__section}>
+          <div className={styles.details__header}>
             <Link href="/talent/jobs">
               <Button
                 type="button"
@@ -73,18 +73,18 @@ const JobDetails = ({ params }) => {
               />
             </Link>
             {isLoading && <LoadingScreen />}
-            <h2 className="details__title">{jobDetails.title}</h2>
-            <div className="details__flex">
-              <p className="details__type">
+            <h2 className={styles.details__title}>{jobDetails.title}</h2>
+            <div className={styles.details__flex}>
+              <p className={styles.details__type}>
                 <AiOutlineEnvironment fill="#9d9d9d" />
                 Full-time
               </p>
-              <p className="details__posted">
+              <p className={styles.details__posted}>
                 <AiOutlineClockCircle fill="#9d9d9d" />
                 {convertTimestamp(jobDetails.datePosted)}
               </p>
             </div>
-            <button className="save__button" onClick={handleSaveJob}>
+            <button className={styles.save__button} onClick={handleSaveJob}>
               {isSaved ? (
                 <BsHeartFill fill="#ff0000" />
               ) : (
@@ -95,126 +95,126 @@ const JobDetails = ({ params }) => {
           </div>
 
           {/* <JobOverview/> */}
-          <section className="employmentInfo__section">
-            <div className="info__header">
-              <p className="info__title">Employment Information</p>
+          <section className={styles.employmentInfo__section}>
+            <div className={styles.info__header}>
+              <p className={styles.info__title}>Employment Information</p>
             </div>
 
-            <div className="info__content">
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+            <div className={styles.info__content}>
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Industry</p>
+                  <p className={styles.info__title}>Industry</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>
                     {jobDetails?.industry || notSpecified}
                   </div>
                 </div>
               </div>
 
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Job level</p>
+                  <p className={styles.info__title}>Job level</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>
                     {jobDetails.jobLevel || notSpecified}
                   </div>
                 </div>
               </div>
 
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Qualification</p>
+                  <p className={styles.info__title}>Qualification</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>
                     {jobDetails.qualifications || notSpecified}
                   </div>
                 </div>
               </div>
 
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Salary</p>
+                  <p className={styles.info__title}>Salary</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>
                     {jobDetails.minSalary} - {jobDetails.maxSalary}
                   </div>
                 </div>
               </div>
 
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Experience</p>
+                  <p className={styles.info__title}>Experience</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">1 year</div>
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>1 year</div>
                 </div>
               </div>
 
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Job type</p>
+                  <p className={styles.info__title}>Job type</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">{jobDetails.jobType}</div>
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>{jobDetails.jobType}</div>
                 </div>
               </div>
 
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Deadline</p>
+                  <p className={styles.info__title}>Deadline</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>
                     {convertFutureTimestamp(jobDetails.deadline)}
                   </div>
                 </div>
               </div>
 
-              <div className="info__item">
-                <div className="info__left">
-                  <span className="info__icon">
+              <div className={styles.info__item}>
+                <div className={styles.info__left}>
+                  <span className={styles.info__icon}>
                     <HiOutlineBuildingOffice2 />
                   </span>
-                  <p className="info__title">Location</p>
+                  <p className={styles.info__title}>Location</p>
                 </div>
-                <div className="info__right">
-                  <div className="info__text">{jobDetails.location}</div>
+                <div className={styles.info__right}>
+                  <div className={styles.info__text}>{jobDetails.location}</div>
                 </div>
               </div>
             </div>
           </section>
 
           {/* <CompanyDescription/> */}
-          <section className="companyDescription__section">
-            <div className="description__header">
-              <h2 className="description__title">About Company</h2>
+          <section className={styles.companyDescription__section}>
+            <div className={styles.description__header}>
+              <h2 className={styles.description__title}>About Company</h2>
             </div>
-            <p className="description__text">
+            <p className={styles.description__text}>
               One of the main areas that I work on with my clients is shedding
               these non-supportive beliefs and replacing them with beliefs that
               will help them to accomplish their desires. It is truly amazing
@@ -228,25 +228,25 @@ const JobDetails = ({ params }) => {
           </section>
 
           {/* <JobDescription/> */}
-          <section className="companyDescription__section">
-            <div className="description__header">
-              <h2 className="description__title">Job Description</h2>
+          <section className={styles.companyDescription__section}>
+            <div className={styles.description__header}>
+              <h2 className={styles.description__title}>Job Description</h2>
             </div>
-            <p className="description__text">
+            <p className={styles.description__text}>
               {jobDetails.description || notSpecified}
             </p>
           </section>
 
           {/* <RequiredSkills/> */}
-          <section className="requiredSkills__section">
-            <div className="skills__header">
-              <h2 className="skills__title">Requirements</h2>
+          <section className={styles.requiredSkills__section}>
+            <div className={styles.skills__header}>
+              <h2 className={styles.skills__title}>Requirements</h2>
             </div>
-            <div className="skills__content">
-              <ul className="skills__list">
+            <div className={styles.skills__content}>
+              <ul className={styles.skills__list}>
                 {jobDetails.skills.map((skill, index) => (
-                  <li className="skills__item" key={index}>
-                    <p className="skills__text">
+                  <li className={styles.skills__item} key={index}>
+                    <p className={styles.skills__text}>
                       <BsCheck2Circle fill="#66789c" />
                       {skill}
                     </p>
@@ -256,14 +256,14 @@ const JobDetails = ({ params }) => {
             </div>
           </section>
 
-          {/* <section className="requiredSkills__section">
-        <div className="skills__header">
-          <h2 className="skills__title">Education + Experience</h2>
+          {/* <section className={styles.requiredSkills__section">
+        <div className={styles.skills__header">
+          <h2 className={styles.skills__title">Education + Experience</h2>
         </div>
-        <div className="skills__content">
-          <ul className="skills__list">
-            <li className="skills__item">
-              <p className="skills__text">
+        <div className={styles.skills__content">
+          <ul className={styles.skills__list">
+            <li className={styles.skills__item">
+              <p className={styles.skills__text">
                 <BsCheck2Circle fill="#66789c" />
                 You will sail along until you collide with an immovable object,
                 after which you will sink to the bottom.
@@ -274,15 +274,15 @@ const JobDetails = ({ params }) => {
       </section> */}
 
           {/* <JobBenefits/> */}
-          <section className="requiredSkills__section">
-            <div className="skills__header">
-              <h2 className="skills__title">Job Benefits</h2>
+          <section className={styles.requiredSkills__section}>
+            <div className={styles.skills__header}>
+              <h2 className={styles.skills__title}>Job Benefits</h2>
             </div>
-            <div className="skills__content">
-              <ul className="skills__list">
+            <div className={styles.skills__content}>
+              <ul className={styles.skills__list}>
                 {jobDetails.benefits.map((benefit, index) => (
-                  <li className="skills__item" key={index}>
-                    <p className="skills__text">
+                  <li className={styles.skills__item} key={index}>
+                    <p className={styles.skills__text}>
                       <BsCheck2Circle fill="#66789c" />
                       {benefit}
                     </p>
@@ -295,7 +295,7 @@ const JobDetails = ({ params }) => {
           {/* Application Button */}
           {/* <Link href={`/apply/${job.id}`}> */}
           <Link href="/application">
-            <button className="apply__button">
+            <button className={styles.apply__button}>
               <BiBadgeCheck fill="#fff" />
               Apply Now
             </button>

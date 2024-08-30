@@ -3,7 +3,7 @@ import styles from './style.module.scss';
 
 const Spinner = () => {
   return (
-    <div className="animateSpinner">
+    <div className={styles.animateSpinner}>
     </div>
   );
 };
