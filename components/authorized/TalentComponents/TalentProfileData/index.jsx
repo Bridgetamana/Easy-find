@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { AiOutlineEnvironment } from "react-icons/ai";
 require("dotenv").config();
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function TalentProfileData({ handleEditClick }) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -118,134 +118,135 @@ export default function TalentProfileData({ handleEditClick }) {
   };
   
   return (
-    <div className="profile__page">
-      <div className="profile__details">
-        <h4 className="note">
+    <div className={styles.profile__page}>
+      <div className={styles.profile__details}>
+        <h4 className={styles.note}>
           This is a preview of your profile. Please review all your information
           and make needed changes.
         </h4>
-        <div className="profile__top">
-          <div className="profile__column">
+        <div className={styles.profile__top}>
+          <div className={styles.profile__column}>
             {formData.photo && (
               <img
                 src={formData.photo}
                 alt="Profile"
-                className="profile__image"
+                className={styles.profile__image}
               />
             )}
 
-            <div className="profile__row">
-              <h4 className="user__name">{formData.username}</h4>
-              <p className="user__address">
+            <div className={styles.profile__row}>
+              <h4 className={styles.user__name}>{formData.username}</h4>
+              <p className={styles.user__address}>
                 <AiOutlineEnvironment />
                 {formData.address}
               </p>
             </div>
-            <p className="user__title">{formData.jobTitle}</p>
+            <p className={styles.user__title}>{formData.jobTitle}</p>
           </div>
         </div>
 
-        <div className="profile__bottom">
-          <div className="profile__box">
-            <h4 className="title">Personal Details</h4>
-            <p className="text">
+        <div className={styles.profile__bottom}>
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Personal Details</h4>
+            <p className={styles.text}>
               <strong>Pronouns:</strong> {formData.pronouns}
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>Gender:</strong> {formData.gender}
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>DOB:</strong> {formData.dob}
             </p>
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">About</h4>
-            <p className="text">{formData.bio}</p>
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>About</h4>
+            <p className={styles.text}>{formData.bio}</p>
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">Skills</h4>
-            <p className="text">{formData.skills}</p>
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Skills</h4>
+            <p className={styles.text}>{formData.skills}</p>
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">Education</h4>
-            <p className="text">
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Education</h4>
+            <p className={styles.text}>
               <strong>Institution: </strong>
               {formData.institute}
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>Degree: </strong>
               {formData.degree}
             </p>
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">Experience</h4>
-            <p className="text">
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Experience</h4>
+            <p className={styles.text}>
               <strong>Company: </strong>
               {formData.company}
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>Position: </strong>
               {formData.position}
             </p>
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">Contact</h4>
-            <p className="text">
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Contact</h4>
+            <p className={styles.text}>
               <strong>Email: </strong>
               {formData.email}
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>Phone: </strong>
               {formData.phone}
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>Mobile: </strong>
               {formData.mobile}
             </p>
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">Social Links</h4>
-            <p className="text">
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Social Links</h4>
+            <p className={styles.text}>
               <strong>LinkedIn:</strong> {formData.linkedInLink}
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>Portfolio:</strong> {formData.portfolioLink}
             </p>
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">Resume*</h4>
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Resume*</h4>
             {formData.resume === null ? (
-              <p className="text">No resume uploaded</p>
+              <p className={styles.text}>No resume uploaded</p>
             ) : (
               <a
                 href={formData.resume}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text"
+                className={styles.text}
               >
                 View Resume
               </a>
             )}
           </div>
 
-          <div className="profile__box">
-            <h4 className="title">Additional Information</h4>
-            <p className="text">
-              <strong>Desired Salary:</strong> ${formData.minSalary} - ${formData.maxSalary}
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Additional Information</h4>
+            <p className={styles.text}>
+              <strong>Desired Salary:</strong> ${formData.minSalary} - $
+              {formData.maxSalary}
             </p>
           </div>
         </div>
         {isLoading ? (
           <p>Loading...</p>
         ) : (
-          <button onClick={handleEditClick} className="edit__button">
+          <button onClick={handleEditClick} className={styles.edit__button}>
             Edit
           </button>
         )}

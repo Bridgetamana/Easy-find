@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdPeopleOutline } from "react-icons/md";
 import { AiOutlineEnvironment, AiOutlineMail } from "react-icons/ai";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 import { BiBriefcase, BiFilter } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 
@@ -68,29 +68,29 @@ export default function CompanyDetails() {
   } = formData;
 
   return (
-    <section className="details__page">
-      <div className="details__container">
-        <div className="details__top">
-          <div className="details__column">
+    <section className={styles.details__page}>
+      <div className={styles.details__container}>
+        <div className={styles.details__top}>
+          <div className={styles.details__column}>
             {profileImage && (
               <img
                 src={profileImage}
                 alt="Profile"
-                className="details__image"
+                className={styles.details__image}
               />
             )}
-            <h4 className="user__name">Welcome to {name}</h4>
+            <h4 className={styles.user__name}>Welcome to {name}</h4>
 
-            <div className="details__row">
-              <p className="user__address">
+            <div className={styles.details__row}>
+              <p className={styles.user__address}>
                 <AiOutlineEnvironment />
                 {address}
               </p>
-              <p className="user__address">
+              <p className={styles.user__address}>
                 <AiOutlineMail />
                 {email}
               </p>
-              <p className="user__address">
+              <p className={styles.user__address}>
                 <MdPeopleOutline />
                 {teamSize} employees
               </p>
@@ -98,54 +98,60 @@ export default function CompanyDetails() {
           </div>
         </div>
 
-        <div className="details__bottom">
-          <div className="details__box">
-            <h4 className="title">About Us</h4>
-            <p className="text">{bio}</p>
+        <div className={styles.details__bottom}>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>About Us</h4>
+            <p className={styles.text}>{bio}</p>
           </div>
 
-          <div className="details__box">
-            <h4 className="title">Open Positions</h4>
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Open Positions</h4>
             {openPositions.length > 0 ? (
               openPositions.map((position, index) => (
-                <div className="open__position" key={index}>
-                  <h5 className="open__positionTitle">{position.title}</h5>
-                  <div className="flex">
-                    <div className="flex__group">
+                <div className={styles.open__position} key={index}>
+                  <h5 className={styles.open__positionTitle}>
+                    {position.title}
+                  </h5>
+                  <div className={styles.flex}>
+                    <div className={styles.flex__group}>
                       <AiOutlineEnvironment fill="#9d9d9d" />
-                      <p className="group__text">{position.location}</p>
+                      <p className={styles.group__text}>{position.location}</p>
                     </div>
-                    <div className="flex__group">
+                    <div className={styles.flex__group}>
                       <BiFilter fill="#9d9d9d" />
-                      <p className="group__text">{position.industry}</p>
+                      <p className={styles.group__text}>{position.industry}</p>
                     </div>
-                    <div className="flex__group">
+                    <div className={styles.flex__group}>
                       <BiBriefcase fill="#9d9d9d" />
-                      <p className="group__text">{position.employmentType}</p>
+                      <p className={styles.group__text}>
+                        {position.employmentType}
+                      </p>
                     </div>
-                    <div className="flex__group">
+                    <div className={styles.flex__group}>
                       <BsClock fill="#9d9d9d" />
-                      <p className="group__text">Posted {position.postedAgo}</p>
+                      <p className={styles.group__text}>
+                        Posted {position.postedAgo}
+                      </p>
                     </div>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text">No open positions available.</p>
+              <p className={styles.text}>No open positions available.</p>
             )}
           </div>
 
-          <div className="details__box">
-            <h4 className="title">Social Links</h4>
-            <p className="text">
+          <div className={styles.details__box}>
+            <h4 className={styles.title}>Social Links</h4>
+            <p className={styles.text}>
               <strong>LinkedIn:</strong>{" "}
-              <a href={linkedInLink} className="text">
+              <a href={linkedInLink} className={styles.text}>
                 {linkedInLink}
               </a>
             </p>
-            <p className="text">
+            <p className={styles.text}>
               <strong>Portfolio:</strong>{" "}
-              <a href={companySite} className="text">
+              <a href={companySite} className={styles.text}>
                 {companySite}
               </a>
             </p>

@@ -3,7 +3,7 @@ import { AiOutlineEnvironment } from "react-icons/ai";
 import Link from "next/link";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { BsBriefcase } from "react-icons/bs";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 const companiesPostings = [
   {
@@ -193,33 +193,33 @@ export default function CompaniesListing() {
   };
 
   return (
-    <section className="companies__grid">
-      <div className="companiesHero__section">
-        <div className="companiesHero__content">
-          <h1 className="hero__title">Find your dream company</h1>
-          <p className="hero__text">
+    <section className={styles.companies__grid}>
+      <div className={styles.companiesHero__section}>
+        <div className={styles.companiesHero__content}>
+          <h1 className={styles.hero__title}>Find your dream company</h1>
+          <p className={styles.hero__text}>
             We have over 100,000 companies available for you
           </p>
 
-          <div className="hero__searchBar">
+          <div className={styles.hero__searchBar}>
             <input
               type="search"
               name="search-bar"
-              className="search__bar"
+              className={styles.search__bar}
               placeholder="Company Name"
             />
-            <Link href="/search" className="hero__button">
-              <HiOutlineArrowNarrowRight className="search__icon" />
+            <Link href="/search" className={styles.hero__button}>
+              <HiOutlineArrowNarrowRight className={styles.search__icon} />
               <p>Browse</p>
             </Link>
           </div>
         </div>
       </div>
-      <div className="grid__header">
-        <div className="header__left">
-          <h5 className="total__companies">
+      <div className={styles.grid__header}>
+        <div className={styles.header__left}>
+          <h5 className={styles.total__companies}>
             Showing{" "}
-            <span className="companies__number">
+            <span className={styles.companies__number}>
               {indexOfFirstCompany + 1} -{" "}
               {indexOfLastCompany > companiesPostings.length
                 ? companiesPostings.length
@@ -229,17 +229,17 @@ export default function CompaniesListing() {
           </h5>
         </div>
 
-        <div className="header__right">
-          <div className="filter">
-            <button className="filter__button" onClick={isFilterToggled}>
+        <div className={styles.header__right}>
+          <div className={styles.filter}>
+            <button className={styles.filter__button} onClick={isFilterToggled}>
               Show Filter
             </button>
 
-            <div className={toggleFilter ? "show__filter" : "filter__group"}>
-              <div className="filter__item">
+            <div className={`toggleFilter ? ${styles.show__filter} : ${filter__group}`}>
+              <div className={styles.filter__item}>
                 <label htmlFor="specialism">Industry:</label>
-                <div className="items">
-                  <div className="check__item">
+                <div className={styles.items}>
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name="industry"
@@ -250,7 +250,7 @@ export default function CompaniesListing() {
                     />
                     <label htmlFor="filter__checkbox1">IT Contractor</label>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name="industry"
@@ -265,22 +265,18 @@ export default function CompaniesListing() {
                       Charity & Voluntary
                     </label>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name="industry"
                       id="filter__checkbox3"
                       value="Digital Marketing"
                       onChange={handleIndustryChange}
-                      checked={selectedIndustries.includes(
-                        "Digital Marketing"
-                      )}
+                      checked={selectedIndustries.includes("Digital Marketing")}
                     />
-                    <label htmlFor="filter__checkbox3">
-                      Digital Marketing
-                    </label>
+                    <label htmlFor="filter__checkbox3">Digital Marketing</label>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name="industry"
@@ -295,35 +291,27 @@ export default function CompaniesListing() {
                       Software Engineering
                     </label>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name="industry"
                       id="filter__checkbox5"
                       value="Estate Agency"
                       onChange={handleIndustryChange}
-                      checked={selectedIndustries.includes(
-                        "Estate Agency"
-                      )}
+                      checked={selectedIndustries.includes("Estate Agency")}
                     />
-                    <label htmlFor="filter__checkbox5">
-                      Estate Agency
-                    </label>
+                    <label htmlFor="filter__checkbox5">Estate Agency</label>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name="industry"
                       id="filter__checkbox6"
                       value="Real Estate"
                       onChange={handleIndustryChange}
-                      checked={selectedIndustries.includes(
-                        "Real Estate"
-                      )}
+                      checked={selectedIndustries.includes("Real Estate")}
                     />
-                    <label htmlFor="filter__checkbox6">
-                      Real Estate
-                    </label>
+                    <label htmlFor="filter__checkbox6">Real Estate</label>
                   </div>
                 </div>
               </div>
@@ -333,23 +321,23 @@ export default function CompaniesListing() {
       </div>
 
       {/* companies listings */}
-      <div className="grid__body">
+      <div className={styles.grid__body}>
         {companiesPostings.length > 0 ? (
           currentCompanies.map((companies) => {
             return (
-              <div className="companies__card" key={companies.id}>
-                <div className="card__info">
-                  <div className="card__company">
-                    <div className="card__logo">
+              <div className={styles.companies__card} key={companies.id}>
+                <div className={styles.card__info}>
+                  <div className={styles.card__company}>
+                    <div className={styles.card__logo}>
                       <img src={companies.logo} alt={companies.name} />
-                      <div className="company__info">
-                        <h5 className="company__name">{companies.name}</h5>
-                        <div className="card__flex">
-                          <p className="company__location">
+                      <div className={styles.company__info}>
+                        <h5 className={styles.company__name}>{companies.name}</h5>
+                        <div className={styles.card__flex}>
+                          <p className={styles.company__location}>
                             <AiOutlineEnvironment />
                             {companies.location}
                           </p>
-                          <p className="company__location">
+                          <p className={styles.company__location}>
                             <BsBriefcase /> {companies.openPositions} Open
                             Positions
                           </p>
@@ -357,14 +345,14 @@ export default function CompaniesListing() {
                       </div>
                     </div>
                   </div>
-                  <h4 className="card__title">{companies.title}</h4>
+                  <h4 className={styles.card__title}>{companies.title}</h4>
 
-                  <p className="card__description">{companies.description}</p>
+                  <p className={styles.card__description}>{companies.description}</p>
                 </div>
-                <div className="card__flex">
-                  <p className="card__industry">{companies.industry}</p>
+                <div className={styles.card__flex}>
+                  <p className={styles.card__industry}>{companies.industry}</p>
                   <Link href="/talent/companies/details">
-                    <button className="apply__button">
+                    <button className={styles.apply__button}>
                       {/* <Link to={`/companies/${companies.id}`}>View</Link> */}
                       View
                     </button>
@@ -379,9 +367,9 @@ export default function CompaniesListing() {
       </div>
 
       {/* Pagination */}
-      <div className="pagination">
+      <div className={styles.pagination}>
         <button
-          className="pagination__button"
+          className={styles.pagination__button}
           onClick={handlePreviousClick}
           disabled={currentPage === 1}
         >
@@ -391,8 +379,8 @@ export default function CompaniesListing() {
         {Array.from({ length: pageNumbers }, (_, index) => index + 1).map(
           (pageNumber) => (
             <button
-              className={`pagination__button ${
-                currentPage === pageNumber ? "pagination__active" : ""
+              className={`${styles.pagination__button} ${
+                currentPage === pageNumber ? style.pagination__active : ""
               }`}
               key={pageNumber}
               onClick={() => handleClick(pageNumber)}
@@ -403,7 +391,7 @@ export default function CompaniesListing() {
         )}
 
         <button
-          className="pagination__button"
+          className={styles.pagination__button}
           onClick={handleNextClick}
           disabled={currentPage === pageNumbers}
         >

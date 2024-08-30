@@ -1,14 +1,14 @@
 import React from "react";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function UserName ({
 
 }) {
   return (
-    <section className="username__section">
-      <div className="username__content">
-        <div className="content__header">
-          <h2 className="username__title">Welcome back, Lilian!</h2>
+    <section className={styles.username__section}>
+      <div className={styles.username__content}>
+        <div className={styles.content__header}>
+          <h2 className={styles.username__title}>Welcome back, Lilian!</h2>
         </div>
       </div>
     </section>

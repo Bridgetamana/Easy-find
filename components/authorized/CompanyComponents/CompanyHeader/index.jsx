@@ -6,7 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import CompanyDropdown from "../AccountDropdown";
 import Image from 'next/image';
 import Link from "next/link";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function CompanyHeader() {
   const [showMenu, setShowMenu] = useState(false);
@@ -46,10 +46,14 @@ export default function CompanyHeader() {
   }, []);
 
   return (
-    <header className={`authorized__header ${isSticky ? "sticky__menu" : ""}`}>
+    <header
+      className={`${styles.authorized__header} ${
+        isSticky ? styles.sticky__menu : ""
+      }`}
+    >
       {/* Desktop Header */}
-      <div className="desktop__header">
-        <div className="header__logo">
+      <div className={styles.desktop__header}>
+        <div className={styles.header__logo}>
           <Image
             src="/assets/images/EasyFind.svg"
             alt="Logo"
@@ -57,58 +61,60 @@ export default function CompanyHeader() {
             width={100}
             height={10}
             layout="fixed"
-            className="logo"
+            className={styles.logo}
           />
         </div>
-        <nav className="nav__bar">
-          <ul className="nav__list">
-            <li className="nav__item">
+        <nav className={styles.nav__bar}>
+          <ul className={styles.nav__list}>
+            <li className={styles.nav__item}>
               <Link
                 href="/company/"
                 onClick={() => handleMenuClick("home")}
-                className={`nav__link ${
-                  active === "home" ? "active__link" : ""
+                className={`${styles.nav__link} ${
+                  active === styles.home ? styles.active__link : ""
                 }`}
               >
                 Home
               </Link>
             </li>
             <li
-              className={accountDropdown ? "active__menu" : "nav__menu"}
+              className={accountDropdown ? styles.active__menu : styles.nav__menu}
               onClick={toggleAccountDropdown}
             >
               Account
               <BsChevronDown fill="#827f7f" size={10} />
               <div
-                className={`${accountDropdown ? "account__modal" : "no__show"}`}
+                className={`${
+                  accountDropdown ? styles.account__modal : styles.no__show
+                }`}
               >
                 <CompanyDropdown />
               </div>
             </li>
-            <li className="nav__item">
+            <li className={styles.nav__item}>
               <Link
                 href="/company/testimonials"
                 onClick={() => handleMenuClick("jobs")}
-                className={`nav__link ${
-                  active === "jobs" ? "active__link" : ""
+                className={`${styles.nav__link} ${
+                  active === styles.jobs ? styles.active__link : ""
                 }`}
               >
                 Testimonials
               </Link>
             </li>
-            <li className="nav__item">
+            <li className={styles.nav__item}>
               <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
-                className={`nav__link ${
-                  active === "blog" ? "active__link" : ""
+                className={`${styles.nav__link} ${
+                  active === styles.blog ? styles.active__link : ""
                 }`}
               >
                 Blog
               </Link>
             </li>
-            <li className="nav__item">
-              <Link href="/signout" className="nav__button">
+            <li className={styles.nav__item}>
+              <Link href="/signout" className={styles.nav__button}>
                 Sign Out
               </Link>
             </li>
@@ -117,92 +123,104 @@ export default function CompanyHeader() {
       </div>
 
       {/* Mobile Header */}
-      <div className="mobile__header">
-        <div className="header__logo">
-          <h2 className="logo__name">MinuJobs</h2>
+      <div className={styles.mobile__header}>
+        <div className={styles.header__logo}>
+          <h2 className={styles.logo__name}>MinuJobs</h2>
         </div>
-        <button type="button" className="menu__button" onClick={toggleMenu}>
+        <button
+          type="button"
+          className={styles.menu__button}
+          onClick={toggleMenu}
+        >
           <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
         </button>
-        <nav className={`nav__bar ${showMenu ? "show__navbar" : "nav__bar"}`}>
-          <div className="nav__header">
-            <h2 className="logo__name">MinuJobs</h2>
-            <button type="button" className="close__menu" onClick={closeMenu}>
+        <nav
+          className={`${styles.nav__bar} ${
+            showMenu ? styles.show__navbar : styles.nav__bar
+          }`}
+        >
+          <div className={styles.nav__header}>
+            <h2 className={styles.logo__name}>MinuJobs</h2>
+            <button
+              type="button"
+              className={styles.close__menu}
+              onClick={closeMenu}
+            >
               <CgClose size={24} />
             </button>
           </div>
           {/* Navigation List */}
-          <ul className="nav__list">
-            <li className="nav__item pd_btm">
+          <ul className={styles.nav__list}>
+            <li className={`${styles.item} ${styles.pd_btm} `}>
               <Link
                 href="/company/"
                 onClick={() => handleMenuClick("home")}
-                className={`nav__link ${
-                  active === "home" ? "active__link" : ""
+                className={`${styles.nav__link} ${
+                  active === styles.home ? styles.active__link : ""
                 }`}
               >
                 Home
               </Link>
             </li>
-            <li className="nav__item">
+            <li className={styles.nav__item}>
               <Link
                 href="/company/testimonials"
                 onClick={() => handleMenuClick("testimonials")}
-                className={`nav__link ${
-                  active === "testimonials" ? "active__link" : ""
+                className={`${styles.nav__link} ${
+                  active === styles.testimonials ? styles.active__link : ""
                 }`}
               >
                 Testimonials
               </Link>
             </li>
           </ul>
-          <ul className="dropdown__list">
-            <h4 className="nav__head">
+          <ul className={styles.dropdown__list}>
+            <h4 className={styles.nav__head}>
               Account
               <BsChevronDown fill="#827f7f" size={10} />
             </h4>
-            <li className="dropdown__link">
+            <li className={styles.dropdown__link}>
               <Link
                 href="/company/profile"
-                className="link"
+                className={styles.link}
                 onClick={closeMenu}
               >
                 Profile
               </Link>
             </li>
-            <li className="dropdown__link">
+            <li className={styles.dropdown__link}>
               <Link
                 href="/company/dashboard"
-                className="link"
+                className={styles.link}
                 onClick={closeMenu}
               >
                 Dashboard
               </Link>
             </li>
-            <li className="dropdown__link">
+            <li className={styles.dropdown__link}>
               <Link
                 href="/company/settings"
-                className="link"
+                className={styles.link}
                 onClick={closeMenu}
               >
                 Settings
               </Link>
             </li>
           </ul>
-          <ul className="nav__list">
-            <li className="nav__item pd_btm">
+          <ul className={styles.nav__list}>
+            <li className={` ${styles.nav__item} ${styles.pd_btm} `}>
               <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
-                className={`nav__link ${
-                  active === "blog" ? "active__link" : ""
+                className={`${styles.nav__link} ${
+                  active === styles.blog ? styles.active__link : ""
                 }`}
               >
                 Blog
               </Link>
             </li>
-            <li className="nav__item">
-              <Link href="/signout" className="nav__button">
+            <li className={styles.nav__item}>
+              <Link href="/signout" className={styles.nav__button}>
                 Sign Out
               </Link>
             </li>

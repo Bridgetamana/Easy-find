@@ -5,7 +5,7 @@ import JobPostForm from "@components/authorized/Company/JobPostForm";
 import React, { useState } from "react";
 import PostTestimonial from "@components/authorized/PostTestimonial";
 import NotificationTab from "../Notifications";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 const DashboardLayout = () => {
   const [activeTab, setActiveTab] = useState("activeJobs");
@@ -15,36 +15,36 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="dashboard__layout">
-      <div className="sidebar">
-        <ul className="sidebar__menu">
+    <div className={styles.dashboard__layout}>
+      <div className={styles.sidebar}>
+        <ul className={styles.sidebar__menu}>
           <li
-            className={`sidebar__item ${
-              activeTab === "activeJobs" ? "active" : ""
+            className={`${styles.sidebar__item} ${
+              activeTab === styles.activeJobs ? styles.active : ""
             }`}
             onClick={() => handleTabClick("activeJobs")}
           >
             Active Jobs
           </li>
           <li
-            className={`sidebar__item ${
-              activeTab === "inactiveJobs" ? "active" : ""
+            className={`${styles.sidebar__item} ${
+              activeTab === styles.inactiveJobs ? styles.active : ""
             }`}
             onClick={() => handleTabClick("inactiveJobs")}
           >
             Inactive Jobs
           </li>
           <li
-            className={`sidebar__item ${
-              activeTab === "postJob" ? "active" : ""
+            className={`${styles.sidebar__item} ${
+              activeTab === styles.postJob ? styles.active : ""
             }`}
             onClick={() => handleTabClick("postJob")}
           >
             Post Job
           </li>
           <li
-            className={`sidebar__item ${
-              activeTab === "postTestimonial" ? "active" : ""
+            className={`${styles.sidebar__item} ${
+              activeTab === styles.postTestimonial ? styles.active : ""
             }`}
             onClick={() => handleTabClick("postTestimonial")}
           >
@@ -59,8 +59,8 @@ const DashboardLayout = () => {
             Candidates
           </li> */}
           <li
-            className={`sidebar__item ${
-              activeTab === "notifications" ? "active" : ""
+            className={`${styles.sidebar__item} ${
+              activeTab === styles.notifications ? styles.active : ""
             }`}
             onClick={() => handleTabClick("notifications")}
           >
@@ -69,13 +69,13 @@ const DashboardLayout = () => {
         </ul>
       </div>
 
-      <div className="content__area">
-        {activeTab === "activeJobs" && <ActiveJobsTab />}
-        {activeTab === "inactiveJobs" && <InactiveJobsTab />}
-        {activeTab === "postJob" && <PostJobTab />}
-        {activeTab === "postTestimonial" && <PostTestimonialTab />}
+      <div className={styles.content__area}>
+        {activeTab === styles.activeJobs && <ActiveJobsTab />}
+        {activeTab === styles.inactiveJobs && <InactiveJobsTab />}
+        {activeTab === styles.postJob && <PostJobTab />}
+        {activeTab === styles.postTestimonial && <PostTestimonialTab />}
         {/* {activeTab === "candidates" && <CandidatesTab />} */}
-        {activeTab === "notifications" && <NotificationsTab />}
+        {activeTab === styles.notifications && <NotificationsTab />}
       </div>
     </div>
   );
