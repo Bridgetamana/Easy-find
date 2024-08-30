@@ -1,0 +1,170 @@
+
+
+
+
+$easyfind-logo: url("/assets/images/EasyFind.svg");
+$easy-logo: url("/assets/images/EasyLogo.svg");
+$hero-bg: url("/assets/images/hero-bg.png");
+$blue-bg: url("/assets/images/cta-bg.svg");
+$hero-img: url("/assets/images/hero-img.png");
+$jobs-bg: url("/assets/images/background-features.jpg");
+
+$primary: #2563eb;
+$secondary: rgb(238 242 255);
+$accent: rgb(113 98 225 / 19%);
+$neutral: #e0e6f7;
+$white: #ffffff;
+$offWhite: #fcfdff;
+$black: #181a21;
+$gray: #827f7f;
+$lightGray: #9d9d9d;
+$border: #a4a4a499;
+$backdrop: #fafafa;
+$placeholder: #acaeb7;
+$error: #ff0000;
+$success: #00ff00;
+$warning: #ffff00;
+
+$font-logo: "Megan", sans-serif;
+$font-text: "DM Sans", sans-serif;
+
+//Font Sizes
+$font-ten: 10px;
+$font-twelve: 12px;
+$font-fourteen: 14px;
+$font-sixteen: 16px;
+$font-eighteen: 18px;
+$font-twenty: 20px;
+$font-twentyTwo: 22px;
+$font-twentyFour: 24px;
+$font-twentySix: 26px;
+$font-twentyEight: 28px;
+$font-thirty: 30px;
+$font-thirtyTwo: 32px;
+$font-thirtyFour: 34px;
+$font-thirtySix: 36px;
+$font-thirtyEight: 38px;
+$font-forty: 40px;
+$font-fortyTwo: 42px;
+$font-fiftySix: 56px;
+
+//Font Weights
+$font-weight-300: 300;
+$font-weight-400: 400;
+$font-weight-500: 500;
+$font-weight-600: 600;
+$font-weight-700: 700;
+
+//Line Heights
+$line-height-1: 1;
+$line-height-1-2: 1.2;
+$line-height-1-4: 1.4;
+$line-height-1-6: 1.6;
+$line-height-1-8: 1.8;
+$line-height-2: 2;
+
+//Spacing
+$spacing-1: 1px;
+$spacing-2: 2px;
+$spacing-4: 4px;
+
+//Border Radius
+$border-radius-1: 10px;
+$border-radius-2: 16px;
+
+//Box Shadows
+$box-shadow-1: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+$box-shadow-2: 2px 2px 4px rgba(0, 0, 0, 0.25);
+$box-shadow-3: 3px 3px 6px rgba(0, 0, 0, 0.25);
+
+//Z-Index
+$z-index-1: 1;
+$z-index-2: 2;
+$z-index-3: 3;
+
+//Breakpoints
+$breakpoint-1: 320px;
+$breakpoint-2: 480px;
+$breakpoint-3: 768px;
+$breakpoint-4: 900px;
+$breakpoint-5: 1024px;
+$breakpoint-6: 1200px;
+$breakpoint-7: 1440px;
+$breakpoint-8: 1600px;
+$breakpoint-9: 1920px;
+
+@mixin title {
+    font-size: $font-twentyEight;
+    color: $black;
+    font-weight: 600;
+
+    @media screen and (min-width: $breakpoint-3) {
+        font-size: $font-thirtyTwo;
+    }
+
+    @media screen and (min-width: $breakpoint-4) {
+        font-size: $font-thirtySix;
+    }
+}
+
+@mixin subtitle {
+    font-size: $font-twenty;
+    color: $black;
+    font-weight: 600;
+
+    @media screen and (min-width: $breakpoint-3) {
+        font-size: $font-twentyTwo;
+    }
+
+    @media screen and (min-width: $breakpoint-4) {
+        font-size: $font-twentySix;
+    }
+}
+
+@mixin errorMsg {
+    width: 100%;
+    font-size: $font-twelve;
+    color: $error;
+    font-weight: 500;
+    background-color: rgba(250 128 75 / 33%);
+    border: 1px solid $error;
+    border-radius: $border-radius-1;
+    padding: 0.15rem;
+}
+
+@mixin successMsg {
+    width: 100%;
+    font-size: 12px;
+    color: $black;
+    font-weight: 500;
+    background-color: rgb(0 255 0 / 14%);
+    border: 1px solid $success;
+    border-radius: 10px;
+    padding: 0.15rem;
+    text-align: center
+}
+
+@mixin inputField {
+    font-size: $font-sixteen;
+    font-weight: $font-weight-400;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 1rem;
+    background: $secondary;
+    height: 3rem;
+}
+
+@mixin selectField {
+    font-size: $font-sixteen;
+    font-weight: $font-weight-400;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 0 1rem;
+    background: $secondary;
+    height: 3rem;
+    width: 100%;
+}

@@ -1,0 +1,49 @@
+@import "../../../styles/variables.scss";
+
+.authorized__footer {
+    background-color: transparent;
+    color: $white;
+    text-align: center;
+    font-size: 12px;
+    width: 100%;
+
+    .footer__bottom {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        max-width: 1140px;
+
+        .footer__right {
+            width: 70%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            @media screen and (min-width: $breakpoint-4) {
+                width: 50%;
+                justify-content: flex-start;
+                gap: 2rem;
+
+                .logo {
+                    display: none;
+                }
+            }
+
+            .logo {
+                display: block;
+                height: 2rem;
+                width: 6rem;
+                object-fit: cover;
+            }
+        }
+        .footer__left {
+            font-size: $font-twelve;
+            font-weight: $font-weight-400;
+            text-align: right;
+            width: 100%;
+            color: $lightGray;
+        }
+    }
+}

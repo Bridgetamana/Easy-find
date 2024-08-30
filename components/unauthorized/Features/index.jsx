@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.scss";
+import "./style.module.scss";
 import { ArrowUpOnSquareIcon, DocumentCheckIcon, DocumentTextIcon } from "@heroicons/react/20/solid";
 
 const features = [
