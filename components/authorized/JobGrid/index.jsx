@@ -6,7 +6,7 @@ import { getJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import JobDetails from "../JobDetails";
 import { useRouter } from "next/navigation";
-import "./style.scss";
+import "./style.module.scss";
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);

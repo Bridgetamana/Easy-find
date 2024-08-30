@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.scss";
+import "./style.module.scss";
 import { BsCheck2Circle } from "react-icons/bs";
 
 export default function RequiredSkills() {

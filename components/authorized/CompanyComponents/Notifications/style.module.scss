@@ -1,0 +1,34 @@
+@import "../../../../styles/variables.scss";
+
+.notifications__page {
+    margin: 0 auto;
+  
+    .section__title {
+      display: flex;
+      align-items: center;
+    }
+  
+    .notification__item {
+        border: 1px solid #e0e6f7;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+  
+      .notification__title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+  
+      .notification__description {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+  
+      .notification__date {
+        font-size: 14px;
+        color: #888;
+      }
+    }
+  }
+  

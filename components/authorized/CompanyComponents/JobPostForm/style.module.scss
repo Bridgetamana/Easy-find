@@ -1,0 +1,62 @@
+@import "../../../../styles/variables.scss";  
+
+.jobPostings__section {
+    .jobPosting__form {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .input__wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            label {
+                font-size: $font-sixteen;
+                font-weight: $font-weight-500;
+                color: $black;
+            }
+
+            .input__field {
+                @include inputField;
+            }
+
+            .text__field{
+                font-size: $font-sixteen;
+                font-weight: $font-weight-400;
+                font-family: inherit;
+                border: none;
+                outline: none;
+                border-radius: 10px;
+                padding: 1rem;
+                background: $secondary;
+                height: 7rem;
+            }
+
+            .select__field {
+                @include selectField;
+            }
+
+            .wrapperClassName {
+                box-sizing: content-box;
+                border: 1px solid #f1f1f1;
+                border-radius: 10px;
+            }
+        }
+        .editorClassName {
+            height: fit-content;
+            padding: 0 1rem;
+        }
+
+        .edit__button,
+        .submit__button {
+            @include button;
+            display: grid;
+            place-items: center;
+        }
+
+        .success__msg{
+            @include successMsg;
+        }
+    }
+}

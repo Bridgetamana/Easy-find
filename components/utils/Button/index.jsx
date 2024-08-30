@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.scss';
+import styles from './style.module.scss';
 
 const Button = ({ type, title, icon, variant, onClick }) => {
   return (
@@ -7,6 +7,7 @@ const Button = ({ type, title, icon, variant, onClick }) => {
       type={type}
       className={variant}
       onClick={onClick}
+      id='button'
       >
       <span className="label">{title}</span>
       {icon}

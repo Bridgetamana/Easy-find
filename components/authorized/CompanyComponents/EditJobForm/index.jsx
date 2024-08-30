@@ -3,7 +3,7 @@ import axios from "axios";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useRouter } from "next/navigation";
-import "./style.scss";
+import "./style.module.scss";
 
 export default function EditJobForm() {
   if (typeof data === "object" && data !== null) {

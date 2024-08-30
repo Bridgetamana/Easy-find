@@ -2,7 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
-import './style.scss';
+import styles from './style.module.scss';
 
 export default function Settings() {
     const [password, setPassword] = useState("");

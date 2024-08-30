@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
-import "./style.scss";
+import "./style.module.scss";
 
 const appliedJobsUrl = "https://minujob.com/applied-jobs/";
 

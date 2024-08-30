@@ -1,0 +1,386 @@
+@import "../../../styles/variables.scss"; 
+
+.login__form {
+    width: 100%;
+    height: 100vh;
+    margin: auto;
+    display: grid;
+    place-items: center;
+    background-color: #2563eb;
+    background-image: url(/assets/images/cta-bg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    @media screen and (min-width: $breakpoint-4) {
+        background-color: #f5f5f5;
+        background-image: none;
+    }
+
+    .login__form__container {
+        width: 90%;
+        height: 530px;
+        background-color: $white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+
+        @media screen and (min-width: 600px) {
+            width: 500px;
+            height: 530px;
+            margin: auto;
+        }
+
+        @media screen and (min-width: $breakpoint-4) {
+            display: grid;
+            grid-template-columns: 55% 45%;
+            width: 800px;
+            height: 600px;
+            margin: auto;
+        }
+
+        @media screen and (min-width: $breakpoint-5) {
+            max-width: 960px;
+            max-height: 600px;
+        }
+
+        .login__signup {
+            display: none;
+
+            @media screen and (min-width: $breakpoint-4) {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 2rem;
+                border-radius: 0 10px 10px 0;
+                background-color: $primary;
+                background-image: $blue-bg;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            .title {
+                font-size: $font-forty;
+                font-family: $font-logo;
+                font-weight: $font-weight-500;
+                color: $white;
+                line-height: $line-height-1-2;
+                margin-top: 0.35rem;
+                padding: 0;
+                text-align: center;
+            }
+
+            .subtitle {
+                font-size: $font-eighteen;
+                font-weight: $font-weight-400;
+                color: $white;
+                text-align: center;
+                line-height: $line-height-1-2;
+                margin-top: 0.75rem;
+                padding: 0;
+            }
+
+            .signup__btn {
+                background-color: transparent;
+                color: $white;
+                font-size: $font-twenty;
+                font-weight: $font-weight-400;
+                width: 14rem;
+                height: 3.5rem;
+                padding: 0.75rem;
+                margin-top: 1.5rem;
+                border: 1px solid $white;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 300ms ease-in-out;
+                box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px;
+                // display: grid;
+
+                &:hover {
+                    transform: scale(0.95, 1);
+                }
+            }
+        }
+
+        .login__signin {
+            background-color: $white;
+            padding: 2rem;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+
+            @media screen and (min-width: $breakpoint-4) {
+                display: grid;
+                grid-template-rows: 25% 65% 10%;
+                border-radius: 10px 0 0 10px;
+            }
+
+            @media screen and (min-width: $breakpoint-5) {
+                padding: 4rem 2rem;
+            }
+
+            .header {
+                .title {
+                    font-size: $font-forty;
+                    font-family: $font-logo;
+                    font-weight: $font-weight-500;
+                    color: $primary;
+                    text-align: center;
+                    line-height: $line-height-1-2;
+                    padding: 0;
+                }
+
+                .subtitle {
+                    font-size: $font-sixteen;
+                    font-weight: $font-weight-400;
+                    color: $gray;
+                    text-align: center;
+                    line-height: $line-height-1-2;
+                    padding: 0;
+                }
+            }
+
+            .form__wrap {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 2rem;
+
+                @media screen and (min-width: $breakpoint-5) {
+                    margin-top: 0;
+                }
+
+                .checkbox__group {
+                    display: flex;
+                    margin-bottom: 1rem;
+                    justify-content: center;
+                    width: 100%;
+                    gap: 1rem;
+
+                    .checkbox__item {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.25rem;
+
+                        .checkbox {
+                            width: 0.75rem;
+                            height: 0.75rem;
+                            background-color: $primary;
+                            border-radius: 3px;
+                        }
+
+                        label {
+                            font-weight: $font-weight-400;
+                            color: $black;
+                            cursor: pointer;
+                            transition: all 0.3s ease-in-out;
+                            font-size: $font-twelve;
+
+                            @media screen and (min-width: 400px) {
+                                font-size: $font-fourteen;
+                            }
+                        }
+
+                        .checkbox:checked + .remember__me__text {
+                            color: $primary;
+                        }
+                    }
+                }
+
+                .input__field {
+                    width: 100%;
+                    height: 3.5rem;
+                    background-color: #ebedf8e8;
+                    border-radius: 10px;
+                    border: none;
+                    padding: 0 1rem;
+                    margin-bottom: 1rem;
+                    font-size: $font-sixteen;
+                    font-weight: $font-weight-400;
+                    color: $black;
+                    line-height: $line-height-1-2;
+                    transition: all 0.3s ease-in-out;
+
+                    &:focus,
+                    &:active {
+                        background-color: #d9d6ee99;
+                    }
+
+                    &::placeholder {
+                        color: $placeholder;
+                    }
+                }
+
+                .password_field {
+                    position: relative;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px;
+                    width: 100%;
+                    height: 3.5rem;
+                    background-color: #ebedf8e8;
+                    border-radius: 10px;
+                    border: none;
+                    margin-bottom: 1rem;
+                    font-size: $font-sixteen;
+                    font-weight: $font-weight-400;
+                    color: $black;
+                    line-height: $line-height-1-2;
+                    transition: all 0.3s ease-in-out;
+
+                    .password_icon {
+                        width: 20px;
+                        cursor: pointer;
+                        transition: all 0.3s ease-in-out;
+                    }
+
+                    .pass_field {
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                        outline: none;
+                        background-color: transparent;
+                        font-size: var(--font-sixteen);
+                        font-weight: 400;
+                        color: var(--text);
+                        line-height: 1.2;
+
+                        &::placeholder {
+                            color: $placeholder;
+                        }
+                    }
+                }
+
+                .flex {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    margin-bottom: 0.5rem;
+
+                    .forgot__password {
+                        border: none;
+                        background-color: transparent;
+                        color: $placeholder;
+                        font-weight: $font-weight-500;
+                        font-size: $font-twelve;
+
+                        @media screen and (min-width: 400px) {
+                            font-size: $font-fourteen;
+                        }
+
+                        &:hover {
+                            color: $lightGray;
+                            border-bottom: 1px solid $lightGray;
+                        }
+                    }
+
+                    .remember__me {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: $font-fourteen;
+                        font-weight: $font-weight-400;
+                        color: $black;
+                        cursor: pointer;
+                        transition: all 0.3s ease-in-out;
+
+                        &:hover {
+                            color: $lightGray;
+                        }
+
+                        .checkbox {
+                            width: 1.25rem;
+                            height: 1.25rem;
+                            border: 1px solid $lightGray;
+                            border-radius: 3px;
+                            margin-right: 0.5rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                            transition: all 0.3s ease-in-out;
+
+                            &:hover {
+                                border: 1px solid $primary;
+                            }
+
+                            .checkmark {
+                                width: 0.75rem;
+                                height: 0.75rem;
+                                background-color: $primary;
+                                border-radius: 3px;
+                                display: none;
+                            }
+                        }
+
+                        .checkbox:checked .checkmark {
+                            display: block;
+                        }
+
+                        .remember__me__text {
+                            font-weight: $font-weight-400;
+                            color: $black;
+                            cursor: pointer;
+                            transition: all 0.3s ease-in-out;
+                            margin-left: 0.5rem;
+                            font-size: $font-twelve;
+
+                            @media screen and (min-width: 400px) {
+                                font-size: $font-fourteen;
+                            }
+                        }
+
+                        .checkbox:checked + .remember__me__text {
+                            color: $primary;
+                        }
+                    }
+                }
+
+                .signin__btn {
+                    background-color: $primary;
+                    color: $white;
+                    font-size: $font-twenty;
+                    font-weight: $font-weight-400;
+                    width: 100%;
+                    height: 3.5rem;
+                    display: grid;
+                    padding: 0.75rem;
+                    border-radius: 10px;
+                    margin-top: 0.5rem;
+                    cursor: pointer;
+                    transition: all 0.3s ease-in-out;
+                    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px;
+
+                    &:hover {
+                        transform: scale(0.95, 1);
+                    }
+                }
+            }
+
+            .signup__info {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                margin: 0.75rem auto;
+
+                .text {
+                    font-size: $font-fourteen;
+                    font-weight: $font-weight-400;
+                    color: $gray;
+                    margin-right: 0.5rem;
+                }
+
+                .signup__text {
+                    color: $primary;
+                    cursor: pointer;
+                    font-size: $font-fourteen;
+                    font-weight: $font-weight-400;
+                }
+            }
+        }
+    }
+}

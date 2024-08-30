@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./style.scss";
+import "./style.module.scss";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
 

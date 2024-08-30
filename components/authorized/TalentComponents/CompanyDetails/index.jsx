@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdPeopleOutline } from "react-icons/md";
 import { AiOutlineEnvironment, AiOutlineMail } from "react-icons/ai";
-import "./style.scss";
+import "./style.module.scss";
 import { BiBriefcase, BiFilter } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 
