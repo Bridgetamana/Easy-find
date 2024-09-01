@@ -59,7 +59,8 @@ export default function Signup() {
           password: "",
           confirmPassword: "",
         });
-        await showAlert({
+        await showAlert(
+          {
             type: "success",
             title: "Success!",
             message: "Operation completed successfully!",
@@ -73,15 +74,16 @@ export default function Signup() {
       }
     } catch (error) {
       const errorMessage = error.message || "An error occurred";
-      await showAlert({
-        type: "error",
-        title: "Error",
-        message: errorMessage,
-        showCloseButton: false,
-        timeout: 4000,
-        handleClose: () => setAlert(null),
-      },
-      setAlert
+      await showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: errorMessage,
+          showCloseButton: false,
+          timeout: 4000,
+          handleClose: () => setAlert(null),
+        },
+        setAlert
       );
     } finally {
       setIsLoading(false);
@@ -97,11 +99,7 @@ export default function Signup() {
     const password = companyFormData.password;
 
     try {
-      const result = await registerCompany(
-        companyName,
-        companyEmail,
-        password
-      );
+      const result = await registerCompany(companyName, companyEmail, password);
       if (result) {
         setCompanyFormData({
           companyName: "",
@@ -109,7 +107,8 @@ export default function Signup() {
           password: "",
           confirmPassword: "",
         });
-        await showAlert({
+        await showAlert(
+          {
             type: "success",
             title: "Success!",
             message: "Registeration completed successfully!",
@@ -123,20 +122,21 @@ export default function Signup() {
       }
     } catch (error) {
       const errorMessage = error.message || "An error occurred";
-      await showAlert({
-        type: "error",
-        title: "Error",
-        message: errorMessage,
-        showCloseButton: false,
-        timeout: 4000,
-        handleClose: () => setAlert(null),
-      },
-      setAlert
+      await showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: errorMessage,
+          showCloseButton: false,
+          timeout: 4000,
+          handleClose: () => setAlert(null),
+        },
+        setAlert
       );
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -209,15 +209,17 @@ export default function Signup() {
         <div className={styles.registeration__signup}>
           <div className={styles.registeration__tabs}>
             <div
-              className={`${styles.tab} ${activeTab === "talents" ? styles.active : ''}`}
-
+              className={`${styles.tab} ${
+                activeTab === "talents" ? styles.active : ""
+              }`}
               onClick={() => handleTabChange("talents")}
             >
               For Talents
             </div>
             <div
-              className={`${styles.tab} ${activeTab === "companies" ? styles.active : ''}`}
-
+              className={`${styles.tab} ${
+                activeTab === "companies" ? styles.active : ""
+              }`}
               onClick={() => handleTabChange("companies")}
             >
               For Companies
@@ -237,22 +239,22 @@ export default function Signup() {
             </div>
             {activeTab === "talents" && (
               <form className={styles.form__wrap} onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    name="firstName"
-                    placeholder="First Name"
-                    className={styles.input__field}
-                    value={talentFormData.firstName}
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Last Name"
-                    className={styles.input__field}
-                    value={talentFormData.lastName}
-                    onChange={handleChange}
-                  />
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  className={styles.input__field}
+                  value={talentFormData.firstName}
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  className={styles.input__field}
+                  value={talentFormData.lastName}
+                  onChange={handleChange}
+                />
                 <input
                   type="email"
                   name="email"
@@ -397,7 +399,7 @@ export default function Signup() {
                   type="submit"
                   disabled={!passwordMatch}
                 >
-                 {isLoading ? <Spinner /> : "Sign Up as Company"}
+                  {isLoading ? <Spinner /> : "Sign Up as Company"}
                 </button>
                 <div className={styles.signin__info}>
                   <p className={styles.text}>Already have an account?</p>{" "}
