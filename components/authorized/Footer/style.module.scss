@@ -1,9 +1,10 @@
 @import "../../../styles/variables.scss";
 
 .authorized__footer {
+    display: grid;
+    place-items: center;
     background-color: transparent;
     color: $white;
-    text-align: center;
     font-size: 12px;
     width: 100%;
 
@@ -13,6 +14,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 1.5rem;
+        width: 90%;
         max-width: 1140px;
 
         .footer__right {
