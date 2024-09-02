@@ -1,0 +1,54 @@
+@import "../../styles/variables.scss";
+
+.verifyEmail__form {
+    width: 100%;
+    height: 100vh;
+    margin: auto;
+    display: grid;
+    place-items: center;
+    background-color: #2563eb;
+    background-image: url(/assets/images/cta-bg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .verifyEmail-form__container {
+        width: 90%;
+        height: 250px;
+        gap: 3rem;
+        background-color: $white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 2rem;
+        
+
+        @media screen and (min-width: 600px) {
+            width: 500px;
+            margin: auto;
+        }
+
+            .header {
+                .title {
+                    font-size: $font-forty;
+                    font-family: $font-logo;
+                    font-weight: $font-weight-500;
+                    color: $primary;
+                    line-height: $line-height-1-2;
+                    margin-top: 0.35rem;
+                    padding: 0;
+                    text-align: center;
+                }
+    
+                .subtitle {
+                    font-size: $font-eighteen;
+                    font-weight: $font-weight-400;
+                    color: $lightGray;
+                    text-align: center;
+                    line-height: $line-height-1-2;
+                    padding: 0;
+                }    
+            }
+    }
+}

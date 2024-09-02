@@ -78,7 +78,7 @@ const PostTestimonial = () => {
       <div className={styles.section__header}>
         <h2 className={styles.section__title}>Testimonial Post</h2>
         <p className={styles.section__subtitle}>
-          Share a testimonial about your experience with Minu Jobs.
+          Share a testimonial about your experience with Easy Find.
         </p>
       </div>
       <form

@@ -125,7 +125,7 @@ export default function CompanyHeader() {
       {/* Mobile Header */}
       <div className={styles.mobile__header}>
         <div className={styles.header__logo}>
-          <h2 className={styles.logo__name}>MinuJobs</h2>
+          <h2 className={styles.logo__name}>EasyFind</h2>
         </div>
         <button
           type="button"
@@ -140,7 +140,7 @@ export default function CompanyHeader() {
           }`}
         >
           <div className={styles.nav__header}>
-            <h2 className={styles.logo__name}>MinuJobs</h2>
+            <h2 className={styles.logo__name}>EasyFind</h2>
             <button
               type="button"
               className={styles.close__menu}

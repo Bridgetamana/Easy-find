@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BiSolidError } from "react-icons/bi";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdError } from "react-icons/md";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export const CustomAlert = ({
   type,
@@ -35,16 +35,17 @@ export const CustomAlert = ({
   }, [handleClose, timeout]);
 
   return (
-    <div className={`custom__alert ${type}`}>
-      <div className="alert">
-        <div className="alert__wrap">
-          <div className="alert__icon">{getIcon()}</div>
-          <div className="alert__content">
-            <div className="alert__title">{title}</div>
-            <div className="alert__message">{message}</div>
+    <div className={`${styles.custom__alert} ${styles[type] || ''}`}
+>
+      <div className={styles.alert}>
+        <div className={styles.alert__wrap}>
+          <div className={styles.alert__icon}>{getIcon()}</div>
+          <div className={styles.alert__content}>
+            <div className={styles.alert__title}>{title}</div>
+            <div className={styles.alert__message}>{message}</div>
           </div>
           {showCloseButton && (
-            <button className="alert-close-button" onClick={handleClose}>
+            <button className={styles.alert-close-button} onClick={handleClose}>
               Close
             </button>
           )}

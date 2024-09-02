@@ -4,7 +4,7 @@ import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
 import styles from "./style.module.scss";
 
-const appliedJobsUrl = "https://minujob.com/applied-jobs/";
+const appliedJobsUrl = "https://localhost:3000/applied-jobs/";
 
 export default function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([]);
