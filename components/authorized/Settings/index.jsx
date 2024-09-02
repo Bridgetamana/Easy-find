@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import styles from './style.module.scss';
 
-export default function Settings() {
+export default function TalentSettings() {
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
