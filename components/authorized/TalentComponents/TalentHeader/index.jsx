@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
@@ -12,6 +13,7 @@ export default function TalentHeader() {
   const [showMenu, setShowMenu] = useState(false);
   const [accountDropdown, setAccountDropdown] = useState(false);
   const [active, setActive] = useState(null);
+  const [isSticky, setIsSticky] = useState(false);
 
   const handleMenuClick = (key) => {
     setActive(key);
@@ -29,7 +31,6 @@ export default function TalentHeader() {
     setShowMenu(false);
   };
 
-  const [isSticky, setIsSticky] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -184,18 +185,18 @@ export default function TalentHeader() {
               <Link
                 href="/talent/"
                 onClick={() => handleMenuClick("home")}
-                className={`${nav__link} ${
+                className={`${styles.nav__link} ${
                   active === styles.home ? styles.active__link : ""
                 }`}
               >
                 Home
               </Link>
             </li>
-            <li className={`${styles.nav__item} ${pd_btm}`}>
+            <li className={`${styles.nav__item} ${styles.pd_btm}`}>
               <Link
                 href="/talent/jobs"
                 onClick={() => handleMenuClick("jobs")}
-                className={`${nav__link} ${
+                className={`${styles.nav__link} ${
                   active === styles.jobs ? styles.active__link : ""
                 }`}
               >
@@ -206,7 +207,7 @@ export default function TalentHeader() {
               <Link
                 href="/talent/companies"
                 onClick={() => handleMenuClick("companies")}
-                className={`${nav__link} ${
+                className={`${styles.nav__link} ${
                   active === styles.companies ? styles.active__link : ""
                 }`}
               >
@@ -244,11 +245,11 @@ export default function TalentHeader() {
             </li>
           </ul>
           <ul className={styles.nav__list}>
-            <li className={`${styles.nav__item} ${pd_btm}`}>
+            <li className={`${styles.nav__item} ${styles.pd_btm}`}>
               <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
-                className={`${nav__link} ${
+                className={`${styles.nav__link} ${
                   active === styles.blog ? styles.active__link : ""
                 }`}
               >

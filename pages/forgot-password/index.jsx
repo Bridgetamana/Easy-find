@@ -1,10 +1,10 @@
 'use client';
+
 import React, { useState } from "react";
 import Link from "next/link";
 import Spinner from "@/components/utils/Loaders/Spinner";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { sendPasswordResetEmail } from "firebase/auth"; 
-// import { auth } from "firebase/auth";
 import { auth } from "@/firebaseConfig/firebase";
 import styles from "./style.module.scss";
 
