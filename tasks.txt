@@ -12,4 +12,9 @@
 - BecomeTalent page
 - Terms for both Job Finders and Job Posters
 - Blog page
-- 
+    - List of blog articles
+    - Single blog article
+
+- Remove Testimonials 
+
+-https://app.otta.com/ https://app.mindpal.co/ design inspos
