@@ -8,7 +8,7 @@ export default function UserName ({
     <section className={styles.username__section}>
       <div className={styles.username__content}>
         <div className={styles.content__header}>
-          <h2 className={styles.username__title}>Welcome back, Lilian!</h2>
+          <h2 className={styles.username__title}>Welcome back, User!</h2>
         </div>
       </div>
     </section>
