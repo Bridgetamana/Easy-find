@@ -7,3 +7,9 @@
 - Let's have a meeting tomorrow by 12pm to go over what needs to be done.
 
 - 404 page, design the 'Go back to home' button to look like other buttons on the page, add a new button next to it that will return the user back to their previous page ('Go back to previous page')
+
+ ### List of pages
+- BecomeTalent page
+- Terms for both Job Finders and Job Posters
+- Blog page
+- 
