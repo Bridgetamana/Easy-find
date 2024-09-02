@@ -1,13 +1,13 @@
 import React from "react";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="unauthorized__footer">
-      <div className="footer__bottom">
-         <div className="footer__right">
+    <footer className={styles.unauthorized__footer}>
+      <div className={styles.footer__bottom}>
+         <div className={styles.footer__right}>
               <Image
                 src="/assets/images/EasyFind.svg"
                 alt="Logo"
@@ -15,9 +15,9 @@ export default function Footer() {
                 width={100}
                 height={10}
                 layout="fixed"
-                className="logo"
+                className={styles.logo}
               />
-           {/* <ul className="footer__list">
+           {/* <ul className={styles.footer__list}>
              <li className="footer__list_item">
                <a className="footer__link" href="/">
                  About
@@ -39,7 +39,7 @@ export default function Footer() {
                </a>
              </li>
            </ul> */}
-         <p className="footer__text">&copy; {new Date().getFullYear()} EasyFind. All rights reserved</p>
+         <p className={styles.footer__text}>&copy; {new Date().getFullYear()} EasyFind. All rights reserved</p>
          </div>
        </div>
     </footer>

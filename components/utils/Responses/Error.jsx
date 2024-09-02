@@ -3,7 +3,7 @@ import styles from './style.module.scss';
 
 const ErrorMessage = ({ text }) => {
   return (
-    <div className="errorMsg">
+    <div className={styles.errorMsg}>
       {text}
     </div>
   );

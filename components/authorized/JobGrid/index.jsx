@@ -6,7 +6,7 @@ import { getJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import JobDetails from "../JobDetails";
 import { useRouter } from "next/navigation";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 const JobGrid = () => {
   const [toggleFilter, setToggleFilter] = useState(false);
@@ -68,7 +68,7 @@ const JobGrid = () => {
   };
 
   return (
-    <section className="job__grid py-12 my-24 bg-white">
+    <section className={` ${styles.job__grid} py-12 my-24 bg-white`}>
       <div className="w-[90%] m-auto">
        <div className="mx-auto max-w-xl text-center my-6">
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -76,11 +76,11 @@ const JobGrid = () => {
           </p>
           <h2 className="text-lg font-semibold leading-8 tracking-tight text-indigo-600">Discover jobs most relevant to you</h2>
         </div>
-      <div className="grid__header">
-        <div className="header__left">
-          <h5 className="total__jobs">
+      <div className={styles.grid__header}>
+        <div className={styles.header__left}>
+          <h5 className={styles.total__jobs}>
             Showing{" "}
-            <span className="job__number">
+            <span className={styles.job__number}>
               {indexOfFirstJob + 1} -{" "}
               {indexOfLastJob > jobs.length ? jobs.length : indexOfLastJob}
             </span>{" "}
@@ -88,58 +88,58 @@ const JobGrid = () => {
           </h5>
         </div>
 
-        <div className="header__right">
-          <div className="filter">
-            <button className="filter__button" onClick={isFilterToggled}>
+        <div className={styles.header__right}>
+          <div className={styles.filter}>
+            <button className={styles.filter__button} onClick={isFilterToggled}>
               Show Filter
             </button>
 
-            <div className={toggleFilter ? "show__filter" : "filter__group"}>
-              <div className="filter__item">
+            <div className={toggleFilter ? styles.show__filter : styles.filter__group}>
+              <div className={styles.filter__item}>
                 <label htmlFor="location">Date Posted:</label>
-                <div className="items">
-                  <div className="check__item">
+                <div className={styles.items}>
+                  <div className={styles.check__item}>
                     {" "}
                     <input
                       type="checkbox"
-                      className="sort__check"
+                      className={styles.sort__check}
                       value="last 24 Hours"
                     />
                     <p>Last 24 hours</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     {" "}
                     <input
                       type="checkbox"
-                      className="sort__check"
+                      className={styles.sort__check}
                       value="last7 Days"
                     />
                     <p>Last 7 days</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     {" "}
                     <input
                       type="checkbox"
-                      className="sort__check"
+                      className={styles.sort__check}
                       value="last 14 Days"
                     />
                     <p>Last 14 days</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     {" "}
                     <input
                       type="checkbox"
-                      className="sort__check"
+                      className={styles.sort__check}
                       value="last 30 Days"
                     />
                     <p>Last 30 days</p>
                   </div>
                 </div>
               </div>
-              <div className="filter__item">
+              <div className={styles.filter__item}>
                 <label htmlFor="specialism">Specialism:</label>
-                <div className="items">
-                  <div className="check__item">
+                <div className={styles.items}>
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -148,7 +148,7 @@ const JobGrid = () => {
                     />
                     <p> IT Contractor </p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -157,11 +157,11 @@ const JobGrid = () => {
                     />
                     <p> Charity & Voluntary </p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input type="checkbox" name="" value="Digital & Creative" />
                     <p>Digital & Creative</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -172,10 +172,10 @@ const JobGrid = () => {
                   </div>
                 </div>
               </div>
-              <div className="filter__item">
+              <div className={styles.filter__item}>
                 <label htmlFor="jobType">Job Type:</label>
-                <div className="items">
-                  <div className="check__item">
+                <div className={styles.items}>
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -184,7 +184,7 @@ const JobGrid = () => {
                     />
                     <p> Full Time </p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -193,7 +193,7 @@ const JobGrid = () => {
                     />
                     <p>Part-Time</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -202,7 +202,7 @@ const JobGrid = () => {
                     />
                     <p>Freelance</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -213,10 +213,10 @@ const JobGrid = () => {
                   </div>
                 </div>
               </div>
-              <div className="filter__item">
+              <div className={styles.filter__item}>
                 <label htmlFor="experience">Experience:</label>
-                <div className="items">
-                  <div className="check__item">
+                <div className={styles.items}>
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -225,7 +225,7 @@ const JobGrid = () => {
                     />
                     <p>Less than 1 year</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -234,7 +234,7 @@ const JobGrid = () => {
                     />
                     <p>2 Year</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -243,7 +243,7 @@ const JobGrid = () => {
                     />
                     <p>3 Year</p>
                   </div>
-                  <div className="check__item">
+                  <div className={styles.check__item}>
                     <input
                       type="checkbox"
                       name=""
@@ -261,7 +261,7 @@ const JobGrid = () => {
       {isLoading && <LoadingScreen />}
       {/* Job listings */}
       {jobs.length > 0 && (
-        <div className="grid__body  grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
+        <div className={` ${styles.grid__body}  grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}>
           {currentJobs.map((job) => {
             const salaryMinFormatted = job.minSalary.toLocaleString();
             const salaryMaxFormatted = job.maxSalary.toLocaleString();
@@ -273,47 +273,47 @@ const JobGrid = () => {
               hour12: true,
             });
             return (
-              <div className="jobs__card overflow-hidden rounded-xl border border-gray-200" key={job.id}>
-                <div className="card__info">
-                  <div className="card__company">
-                    <div className="card__logo">
+              <div className={` ${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`} key={job.id}>
+                <div className={styles.card__info}>
+                  <div className={styles.card__company}>
+                    <div className={styles.card__logo}>
                       <img src={job.companyLogo} alt={job.companyName} />
-                      <div className="company__info">
-                        <h5 className="company__name">{job.companyName}</h5>
-                        <p className="company__location">
+                      <div className={styles.company__info}>
+                        <h5 className={styles.company__name}>{job.companyName}</h5>
+                        <p className={styles.company__location}>
                           <AiOutlineEnvironment />
                           {job.location}
                         </p>
                       </div>
                     </div>
                   </div>
-                  <h4 className="card__title">{job.title}</h4>
-                  <div className="card__flex">
-                    <p className="card__location">
+                  <h4 className={styles.card__title}>{job.title}</h4>
+                  <div className={styles.card__flex}>
+                    <p className={styles.card__location}>
                       <CgBriefcase />
                       {job.jobType}
                     </p>
-                    <p className="card__time">
+                    <p className={styles.card__time}>
                       <AiOutlineClockCircle />
                       {timePostedFormatted}
                     </p>
                   </div>
-                  {/* <p className="card__description">{job.description}</p> */}
-                  {/* <ul className="card__tags">
+                  {/* <p className={styles.card__description}>{job.description}</p> */}
+                  {/* <ul className={styles.card__tags}>
               {jobTags.map((tag) => (
                 <li key={tag}>{tag}</li>
               ))}
             </ul> */}
                 </div>
-                <div className="card__flex">
-                  <p className="company__pay">
+                <div className={styles.card__flex}>
+                  <p className={styles.company__pay}>
                     ${salaryMinFormatted} - ${salaryMaxFormatted}{" "}
                   </p>
                   <Link
                     href={`/talent/jobs/details/${job.id}`}
                   >
                   <button
-                    className="apply__button"
+                    className={styles.apply__button}
                   >
                     View More
                   </button>
@@ -324,12 +324,12 @@ const JobGrid = () => {
           })}
         </div>
       )}
-      {jobs.length === 0 && <p className="no__jobs">No jobs found.</p>}
+      {jobs.length === 0 && <p className={styles.no__jobs}>No jobs found.</p>}
 
       {/* Pagination */}
-      <div className="pagination">
+      <div className={styles.pagination}>
         <button
-          className="pagination__button"
+          className={styles.pagination__button}
           onClick={handlePreviousClick}
           disabled={currentPage === 1}
         >
@@ -351,7 +351,7 @@ const JobGrid = () => {
         )}
 
         <button
-          className="pagination__button"
+          className={styles.pagination__button}
           onClick={handleNextClick}
           disabled={currentPage === pageNumbers}
         >

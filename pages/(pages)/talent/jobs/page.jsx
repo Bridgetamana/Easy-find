@@ -10,7 +10,7 @@ const JobListingsPage = () => {
 
   return (
     <ProtectedRoute>
-    <div className="job__page">
+    <div className={styles.job__page}>
       <JobHero/>
         <JobGrid/>
     </div>

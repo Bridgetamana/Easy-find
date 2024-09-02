@@ -6,7 +6,7 @@ import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { sendPasswordResetEmail } from "firebase/auth"; 
 // import { auth } from "firebase/auth";
 import { auth } from "@/firebaseConfig/firebase";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -53,33 +53,33 @@ export default function ForgotPassword() {
   };
 
   return (
-    <section className="forgotPassword__form">
+    <section className={styles.forgotPassword__form}>
       {alert && alert.component}
-      <div className="forgotPassword-form__container">
-        <div className="header">
-          <h1 className="title">Forgot Password</h1>
-          <p className="subtitle">
+      <div className={styles.forgotPassword-form__container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Forgot Password</h1>
+          <p className={styles.subtitle}>
             Enter your email address to reset your password.
           </p>
         </div>
-        <form className="form__wrap" onSubmit={handleResetPassword}>
+        <form className={styles.form__wrap} onSubmit={handleResetPassword}>
           <input
             type="text"
             name="email"
             placeholder="Email"
-            className="input__field"
+            className={styles.input__field}
             value={email}
             onChange={handleInputChange}
           />
 
-          <button className="reset-password__btn" type="submit">
+          <button className={styles.reset-password__btn} type="submit">
             {isLoading ? <Spinner /> : "Reset Password"}
           </button>
 
-          <div className="login__info">
-            <p className="text">
+          <div className={styles.login__info}>
+            <p className={styles.text}>
               Remember your password?{" "}
-              <Link href={"/signin"} className="signin__text">
+              <Link href={"/signin"} className={styles.signin__text}>
                 Sign In
               </Link>
             </p>

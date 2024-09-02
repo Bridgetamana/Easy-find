@@ -1,17 +1,19 @@
+"use client"
+
 import React from 'react';
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function Terms() {
   return (
-    <section className="terms__page">
-      <div className="terms__container">
-        <div className="terms__header">
-          <h2 className="terms__title">Terms and Conditions</h2>
+    <section className={styles.terms__page}>
+      <div className={styles.terms__container}>
+        <div className={styles.terms__header}>
+          <h2 className={styles.terms__title}>Terms and Conditions</h2>
         </div>
-        <div className="terms__content">
-          <ol className='terms__list'>
-            <li className='list__item'>
-              <h2 className='list__head'>Description of Service</h2>
+        <div className={styles.terms__content}>
+          <ol className={styles.terms__list}>
+            <li className={styles.list__item}>
+              <h2 className={styles.list__head}>Description of Service</h2>
               <p>
                 Making a decision to do something – this is the first step. We
                 all know that nothing moves until someone makes a decision. The
@@ -19,8 +21,8 @@ export default function Terms() {
               </p>
             </li>
 
-            <li className='list__item'>
-              <h2 className='list__head'>Your Registration Obligations</h2>
+            <li className={styles.list__item}>
+              <h2 className={styles.list__head}>Your Registration Obligations</h2>
               <p>
                 Focus is having the unwavering attention to complete what you
                 set out to do. There are a million distractions in every facet
@@ -31,8 +33,8 @@ export default function Terms() {
               </p>
             </li>
 
-            <li className='list__item'>
-              <h2 className='list__head'>User Account, Password, and Security</h2>
+            <li className={styles.list__item}>
+              <h2 className={styles.list__head}>User Account, Password, and Security</h2>
               <p>
                 So, how can we stay on course with all the distractions in our
                 lives? Willpower is a good start, but it’s very difficult to
@@ -40,8 +42,8 @@ export default function Terms() {
               </p>
             </li>
 
-            <li className='list__item'>
-              <h2 className='list__head'>User Conduct</h2>
+            <li className={styles.list__item}>
+              <h2 className={styles.list__head}>User Conduct</h2>
               <p>
                 We also know those epic stories, those modern-day legends
                 surrounding the early failures of such supremely successful
@@ -59,8 +61,8 @@ export default function Terms() {
               </p>
             </li>
 
-            <li className='list__item'>
-              <h2 className='list__head'>International Use</h2>
+            <li className={styles.list__item}>
+              <h2 className={styles.list__head}>International Use</h2>
               <p>
                 We also know those epic stories, those modern-day legends
                 surrounding the early failures of such supremely successful
@@ -71,9 +73,9 @@ export default function Terms() {
               </p>
             </li>
           </ol>
-          <div className='buttons__wrap'>
-            <button onClick={() => console.log("Accepted")} className='accept__btn'>Accept</button>
-            <button onClick={() => console.log("Closed")} className='close__btn'>Close</button>
+          <div className={styles.buttons__wrap}>
+            <button onClick={() => console.log("Accepted")} className={styles.accept__btn}>Accept</button>
+            <button onClick={() => window.history.back()} className={styles.close__btn}>Close</button>
           </div>
         </div>
       </div>

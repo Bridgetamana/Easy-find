@@ -5,7 +5,7 @@ import Spinner from "@/components/utils/Loaders/Spinner";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { resetPassword } from "@/firebaseConfig/talentStore";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -123,32 +123,32 @@ export default function ResetPassword() {
   };
 
   return (
-    <section className="resetPassword__form">
+    <section className={styles.resetPassword__form}>
       {alert && alert.component}
-      <div className="resetPassword-form__container">
-        <div className="header">
-          <h1 className="title">Reset Password</h1>
-          <p className="subtitle">Enter your new password.</p>
+      <div className={styles.resetPassword-form__container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Reset Password</h1>
+          <p className={styles.subtitle}>Enter your new password.</p>
         </div>
-        <form className="form__wrap" onSubmit={handleResetPassword}>
-          <div className="password__field">
+        <form className={styles.form__wrap} onSubmit={handleResetPassword}>
+          <div className={styles.password__field}>
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
-              className="pass__field"
+              className={styles.pass__field}
               value={password}
               onChange={handleInputChange}
               required
             />
             {showPassword ? (
               <IoEye
-                className="password__icon"
+                className={styles.password__icon}
                 onClick={togglePasswordVisibility}
               />
             ) : (
               <IoEyeOff
-                className="password__icon"
+                className={styles.password__icon}
                 onClick={togglePasswordVisibility}
               />
             )}
@@ -158,20 +158,20 @@ export default function ResetPassword() {
             type="text"
             name="confirm-password"
             placeholder="Confirm Password"
-            className="input__field"
+            className={styles.input__field}
             value={confirmPassword}
             onChange={handleInputChange}
             required
           />
 
-          <button className="reset-password__btn" type="submit">
+          <button className={styles.reset-password__btn} type="submit">
             {isLoading ? <Spinner /> : "Submit"}
           </button>
 
-          <div className="login__info">
-            <p className="text">
+          <div className={styles.login__info}>
+            <p className={styles.text}>
               Remember your password?{" "}
-              <Link href={"/signin"} className="signin__text">
+              <Link href={"/signin"} className={styles.signin__text}>
                 Sign In
               </Link>
             </p>

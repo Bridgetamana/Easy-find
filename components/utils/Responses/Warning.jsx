@@ -1,8 +1,9 @@
 import React from 'react';
+import styles from './style.module.scss'
 
 const WarningMessage = ({ text }) => {
   return (
-    <div className="warningMsg">
+    <div className={styles.warningMsg}>
       {text}
     </div>
   );

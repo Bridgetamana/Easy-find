@@ -1,6 +1,7 @@
 import React from "react";
 import Footer from "@/components/authorized/Footer";
 import CompanyHeader from "@/components/authorized/CompanyComponents/CompanyHeader";
+import styles from '../../../styles/global.scss'
 
 export const metadata = {
   title: "EasyFind",
@@ -12,9 +13,9 @@ export default function TalentLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="app">
+        <div className={styles.app}>
           <CompanyHeader />
-          <main className="main">{children}</main>
+          <main className={styles.main}>{children}</main>
           <Footer />
         </div>
       </body>
