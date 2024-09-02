@@ -4,7 +4,7 @@ import { CgBriefcase } from "react-icons/cg";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import styles from "./style.module.scss";
 
-const jobUrl = "https://minujob.com/job-listings/";
+const jobUrl = "https://localhost:3000/job-listings/";
 
 export default function BrowseJobs() {
   const [jobPostings, setJobPostings] = useState([]);

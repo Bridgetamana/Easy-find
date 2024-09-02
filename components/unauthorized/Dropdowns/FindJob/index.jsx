@@ -58,7 +58,7 @@ export default function FindJob() {
     <div className={styles.findJob__menu} ref={findJobRef}>
       <ul className={styles.dropdown__list}>
         <li className={styles.dropdown__link}>
-          <Link href="/minu" className={styles.link}>
+          <Link href="/" className={styles.link}>
             Browse Jobs
           </Link>
         </li>

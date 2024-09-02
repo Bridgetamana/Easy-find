@@ -4,7 +4,7 @@ import styles from "./style.module.scss";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
 
-const savedJobsUrl = "https://minujob.com/saved-jobs/";
+const savedJobsUrl = "https://localhost:3000/saved-jobs/";
 
 export default function SavedJobs() {
   const [savedJobs, setSavedJobs] = useState([]);

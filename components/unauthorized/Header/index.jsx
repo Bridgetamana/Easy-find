@@ -138,7 +138,7 @@ export default function UnauthorizedHeader() {
               <BsChevronDown fill="#827f7f" size={10} />
             </h4>
             <li className={styles.dropdown__link}>
-              <Link href="/minu" className={styles.link}>
+              <Link href="/easy-find" className={styles.link}>
                 How Minu works
               </Link>
             </li>
