@@ -1,4 +1,7 @@
 - Make landing page look more real, remove lorem ipsum texts and add real texts.
-- All style modules, change the classnames to style modules classnames, e.g `className={styles.container}`. This might help styles to be applied correctly.
-- Fix issues
-- Make a list of features to be added to the app after resolving all issues.
+
+- Make a list of all the pages that needs to be created based on what we currently have.
+
+- Kindly fix the signout button on both company and talent headers. It shouldn't be a Link but a function.
+
+- Let's have a meeting tomorrow by 12pm to go over what needs to be done.
