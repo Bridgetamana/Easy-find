@@ -12,7 +12,7 @@
     background-repeat: no-repeat;
     background-size: cover;
 
-    .forgotPassword-form__container {
+    .forgotPassword_form__container {
         width: 90%;
         height: 420px;
         gap: 3rem;
@@ -80,7 +80,7 @@
                     }
                 }
 
-                .reset-password__btn {
+                .reset_password__btn {
                     background-color: $primary;
                     color: $white;
                     font-size: $font-twenty;

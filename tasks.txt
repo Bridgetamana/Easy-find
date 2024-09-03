@@ -18,3 +18,5 @@
 - Remove Testimonials 
 
 -https://app.otta.com/ https://app.mindpal.co/ design inspos
+
+- Notifications page

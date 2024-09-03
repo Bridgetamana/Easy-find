@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
 import { BsChevronDown } from "react-icons/bs";
@@ -14,6 +15,7 @@ export default function TalentHeader() {
   const [accountDropdown, setAccountDropdown] = useState(false);
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
+  const router = useRouter();
 
   const handleMenuClick = (key) => {
     setActive(key);
@@ -45,6 +47,10 @@ export default function TalentHeader() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const signOut = () => {
+    router.push("/signin");
+  };
 
   return (
     <header
@@ -117,9 +123,9 @@ export default function TalentHeader() {
               </Link>
             </li>
             <li className={styles.nav__item}>
-              <Link href="/signout" className={styles.nav__button}>
+              <button onClick={signOut} className={styles.nav__button}>
                 Sign Out
-              </Link>
+              </button>
             </li>
           </ul>
         </nav>
@@ -246,9 +252,9 @@ export default function TalentHeader() {
               </Link>
             </li>
             <li className={styles.nav__item}>
-              <Link href="/signout" className={styles.nav__button}>
+              <button onClick={signOut} className={styles.nav__button}>
                 Sign Out
-              </Link>
+              </button>
             </li>
           </ul>
         </nav>
