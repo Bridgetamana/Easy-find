@@ -1,12 +1,6 @@
 - Make landing page look more real, remove lorem ipsum texts and add real texts.
 
-- Make a list of all the pages that needs to be created based on what we currently have.
-
 - Kindly fix the signout button on both company and talent headers. It shouldn't be a Link but a function.
-
-- Let's have a meeting tomorrow by 12pm to go over what needs to be done.
-
-- 404 page, design the 'Go back to home' button to look like other buttons on the page, add a new button next to it that will return the user back to their previous page ('Go back to previous page')
 
  ### List of pages
 - BecomeTalent page
@@ -15,7 +9,10 @@
     - List of blog articles
     - Single blog article
 
-- Remove Testimonials 
+- Check console in landingpage and clear out all errors
+- Take out Testimonials from dropdowns
+- Talent Profileform should be connected to the edit button for TalentProfileData page
+- http://localhost:1337/api this is for strapi
 
 -https://app.otta.com/ https://app.mindpal.co/ design inspos
 
