@@ -95,17 +95,6 @@ export default function TalentHeader() {
                 Jobs
               </Link>
             </li>
-            <li className={styles.nav__item}>
-              <Link
-                href="/talent/companies"
-                onClick={() => handleMenuClick("companies")}
-                className={`${styles.nav__link} ${
-                  active === styles.companies ? styles.active__link : ""
-                }`}
-              >
-                Companies
-              </Link>
-            </li>
             <li
               className={
                 accountDropdown ? styles.active__menu : styles.nav__menu

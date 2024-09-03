@@ -17,11 +17,6 @@ export default function AccountDropdown() {
             Setting
           </Link>
         </li>
-        <li className={styles.dropdown__link}>
-          <Link href="/talent/testimonials" className={styles.link}>
-            Testimonials
-          </Link>
-        </li>
       </ul>
     </div>
   );
