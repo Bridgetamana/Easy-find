@@ -12,4 +12,4 @@
 - BecomeTalent page
 - Terms for both Job Finders and Job Posters
 - Blog page
-- 
+- Notifications Page
