@@ -55,7 +55,7 @@ export default function ForgotPassword() {
   return (
     <section className={styles.forgotPassword__form}>
       {alert && alert.component}
-      <div className={styles.forgotPassword-form__container}>
+      <div className={styles.forgotPassword_form__container}>
         <div className={styles.header}>
           <h1 className={styles.title}>Forgot Password</h1>
           <p className={styles.subtitle}>
@@ -72,7 +72,7 @@ export default function ForgotPassword() {
             onChange={handleInputChange}
           />
 
-          <button className={styles.reset-password__btn} type="submit">
+          <button className={styles.reset_password__btn} type="submit">
             {isLoading ? <Spinner /> : "Reset Password"}
           </button>
 
