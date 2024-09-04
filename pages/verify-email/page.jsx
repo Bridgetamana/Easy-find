@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from "react";
 import styles from "./style.module.scss";
+import { applyActionCode } from "firebase/auth";
 
-export default function VerifyEmail() {
+export default function VerifyEmail () {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [message, setMessage] = useState("Verifing email address, please wait...");

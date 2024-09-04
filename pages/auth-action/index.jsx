@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect, useReducer } from "react";
 import { useRouter, useLocation } from "next/navigation";
 import {
@@ -7,8 +8,7 @@ import {
   verifyPasswordResetCode,
   confirmPasswordReset,
 } from "firebase/auth";
-import ResetPasswordForm from "./ResetPasswordForm";
-import ResetPasswordSuccess from "./ResetPasswordSuccess";
+import ResetPassword from "./password-set/index";
 import VerifyEmail from "../verify-email/page";
 
 
@@ -42,17 +42,17 @@ export default function AuthAction() {
   return (
     <>
       {state.stage === "form" && (
-        <ResetPasswordForm />
+        <ResetPassword state={state} navigate={router} />
       )}
 
       {
         state.stage === "verify" && (
-          <VerifyEmail/>
+          <VerifyEmail />
         )
       }
 
       {state.stage && (
-        <ResetPasswordSuccess state={state} navigate={router} />
+        <ResetPassword state={state} navigate={router} />
       )}
     </>
   );

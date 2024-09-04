@@ -1,7 +1,7 @@
-// ResetPasswordSuccess.js
+// ResetPassword.js
 import React from "react";
 
-export default function ResetPasswordSuccess({ state, navigate }) {
+export default function ResetPassword({ state, navigate }) {
   return (
     <section className="resetPassword__form">
       {
