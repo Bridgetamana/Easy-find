@@ -68,11 +68,6 @@ export default function FindJob() {
           </Link>
         </li>
         <li className={styles.dropdown__link}>
-          <Link href='#testimonials' className={styles.link}>
-            Testimonials
-          </Link>
-        </li>
-        <li className={styles.dropdown__link}>
           <Link href="/terms" className={styles.link}>
             Terms
           </Link>

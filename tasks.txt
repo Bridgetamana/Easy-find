@@ -34,5 +34,6 @@
 
 - Talent/Blog/Settings - 
     - 
-- Company/Auth/Notifications -
-    - 
+- Company/Auth/Notifications - Bridget
+    - Remove signout button from header and add it in Account dropdown below settings for company header
+    - Take out Testimonials from dropdowns
