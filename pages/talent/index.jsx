@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import ProtectedRoute from '@/utils/ProtectedRoute';
+import ProtectedRoute from '@/utils/protectedRoute';
 import Hero from '@/components/authorized/Hero';
 import AppliedJobs from '@/components/authorized/TalentComponents/AppliedJobs';
 import ExpectationSection from '@/components/authorized/TalentComponents/ExpectationSection';

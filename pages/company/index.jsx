@@ -1,7 +1,7 @@
 import React from "react";
 import CompanyLayout from "./layout";
-import ProtectedRoute from "@/utils/ProtectedRoute";
 import Hero from "@/components/authorized/Hero";
+import ProtectedRoute from "@/utils/protectedRoute";
 
 const HomePage = () => {
   return (
