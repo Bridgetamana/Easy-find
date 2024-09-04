@@ -6,6 +6,7 @@ import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { resetPassword } from "@/firebaseConfig/talentStore";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import styles from "./style.module.scss";
+import { useRouter } from "next/router";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -14,6 +15,7 @@ export default function ResetPassword() {
   const [alert, setAlert] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [oobCode, setOobCode] = useState("");
+  const navigate = useRouter();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -62,6 +64,7 @@ export default function ResetPassword() {
         const success = await resetPassword(oobCode, password);
   
         if (success) {
+          setIsLoading(false);
           // Show a success alert
           await showAlert(
             {
@@ -74,6 +77,7 @@ export default function ResetPassword() {
             },
             setAlert
           );
+          navigate.push("/signin");
         } else {
           // Show an error alert if password reset fails
           await showAlert(
@@ -125,7 +129,7 @@ export default function ResetPassword() {
   return (
     <section className={styles.resetPassword__form}>
       {alert && alert.component}
-      <div className={styles.resetPassword-form__container}>
+      <div className={styles.form__container}>
         <div className={styles.header}>
           <h1 className={styles.title}>Reset Password</h1>
           <p className={styles.subtitle}>Enter your new password.</p>
@@ -164,7 +168,7 @@ export default function ResetPassword() {
             required
           />
 
-          <button className={styles.reset-password__btn} type="submit">
+          <button className={styles.form__btn} type="submit">
             {isLoading ? <Spinner /> : "Submit"}
           </button>
 

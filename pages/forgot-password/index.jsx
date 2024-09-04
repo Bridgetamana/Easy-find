@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
 import Spinner from "@/components/utils/Loaders/Spinner";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
-import { sendPasswordResetEmail } from "firebase/auth"; 
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/firebaseConfig/firebase";
 import styles from "./style.module.scss";
 
@@ -16,36 +16,42 @@ export default function ForgotPassword() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-  
+
     try {
       await sendPasswordResetEmail(auth, email);
-  
-      await showAlert({
-        type: "success",
-        title: "Success",
-        message: "Password reset email sent. Check your inbox.",
-        showCloseButton: false,
-        timeout: 4000,
-        handleClose: () => setAlert(null),
-      }, setAlert);
-      
+      setIsLoading(false);
+      await showAlert(
+        {
+          type: "success",
+          title: "Success",
+          message: "Password reset email sent. Check your inbox.",
+          showCloseButton: false,
+          timeout: 4000,
+          handleClose: () => setAlert(null),
+        },
+        setAlert
+      );
+
       setEmail("");
     } catch (error) {
       console.error("Password reset error:", error);
-  
+
       // Show an error alert
-      await showAlert({
-        type: "error",
-        title: "Error",
-        message: error.message,
-        showCloseButton: false,
-        timeout: 14000,
-        handleClose: () => setAlert(null),
-      }, setAlert);
+      await showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: error.message,
+          showCloseButton: false,
+          timeout: 14000,
+          handleClose: () => setAlert(null),
+        },
+        setAlert
+      );
     } finally {
       setIsLoading(false);
     }
-  }; 
+  };
 
   const handleInputChange = (e) => {
     const { value } = e.target;

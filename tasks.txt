@@ -1,39 +1,36 @@
-- Make landing page look more real, remove lorem ipsum texts and add real texts.
-
-- Kindly fix the signout button on both company and talent headers. It shouldn't be a Link but a function.
-- Fix authentication for both company and talent, user should be redirected to the login page if they are not logged in(if their token is not in the local storage).
-
 ### List of pages
-- Find Talent page
-- Find Company page
 - Terms for both Job Finders and Job Posters
-- Blog page
-    - Fix blog layout
-    - List of blog articles
-    - Single blog article
-- Remove signout button from header and add it in Account dropdown below settings
-
 - Check console in landingpage and clear out all errors
-- Take out Testimonials from dropdowns
-- Talent Profileform should be connected to the edit button for TalentProfileData page
 - Firebase is being used 
-- Job search bars should be functional
 - Single Job page should be functional, fix error
 
 - https://app.otta.com/ https://app.mindpal.co/ design inspos
 
-- Notifications page ()
+
+- Talent/Blog/Settings - Betty
+    - Kindly fix the signout button on talent header. It shouldn't be a Link but a function.
+    - Fix authentication for talent, user should be redirected to the login page if they are not logged in(if their token is not in the local storage).
+    - Find Talent page
+    - Blog page
+        - Fix blog layout
+        - List of blog articles
+        - Single blog article
+    - Take out Testimonials from dropdowns
+    - Make landing page look more real, remove lorem ipsum texts and add real texts.
+    - Job Application page
+    - Talent Profileform should be connected to the edit button for TalentProfileData page
+    - Job search bars should be functional
+
+
+- Company/Auth/Notifications - Bridget
+    - Find Company page
+    - Kindly fix the signout button on company header. It shouldn't be a Link but a function.
+    - Fix authentication for company, user should be redirected to the login page if they are not logged in(if their token is not in the local storage).
+    - Notifications page ()
     - Notifications should be displayed in a dropdown
     - Notifications for talent should consist of job suggestions, job application status, job application feedback
     - Notifications for company should consist of who applied to their job postings, who saved their job.
+    - Suggest talents to companies based on skills and location provided in the job posting, this should viewable in the company job details page below the job descriptions.
+    - View the talents that have applied to their job postings
+    - Remove signout button from header and add it in Account dropdown below settings
 
-- Job Application page
-- View the talents that have applied to their job postings
-- Suggest talents to companies based on skills and location provided in the job posting, this should viewable in the company job details page below the job descriptions.
-
-
-- Talent/Blog/Settings - 
-    - 
-- Company/Auth/Notifications - Bridget
-    - Remove signout button from header and add it in Account dropdown below settings for company header
-    - Take out Testimonials from dropdowns

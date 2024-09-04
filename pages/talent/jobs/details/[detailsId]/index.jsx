@@ -14,7 +14,7 @@ import Button from "@/components/utils/Button";
 import { BsCheck2Circle, BsHeart, BsHeartFill } from "react-icons/bs";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
-import ProtectedRoute from "@/utils/ProtectedRoute";
+import ProtectedRoute from "@/utils/protectedRoute";
 import Link from "next/link";
 import styles from "./style.module.scss";
 import TalentLayout from "../../../layout";
