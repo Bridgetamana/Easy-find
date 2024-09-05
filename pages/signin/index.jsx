@@ -68,7 +68,9 @@ export default function Signin() {
   
       
   
-      // Store the user's first name in secure storage
+      // Store the user's token and first name in secure storage
+      const token = await user.getIdToken(); 
+      secureLocalStorage.setItem("userToken", token); 
       secureLocalStorage.setItem("user_firstName", userData.fullName);
   
       // Navigate based on user type
