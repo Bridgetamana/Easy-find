@@ -5,44 +5,35 @@ import LoadingScreen from '@/components/utils/Loaders/Loader';
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loadingAuthState, setLoadingAuthState] = useState(true);
-  const [authData, setAuthData] = useState({ phoneNumber: null, confirmationResult: null });
+    const [user, setUser] = useState(null);
+    const [loadingAuthState, setLoadingAuthState] = useState(true);
 
-  const setPhoneAuthData = (phoneNumber, confirmationResult) => {
-    setAuthData({ phoneNumber, confirmationResult });
-  };
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setLoadingAuthState(false);
+        });
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoadingAuthState(false);
-    });
+        return () => unsubscribe();  
+    }, []);
 
-    return () => unsubscribe();  
-  }, []);
+    if (loadingAuthState) {
+        return <LoadingScreen />; 
+    }
 
-  if (loadingAuthState) {
-    return <LoadingScreen />; 
-  }
+    const contextValue = {
+        user,
+        setUser, 
+    };
 
-  const contextValue = {
-    user,
-    loadingAuthState,
-    authData,
-    setPhoneAuthData,
-  };
-
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return (
+        <AuthContext.Provider value={contextValue}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export { AuthProvider, AuthContext };
