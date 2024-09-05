@@ -2,7 +2,7 @@ import React from "react";
 
 
 const featuredTestimonial = {
-  body: 'Integer id nunc sit semper purus. Bibendum at lacus ut arcu blandit montes vitae auctor libero. Hac condimentum dignissim nibh vulputate ut nunc. Amet nibh orci mi venenatis blandit vel et proin. Non hendrerit in vel ac diam.',
+  body: 'EasyFind connected me with companies that were looking for someone with my exact experience. I found a new job faster than I expected, and I couldn’t be happier!',
   author: {
     name: 'Brenna Goyette',
     handle: 'brennagoyette',
@@ -16,7 +16,7 @@ const testimonials = [
   [
     [
       {
-        body: 'Laborum quis quam. Dolorum et ut quod quia. Voluptas numquam delectus nihil. Aut enim doloremque et ipsam.',
+        body: 'After struggling to find a job through other platforms, EasyFind came through for me. I landed a dream position at a top company with a great salary package',
         author: {
           name: 'Leslie Alexander',
           handle: 'lesliealexander',
@@ -25,7 +25,7 @@ const testimonials = [
         },
       },
       {
-        body: 'Voluptas quos itaque ipsam in voluptatem est. Iste eos blanditiis repudiandae. Earum deserunt enim molestiae ipsum perferendis recusandae saepe corrupti.',
+        body: 'We’ve been using EasyFind to hire talent for our growing tech team, and the results have been outstanding. The platform makes it easy to find qualified candidates who fit our company culture.',
         author: {
           name: 'Tom Cook',
           handle: 'tomcook',
@@ -36,7 +36,7 @@ const testimonials = [
     ],
     [
       {
-        body: 'Aut reprehenderit voluptatem eum asperiores beatae id. Iure molestiae ipsam ut officia rem nulla blanditiis.',
+        body: 'Finding the right people for our business has always been a challenge, but EasyFind changed that. We’ve filled several key positions in record time, thanks to their extensive talent pool.',
         author: {
           name: 'Lindsay Walton',
           handle: 'lindsaywalton',
@@ -45,7 +45,7 @@ const testimonials = [
         },
       },
       {
-        body: 'Aut reprehenderit voluptatem eum asperiores beatae id. Iure molestiae ipsam ut officia rem nulla blanditiis.',
+        body: 'EasyFind is a game-changer for startups like ours. We need to move fast, and this platform gives us access to the best talent quickly and efficiently. It’s become our go-to hiring tool.',
         author: {
           name: 'Jane Lohan',
           handle: 'janelohan',
@@ -58,7 +58,7 @@ const testimonials = [
   [
     [
       {
-        body: 'Voluptas quos itaque ipsam in voluptatem est. Iste eos blanditiis repudiandae. Earum deserunt enim molestiae ipsum perferendis recusandae saepe corrupti.',
+        body: 'We’ve been using EasyFind to hire talent for our growing tech team, and the results have been outstanding. The platform makes it easy to find qualified candidates who fit our company culture.',
         author: {
           name: 'Tom Cook',
           handle: 'tomcook',
@@ -67,7 +67,7 @@ const testimonials = [
         },
       },
       {
-        body: 'Molestias ea earum quos nostrum doloremque sed. Quaerat quasi aut velit incidunt excepturi rerum voluptatem minus harum.',
+        body: 'EasyFind’s personalized job alerts saved me so much time. I no longer had to sift through irrelevant job postings—only the most relevant opportunities landed in my inbox.',
         author: {
           name: 'Leonard Krasner',
           handle: 'leonardkrasner',
@@ -78,7 +78,7 @@ const testimonials = [
     ],
     [
       {
-        body: 'Molestias ea earum quos nostrum doloremque sed. Quaerat quasi aut velit incidunt excepturi rerum voluptatem minus harum.',
+        body: 'I was impressed with how EasyFind matched me with jobs that aligned with my skills and interests. The application process was smooth, and I received multiple offers within a month!',
         author: {
           name: 'Leonard Krasner',
           handle: 'leonardkrasner',
@@ -87,7 +87,7 @@ const testimonials = [
         },
       },
         {
-          body: 'Laborum quis quam. Dolorum et ut quod quia. Voluptas numquam delectus nihil. Aut enim doloremque et ipsam.',
+          body: 'EasyFind made my job search seamless and stress-free. I found the perfect role in just two weeks, thanks to the intuitive platform and tailored job recommendations!',
           author: {
             name: 'Leslie Alexander',
             handle: 'lesliealexander',
@@ -107,7 +107,7 @@ function classNames(...classes) {
 
 export default function TestimonialsSection() {
   return (
-    <div id="testimonials" className="relative isolate bg-white pb-32 pt-24 sm:pt-32 scroll-smooth">
+    <div className="relative isolate bg-white pb-32 pt-24 sm:pt-32 scroll-smooth">
       <div
         className="absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 transform-gpu overflow-hidden opacity-30 blur-3xl"
         aria-hidden="true"
