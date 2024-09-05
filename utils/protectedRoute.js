@@ -1,14 +1,16 @@
 import { useContext } from 'react';
 import { AuthContext } from './authContext';
 import { useRouter } from 'next/navigation';
+import secureLocalStorage from "react-secure-storage";
 
 function ProtectedRoute({ children }) {
   const { user } = useContext(AuthContext);
   const router = useRouter();
+  const token = secureLocalStorage.getItem("userToken");
 
-  if (!user) {
-    router.push('/'); 
-    return null; 
+  if (!user || !token) {
+    router.push("/signin");
+    return null;
   }
 
   return children;
