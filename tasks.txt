@@ -33,4 +33,3 @@
     - Suggest talents to companies based on skills and location provided in the job posting, this should viewable in the company job details page below the job descriptions.
     - View the talents that have applied to their job postings
     - Remove signout button from header and add it in Account dropdown below settings
-
