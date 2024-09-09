@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AuthContext } from './authContext';
+import { AuthContext } from '../context//authContext';
 import { useRouter } from 'next/navigation';
 import secureLocalStorage from "react-secure-storage";
 

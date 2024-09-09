@@ -1,12 +1,13 @@
 import React from 'react'
-// import UnauthorizedHeader from '@/components/unauthorized/UnauthorizedHeader'
-// import Footer from '@/components/unauthorized/Footer'
+import Footer from '@/components/unauthorized/Footer'
+import  UnauthorizedHeader  from '@/components/unauthorized/Header'
 
-export default function BlogLayout() {
+export default function BlogLayout( { children }) {
   return (
     <div>
-      {/* <UnauthorizedHeader />
-      <Footer /> */}
+      <UnauthorizedHeader />
+      <main className="main">{children}</main>
+      <Footer />
     </div>
   )
 }

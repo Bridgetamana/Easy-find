@@ -3,6 +3,7 @@
 - Check console in landingpage and clear out all errors [COMPLETED]
 - Firebase is being used 
 - Single Job page should be functional, fix error
+    - You can decided to make it a modal a part of the page
 
 - https://app.otta.com/ https://app.mindpal.co/ design inspos
 
