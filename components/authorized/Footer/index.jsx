@@ -12,7 +12,6 @@ export default function Footer() {
             alt="Logo"
             width={100}
             height={100}
-            layout="fixed"
             className={styles.logo}
           />
         </div>

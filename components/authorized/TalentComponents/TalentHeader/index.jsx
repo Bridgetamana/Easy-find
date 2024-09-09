@@ -15,7 +15,6 @@ export default function TalentHeader() {
   const [accountDropdown, setAccountDropdown] = useState(false);
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
-  const router = useRouter();
 
   const handleMenuClick = (key) => {
     setActive(key);
@@ -47,10 +46,6 @@ export default function TalentHeader() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const signOut = () => {
-    router.push("/signin");
-  };
 
   return (
     <header
@@ -121,11 +116,6 @@ export default function TalentHeader() {
               >
                 Blog
               </Link>
-            </li>
-            <li className={styles.nav__item}>
-              <button onClick={signOut} className={styles.nav__button}>
-                Sign Out
-              </button>
             </li>
           </ul>
         </nav>
@@ -250,11 +240,6 @@ export default function TalentHeader() {
               >
                 Blog
               </Link>
-            </li>
-            <li className={styles.nav__item}>
-              <button onClick={signOut} className={styles.nav__button}>
-                Sign Out
-              </button>
             </li>
           </ul>
         </nav>
