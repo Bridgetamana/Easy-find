@@ -5,16 +5,29 @@
     width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     
-    .blog{
-        font-weight: 550;
-        padding-top: 2px;
-        padding-left: 5px;
-        font-size: 16px;
-        font-style: italic;
-    }
-
     .desktop__header {
         display: none;
+    }
+    .category__nav{
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        justify-content: center;
+
+        .category__Link{
+            padding: 0.5rem;
+            border: none;
+            font-weight: 500;
+            font-size: 12px;
+            color: #0070f3;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+          
+          .category__Link:hover {
+            text-decoration: underline #005bb5;
+        }   
+       
     }
 
     .mobile__header {
@@ -144,6 +157,7 @@
                     }
                 }
             }
+            
         }
 
         .show__navbar {
@@ -268,29 +282,29 @@
         .mobile__header {
             display: none;
         }
-        
+        .category__nav{
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 3rem 0.5rem 2rem;
+            padding-bottom: 0.5rem;
+            justify-content: flex-start;
+    
+            .category__Link{
+                padding: 0.5rem;
+                border: none;
+                font-weight: 600;
+                font-size: 20px;
+                color: #0070f3;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+              
+              .category__Link:hover {
+                text-decoration: underline #005bb5;
+            }   
+           
+        }    
        
     }
-    .category__nav{
-        display: flex;
-        gap: 1rem;
-        padding: 1rem 3rem 0.5rem 2rem;
-        padding-bottom: 0.5rem;
-
-        .category__Link{
-            padding: 0.5rem;
-            border: none;
-            font-weight: 600;
-            font-size: 20px;
-            color: #0070f3;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-          
-          .category__Link:hover {
-            text-decoration: underline #005bb5;
-        }   
-       
-    }
-
+    
 }

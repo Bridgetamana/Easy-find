@@ -12,11 +12,11 @@ export default function TargetAudience() {
                   <span className="block text-base font-semibold text-blue-500 sm:text-lg lg:text-base xl:text-lg">
                     Easy find
                   </span>
-                  <h1 className="mt-1 block text-4xl font-bold tracking-tight sm:text-4xl">
+                  <p className="mt-1 block text-4xl font-bold tracking-tight sm:text-4xl">
                     <span className="block text-gray-900">
                      For Companies
                     </span>
-                  </h1>
+                  </p>
                 </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                   Find professionals from around the world and from around all skills.
@@ -31,11 +31,11 @@ export default function TargetAudience() {
                   <span className="block text-base font-semibold text-blue-500 sm:text-lg lg:text-base xl:text-lg">
                    Easy find
                   </span>
-                  <h1 className="mt-1 block text-4xl font-bold tracking-tight sm:text-4xl">
+                  <p className="mt-1 block text-4xl font-bold tracking-tight sm:text-4xl">
                     <span className="block text-gray-900">
                      For Candidates
                     </span>
-                  </h1>
+                  </p>
                 </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                   Build your professional profile, find job new opportunities.

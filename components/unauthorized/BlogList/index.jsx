@@ -92,6 +92,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from 'next/router';
 import Link from "next/link";
+import Image from "next/image";
 import LoadingScreen from "../../utils/Loaders/Loader";
 import styles from "./style.module.scss";
 
@@ -135,18 +136,43 @@ export default function BlogList() {
 
   return (
     <section className={styles.featured__component}>
+      {!category && (
+      <div className="flex flex-col-reverse items-center justify-center lg:flex-row gap-4 mb-7 pb-7">
+        <div className="flex flex-col justify-center">
+          <h2 className="text-black font-semibold text-4xl py-2">Why Our Blog is Your Essential Resource for Job Seekers and Employers</h2>
+          <p className="text-sm py-2 leading-6">In the competitive world of job hunting and talent acquisition, staying informed is key. Our blog is designed to provide you with practical advice, industry insights, and tips for both job seekers and employers. Whether you’re looking for ways to stand out in a crowded job market or seeking top talent to grow your team, our articles are crafted to give you the edge. From resume tips and interview strategies to recruitment trends, our blog helps bridge the gap between finding the right job and hiring the perfect candidate.</p>
+        </div>
+        <Image
+          src="/assets/images/blogImage.png"
+          alt="blog-image"
+          width={600}
+          height={300}
+          className="rounded-md"
+          priority
+        />
+      </div>
+      )}
       <div className={styles.featured__content}>
         <div className={styles.featured__posts}>
         {posts.map((post, index) => (
-          <Link href={`/blog/${encodeURIComponent(post.title)}`} key={post.id}>
+          <Link href={`/blog/${encodeURIComponent(post.title)}`} key={`${post.title}-${index}`}>
             <div className={`${styles.post} ${index === 0 ? styles.featured : ""}`}>
-              {post.urlToImage && (
-                <img
-                  src={post.urlToImage}
-                  className={styles.post__image}
-                  alt="Post"
-                />
-              )}
+            {post.urlToImage ? (
+              <img
+                src={post.urlToImage}
+                className={styles.post__image}
+                alt="Post"
+                onError={(e) => {
+                  e.target.src = "/assets/images/blogImage.png"; 
+                }}
+              />
+            ) : (
+              <img
+                src="/assets/images/blogImage.png" 
+                className={styles.post__image}
+                alt="Default Post"
+              />
+            )}
               <div className={styles.post__body}>
                 <h2 className={styles.post__title}>{post.title}</h2>
                 {/* <p className={styles.post__text}>{post.description}</p> */}

@@ -14,7 +14,6 @@ export default function Footer() {
                 sizes="100px"
                 width={100}
                 height={10}
-                layout="fixed"
                 className={styles.logo}
               />
            {/* <ul className={styles.footer__list}>

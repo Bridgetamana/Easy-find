@@ -30,10 +30,8 @@ export default function BlogHeader() {
             sizes="100px"
             width={100}
             height={10}
-            layout="fixed"
             className={styles.logo}
           />
-          <p className={styles.blog}>Blog</p>
         </Link>
 
         <nav className={styles.nav__bar}>
@@ -72,7 +70,6 @@ export default function BlogHeader() {
             sizes="100px"
             width={100}
             height={10}
-            layout="fixed"
             className={styles.logo}
           />
         </div>

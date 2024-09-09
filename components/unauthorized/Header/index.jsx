@@ -45,7 +45,6 @@ export default function UnauthorizedHeader() {
             sizes="100px"
             width={100}
             height={10}
-            layout="fixed"
             className={styles.logo}
           />
         </Link>
@@ -105,7 +104,6 @@ export default function UnauthorizedHeader() {
             sizes="100px"
             width={100}
             height={10}
-            layout="fixed"
             className={styles.logo}
           />
         </div>
@@ -122,7 +120,6 @@ export default function UnauthorizedHeader() {
                 sizes="100px"
                 width={100}
                 height={10}
-                layout="fixed"
                 className={styles.logo}
               />
             </Link>
