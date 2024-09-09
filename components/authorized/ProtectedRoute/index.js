@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useAuth } from '../firebase'; // Import Firebase Authentication
+import { useAuth } from '../firebase'; 
 
 const ProtectedRoute = ({ children }) => {
   const router = useRouter();
-  const auth = useAuth(); // Your Firebase Authentication hook
+  const auth = useAuth();
 
   useEffect(() => {
     const checkAuthentication = async () => {
