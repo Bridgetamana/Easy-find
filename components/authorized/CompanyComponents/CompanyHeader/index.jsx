@@ -15,6 +15,7 @@ export default function CompanyHeader() {
   const [accountDropdown, setAccountDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [active, setActive] = useState(null);
+  const [isSticky, setIsSticky] = useState(false);
 
   const handleMenuClick = (key) => {
     setActive(key);
@@ -36,7 +37,6 @@ export default function CompanyHeader() {
     setShowMenu(false);
   };
 
-  const [isSticky, setIsSticky] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -126,7 +126,7 @@ export default function CompanyHeader() {
           className={styles.menu__button}
           onClick={toggleNotifications}
         >
-          <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
+          <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
           </button>
             </li>
           </ul>
