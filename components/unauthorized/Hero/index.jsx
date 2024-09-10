@@ -57,7 +57,7 @@ export default function Heroine() {
                 alt="Job seekers"
                 width={640}
                 height={360}
-                layout="responsive"
+                priority
                 className="z-10"
               />
             </div>
