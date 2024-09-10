@@ -12,11 +12,6 @@ export default function HireTalent() {
           </Link>
         </li>
         <li className={styles.dropdown__link}>
-          <Link href="/browse-talents" className={styles.link}>
-            Find Talents
-          </Link>
-        </li>
-        <li className={styles.dropdown__link}>
           <Link href="/terms" className={styles.link}>
             Terms
           </Link>

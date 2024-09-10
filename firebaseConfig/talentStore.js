@@ -37,6 +37,7 @@ import {
   confirmPasswordReset,
   browserSessionPersistence,
 } from "firebase/auth";
+import { useUser } from "../context/userContext";
 
 const TALENT = "talentCollection";
 
@@ -90,15 +91,20 @@ export const registerTalent = async (fullName, email, password) => {
 
 //Handle Login Talent
 export const loginUser = async (email, password) => {
+  const { setUser } = useUser(); // use the context
   const auth = getAuth();
+
   try {
     await setPersistence(auth, browserSessionPersistence);
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+
+    // Set user information in context
+    setUser({
+      username: user.email, // or any other identifier you prefer
+      uid: user.uid
+    });
+
     return user;
   } catch (error) {
     throw error;

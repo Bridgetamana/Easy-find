@@ -25,7 +25,22 @@ export default function Signin() {
     e.preventDefault();
     setIsLoading(true);
   
+    const isCheckboxSelected = isTalent || isCompany;
+
     try {
+      // Check if the user selected a checkbox
+      if (!isCheckboxSelected) {
+        setIsLoading(false);
+        await showAlert({
+          type: "error",
+          title: "Error",
+          message: "Please select a checkbox to continue.",
+          showCloseButton: false,
+          timeout: 2000,
+          handleClose: () => setAlert(null),
+        }, setAlert);
+        return;
+      }
       const userCredential = await loginUser(email, password);
       const user = userCredential;
       const userUID = user.uid;
@@ -68,7 +83,9 @@ export default function Signin() {
   
       
   
-      // Store the user's first name in secure storage
+      // Store the user's token and first name in secure storage
+      const token = await user.getIdToken(); 
+      secureLocalStorage.setItem("userToken", token); 
       secureLocalStorage.setItem("user_firstName", userData.fullName);
   
       // Navigate based on user type
