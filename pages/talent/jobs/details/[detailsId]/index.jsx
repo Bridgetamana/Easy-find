@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { AiOutlineClockCircle, AiOutlineEnvironment } from "react-icons/ai";
 import { MdKeyboardBackspace } from "react-icons/md";
 import {
@@ -19,13 +20,16 @@ import Link from "next/link";
 import styles from "./style.module.scss";
 import TalentLayout from "../../../layout";
 
-const JobDetails = ({ params }) => {
-  const jobId = params.detailsId;
+const JobDetails = () => {
+  const router = useRouter();
+  const { detailsId } = router.query; 
+  const jobId = detailsId; 
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchJobDetails = async () => {
+    if (!jobId) return; 
     setIsLoading(true);
     try {
       const response = await getJobById(jobId);
