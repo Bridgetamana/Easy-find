@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
 import { BsChevronDown } from "react-icons/bs";
+import { MdNotifications } from "react-icons/md";
 import CompanyDropdown from "../AccountDropdown";
+import NotificationTab from "../Notifications";
 import Image from 'next/image';
 import Link from "next/link";
 import styles from "./style.module.scss";
@@ -11,7 +13,9 @@ import styles from "./style.module.scss";
 export default function CompanyHeader() {
   const [showMenu, setShowMenu] = useState(false);
   const [accountDropdown, setAccountDropdown] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [active, setActive] = useState(null);
+  const [isSticky, setIsSticky] = useState(false);
 
   const handleMenuClick = (key) => {
     setActive(key);
@@ -25,11 +29,18 @@ export default function CompanyHeader() {
     setAccountDropdown(!accountDropdown);
   };
 
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
   const closeMenu = () => {
     setShowMenu(false);
   };
 
-  const [isSticky, setIsSticky] = useState(false);
+  const closeNotifications = () => {
+    setShowNotifications(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -61,7 +72,6 @@ export default function CompanyHeader() {
             sizes="100px"
             width={100}
             height={10}
-            layout="fixed"
             className={styles.logo}
           />
         </div>
@@ -114,6 +124,15 @@ export default function CompanyHeader() {
                 Blog
               </Link>
             </li>
+            <li className={styles.nav__item}>
+            <button
+          type="button"
+          className={styles.menu__button}
+          onClick={toggleNotifications}
+        >
+          <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
+          </button>
+            </li>
           </ul>
         </nav>
       </div>
@@ -123,13 +142,22 @@ export default function CompanyHeader() {
         <div className={styles.header__logo}>
           <h2 className={styles.logo__name}>EasyFind</h2>
         </div>
-        <button
+        <div>
+          <button
+          type="button"
+          className={styles.menu__button}
+          onClick={toggleNotifications}
+        >
+          <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
+          </button>
+          <button
           type="button"
           className={styles.menu__button}
           onClick={toggleMenu}
         >
           <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
-        </button>
+          </button>
+        </div>
         <nav
           className={`${styles.nav__bar} ${
             showMenu ? styles.show__navbar : styles.nav__bar
@@ -218,6 +246,12 @@ export default function CompanyHeader() {
           </ul>
         </nav>
       </div>
+
+      {showNotifications && (
+          <div className={styles.notification__dropdown}>
+            <NotificationTab closeNotifications={closeNotifications}/>
+          </div>
+        )}
     </header>
   );
 }

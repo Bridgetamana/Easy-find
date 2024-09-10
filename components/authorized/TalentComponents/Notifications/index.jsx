@@ -17,6 +17,14 @@ const notificationsData = [
   //   jobTitle: 'Web Developer',
   //   date: '2023-09-15',
   // },
+  ,
+  // {
+  //   id: 3,
+  //   type: 'apply',
+  //   talentName: 'Jane Smith',
+  //   jobTitle: 'Web Developer',
+  //   date: '2023-09-15',
+  // },
 ];
 
 export default function NotificationTab({ closeNotifications }) {
@@ -31,7 +39,7 @@ export default function NotificationTab({ closeNotifications }) {
         </button>
       </div>
       <div className={styles.notifications__list}>
-        {notifications.length === 0 ? ( 
+        {notifications.length === 0 ? (
           <p className={styles.no_notifications}>
             Nothing right now. Check back later!
           </p>
