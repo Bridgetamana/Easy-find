@@ -26,10 +26,9 @@ export default function NotificationTab() {
   return (
     <div className={styles.notifications__page}>
       <div className={styles.section__header}>
-        <h2 className={styles.section__title}>
+        <h1 className={styles.section__title}>
           Notifications
-          <MdNotifications />
-        </h2>
+        </h1>
       </div>
       {notifications.map((notification) => (
         <div key={notification.id} className={styles.notification__item}>
