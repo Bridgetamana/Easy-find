@@ -1,33 +1,18 @@
 import React, { useState } from "react";
 import { CgClose } from "react-icons/cg";
-import { FiMenu } from "react-icons/fi";
-import { BsChevronDown } from "react-icons/bs";
 import { RxDividerVertical } from "react-icons/rx";
+import Button from '../../utils/Button';
+import { FiMenu } from "react-icons/fi";
 import Link from "next/link";
-import HireTalent from "../Dropdowns/HireTalent";
-import FindJob from "../Dropdowns/FindJob";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import Button from "@/components/utils/Button";
 import Image from "next/image";
 import styles from './style.module.scss';
 
-export default function UnauthorizedHeader() {
+export default function BlogHeader() {
   const [showMenu, setShowMenu] = useState(false);
-  const [jobDropdown, setJobDropdown] = useState(false);
-  const [hireDropdown, setHireDropdown] = useState(false);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
-  };
-
-  const toggleJobDropdown = () => {
-    setJobDropdown(!jobDropdown);
-    setHireDropdown(false); // Close the hireDropdown
-  };
-
-  const toggleHireDropdown = () => {
-    setHireDropdown(!hireDropdown);
-    setJobDropdown(false); // Close the jobDropdown
   };
 
   const closeMenu = () => {
@@ -35,7 +20,7 @@ export default function UnauthorizedHeader() {
   };
 
   return (
-    <header className={styles.unauthorized__header}>
+    <header className={styles.blog__header}>
       {/* Desktop Header */}
       <div className={styles.desktop__header}>
         <Link href="/" className={styles.header__logo}>
@@ -48,31 +33,12 @@ export default function UnauthorizedHeader() {
             className={styles.logo}
           />
         </Link>
+
         <nav className={styles.nav__bar}>
           <ul className={styles.nav__list}>
-            <li
-              className={jobDropdown ? styles.active__menu : styles.nav__menu}
-              onClick={toggleJobDropdown}
-            >
-              Find job
-              <BsChevronDown fill="#827f7f" size={10} />
-              <div className={jobDropdown ? styles.findJob_modal : styles.no__show}>
-                <FindJob />
-              </div>
-            </li>
-            <li
-              className={hireDropdown ? styles.active__menu : styles.nav__menu}
-              onClick={toggleHireDropdown}
-            >
-              Hire talent
-              <BsChevronDown fill="#827f7f" size={10} />
-              <div className={hireDropdown ? styles.hireTalent__modal : styles.no__show}>
-                <HireTalent />
-              </div>
-            </li>
             <li className={styles.nav__item}>
-              <Link href="/blog" className={styles.nav__link}>
-                Blog
+              <Link href="/" className={styles.nav__link}>
+                Home
               </Link>
             </li>
             <RxDividerVertical size={24} />
@@ -128,55 +94,10 @@ export default function UnauthorizedHeader() {
             </button>
           </div>
 
-          {/* Navigation List */}
-          <ul className={styles.dropdown__list}>
-            <h4 className={styles.nav__head}>
-              Find job
-              <BsChevronDown fill="#827f7f" size={10} />
-            </h4>
-            <li className={styles.dropdown__link}>
-              <Link href="/easy-find" className={styles.link}>
-                How Minu works
-              </Link>
-            </li>
-            <li className={styles.dropdown__link}>
-              <Link href="/become-talent" className={styles.link}>
-                Become a Talent
-              </Link>
-            </li>
-            <li className={styles.dropdown__link}>
-              <Link href="/terms" className={styles.link}>
-                Terms
-              </Link>
-            </li>
-          </ul>
-
-          <ul className={styles.dropdown__list}>
-            <h4 className={styles.nav__head}>
-              Hire talent
-              <BsChevronDown fill="#827f7f" size={10} />
-            </h4>
-            <li className={styles.dropdown__link}>
-              <Link href="/settings" className={styles.link}>
-                Post Jobs
-              </Link>
-            </li>
-            <li className={styles.dropdown__link}>
-              <Link href="/become-member" className={styles.link}>
-                Partnership
-              </Link>
-            </li>
-            <li className={styles.dropdown__link}>
-              <Link href="/terms" className={styles.link}>
-                Terms
-              </Link>
-            </li>
-          </ul>
-
           <ul className={styles.nav__list}>
             <li className={styles.nav__item}>
-              <Link href="/blog" className={styles.nav__link}>
-                Blog
+              <Link href="/" className={styles.nav__link}>
+                Home
               </Link>
             </li>
             <li className={styles.nav__item}>
@@ -192,6 +113,13 @@ export default function UnauthorizedHeader() {
           </ul>
         </nav>
       </div>
+
+      <nav className={styles.category__nav}>
+        <Link href="/blog" className={`${styles.category__Link} sm:text-sm`}>All</Link>
+        <Link href="/blog?category=job-application" className={`${styles.category__Link} sm:text-sm`}>Job Application</Link>
+        <Link href="/blog?category=resume-tips" className={`${styles.category__Link} sm:text-sm`}>Resume Tips</Link>
+        <Link href="/blog?category=getting-a-job" className={`${styles.category__Link} sm:text-sm`}>Getting a Job</Link>
+      </nav>
     </header>
   );
 }
