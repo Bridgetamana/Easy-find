@@ -38,6 +38,10 @@ export default function TalentHeader() {
     setShowMenu(false);
   };
 
+  const closeNotifications = () => {
+    setShowNotifications(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -269,7 +273,7 @@ export default function TalentHeader() {
       </div>
       {showNotifications && (
           <div className={styles.notification__dropdown}>
-            <NotificationTab />
+            <NotificationTab closeNotifications={closeNotifications}/>
           </div>
         )}
     </header>

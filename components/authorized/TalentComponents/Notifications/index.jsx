@@ -28,14 +28,14 @@ const notificationsData = [
   // Add more notifications here as needed
 ];
 
-export default function NotificationTab() {
+export default function NotificationTab({ closeNotifications }) {
   const [notifications, setNotifications] = useState(notificationsData);
 
   return (
     <div className={styles.notifications__page}>
       <div className={styles.section__header}>
         <h1 className={styles.section__title}>Notifications</h1>
-        <button className={styles.close__button}>
+        <button className={styles.close__button} onClick={closeNotifications}>
           <MdClose fill="#827f7f" size={24} />
         </button>
       </div>

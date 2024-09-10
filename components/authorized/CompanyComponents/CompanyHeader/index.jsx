@@ -37,6 +37,10 @@ export default function CompanyHeader() {
     setShowMenu(false);
   };
 
+  const closeNotifications = () => {
+    setShowNotifications(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -245,7 +249,7 @@ export default function CompanyHeader() {
 
       {showNotifications && (
           <div className={styles.notification__dropdown}>
-            <NotificationTab />
+            <NotificationTab closeNotifications={closeNotifications}/>
           </div>
         )}
     </header>
