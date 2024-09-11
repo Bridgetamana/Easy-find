@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getFirestore, collection, onSnapshot } from "firebase/firestore";
 import styles from "./style.module.scss";
 import { MdClose } from "react-icons/md";
 
@@ -20,7 +21,25 @@ const notificationsData = [
 ];
 
 export default function NotificationTab({ closeNotifications }) {
-  const [notifications, setNotifications] = useState(notificationsData);
+  const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const db = getFirestore();
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'notifications'), (snapshot) => {
+      const newNotifications = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setNotifications(newNotifications);
+      setIsLoading(false); 
+    }, (error) => {
+      console.error("Error fetching notifications:", error);
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe(); 
+  }, [db]);
 
   return (
     <div className={styles.notifications__page}>
@@ -31,26 +50,28 @@ export default function NotificationTab({ closeNotifications }) {
         </button>
       </div>
       <div className={styles.notifications__list}>
-        {notifications.length === 0 ? ( 
+        {isLoading ? (
+          <div className={styles.loader}></div>
+        ) : notifications.length === 0 ? (
           <p className={styles.no_notifications}>
             Nothing right now. Check back later!
           </p>
         ) : (
-          notifications.map((notification) => (
+          notifications.map(notification => (
             <div key={notification.id} className={styles.notification__item}>
               <div className={styles.notification__content}>
                 <h2 className={styles.notification__title}>
                   {notification.type === "save"
-                    ? `${notification.talentName} saved a job post`
-                    : `${notification.talentName} applied to a job post`}
+                    ? `You saved a job post`
+                    : `You applied to a job post`}
                 </h2>
                 <p className={styles.notification__description}>
                   {notification.type === "save"
-                    ? `${notification.talentName} saved the job post for ${notification.jobTitle}.`
-                    : `${notification.talentName} applied to the job post for ${notification.jobTitle}.`}
+                    ? `You saved the job post`
+                    : `You applied to the job post`}
                 </p>
               </div>
-              <p className={styles.notification__date}>{notification.date}</p>
+              <p className={styles.notification__date}>{new Date(notification.date).toLocaleDateString()}</p>
             </div>
           ))
         )}

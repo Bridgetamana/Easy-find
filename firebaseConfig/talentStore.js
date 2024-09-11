@@ -241,6 +241,14 @@ export const saveJob = async (jobId) => {
       'jobs.saved': arrayUnion(jobId),
     });
 
+    // Create a notification with the job title
+    const notificationRef = collection(db, 'notifications');
+    await addDoc(notificationRef, {
+      userId: user.uid,
+      type: 'save',
+      date: new Date().toISOString(),
+    });
+
     console.log('Job saved successfully!');
   } catch (error) {
     console.error('Error saving job:', error.message);
