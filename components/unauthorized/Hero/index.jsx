@@ -52,14 +52,15 @@ export default function Heroine() {
         <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
           <div className="relative mx-auto w-full rounded-lg shadow-lg">
             <div className="relative block w-full overflow-hidden rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-              <Image
-                src="/assets/images/job_seekers.jpg"
-                alt="Job seekers"
-                width={640}
-                height={360}
-                priority
-                className="z-10"
-              />
+            <Image
+              src="/assets/images/job_seekers.jpg"
+              alt="Job seekers"
+              width={640}
+              height={360}
+              sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="z-10"
+              priority
+            />
             </div>
           </div>
         </div>
