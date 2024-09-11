@@ -33,3 +33,8 @@
     - Suggest talents to companies based on skills and location provided in the job posting, this should viewable in the company job details page below the job descriptions.
     - View the talents that have applied to their job postings
     - Remove signout button from header and add it in Account dropdown below settings [COMPLETED]
+
+
+
+- Issues
+    - User's email address goes back to default "User" after a refresh is made. The user email or preferably the user's name should be displayed in the header after login and should remain there even after a refresh is made. This can be done by storing the user's email by using useContext and retrieving it when the page is refreshed. This should be done in /components/context/userContext.js 
