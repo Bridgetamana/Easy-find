@@ -22,6 +22,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  arrayUnion ,
   serverTimestamp,
   setDoc,
   updateDoc,
@@ -209,19 +210,35 @@ export function convertFutureTimestamp(timestamp) {
 
 // Function to save a job ID to the user's saved jobs array
 export const saveJob = async (jobId) => {
-  try {
+  const auth = getAuth();
     // Ensure the user is authenticated
     const user = auth.currentUser;
     if (!user) {
       throw new Error('User not authenticated');
     }
 
+  try {
+    console.log("User UID:", user.uid);
     // Get the user's document reference
-    const userDocRef = db.collection(TALENT).doc(user.uid);
+    const userDocRef = doc(db, TALENT, user.uid);
+
+    // Check if the document exists
+    const userDocSnapshot = await getDoc(userDocRef);
+    if (!userDocSnapshot.exists()) {
+      // Document does not exist, create it 
+      await setDoc(userDocRef, { jobs: { saved: [] } });
+    } else {
+      // If document exists, ensure the `jobs` field has the `saved` array
+      const userDocData = userDocSnapshot.data();
+      if (!userDocData.jobs) {
+        // Create the `jobs` field with an empty `saved` array 
+        await updateDoc(userDocRef, { jobs: { saved: [] } });
+      }
+    }
 
     // Update the user's document with the new saved job ID
-    await userDocRef.update({
-      saved: db.FieldValue.arrayUnion(jobId),
+    await updateDoc(userDocRef, {
+      'jobs.saved': arrayUnion(jobId),
     });
 
     console.log('Job saved successfully!');
