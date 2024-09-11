@@ -37,7 +37,6 @@ import {
   confirmPasswordReset,
   browserSessionPersistence,
 } from "firebase/auth";
-import { useUser } from "../context/userContext";
 
 const TALENT = "talentCollection";
 
@@ -90,8 +89,7 @@ export const registerTalent = async (fullName, email, password) => {
 };
 
 //Handle Login Talent
-export const loginUser = async (email, password) => {
-  const { setUser } = useUser(); // use the context
+export const loginUser = async (email, password, setUser) => {
   const auth = getAuth();
 
   try {
