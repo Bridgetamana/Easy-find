@@ -209,7 +209,7 @@ export function convertFutureTimestamp(timestamp) {
 }
 
 // Function to save a job ID to the user's saved jobs array
-export const saveJob = async (jobId) => {
+export const saveJob = async (jobId, jobTitle) => {
   const auth = getAuth();
     // Ensure the user is authenticated
     const user = auth.currentUser;
@@ -241,18 +241,41 @@ export const saveJob = async (jobId) => {
       'jobs.saved': arrayUnion(jobId),
     });
 
-    // Create a notification with the job title
-    const notificationRef = collection(db, 'notifications');
-    await addDoc(notificationRef, {
-      userId: user.uid,
+    // Create a notification for the specific user
+    const notificationsRef = collection(userDocRef, 'notifications');
+    const notificationDocRef = await addDoc(notificationsRef, {
       type: 'save',
+      jobTitle: jobTitle,
       date: new Date().toISOString(),
     });
 
-    console.log('Job saved successfully!');
   } catch (error) {
     console.error('Error saving job:', error.message);
     throw error;
+  }
+};
+
+// Function to fetch notifications
+export const fetchNotifications = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    return;
+  }
+
+  try {
+    const notificationsRef = collection(db, TALENT, user.uid, 'notifications');
+    const querySnapshot = await getDocs(notificationsRef);
+    
+    // Map over documents to extract notification data
+    const notifications = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return notifications;
+  } catch (error) {
+    console.error('Error fetching notifications:', error.message);
   }
 };
 

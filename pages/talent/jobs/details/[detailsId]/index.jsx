@@ -52,7 +52,7 @@ const JobDetails = () => {
       if (isSaved) {
         await unsaveJob(jobId);
       } else {
-        await saveJob(jobId); 
+        await saveJob(jobId, jobDetails.title); 
       }
       // Toggle the save state
       setIsSaved(!isSaved);
