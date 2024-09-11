@@ -127,13 +127,13 @@ export default function TalentHeader() {
               </Link>
             </li>
             <li className={styles.nav__item}>
-            <button
-          type="button"
-          className={styles.menu__button}
-          onClick={toggleNotifications}
-        >
-          <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
-          </button>
+              <button
+                type="button"
+                className={styles.menu__button}
+                onClick={toggleNotifications}
+              >
+                <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
+              </button>
             </li>
           </ul>
         </nav>
@@ -154,18 +154,18 @@ export default function TalentHeader() {
         </div>
         <div>
           <button
-          type="button"
-          className={styles.menu__button}
-          onClick={toggleNotifications}
-        >
-          <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
+            type="button"
+            className={styles.menu__button}
+            onClick={toggleNotifications}
+          >
+            <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
           </button>
           <button
-          type="button"
-          className={styles.menu__button}
-          onClick={toggleMenu}
-        >
-          <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
+            type="button"
+            className={styles.menu__button}
+            onClick={toggleMenu}
+          >
+            <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
           </button>
         </div>
         <nav
@@ -272,10 +272,10 @@ export default function TalentHeader() {
         </nav>
       </div>
       {showNotifications && (
-          <div className={styles.notification__dropdown}>
-            <NotificationTab closeNotifications={closeNotifications}/>
-          </div>
-        )}
+        <div className={styles.notification__dropdown}>
+          <NotificationTab closeNotifications={closeNotifications} />
+        </div>
+      )}
     </header>
   );
 }

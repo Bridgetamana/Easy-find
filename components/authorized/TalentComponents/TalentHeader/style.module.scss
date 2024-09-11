@@ -86,10 +86,10 @@
                 align-items: center;
                 justify-content: space-between;
 
-                .logo{
-                height: 2rem;
-                width: 6rem;
-                object-fit: cover;
+                .logo {
+                    height: 2rem;
+                    width: 6rem;
+                    object-fit: cover;
                 }
 
                 .close__menu {
@@ -207,7 +207,7 @@
         border-radius: 10px;
         animation: fadeInDown 0.7s ease-in-out 0s 1 normal none running;
         transition: all 0.7s ease 0s;
-      }
+    }
 
     @media screen and (min-width: $breakpoint-4) {
         .desktop__header {
@@ -234,6 +234,7 @@
                     gap: 1.5rem;
 
                     .nav__item {
+                        display: flex;
                         .nav__link {
                             color: $black;
                             font-size: $font-sixteen;
@@ -332,6 +333,6 @@
 
         .notification__dropdown {
             width: 400px;
-          }
+        }
     }
 }
