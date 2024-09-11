@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
 import { BsChevronDown } from "react-icons/bs";
+import { MdNotifications } from "react-icons/md";
+import NotificationTab from "../Notifications";
 import AccountDropdown from "../AccountDropdown";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,9 +14,9 @@ import styles from "./style.module.scss";
 export default function TalentHeader() {
   const [showMenu, setShowMenu] = useState(false);
   const [accountDropdown, setAccountDropdown] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
-  const router = useRouter();
 
   const handleMenuClick = (key) => {
     setActive(key);
@@ -29,8 +30,16 @@ export default function TalentHeader() {
     setAccountDropdown(!accountDropdown);
   };
 
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
   const closeMenu = () => {
     setShowMenu(false);
+  };
+
+  const closeNotifications = () => {
+    setShowNotifications(false);
   };
 
   useEffect(() => {
@@ -48,10 +57,6 @@ export default function TalentHeader() {
     };
   }, []);
 
-  const signOut = () => {
-    router.push("/signin");
-  };
-
   return (
     <header
       className={`${styles.authorized__header} ${
@@ -67,7 +72,6 @@ export default function TalentHeader() {
             sizes="100px"
             width={100}
             height={10}
-            layout="fixed"
             className={styles.logo}
           />
         </div>
@@ -123,9 +127,13 @@ export default function TalentHeader() {
               </Link>
             </li>
             <li className={styles.nav__item}>
-              <button onClick={signOut} className={styles.nav__button}>
-                Sign Out
-              </button>
+            <button
+          type="button"
+          className={styles.menu__button}
+          onClick={toggleNotifications}
+        >
+          <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
+          </button>
             </li>
           </ul>
         </nav>
@@ -144,13 +152,22 @@ export default function TalentHeader() {
             className={styles.logo}
           />
         </div>
-        <button
+        <div>
+          <button
+          type="button"
+          className={styles.menu__button}
+          onClick={toggleNotifications}
+        >
+          <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
+          </button>
+          <button
           type="button"
           className={styles.menu__button}
           onClick={toggleMenu}
         >
           <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
-        </button>
+          </button>
+        </div>
         <nav
           className={`${styles.nav__bar} ${
             showMenu ? styles.show__navbar : styles.nav__bar
@@ -251,14 +268,14 @@ export default function TalentHeader() {
                 Blog
               </Link>
             </li>
-            <li className={styles.nav__item}>
-              <button onClick={signOut} className={styles.nav__button}>
-                Sign Out
-              </button>
-            </li>
           </ul>
         </nav>
       </div>
+      {showNotifications && (
+          <div className={styles.notification__dropdown}>
+            <NotificationTab closeNotifications={closeNotifications}/>
+          </div>
+        )}
     </header>
   );
 }
