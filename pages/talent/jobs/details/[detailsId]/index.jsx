@@ -50,9 +50,9 @@ const JobDetails = () => {
   const handleSaveJob = async () => {
     try {
       if (isSaved) {
-        await unsaveJob(jobDetails.id);
+        await unsaveJob(jobId);
       } else {
-        await saveJob(jobDetails.id);
+        await saveJob(jobId, jobDetails.title); 
       }
       // Toggle the save state
       setIsSaved(!isSaved);

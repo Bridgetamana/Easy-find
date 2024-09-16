@@ -24,11 +24,11 @@ export default function AccountDropdown() {
         </li>
         <li className={styles.dropdown__link}>
           <Link href="/talent/settings" className={styles.link}>
-            Setting
+            Settings
           </Link>
         </li>
         <li className={styles.dropdown__link}>
-          <button onClick={signOut} className={styles.link}>
+          <button onClick={signOut} className={`${styles.link} ${styles.signout}`}>
             Sign Out
           </button>
         </li>
