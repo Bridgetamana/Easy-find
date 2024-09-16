@@ -18,6 +18,8 @@
     background-color: $white;
     padding: 2rem;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
   }
 
   .blogDetails__image {

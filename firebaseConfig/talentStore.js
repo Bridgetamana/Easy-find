@@ -19,6 +19,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  where,
   onSnapshot,
   orderBy,
   query,
@@ -93,17 +94,28 @@ export const loginUser = async (email, password, setUser) => {
   const auth = getAuth();
 
   try {
-    await setPersistence(auth, browserSessionPersistence);
+    await setPersistence(auth, browserSessionPersistence); 
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Set user information in context
-    setUser({
-      username: user.email, // or any other identifier you prefer
-      uid: user.uid
-    });
+    // Step 1: Fetch the user's document from Firestore using the user's UID
+    const userDocRef = doc(db, "talentCollection", user.uid); 
+    const userDocSnap = await getDoc(userDocRef);
 
-    return user;
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+
+      // Step 2: Set user information in the context with fullName from Firestore
+      setUser({
+        username: userData.fullName, 
+        email: user.email,           
+        uid: user.uid                
+      });
+
+      return user;
+    } else {
+      throw new Error("User document not found");
+    }
   } catch (error) {
     throw error;
   }
@@ -154,6 +166,41 @@ export const getJobById = async (id) => {
   const docRef = doc(db, JOBS, id);
   const docSnap = await getDoc(docRef);
   return docSnap.data();
+};
+
+// get jobs based on search input
+export const searchJobs = (searchInput, setJobs, setNoResults) => {
+  if (!searchInput.trim()) return;
+
+  const q = query(
+    collection(db, JOBS),
+    where("title", ">=", searchInput),
+    where("title", "<=", searchInput + "\uf8ff")
+  );
+
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      if (snapshot.empty) {
+        setNoResults(true);
+        setJobs([]);
+      } else {
+        const matchingJobs = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setNoResults(false);
+        setJobs(matchingJobs);
+      }
+    },
+    (error) => {
+      console.error("Error fetching jobs:", error);
+      setJobs([]);
+      setNoResults(true);
+    }
+  );
+
+  return unsubscribe;
 };
 
 // Readable Timestamp

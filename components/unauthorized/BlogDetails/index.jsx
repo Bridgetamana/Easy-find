@@ -99,11 +99,11 @@
 "use client";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../../firebaseConfig/firebase'; 
 import BlogLayout from '../../../pages/blog/layout';
 import LoadingScreen from '../../utils/Loaders/Loader';
 import styles from "./style.module.scss";
-
 
 const BlogDetails = () => {
   const router = useRouter();
@@ -116,10 +116,16 @@ const BlogDetails = () => {
     if (id) {
       const fetchBlogDetails = async () => {
         try {
-          const response = await axios.get(`/api/blog/${id}`);
-          console.log(response.data);
-          setBlogData(response.data);
+          const docRef = doc(db, 'blogCollection', id); 
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            setBlogData(docSnap.data());
+          } else {
+            setError("No blog found with this ID.");
+          }
         } catch (error) {
+          console.error("Error fetching blog details:", error.message);
           setError("Failed to load blog details.");
         } finally {
           setLoading(false);
@@ -144,36 +150,39 @@ const BlogDetails = () => {
 
   return (
     <BlogLayout>
-    <div className={styles.blogDetails__page}>
-      <div className={styles.blogDetails__content}>
-        <img
-          src={blogData.urlToImage || "https://source.unsplash.com/random/800x600?lifestyle"}
-          alt="blog"
-          className={styles.blogDetails__image}
-        />
-        <div className={styles.blogDetails__image__title}>
-          <h1 className={styles.blogDetails__image__title__text}>
-            {blogData.title || "Default Title"}
-          </h1>
-        </div>
-        <div className={styles.blogDetails__meta}>
-          <span className={styles.blogDetails__category}>
-            Category: {blogData.category || "General"}
-          </span>
-          <span className={styles.blogDetails__date}>
-            Date Posted: {new Date(blogData.publishedAt).toDateString() || "Unknown Date"}
-          </span>
-          <span className={styles.blogDetails__author}>
-            By {blogData.author || "Unknown Author"}
-          </span>
-        </div>
-        <div className={styles.blogDetails__details}>
-          <p className={styles.blogDetails__text}>
-            {blogData.content || "No content available."}
-          </p>
+      <div className={styles.blogDetails__page}>
+        <div className={styles.blogDetails__content}>
+          <img
+            src={blogData.image || "https://source.unsplash.com/random/800x600?lifestyle"}
+            alt="blog"
+            className={styles.blogDetails__image}
+          />
+          <div className={styles.blogDetails__image__title}>
+            <h1 className={styles.blogDetails__image__title__text}>
+              {blogData.title || "Default Title"}
+            </h1>
+          </div>
+          <div className={styles.blogDetails__meta}>
+            <span className={styles.blogDetails__category}>
+             {blogData.category || "General"}
+            </span>
+            <span className={styles.blogDetails__date}>
+              Date Posted: {new Date(blogData.datePublished.seconds * 1000).toDateString() || "Unknown Date"}
+            </span>
+            <span className={styles.blogDetails__author}>
+              By {blogData.author || "Unknown Author"}
+            </span>
+          </div>
+          <div className={styles.blogDetails__details}>
+            <p className={styles.blogDetails__text}>
+              {blogData.content || "No content available."}
+            </p>
+          </div>
+          <button onClick={() => window.history.back()} className='w-fit self-end'>
+             <p className='mt-2 py-2 px-4 block bg-[#2563eb] rounded-lg text-white text-sm font-medium transition-all duration-300 ease-in-out transform hover:scale-105'>Go back</p>
+          </button>
         </div>
       </div>
-    </div>
     </BlogLayout>
   );
 };

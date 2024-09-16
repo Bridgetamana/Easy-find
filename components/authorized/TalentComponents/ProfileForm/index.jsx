@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
-import axios from "axios";
 import styles from "./style.module.scss";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+import { updateTalent } from '../../../../firebaseConfig/talentStore';
 
 export default function TalentProfileForm() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  
   const initialFormData = {
     id: null,
     username: "",
@@ -32,95 +32,27 @@ export default function TalentProfileForm() {
   };
 
   const [formData, setFormData] = useState(initialFormData);
-  const [form, setForm] = useState({ ...initialFormData });
-
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
+  const router = useRouter();
+  const { id } = router.query;
 
   useEffect(() => {
-    // Fetch the user ID first, then use it to fetch user data
-    const fetchInitialUserId = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-        const response = await axios.get(`${apiUrl}/users/me`, { headers });
-        const userId = response.data.id;
-        // Now that we have the userId, fetch the user data
-        if (userId) {
-          fetchUserData(userId);
-          handleSaveClick(userId);
+    if (id) {
+      const fetchUserData = async () => {
+        try {
+          const data = await talentStore.getTalentStoreById(id);
+          setFormData(data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
         }
-      } catch (error) {
-        console.error("An error occurred while fetching user ID:", error);
-      }
-    };
-
-    fetchInitialUserId();
-  }, []);
-
-  const fetchUserData = async (userId) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.log("No token found");
-        return;
-      }
-
-      const headers = {
-        Authorization: `Bearer ${token}`,
       };
 
-      const response = await axios.get(`${apiUrl}/talents/${userId}`, {
-        headers,
-      });
-      const fetchedUserData = response.data.data.attributes;
-
-      setFormData((fetchedUserData) => ({
-        ...fetchedUserData,
-        id: fetchedUserData.id,
-        username: fetchedUserData.username,
-        email: fetchedUserData.email,
-        bio: fetchedUserData.bio,
-        photo: fetchedUserData.photo,
-        dob: fetchedUserData.dob,
-        gender: fetchedUserData.gender,
-        pronouns: fetchedUserData.pronouns,
-        jobTitle: fetchedUserData.jobTitle,
-        minSalary: fetchedUserData.minSalary,
-        maxSalary: fetchedUserData.maxSalary,
-        linkedin: fetchedUserData.linkedin,
-        portfolio: fetchedUserData.portfolio,
-        address: fetchedUserData.address,
-        phone: fetchedUserData.phone,
-        mobile: fetchedUserData.mobile,
-        resume: fetchedUserData.resume,
-        skills: fetchedUserData.skills,
-        institute: fetchedUserData.institute,
-        degree: fetchedUserData.degree,
-        company: fetchedUserData.company,
-        position: fetchedUserData.position,
-      }));
-      if (!fetchedUserData) {
-        console.log("No user data returned from API");
-        return;
-      }
-
-      // Update your state with the fetched user data
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        ...fetchedUserData,
-      }));
-    } catch (error) {
-      console.error("An error occurred while fetching user data:", error);
+      fetchUserData();
     }
-  };
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -129,22 +61,12 @@ export default function TalentProfileForm() {
       const file = files[0];
       const imageUrl = URL.createObjectURL(file);
 
-      setForm((prevForm) => ({
-        ...prevForm,
+      setFormData((prevFormData) => ({
+        ...prevFormData,
         [name]: file,
         photo: imageUrl,
       }));
-
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: imageUrl,
-      }));
     } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        [name]: value,
-      }));
-
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: value,
@@ -152,11 +74,9 @@ export default function TalentProfileForm() {
     }
   };
 
-  const router = useRouter();
-
-  const handleSaveClick = async (userId) => {
-    // e.preventDefault();
-    console.log(userId);
+  const handleSaveClick = async (e) => {
+    e.preventDefault();
+  
     // Validate the form data
     if (formData.email.length < 1 || formData.username.length < 1) {
       setErrorMsg("Email and username must have at least 1 character.");
@@ -165,49 +85,28 @@ export default function TalentProfileForm() {
       }, 3000);
       return;
     }
-
+  
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
-
-      // Set headers
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-
-      // Prepare the payload
+  
+      // Prepare the payload with ID
       const payload = {
-        data: {
-          formData,
-        },
+        ...formData,
+        id, // Ensure that the user ID is included
       };
-      console.log("payload:", payload);
-
-      // POST data to /api/talents
-      const response = await axios.put(`${apiUrl}/talents/${userId}`, payload, {
-        headers: headers,
-      });
-
-      console.log("POST Response:", response.data);
-
-      // Reset the form and set a success message
-      setForm(initialFormData);
+  
+      // Update the user data
+      await updateTalent(payload);
+  
       setSuccessMsg("Profile updated successfully.");
       setTimeout(() => {
         setSuccessMsg("");
       }, 3000);
-
+  
       // Redirect to the talent profile
       router.push("/talent/profile");
-
-      // Optional: Fetch updated user data
-      fetchUserData();
     } catch (error) {
-      console.error(
-        "Error Response:",
-        error.response ? error.response.data : "No response data"
-      );
+      console.error("Error updating profile:", error);
       setErrorMsg(error.message);
       setTimeout(() => {
         setErrorMsg("");
@@ -216,6 +115,8 @@ export default function TalentProfileForm() {
       setIsLoading(false);
     }
   };
+  
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className={styles.profile__page}>

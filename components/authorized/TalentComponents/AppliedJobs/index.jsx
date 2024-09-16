@@ -60,7 +60,7 @@ export default function AppliedJobs() {
           <div className={styles.no__appliedJobs}>
             <h3 className={styles.no__appliedJobs__title}>No Applied Jobs</h3>
             <p className={styles.appliedJobs__message}>
-              <IoAddCircle className={styles.appliedJobs__icon} />
+              <Link href="/talent/jobs"><IoAddCircle className={styles.appliedJobs__icon} /></Link>
               Your applied jobs will appear here so you can keep track of your
               applications.
             </p>

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClockCircle, AiOutlineEnvironment } from "react-icons/ai";
 import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
-import { getJobs } from "@/firebaseConfig/talentStore";
+import { getJobs, searchJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import JobDetails from "../JobDetails";
 import { useRouter } from "next/navigation";
 import styles from "./style.module.scss";
 
-const JobGrid = () => {
+const JobGrid = ({ searchInput }) => {
   const [toggleFilter, setToggleFilter] = useState(false);
   const [toggleSort, setToggleSort] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,24 +16,44 @@ const JobGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [detailsPage, setDetailsPage] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [noResults, setNoResults] = useState(false);
   const router = useRouter();
   const jobsPerPage = 8;
 
+  //Display all jobs
   useEffect(() => {
+    const fetchJobs = async () => {
+      const jobList = await getJobs();
+      setJobs(jobList);
+      setFilteredJobs(jobList); 
+    };
+
     fetchJobs();
   }, []);
 
-  const fetchJobs = async () => {
-    setIsLoading(true);
-    try {
-      const response = await getJobs();
-      setJobs(response);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (!searchInput || searchInput.trim() === "") {
+      setFilteredJobs(jobs);
+      setNoResults(false);
+    } else {
+      const searchTerm = searchInput.toLowerCase(); 
+      const filtered = jobs.filter((job) =>
+        job.title.toLowerCase().includes(searchTerm) ||
+        job.companyName.toLowerCase().includes(searchTerm) ||
+        job.location.toLowerCase().includes(searchTerm)
+      );
+
+      if (filtered.length > 0) {
+        setFilteredJobs(filtered);
+        setNoResults(false);
+      } else {
+        setFilteredJobs([]);
+        setNoResults(true);
+      }
     }
-  };
+  }, [searchInput, jobs]);
+
 
   const isFilterToggled = () => {
     setToggleFilter(!toggleFilter);
@@ -259,21 +279,21 @@ const JobGrid = () => {
         </div>
       </div>
       {isLoading && <LoadingScreen />}
+
       {/* Job listings */}
-      {jobs.length > 0 && (
-        <div className={` ${styles.grid__body}  grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}>
-          {currentJobs.map((job) => {
-            const salaryMinFormatted = job.minSalary.toLocaleString();
-            const salaryMaxFormatted = job.maxSalary.toLocaleString();
-            const timePostedFormatted = new Date(
-              job.datePosted
-            ).toLocaleTimeString("en-US", {
+      {filteredJobs.length > 0 ? (
+        <div className={`${styles.grid__body} grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}>
+          {filteredJobs.map((job) => {
+            const salaryMinFormatted = job.minSalary?.toLocaleString();
+            const salaryMaxFormatted = job.maxSalary?.toLocaleString();
+            const timePostedFormatted = new Date(job.datePosted).toLocaleTimeString("en-US", {
               hour: "numeric",
               minute: "numeric",
               hour12: true,
             });
+
             return (
-              <div className={` ${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`} key={job.id}>
+              <div className={`${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`} key={job.id}>
                 <div className={styles.card__info}>
                   <div className={styles.card__company}>
                     <div className={styles.card__logo}>
@@ -298,33 +318,24 @@ const JobGrid = () => {
                       {timePostedFormatted}
                     </p>
                   </div>
-                  {/* <p className={styles.card__description}>{job.description}</p> */}
-                  {/* <ul className={styles.card__tags}>
-              {jobTags.map((tag) => (
-                <li key={tag}>{tag}</li>
-              ))}
-            </ul> */}
                 </div>
                 <div className={styles.card__flex}>
                   <p className={styles.company__pay}>
-                    ${salaryMinFormatted} - ${salaryMaxFormatted}{" "}
+                    ${salaryMinFormatted} - ${salaryMaxFormatted}
                   </p>
-                  <Link
-                    href={`/talent/jobs/details/${job.id}`}
-                  >
-                  <button
-                    className={styles.apply__button}
-                  >
-                    View More
-                  </button>
+                  <Link href={`/talent/jobs/details/${job.id}`}>
+                    <button className={styles.apply__button}>
+                      View More
+                    </button>
                   </Link>
                 </div>
               </div>
             );
           })}
         </div>
+      ) : (
+        <p className={styles.no__jobs}>No jobs found.</p>
       )}
-      {jobs.length === 0 && <p className={styles.no__jobs}>No jobs found.</p>}
 
       {/* Pagination */}
       <div className={styles.pagination}>

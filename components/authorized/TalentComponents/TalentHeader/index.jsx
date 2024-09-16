@@ -180,7 +180,6 @@ export default function TalentHeader() {
               sizes="100px"
               width={100}
               height={10}
-              layout="fixed"
               className={styles.logo}
             />
             <button

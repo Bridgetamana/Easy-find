@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./style.module.scss";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -15,13 +16,13 @@ export default function Hero() {
           </p>
         </div>
         <div className={styles.content__boxes}>
-          <div className={styles.content__box}>
+          <Link href='/talent/profile' className={styles.content__box}>
             <h3 className={styles.box__title}>Complete Profile</h3>
             <p className={styles.box__text}>
               Add your profile picture, bio, skills, and experience to your
               profile
             </p>
-          </div>
+          </Link>
           <div className={styles.content__box}>
             <h3 className={styles.box__title}>Send Application</h3>
             <p className={styles.box__text}>

@@ -63,7 +63,7 @@ export default function SavedJobs() {
           <div className={styles.no__savedJobs}>
             <h3 className={styles.no__savedJobs__title}>No Saved Jobs</h3>
             <p className={styles.savedJobs__message}>
-              <IoAddCircle className={styles.savedJobs__icon} />
+              <Link href="/talent/jobs"><IoAddCircle className={styles.savedJobs__icon} /></Link>
               Your saved jobs will appear here so you can choose which to apply
               for.
             </p>
