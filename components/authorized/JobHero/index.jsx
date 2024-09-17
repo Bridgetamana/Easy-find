@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
 import styles from './style.module.scss';
 
-export default function JobHero() {
+export default function JobHero({ setSearchInput }) {
+  const [searchValue, setSearchValue] = useState(""); 
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value); 
+    setSearchInput(value); 
+  };
+
   return (
     <div className={styles.jobHero__section}>
       <div className={styles.jobHero__content}>
@@ -20,6 +28,8 @@ export default function JobHero() {
             name="search-bar"
             className={styles.search__bar}
             placeholder="Job Title, Skill or Company"
+            value={searchValue} 
+            onChange={handleInputChange} 
           />
           <Link href="/search" className={styles.hero__button}>
             <HiOutlineArrowNarrowRight className={styles.search__icon} />

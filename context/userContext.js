@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Create the context
 export const UserContext = createContext();
@@ -8,13 +8,29 @@ export const useUser = () => useContext(UserContext);
 
 // Provider component
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-    // Value to be passed to context consumers
-    const value = {
-        user,
-        setUser
-    };
+  
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser)); 
+    }
+  }, []);
 
-    return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user)); 
+    } else {
+      localStorage.removeItem('user'); 
+    }
+  }, [user]);
+
+  // Value to be passed to context consumers
+  const value = {
+    user,
+    setUser
+  };
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

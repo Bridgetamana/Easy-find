@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useRouter } from "next/router"; 
+import styles from "./style.module.scss"; 
+import { talentStore } from "../../../../firebaseConfig/talentStore";
 import { AiOutlineEnvironment } from "react-icons/ai";
 require("dotenv").config();
-import styles from "./style.module.scss";
+ 
 
-export default function TalentProfileData({ handleEditClick }) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [isLoading, setIsLoading] = useState(false);
-  const initialFormData = {
+export default function TalentProfileData() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState({
     id: "",
     username: "",
     email: "",
@@ -30,93 +31,60 @@ export default function TalentProfileData({ handleEditClick }) {
     degree: "",
     company: "",
     position: "",
-  };
+  });
 
-  const [formData, setFormData] = useState(initialFormData);
+  const router = useRouter();
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Replace this with actual method to get the user ID from auth context or session
+        const userId = "userId_from_auth"; // This should be replaced with actual user ID retrieval logic
+
+        // Fetch profile data using the function from talentStore
+        const userProfile = await talentStore.getTalentStoreById(userId);
+
+        if (userProfile) {
+          setFormData({
+            id: userId,
+            username: userProfile.username || "",
+            email: userProfile.email || "",
+            bio: userProfile.bio || "",
+            photo: userProfile.photo || null,
+            dob: userProfile.dob || "",
+            gender: userProfile.gender || "",
+            pronouns: userProfile.pronouns || "",
+            jobTitle: userProfile.jobTitle || "",
+            minSalary: userProfile.minSalary || "",
+            maxSalary: userProfile.maxSalary || "",
+            linkedin: userProfile.linkedin || "",
+            portfolio: userProfile.portfolio || "",
+            address: userProfile.address || "",
+            phone: userProfile.phone || "",
+            mobile: userProfile.mobile || "",
+            resume: userProfile.resume || null,
+            skills: userProfile.skills || "",
+            institute: userProfile.institute || "",
+            degree: userProfile.degree || "",
+            company: userProfile.company || "",
+            position: userProfile.position || "",
+          });
+        }
+      } catch (error) {
+        console.error("An error occurred while fetching user data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchUserData();
   }, []);
 
-  useEffect(() => {
-    // Fetch the user ID first, then use it to fetch user data
-    const fetchInitialUserId = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-        const response = await axios.get(`${apiUrl}/users/me`, { headers });
-        const userId = response.data.id;
-        // Now that we have the userId, fetch the user data
-        if (userId) {
-          fetchUserData(userId);
-        }
-      } catch (error) {
-        console.error("An error occurred while fetching user ID:", error);
-      }
-    };
-    
-    fetchInitialUserId();
-  }, []);
-  
-  const fetchUserData = async (userId) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.log("No token found");
-        return;
-      }
-      
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      
-      const response = await axios.get(`${apiUrl}/talents/${userId}`, { headers });
-      const fetchedUserData = response.data.data.attributes;
-      setFormData((fetchedUserData) => ({
-        ...fetchedUserData,
-        id: fetchedUserData.id,
-        username: fetchedUserData.username,
-        email: fetchedUserData.email,
-        bio: fetchedUserData.bio,
-        photo: fetchedUserData.photo,
-        dob: fetchedUserData.dob,
-        gender: fetchedUserData.gender,
-        pronouns: fetchedUserData.pronouns,
-        jobTitle: fetchedUserData.jobTitle,
-        minSalary: fetchedUserData.minSalary,
-        maxSalary: fetchedUserData.maxSalary,
-        linkedin: fetchedUserData.linkedin,
-        portfolio: fetchedUserData.portfolio,
-        address: fetchedUserData.address,
-        phone: fetchedUserData.phone,
-        mobile: fetchedUserData.mobile,
-        resume: fetchedUserData.resume,
-        skills: fetchedUserData.skills,
-        institute: fetchedUserData.institute,
-        degree: fetchedUserData.degree,
-        company: fetchedUserData.company,
-        position: fetchedUserData.position,
-
-      }));
-      console.log(fetchUserData.photo)
-      if (!fetchedUserData) {
-        console.log("No user data returned from API");
-        return;
-      }
-  
-      // Update your state with the fetched user data
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        ...fetchedUserData
-      }));
-  
-    } catch (error) {
-      console.error("An error occurred while fetching user data:", error);
-    }
+  const handleEditClick = () => {
+    router.push(`/talent/edit`); 
   };
-  
+
+  if (isLoading) return <p>Loading...</p>;
   return (
     <div className={styles.profile__page}>
       <div className={styles.profile__details}>
@@ -212,10 +180,10 @@ export default function TalentProfileData({ handleEditClick }) {
           <div className={styles.profile__box}>
             <h4 className={styles.title}>Social Links</h4>
             <p className={styles.text}>
-              <strong>LinkedIn:</strong> {formData.linkedInLink}
+              <strong>LinkedIn:</strong> {formData.linkedin}
             </p>
             <p className={styles.text}>
-              <strong>Portfolio:</strong> {formData.portfolioLink}
+              <strong>Portfolio:</strong> {formData.portfolio}
             </p>
           </div>
 
