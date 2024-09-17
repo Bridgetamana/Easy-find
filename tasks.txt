@@ -39,4 +39,13 @@
 - Issues
     - User's email address goes back to default "User" after a refresh is made. The user email or preferably the user name should be displayed in the header after login and should remain there even after a refresh is made. This can be done by storing the user's email by using useContext and retrieving it when the page is refreshed. This should be done in /components/context/userContext.js [COMPLETED]
  
-    - Kindly check /public/images/Blog home page UI.jpeg to make design updates to the UI of the blog homepage.
+    - Kindly check /public/ui-suggestions/Blog home page UI.jpeg to make design updates to the UI of the blog homepage.
+
+- Company pages
+    - Company Profile page
+    - Company Job details page
+        - Candidates that applied to the job
+        - Candidates that saved the job
+    - Company Add Job page
+    - Company Edit Job page (delete job, edit job details)
+    - 
