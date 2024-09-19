@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 require('dotenv').config();
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import { Editor } from "react-draft-wysiwyg";
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./style.module.scss";
 
 const removeImmutable = (data) => {
