@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router"; 
 import styles from "./style.module.scss"; 
+import { getAuth } from "firebase/auth";
 import { talentStore } from "../../../../firebaseConfig/talentStore";
 import { AiOutlineEnvironment } from "react-icons/ai";
 require("dotenv").config();
@@ -38,10 +39,14 @@ export default function TalentProfileData() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Replace this with actual method to get the user ID from auth context or session
-        const userId = "userId_from_auth"; // This should be replaced with actual user ID retrieval logic
-
-        // Fetch profile data using the function from talentStore
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (!user) {
+          console.error("No user is logged in");
+          return;
+        }
+  
+        const userId = user.uid;
         const userProfile = await talentStore.getTalentStoreById(userId);
 
         if (userProfile) {
