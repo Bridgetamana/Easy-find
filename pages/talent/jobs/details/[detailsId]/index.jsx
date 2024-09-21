@@ -19,17 +19,27 @@ import ProtectedRoute from "@/utils/protectedRoute";
 import Link from "next/link";
 import styles from "./style.module.scss";
 import TalentLayout from "../../../layout";
+import JobApplicationForm from "../../../../../components/authorized/CompanyComponents/JobApplicationForm";
 
 const JobDetails = () => {
   const router = useRouter();
-  const { detailsId } = router.query; 
-  const jobId = detailsId; 
+  const { detailsId } = router.query;
+  const jobId = detailsId;
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [JobApplicationModal, setJobApllicationModal] = useState(false);
+
+  const togglejobApplicationModal = () => {
+    setJobApllicationModal(!JobApplicationModal);
+  };
+
+  const closeApplicationForm = () => {
+    setJobApllicationModal(false);
+  };
 
   const fetchJobDetails = async () => {
-    if (!jobId) return; 
+    if (!jobId) return;
     setIsLoading(true);
     try {
       const response = await getJobById(jobId);
@@ -52,7 +62,7 @@ const JobDetails = () => {
       if (isSaved) {
         await unsaveJob(jobId);
       } else {
-        await saveJob(jobId, jobDetails.title); 
+        await saveJob(jobId, jobDetails.title);
       }
       // Toggle the save state
       setIsSaved(!isSaved);
@@ -306,12 +316,18 @@ const JobDetails = () => {
 
             {/* Application Button */}
             {/* <Link href={`/apply/${job.id}`}> */}
-            <Link href="/application">
-              <button className={styles.apply__button}>
-                <BiBadgeCheck fill="#fff" />
-                Apply Now
-              </button>
-            </Link>
+            <button
+              className={styles.apply__button}
+              onClick={togglejobApplicationModal}
+            >
+              <BiBadgeCheck fill="#fff" />
+              Apply Now
+            </button>
+            {JobApplicationModal && (
+              <div>
+                <JobApplicationForm closeApplicationForm={closeApplicationForm}/>
+              </div>
+            )}
           </div>
         )}
       </TalentLayout>
