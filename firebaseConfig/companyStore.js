@@ -112,3 +112,15 @@ import {
     await deleteDoc(docRef);
   };
   
+  // Function to add a job to the companycollection
+  export const addJobPost = async (companyId, jobData) => {
+    try {
+      const companyRef = doc(db, "companyCollection", companyId);
+      const jobsCollectionRef = collection(companyRef, "jobs");
+  
+      await addDoc(jobsCollectionRef, jobData);
+    } catch (error) {
+      console.error("Error adding job to company's collection:", error);
+      throw error;
+    }
+  };

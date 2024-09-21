@@ -1,36 +1,24 @@
 import React, { useState } from "react";
-import axios from "axios";
-require('dotenv').config();
-// import { Editor } from "react-draft-wysiwyg";
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { getAuth } from "firebase/auth";
+import { addJobPost } from "@/firebaseConfig/companyStore";
+import { EditorState, convertToRaw } from "draft-js";
+import draftToHtml from 'draftjs-to-html';
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./style.module.scss";
 
-const removeImmutable = (data) => {
-  if (typeof data === "object" && data !== null) {
-    if (data._immutable) {
-      delete data._immutable;
-    }
-    Object.keys(data).forEach((key) => {
-      data[key] = removeImmutable(data[key]);
-    });
-  }
-  return data;
-};
-
 const JobPostForm = () => {
-  const [isEditMode, setIsEditMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
+  
   const initialFormData = {
     jobTitle: "",
     jobDescription: "",
     location: "",
     industry: "",
-    requirements: "",
-    benefits: "",
+    requirements: EditorState.createEmpty(), 
+    benefits: EditorState.createEmpty(),
     salaryMin: "",
     salaryMax: "",
     salaryType: "",
@@ -42,65 +30,57 @@ const JobPostForm = () => {
   };
   const [formData, setFormData] = useState(initialFormData);
 
-  const handleEditClick = () => {
-    setIsEditMode(true);
+  // function to convert EditorState to HTML
+  const convertEditorStateToHtml = (editorState) => {
+    return draftToHtml(convertToRaw(editorState.getCurrentContent()));
   };
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-    // Clean up the formData before sending the request
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    // Convert the EditorState fields to HTML
     const cleanFormData = {
       title: formData.jobTitle,
       description: formData.jobDescription,
       datePosted: formatDate(new Date()), // Format the date to YYYY-MM-DD
       deadline: formatDate(new Date(formData.deadline)), // Format the deadline date to YYYY-MM-DD
-      jobId: 1,
       industry: formData.industry,
       jobLevel: formData.jobLevel,
-      salary: formData.salaryMax,
+      salaryMin: formData.salaryMin,
+      salaryMax: formData.salaryMax,
       jobType: formData.employmentType,
       location: formData.location,
+      requirements: convertEditorStateToHtml(formData.requirements),
+      benefits: convertEditorStateToHtml(formData.benefits),
+      experience: formData.experience,
+      deadline: formatDate(new Date(formData.deadline)),
+      createdAt: new Date(),
       active: true,
       inactive: false,
       saved: true,
       seen: true,
       applied: true,
     };
-
-    // Remove _immutable property from requirements, benefits, and educationExperience
-    if (cleanFormData.requirements && cleanFormData.requirements._immutable) {
-      delete cleanFormData.requirements._immutable;
-    }
-    if (cleanFormData.benefits && cleanFormData.benefits._immutable) {
-      delete cleanFormData.benefits._immutable;
-    }
-    if (
-      cleanFormData.educationExperience &&
-      cleanFormData.educationExperience._immutable
-    ) {
-      delete cleanFormData.educationExperience._immutable;
-    }
-
-    const payload = {
-      data: cleanFormData,
-    };
-
-    console.log("Data to be sent:", payload); // Log the data
-
+    
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const response = await axios.post(
-        `${apiUrl}/jobs`,
-        payload
-      );
-      console.log(response.data); // Handle the response
+      // Save job post to the company's collection in Firebase
+      await addJobPost(user.uid, cleanFormData); 
+
       setFormData(initialFormData);
       setTimeout(() => {
         setIsSuccess(true);
       }, 3000);
     } catch (error) {
-      console.error(error); // Handle the error
+      console.error("Error saving job post:", error);
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -111,6 +91,13 @@ const JobPostForm = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
+    }));
+  };
+
+  const handleEditorChange = (field, editorState) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [field]: editorState,
     }));
   };
 
@@ -143,7 +130,6 @@ const JobPostForm = () => {
             required
           />
         </div>
-
         <div className={styles.input__wrap}>
           <label htmlFor="job-description">Job Description:</label>
           <textarea
@@ -163,13 +149,7 @@ const JobPostForm = () => {
           <Editor
             name="requirements"
             editorState={formData.requirements}
-            onEditorStateChange={(editorState) =>
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                requirements: editorState,
-              }))
-            }
-            required
+            onEditorStateChange={(editorState) => handleEditorChange('requirements', editorState)}
             wrapperClassName={styles.wrapperClassName}
             editorClassName={styles.editorClassName}
           />
@@ -180,12 +160,7 @@ const JobPostForm = () => {
           <Editor
             name="benefits"
             editorState={formData.benefits}
-            onEditorStateChange={(editorState) =>
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                benefits: editorState,
-              }))
-            }
+            onEditorStateChange={(editorState) => handleEditorChange('benefits', editorState)}
             required
             wrapperClassName={styles.wrapperClassName}
             editorClassName={styles.editorClassName}
@@ -197,12 +172,7 @@ const JobPostForm = () => {
           <Editor
             name="educationExperience"
             editorState={formData.educationExperience}
-            onEditorStateChange={(editorState) =>
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                educationExperience: editorState,
-              }))
-            }
+            onEditorStateChange={(editorState) => handleEditorChange('educationExperience', editorState)}
             required
             wrapperClassName={styles.wrapperClassName}
             editorClassName={styles.editorClassName}
@@ -247,7 +217,7 @@ const JobPostForm = () => {
             placeholder="Minimum Salary"
           />
           <input
-            type="text"
+            type="number"
             className={styles.input__field}
             name="salaryMax"
             value={formData.salaryMax}
@@ -269,6 +239,7 @@ const JobPostForm = () => {
           >
             <option value="">Select Salary Type</option>
             <option value="hourly">Hourly</option>
+            <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
           </select>
         </div>
@@ -333,19 +304,9 @@ const JobPostForm = () => {
             required
           />
         </div>
-        {isEditMode ? (
-          <button type="submit" className={styles.submit__button}>
+        <button type="submit" className={styles.submit__button}>
             {isLoading ? <div className={styles.spinner}></div> : "Create Job Post"}
           </button>
-        ) : (
-          <button
-            type="button"
-            className={styles.edit__button}
-            onClick={handleEditClick}
-          >
-            Edit
-          </button>
-        )}
         {isSuccess && (
           <p className={styles.success__msg}>Job Post Created Successfully</p>
         )}
