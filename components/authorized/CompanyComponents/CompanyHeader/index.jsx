@@ -6,7 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import { MdNotifications } from "react-icons/md";
 import CompanyDropdown from "../AccountDropdown";
 import NotificationTab from "../Notifications";
-import Image from 'next/image';
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./style.module.scss";
 
@@ -56,7 +56,6 @@ export default function CompanyHeader() {
     };
   }, []);
 
-
   return (
     <header
       className={`${styles.authorized__header} ${
@@ -89,7 +88,9 @@ export default function CompanyHeader() {
               </Link>
             </li>
             <li
-              className={accountDropdown ? styles.active__menu : styles.nav__menu}
+              className={
+                accountDropdown ? styles.active__menu : styles.nav__menu
+              }
               onClick={toggleAccountDropdown}
             >
               Account
@@ -104,17 +105,6 @@ export default function CompanyHeader() {
             </li>
             <li className={styles.nav__item}>
               <Link
-                href="/company/testimonials"
-                onClick={() => handleMenuClick("jobs")}
-                className={`${styles.nav__link} ${
-                  active === styles.jobs ? styles.active__link : ""
-                }`}
-              >
-                Testimonials
-              </Link>
-            </li>
-            <li className={styles.nav__item}>
-              <Link
                 href="/blog"
                 onClick={() => handleMenuClick("blog")}
                 className={`${styles.nav__link} ${
@@ -125,14 +115,23 @@ export default function CompanyHeader() {
               </Link>
             </li>
             <li className={styles.nav__item}>
-            <button
-          type="button"
-          className={styles.menu__button}
-          onClick={toggleNotifications}
-        >
-          <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
-          </button>
+              <Link
+                href="/company/jobs/postjobs"
+                className={styles.nav__button}
+              >
+                Post Job
+              </Link>
             </li>
+            <li className={styles.nav__item}>
+              <button
+                type="button"
+                className={styles.menu__button}
+                onClick={toggleNotifications}
+              >
+                <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
+              </button>
+            </li>
+            
           </ul>
         </nav>
       </div>
@@ -144,18 +143,18 @@ export default function CompanyHeader() {
         </div>
         <div>
           <button
-          type="button"
-          className={styles.menu__button}
-          onClick={toggleNotifications}
-        >
-          <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
+            type="button"
+            className={styles.menu__button}
+            onClick={toggleNotifications}
+          >
+            <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
           </button>
           <button
-          type="button"
-          className={styles.menu__button}
-          onClick={toggleMenu}
-        >
-          <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
+            type="button"
+            className={styles.menu__button}
+            onClick={toggleMenu}
+          >
+            <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
           </button>
         </div>
         <nav
@@ -186,7 +185,7 @@ export default function CompanyHeader() {
                 Home
               </Link>
             </li>
-            <li className={styles.nav__item}>
+            {/* <li className={styles.nav__item}>
               <Link
                 href="/company/testimonials"
                 onClick={() => handleMenuClick("testimonials")}
@@ -196,7 +195,7 @@ export default function CompanyHeader() {
               >
                 Testimonials
               </Link>
-            </li>
+            </li> */}
           </ul>
           <ul className={styles.dropdown__list}>
             <h4 className={styles.nav__head}>
@@ -248,10 +247,10 @@ export default function CompanyHeader() {
       </div>
 
       {showNotifications && (
-          <div className={styles.notification__dropdown}>
-            <NotificationTab closeNotifications={closeNotifications}/>
-          </div>
-        )}
+        <div className={styles.notification__dropdown}>
+          <NotificationTab closeNotifications={closeNotifications} />
+        </div>
+      )}
     </header>
   );
 }
