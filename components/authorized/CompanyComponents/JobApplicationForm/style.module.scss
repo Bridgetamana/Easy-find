@@ -65,8 +65,22 @@
     width: 100%;
   }
 
+  .modal__field:last-child input {
+    height: 3.5rem;
+  }
+
   .modal__field select {
     padding: 10px;
+    border: 1px solid $border;
+    border-radius: 4px;
+    background-color: $white;
+    font-size: $font-sixteen;
+  }
+
+  .modal__field textarea {
+    padding: 10px;
+    outline: none;
+    width: 100%;
     border: 1px solid $border;
     border-radius: 4px;
     background-color: $white;

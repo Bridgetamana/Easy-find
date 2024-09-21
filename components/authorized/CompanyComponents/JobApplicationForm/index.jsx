@@ -128,7 +128,7 @@ export default function JobApplicationForm({ closeApplicationForm }) {
             <textarea
               id="coverLetter"
               name="coverLetter"
-              rows="5"
+              rows="6"
               placeholder="Tell us about yourself"
               required
             ></textarea>
