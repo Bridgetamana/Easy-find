@@ -113,13 +113,6 @@ export default function BlogHeader() {
           </ul>
         </nav>
       </div>
-
-      <nav className={styles.category__nav}>
-        <Link href="/blog" className={`${styles.category__Link} sm:text-sm`}>All</Link>
-        <Link href="/blog?category=job-application" className={`${styles.category__Link} sm:text-sm`}>Job Application</Link>
-        <Link href="/blog?category=resume-tips" className={`${styles.category__Link} sm:text-sm`}>Resume Tips</Link>
-        <Link href="/blog?category=getting-a-job" className={`${styles.category__Link} sm:text-sm`}>Getting a Job</Link>
-      </nav>
     </header>
   );
 }

@@ -90,15 +90,17 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../../firebaseConfig/firebase'; // Your Firebase configuration
+import { db } from '../../../firebaseConfig/firebase'; 
 import { useRouter } from 'next/router'; 
 import Link from "next/link";
 import Image from "next/image";
 import LoadingScreen from "../../utils/Loaders/Loader";
+import customLoader from '../../utils/Loaders/imageLoader';
 import styles from "./style.module.scss";
 
 const BlogList = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [featuredBlog, setFeaturedBlog] = useState(null); // Featured blog state
+  const [blogs, setBlogs] = useState([]); // Other blogs state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
@@ -106,6 +108,28 @@ const BlogList = () => {
   const { category } = router.query; 
   const postsRef = useRef([]);
 
+  // Fetch Featured Blog
+  useEffect(() => {
+    const fetchFeaturedBlog = async () => {
+      try {
+        const blogCollection = collection(db, 'blogCollection');
+        const featuredQuery = query(blogCollection, where('isFeatured', '==', true));
+        const featuredSnapshot = await getDocs(featuredQuery);
+        
+        if (!featuredSnapshot.empty) {
+          const featuredPost = featuredSnapshot.docs[0].data();
+          setFeaturedBlog({ id: featuredSnapshot.docs[0].id, ...featuredPost });
+        }
+      } catch (err) {
+        console.error('Error fetching featured blog:', err);
+        setError('Failed to load featured blog');
+      }
+    };
+
+    fetchFeaturedBlog();
+  }, []);
+
+  // Fetch Other Blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
@@ -116,9 +140,11 @@ const BlogList = () => {
         console.log('Selected Category:', category);
   
         if (!category || category === 'all') {
-          blogQuery = blogCollection;
+          // Fetch all blogs except the featured one
+          blogQuery = query(blogCollection, where('isFeatured', '==', false));
         } else {
-          blogQuery = query(blogCollection, where('category', '==', category));
+          // Fetch blogs of the specific category, excluding the featured one
+          blogQuery = query(blogCollection, where('category', '==', category), where('isFeatured', '==', false));
         }
   
         console.log('Query:', blogQuery);
@@ -131,7 +157,7 @@ const BlogList = () => {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching blogs:', err);
-        setError('Failed to load blog post');
+        setError('Failed to load blog posts');
         setLoading(false);
       }
     };
@@ -139,34 +165,34 @@ const BlogList = () => {
     fetchBlogs();
   }, [category]);
 
+  // Intersection Observer for Animations
   useEffect(() => {
-       const observer = new IntersectionObserver(
-         (entries) => {
-           entries.forEach((entry) => {
-             if (entry.isIntersecting) {
-               entry.target.classList.add(styles.visible);
-             }
-           });
-         },
-         { threshold: 0.1 }
-       );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.visible);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
     
-       postsRef.current.forEach((post) => {
-         if (post) {
-           observer.observe(post);
-         }
-       });
+    postsRef.current.forEach((post) => {
+      if (post) {
+        observer.observe(post);
+      }
+    });
     
-       return () => {
-         postsRef.current.forEach((post) => {
-           if (post) {
-             observer.unobserve(post);
-           }
-         });
-       };
-     }, [blogs]);
-    
-  
+    return () => {
+      postsRef.current.forEach((post) => {
+        if (post) {
+          observer.unobserve(post);
+        }
+      });
+    };
+  }, [blogs]);
+
   if (loading) {
     return <div><LoadingScreen /></div>;
   }
@@ -175,29 +201,45 @@ const BlogList = () => {
     return <div>{error}</div>;
   }
 
+
   return (
     <section className={styles.featured__component}>
-       {!category && (
-         <div className="flex flex-col-reverse items-center justify-center lg:flex-row gap-4 mb-7 pb-7">
-           <div className="flex flex-col justify-center">
-             <h2 className="text-black font-semibold text-4xl py-2">
-               Why Our Blog is Your Essential Resource for Job Seekers and Employers
-             </h2>
-             <p className="text-sm py-2 leading-6">
-               In the competitive world of job hunting and talent acquisition, staying informed is key.
-               Our blog is designed to provide you with practical advice, industry insights, and tips for both job seekers and employers.
-             </p>
-           </div>
-           <Image
-             src="/assets/images/blogImage.png"
-             alt="blog-image"
-             width={600}
-             height={300}
-             className="rounded-md"
-             priority
-           />
-         </div>
-       )}
+       {!category && featuredBlog && (
+        <div className="relative mb-5 pb-5">
+          <div className="relative w-full h-[550px]">
+            <Image
+              loader={customLoader}
+              src={featuredBlog.image || '/assets/images/blogImage.png'} // Dynamic image from Firebase
+              alt={featuredBlog.title}
+              fill
+              className="object-cover rounded-2xl"
+              priority
+            />
+            <div className="absolute inset-0 flex flex-col-reverse md:flex-row items-end justify-between text-zinc-900 lg:text-white">
+              <div className="p-8 basis-10/12">
+                <p className="font-bold py-1">Featured</p>
+                <h2 className="text-2xl lg:text-4xl font-bold py-2 animate-swoop-in">
+                  {featuredBlog.title}
+                </h2>
+                <p className="text-sm py-2 leading-6 animate-swoop-in delay-300 font-semibold">
+                  {featuredBlog.summary}...
+                </p>
+              </div>
+              <Link href={`/blog/${featuredBlog.id}`} className='flex items-center justify-center basis-2/12 group px-4 pb-10 bg-transparent h-full text-white hover:text-black hover:bg-opacity-70 hover:bg-stone-500'>
+                  <i className="bx bx-lg bx-fade-right-hover mt-8 pt-8 bx-right-arrow-alt group-hover:text-black transition-transform transform group-hover:translate-x-2"></i>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <nav className={styles.category__nav}>
+        <Link href="/blog" className={`${styles.category__Link} sm:text-sm`}>All</Link>
+        <Link href="/blog?category=job-application" className={`${styles.category__Link} sm:text-sm`}>Job Application</Link>
+        <Link href="/blog?category=resume-tips" className={`${styles.category__Link} sm:text-sm`}>Resume Tips</Link>
+        <Link href="/blog?category=getting-a-job" className={`${styles.category__Link} sm:text-sm`}>Getting a Job</Link>
+      </nav>
+
        <div className={styles.featured__content}>
          <div className={styles.featured__posts}>
            {blogs.map((post, index) => (
@@ -224,6 +266,7 @@ const BlogList = () => {
                  )}
                  <div className={styles.post__body}>
                    <h2 className={styles.post__title}>{post.title}</h2>
+                   <p className={styles.post__summary}>{post.summary.slice(0, 70)}...</p>
                    <div className={styles.post__wrap}>
                      {post.author && (
                        <div className={styles.post__author}>
