@@ -124,3 +124,31 @@ import {
       throw error;
     }
   };
+
+  export const getJobIdsFromCompany = async () => {
+    try {
+      const companyQuerySnapshot = await getDocs(collection(db, COMPANY));
+      
+      const jobIds = [];
+  
+      for (const companyDoc of companyQuerySnapshot.docs) {
+        const companyId = companyDoc.id;
+  
+        const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
+  
+        const jobsQuerySnapshot = await getDocs(jobsCollectionRef);
+  
+        jobsQuerySnapshot.forEach((jobDoc) => {
+          jobIds.push({
+            companyId: companyId,
+            jobId: jobDoc.id,
+            ...jobDoc.data() 
+          });
+        });
+      }
+      return jobIds;
+    } catch (error) {
+      console.error("Error fetching job IDs from company collection:", error);
+      throw error;
+    }
+  };
