@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import styles from "./style.module.scss";
 import { useRouter } from "next/router";
-import { updateTalent } from '../../../../firebaseConfig/talentStore';
+import { getAuth } from "firebase/auth";
+import { updateTalent, talentStore } from '../../../../firebaseConfig/talentStore';
 
 export default function TalentProfileForm() {
   
@@ -37,7 +38,18 @@ export default function TalentProfileForm() {
   const [successMsg, setSuccessMsg] = useState("");
 
   const router = useRouter();
-  const { id } = router.query;
+  const [id, setId] = useState(null); 
+
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      setId(user.uid);
+    } else {
+      console.error("No user is logged in");
+    }
+  }, []);  
 
   useEffect(() => {
     if (id) {
@@ -88,13 +100,12 @@ export default function TalentProfileForm() {
   
     try {
       setIsLoading(true);
-  
-      // Prepare the payload with ID
+
       const payload = {
         ...formData,
-        id, // Ensure that the user ID is included
+        id, 
       };
-  
+     
       // Update the user data
       await updateTalent(payload);
   
