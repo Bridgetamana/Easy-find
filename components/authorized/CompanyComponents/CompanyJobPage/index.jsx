@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getJobIdsFromCompany, deleteJob  } from "../../../../firebaseConfig/companyStore";
 import { CiMenuKebab } from "react-icons/ci";
+import { useRouter } from "next/router"; 
 import styles from "./style.module.scss"; 
 
 const JobPage = () => {
+  const router = useRouter();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,9 +31,8 @@ const JobPage = () => {
     setActiveDropdown(activeDropdown === jobId ? false : jobId);
   };
 
-  const handleEditJob = () => {
-    console.log("edit button has been clicked");
-
+  const handleEditJob = (jobId) => {
+    router.push(`/company/jobs/editjob/${jobId}`);
   };
 
   const handleDeleteJob = async (jobId) => {

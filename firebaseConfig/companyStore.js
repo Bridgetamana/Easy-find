@@ -178,3 +178,16 @@ import {
       throw error;
     }
   };
+
+// Function to update job details
+  export const updateJobDetails = async (companyId, jobId, updatedData) => {
+    try {
+      const jobRef = doc(db, "companyCollection", companyId, "jobs", jobId);
+      await updateDoc(jobRef, updatedData);
+      console.log("Job details updated successfully");
+    } catch (error) {
+      console.error("Error updating job details:", error);
+      throw error;
+    }
+};
+
