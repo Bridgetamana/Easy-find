@@ -242,6 +242,14 @@ export default function CompanyHeader() {
                 Blog
               </Link>
             </li>
+            <li className={styles.nav__item}>
+              <Link
+                href="/company/jobs/postjobs"
+                className={styles.nav__button}
+              >
+                Post Job
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>

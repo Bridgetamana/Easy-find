@@ -124,3 +124,70 @@ import {
       throw error;
     }
   };
+
+  // Function to get a jobID from the companycollection
+  export const getJobIdsFromCompany = async () => {
+    try {
+      const companyQuerySnapshot = await getDocs(collection(db, COMPANY));
+      
+      const jobIds = [];
+  
+      for (const companyDoc of companyQuerySnapshot.docs) {
+        const companyId = companyDoc.id;
+  
+        const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
+  
+        const jobsQuerySnapshot = await getDocs(jobsCollectionRef);
+  
+        jobsQuerySnapshot.forEach((jobDoc) => {
+          jobIds.push({
+            companyId: companyId,
+            jobId: jobDoc.id,
+            ...jobDoc.data() 
+          });
+        });
+      }
+      return jobIds;
+    } catch (error) {
+      console.error("Error fetching job IDs from company collection:", error);
+      throw error;
+    }
+  };
+
+  // Function to delete a job from the companycollection
+  export const deleteJob = async (jobId) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      throw new Error('User not authenticated.');
+    }
+  
+    try {
+      const companyId = user.uid;
+        if (!companyId || !jobId) {
+        throw new Error('Company ID and Job ID are required.');
+      }
+  
+      const jobRef = doc(db, COMPANY, companyId, 'jobs', jobId);
+  
+      // Delete the job document
+      await deleteDoc(jobRef);
+      } catch (error) {
+      console.error('Error deleting job:', error.message);
+      throw error;
+    }
+  };
+
+// Function to update job details
+  export const updateJobDetails = async (companyId, jobId, updatedData) => {
+    try {
+      const jobRef = doc(db, "companyCollection", companyId, "jobs", jobId);
+      await updateDoc(jobRef, updatedData);
+      console.log("Job details updated successfully");
+    } catch (error) {
+      console.error("Error updating job details:", error);
+      throw error;
+    }
+};
+

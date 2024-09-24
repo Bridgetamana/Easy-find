@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { addJobPost } from "@/firebaseConfig/companyStore";
 import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from 'draftjs-to-html';
+import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./style.module.scss";
@@ -11,13 +11,13 @@ const JobPostForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-  
+
   const initialFormData = {
     jobTitle: "",
     jobDescription: "",
     location: "",
     industry: "",
-    requirements: EditorState.createEmpty(), 
+    requirements: EditorState.createEmpty(),
     benefits: EditorState.createEmpty(),
     salaryMin: "",
     salaryMax: "",
@@ -68,11 +68,11 @@ const JobPostForm = () => {
       seen: true,
       applied: true,
     };
-    
+
     setIsLoading(true);
     try {
       // Save job post to the company's collection in Firebase
-      await addJobPost(user.uid, cleanFormData); 
+      await addJobPost(user.uid, cleanFormData);
 
       setFormData(initialFormData);
       setTimeout(() => {
@@ -149,7 +149,9 @@ const JobPostForm = () => {
           <Editor
             name="requirements"
             editorState={formData.requirements}
-            onEditorStateChange={(editorState) => handleEditorChange('requirements', editorState)}
+            onEditorStateChange={(editorState) =>
+              handleEditorChange("requirements", editorState)
+            }
             wrapperClassName={styles.wrapperClassName}
             editorClassName={styles.editorClassName}
           />
@@ -160,7 +162,9 @@ const JobPostForm = () => {
           <Editor
             name="benefits"
             editorState={formData.benefits}
-            onEditorStateChange={(editorState) => handleEditorChange('benefits', editorState)}
+            onEditorStateChange={(editorState) =>
+              handleEditorChange("benefits", editorState)
+            }
             required
             wrapperClassName={styles.wrapperClassName}
             editorClassName={styles.editorClassName}
@@ -172,7 +176,9 @@ const JobPostForm = () => {
           <Editor
             name="educationExperience"
             editorState={formData.educationExperience}
-            onEditorStateChange={(editorState) => handleEditorChange('educationExperience', editorState)}
+            onEditorStateChange={(editorState) =>
+              handleEditorChange("educationExperience", editorState)
+            }
             required
             wrapperClassName={styles.wrapperClassName}
             editorClassName={styles.editorClassName}
@@ -304,12 +310,18 @@ const JobPostForm = () => {
             required
           />
         </div>
-        <button type="submit" className={styles.submit__button}>
-            {isLoading ? <div className={styles.spinner}></div> : "Create Job Post"}
-          </button>
-        {isSuccess && (
-          <p className={styles.success__msg}>Job Post Created Successfully</p>
-        )}
+        <button
+          type="submit"
+          className={styles.submit__button}
+        >
+          {isLoading ? (
+            <div className={styles.spinner}></div>
+          ) : isSuccess ? (
+            "Post Created Successfully"
+          ) : (
+            "Create Job Post"
+          )}
+        </button>
       </form>
     </section>
   );

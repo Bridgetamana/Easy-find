@@ -1,0 +1,159 @@
+@import "../../../../styles/variables.scss";
+
+.jobs__page {
+  padding: 18px;
+  background-color: $offWhite;
+
+  .page__title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .job__container {
+    width: 100%;
+  }
+
+  .jobs__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e2e1e1;
+    }
+
+    th {
+      background-color: $offWhite;
+    }
+
+    td {
+      a.job__link {
+        color: $primary;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .dropdown {
+        position: relative;
+
+        .dropdown__button {
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        .dropdown__menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: white;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          padding: 10px 24px 0 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          z-index: 100;
+
+          button {
+            display: block;
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 8px;
+            text-align: left;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  .jobs__grid {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
+
+  .job__card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: $box-shadow-1;
+
+    .job_header {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      
+
+      a.job__link {
+        color: $primary;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    p {
+      margin: 5px 0;
+      font-size: 1rem;
+      color: #666;
+    }
+
+    .dropdown {
+      position: relative;
+
+      .dropdown__button {
+        background-color: $primary;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .dropdown__menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px 24px 0 10px;
+        z-index: 100;
+
+        button {
+          display: block;
+          width: 100%;
+          background: none;
+          border: none;
+          padding: 8px;
+          text-align: left;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #f2f2f2;
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .jobs__table {
+      display: none;
+    }
+
+    .jobs__grid {
+      display: block;
+    }
+  }
+}
