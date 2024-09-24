@@ -46,6 +46,6 @@
     - Company Job details page
         - Candidates that applied to the job
         - Candidates that saved the job
-    - Company Add Job page
+    - Company Add Job page [COMLETED]
     - Company Edit Job page (delete job, edit job details)
     - 
