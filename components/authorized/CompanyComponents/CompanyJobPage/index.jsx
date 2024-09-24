@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getJobIdsFromCompany } from "../../../../firebaseConfig/companyStore";
+import { getJobIdsFromCompany, deleteJob  } from "../../../../firebaseConfig/companyStore";
 import { CiMenuKebab } from "react-icons/ci";
 import styles from "./style.module.scss"; 
 
@@ -29,16 +29,23 @@ const JobPage = () => {
     setActiveDropdown(activeDropdown === jobId ? false : jobId);
   };
 
-  const handleEdit = () => {
+  const handleEditJob = () => {
     console.log("edit button has been clicked");
 
   };
 
-  const handleDelete = () => {
-    console.log("delete button has been clicked");
+  const handleDeleteJob = async (jobId) => {
+    try {
+      await deleteJob(jobId); 
+      alert('Job deleted successfully');
+
+      setJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
+    } catch (error) {
+      alert('Error deleting job: ' + error.message);
+    }
   };
 
-  const handleClose = () => {
+  const handleCloseJob = () => {
     console.log("close button has been clicked");
   };
 
@@ -74,7 +81,7 @@ const JobPage = () => {
                 {jobs.map((job) => (
                   <tr key={job.jobId}>
                     <td>
-                      <a href="/" className={styles.job__link}>
+                      <a href={`/jobs/${job.jobId}`} className={styles.job__link}>
                         {job.title}
                       </a>
                     </td>
@@ -88,9 +95,9 @@ const JobPage = () => {
                         </button>
                         {activeDropdown === job.jobId && (
                           <div className={styles.dropdown__menu}>
-                            <button onClick={() => handleEdit(job.jobId)}>Edit</button>
-                            <button onClick={() => handleDelete(job.jobId)}>Delete</button>
-                            <button onClick={() => handleClose(job.jobId)}>Close</button>
+                            <button onClick={() => handleEditJob(job.jobId)}>Edit</button>
+                            <button onClick={() => handleDeleteJob(job.jobId)}>Delete</button>
+                            <button onClick={() => handleCloseJob(job.jobId)}>Close</button>
                           </div>
                         )}
                       </div>
@@ -116,9 +123,9 @@ const JobPage = () => {
                   <div className={styles.dropdown}>
                     {activeDropdown === job.jobId && (
                       <div className={styles.dropdown__menu}>
-                        <button onClick={() => handleEdit(job.jobId)}>Edit</button>
-                        <button onClick={() => handleDelete(job.jobId)}>Delete</button>
-                        <button onClick={() => handleClose(job.jobId)}>Close</button>
+                        <button onClick={() => handleEditJob(job.jobId)}>Edit</button>
+                        <button onClick={() => handleDeleteJob(job.jobId)}>Delete</button>
+                        <button onClick={() => handleCloseJob(job.jobId)}>Close</button>
                       </div>
                     )}
                   </div>

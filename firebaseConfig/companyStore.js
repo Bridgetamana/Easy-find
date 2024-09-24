@@ -125,6 +125,7 @@ import {
     }
   };
 
+  // Function to get a jobID from the companycollection
   export const getJobIdsFromCompany = async () => {
     try {
       const companyQuerySnapshot = await getDocs(collection(db, COMPANY));
@@ -149,6 +150,31 @@ import {
       return jobIds;
     } catch (error) {
       console.error("Error fetching job IDs from company collection:", error);
+      throw error;
+    }
+  };
+
+  // Function to delete a job from the companycollection
+  export const deleteJob = async (jobId) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      throw new Error('User not authenticated.');
+    }
+  
+    try {
+      const companyId = user.uid;
+        if (!companyId || !jobId) {
+        throw new Error('Company ID and Job ID are required.');
+      }
+  
+      const jobRef = doc(db, COMPANY, companyId, 'jobs', jobId);
+  
+      // Delete the job document
+      await deleteDoc(jobRef);
+      } catch (error) {
+      console.error('Error deleting job:', error.message);
       throw error;
     }
   };
