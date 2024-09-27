@@ -5,61 +5,41 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useRouter } from "next/navigation";
 import styles from "./style.module.scss";
 
-export default function EditJobForm() {
-  if (typeof data === "object" && data !== null) {
-    if (data._immutable) {
-      delete data._immutable;
-    }
-    Object.keys(data).forEach((key) => {
-      data[key] = removeImmutable(data[key]);
-    });
-  }
-  return data;
-};
-
 const EditJobForm = () => {
-  const router = useRouter();
-  const jobId = router.query.jobId; // Get the jobId from the query parameters
 
   const [isEditMode, setIsEditMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
 
-  useEffect(() => {
-    // Fetch the job data based on the jobId
-    if (jobId) {
-      fetchJobData(jobId);
-    }
-  }, [jobId]);
 
-  const fetchJobData = async (jobId) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:1337/api/jobs/${jobId}`
-      );
-      const jobData = response.data;
+  // const fetchJobData = async (jobId) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:1337/api/jobs/${jobId}`
+  //     );
+  //     const jobData = response.data;
 
-      // Populate the form data with the fetched job data
-      setFormData({
-        jobTitle: jobData.title,
-        jobDescription: jobData.description,
-        deadline: jobData.deadline,
-        industry: jobData.industry,
-        jobLevel: jobData.jobLevel,
-        salaryMin: jobData.salaryMin,
-        salaryMax: jobData.salaryMax,
-        employmentType: jobData.employmentType,
-        location: jobData.location,
-        requirements: jobData.requirements,
-        benefits: jobData.benefits,
-        educationExperience: jobData.educationExperience,
+  //     // Populate the form data with the fetched job data
+  //     setFormData({
+  //       jobTitle: jobData.title,
+  //       jobDescription: jobData.description,
+  //       deadline: jobData.deadline,
+  //       industry: jobData.industry,
+  //       jobLevel: jobData.jobLevel,
+  //       salaryMin: jobData.salaryMin,
+  //       salaryMax: jobData.salaryMax,
+  //       employmentType: jobData.employmentType,
+  //       location: jobData.location,
+  //       requirements: jobData.requirements,
+  //       benefits: jobData.benefits,
+  //       educationExperience: jobData.educationExperience,
         
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleEditClick = () => {
     setIsEditMode(true);
@@ -377,3 +357,5 @@ const EditJobForm = () => {
     </section>
   );
 };
+
+export default EditJobForm

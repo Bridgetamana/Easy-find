@@ -115,7 +115,7 @@ import {
   // Function to add a job to the companycollection
   export const addJobPost = async (companyId, jobData) => {
     try {
-      const companyRef = doc(db, "companyCollection", companyId);
+      const companyRef = doc(db, COMPANY, companyId);
       const jobsCollectionRef = collection(companyRef, "jobs");
   
       await addDoc(jobsCollectionRef, jobData);
@@ -182,12 +182,37 @@ import {
 // Function to update job details
   export const updateJobDetails = async (companyId, jobId, updatedData) => {
     try {
-      const jobRef = doc(db, "companyCollection", companyId, "jobs", jobId);
+      const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
       await updateDoc(jobRef, updatedData);
       console.log("Job details updated successfully");
     } catch (error) {
       console.error("Error updating job details:", error);
       throw error;
     }
+};
+
+// Function to get job details
+export const getJobDetailsById = async (jobId) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
+  try {
+    const companyId = user.uid;
+    const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
+    const jobSnapshot = await getDoc(jobRef);
+
+    if (!jobSnapshot.exists()) {
+      throw new Error("Job not found.");
+    }
+
+    return jobSnapshot.data();
+  } catch (error) {
+    console.error("Error fetching job details:", error);
+    throw error;
+  }
 };
 
