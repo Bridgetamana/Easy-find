@@ -180,8 +180,16 @@ import {
   };
 
 // Function to update job details
-  export const updateJobDetails = async (companyId, jobId, updatedData) => {
+export const updateJobDetails = async (jobId, updatedData) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
     try {
+    const companyId = user.uid; 
       const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
       await updateDoc(jobRef, updatedData);
       console.log("Job details updated successfully");
