@@ -142,6 +142,13 @@
                             color: $primary;
                         }
                     }
+                    .signout{
+                        color: $error;
+
+                        &:hover {
+                            color: $error;
+                        }
+                    }
                 }
             }
 

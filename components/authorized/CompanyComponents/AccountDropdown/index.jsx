@@ -54,7 +54,7 @@ export default function CompanyDropdown({ closeMenu }) {
           </Link>
         </li>
         <li className={styles.dropdown__link}>
-          <button onClick={signOut} className={styles.link}>
+          <button onClick={signOut} className={`${styles.link} ${styles.signout}`}>
             Sign Out
           </button>
         </li>

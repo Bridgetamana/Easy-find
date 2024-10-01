@@ -142,6 +142,8 @@ const EditJobForm = () => {
 
   return (
     <section className={styles.jobPostings__section}>
+            <div className={styles.jobPosting__container}>
+
       <div className={styles.section__header}>
         <h2 className={styles.section__title}>Edit Job</h2>
         <p className={styles.section__subtitle}>
@@ -363,6 +365,7 @@ const EditJobForm = () => {
           <p className={styles.success__msg}>Job Post Edited Successfully</p>
         )}
       </form>
+      </div>
     </section>
   );
 };
