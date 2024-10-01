@@ -1,0 +1,147 @@
+@import "../../../../styles/variables";
+
+.jobDetails__section {
+  margin: 2rem auto;
+
+  width: 90%;
+
+  .details__header {
+    display: block;
+    margin-bottom: 3rem;
+
+    .details__back {
+      border: $border 1px solid;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      font-size: $font-fourteen;
+      font-weight: $font-weight-500;
+      color: $black;
+    }
+
+    .details__title {
+      @include title;
+      margin-top: 1.5rem;
+    }
+
+    .details__flex {
+      display: flex;
+      gap: 1rem;
+
+      .details__type,
+      .details__posted {
+        font-size: $font-fourteen;
+        color: $lightGray;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+    }
+
+    .edit__button {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      background-color: $offWhite;
+      border: 1px solid $neutral;
+      color: $black;
+      font-size: $font-fourteen;
+      font-weight: $font-weight-500;
+
+      &:hover {
+          background-color: $neutral;
+          color: $white;
+      }
+    }
+  }
+
+  // Job Overview
+  .employmentInfo__section {
+    margin-top: 2rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid $neutral;
+    border-radius: 10px;
+
+    .info__header {
+      display: block;
+
+      .info__title {
+        font-size: $font-twentyFour;
+        font-weight: $font-weight-600;
+        color: $black;
+        border-bottom: 1px solid $neutral;
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    .info__content {
+      display: grid;
+      margin-top: 1.5rem;
+      gap: 1rem;
+
+      @media screen and (min-width: $breakpoint-4) {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .info__item {
+        display: grid;
+        grid-template-columns: 32% 65%;
+        align-content: center;
+        gap: 2rem;
+
+        @media screen and (min-width: $breakpoint-4) {
+          gap: 1rem;
+        }
+
+        .info__left {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          .info__icon {
+            line-height: 0;
+            font-weight: $font-weight-600;
+            color: #66789c;
+          }
+
+          .info__title {
+            font-size: $font-fourteen;
+            font-weight: $font-weight-500;
+            color: #66789c;
+          }
+        }
+
+        .info__right {
+          .info__text {
+            font-size: $font-fourteen;
+            font-weight: $font-weight-500;
+            color: $black;
+          }
+          .not__specified {
+            font-size: $font-fourteen;
+            font-weight: $font-weight-500;
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  .jobInfo__section {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+    .description__header {
+      display: block;
+
+      .description__title {
+        font-size: $font-twentyFour;
+        font-weight: $font-weight-600;
+        color: $black;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

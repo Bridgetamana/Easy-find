@@ -1,10 +1,41 @@
-@import "../../../../styles/variables.scss";
+@import "../../../../styles/variables";  
 
 .jobPostings__section {
+
+    .jobPosting__container {
+        padding: 40px 15px 0;
+        width: 100%;
+        max-width: 64rem;
+        margin: 0 auto;
+
+        @media screen and (min-width: $breakpoint-4) {
+            padding: 40px 35px 0;
+        }
+    }
+    .section__header {
+        margin-bottom: 40px;
+    }
+    .section__title {
+        margin-bottom: 6px;
+        font-size: $font-twentyFour;
+        font-weight: $font-weight-600;
+
+        @media screen and (min-width: $breakpoint-4) {
+            font-size: 30px;
+        }
+    }
+
     .jobPosting__form {
         display: flex;
         flex-direction: column;
+        background: $white;
+        border-radius: 10px;
+        padding: 16px 12px;
         gap: 2rem;
+
+        @media screen and (min-width: $breakpoint-4) {
+            padding: 28px 32px;
+        }
 
         .input__wrap {
             display: flex;
@@ -53,6 +84,8 @@
             @include button;
             display: grid;
             place-items: center;
+            width: 100%;
+            max-width: 12rem
         }
 
         .success__msg{

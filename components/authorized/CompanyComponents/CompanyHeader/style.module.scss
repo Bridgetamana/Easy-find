@@ -142,6 +142,13 @@
                             color: $primary;
                         }
                     }
+                    .signout{
+                        color: $error;
+
+                        &:hover {
+                            color: $error;
+                        }
+                    }
                 }
             }
 
@@ -201,11 +208,12 @@
   }
 
   .notification__dropdown {
-    width: 300px;
+    width: 320px;
     position: absolute;
     right: 5%;
     margin-top: 10px;
     padding: 1rem;
+    z-index: 100;
     background-color: $white;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
     border-radius: 10px;
@@ -345,6 +353,7 @@
 
     .notification__dropdown {
         width: 400px;
+        z-index: 100;
       }
     
   }

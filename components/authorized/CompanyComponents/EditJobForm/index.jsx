@@ -1,85 +1,98 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+import { getJobDetailsById, updateJobDetails } from "@/firebaseConfig/companyStore"; 
 import styles from "./style.module.scss";
-
-export default function EditJobForm() {
-  if (typeof data === "object" && data !== null) {
-    if (data._immutable) {
-      delete data._immutable;
-    }
-    Object.keys(data).forEach((key) => {
-      data[key] = removeImmutable(data[key]);
-    });
-  }
-  return data;
-};
 
 const EditJobForm = () => {
   const router = useRouter();
-  const jobId = router.query.jobId; // Get the jobId from the query parameters
+  const { jobId } = router.query; 
 
   const [isEditMode, setIsEditMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState(null);
+
+  const initialFormData = {
+    jobTitle: "",
+    jobDescription: "",
+    location: "",
+    industry: "",
+    requirements: EditorState.createEmpty(),
+    benefits: EditorState.createEmpty(),
+    salaryMin: "",
+    salaryMax: "",
+    salaryType: "",
+    employmentType: "",
+    jobLevel: "",
+    educationExperience: EditorState.createEmpty(),
+    experience: "",
+    deadline: "",
+  };
+
   const [formData, setFormData] = useState(initialFormData);
 
+  // function to convert EditorState to HTML
+  const convertEditorStateToHtml = (editorState) => {
+    return draftToHtml(convertToRaw(editorState.getCurrentContent()));
+  };
+
   useEffect(() => {
-    // Fetch the job data based on the jobId
     if (jobId) {
-      fetchJobData(jobId);
+      fetchJobDetails();
     }
   }, [jobId]);
 
-  const fetchJobData = async (jobId) => {
+  const fetchJobDetails = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:1337/api/jobs/${jobId}`
-      );
-      const jobData = response.data;
+      setIsLoading(true);
+      const jobData = await getJobDetailsById(jobId);
 
-      // Populate the form data with the fetched job data
       setFormData({
-        jobTitle: jobData.title,
-        jobDescription: jobData.description,
-        deadline: jobData.deadline,
-        industry: jobData.industry,
-        jobLevel: jobData.jobLevel,
-        salaryMin: jobData.salaryMin,
-        salaryMax: jobData.salaryMax,
-        employmentType: jobData.employmentType,
-        location: jobData.location,
-        requirements: jobData.requirements,
-        benefits: jobData.benefits,
-        educationExperience: jobData.educationExperience,
-        
+        jobTitle: jobData.title || "",
+        jobDescription: jobData.description || "",
+        location: jobData.location || "",
+        industry: jobData.industry || "",
+        salaryMin: jobData.salaryMin || "",
+        salaryMax: jobData.salaryMax || "",
+        salaryType: jobData.salaryType || "",
+        employmentType: jobData.jobType || "",
+        jobLevel: jobData.jobLevel || "",
+        experience: jobData.experience || "",
+        deadline: jobData.deadline ? formatDate(new Date(jobData.deadline)) : "",
       });
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching job details:", error);
+      setError("Failed to fetch job details. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleEditClick = () => {
-    setIsEditMode(true);
   };
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
 
-    // Clean up the formData before sending the request
+    // Convert the EditorState fields to HTML
     const cleanFormData = {
       title: formData.jobTitle,
       description: formData.jobDescription,
       datePosted: formatDate(new Date()), // Format the date to YYYY-MM-DD
       deadline: formatDate(new Date(formData.deadline)), // Format the deadline date to YYYY-MM-DD
-      jobId: 1,
       industry: formData.industry,
       jobLevel: formData.jobLevel,
-      salary: formData.salaryMax,
+      salaryMin: formData.salaryMin,
+      salaryMax: formData.salaryMax,
       jobType: formData.employmentType,
       location: formData.location,
+      requirements: convertEditorStateToHtml(formData.requirements),
+      benefits: convertEditorStateToHtml(formData.benefits),
+      experience: formData.experience,
+      deadline: formatDate(new Date(formData.deadline)),
+      createdAt: new Date(),
       active: true,
       inactive: false,
       saved: true,
@@ -87,40 +100,18 @@ const EditJobForm = () => {
       applied: true,
     };
 
-    // Remove _immutable property from requirements, benefits, and educationExperience
-    if (cleanFormData.requirements && cleanFormData.requirements._immutable) {
-      delete cleanFormData.requirements._immutable;
-    }
-    if (cleanFormData.benefits && cleanFormData.benefits._immutable) {
-      delete cleanFormData.benefits._immutable;
-    }
-    if (
-      cleanFormData.educationExperience &&
-      cleanFormData.educationExperience._immutable
-    ) {
-      delete cleanFormData.educationExperience._immutable;
-    }
-
-    const payload = {
-      data: cleanFormData,
-    };
-
-    console.log("Data to be sent:", payload); // Log the data
-
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:1337/api/jobs",
-        payload
-      );
-      console.log(response.data); // Handle the response
+      await updateJobDetails(jobId, cleanFormData);
+
       setFormData(initialFormData);
       setTimeout(() => {
         setIsSuccess(true);
       }, 3000);
-      router.push(`/company/dashboard`);
+      router.push(`/company/jobs`);
     } catch (error) {
-      console.error(error); // Handle the error
+      console.error("Error updating job post:", error);
+      setError("Failed to update job. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +125,13 @@ const EditJobForm = () => {
     }));
   };
 
+  const handleEditorChange = (field, editorState) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [field]: editorState,
+    }));
+  };
+
   // Function to format the date to YYYY-MM-DD
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -144,6 +142,8 @@ const EditJobForm = () => {
 
   return (
     <section className={styles.jobPostings__section}>
+            <div className={styles.jobPosting__container}>
+
       <div className={styles.section__header}>
         <h2 className={styles.section__title}>Edit Job</h2>
         <p className={styles.section__subtitle}>
@@ -152,7 +152,7 @@ const EditJobForm = () => {
       </div>
       <form className={styles.jobPosting__form} onSubmit={handleSaveClick}>
         <div className={styles.input__wrap}>
-          <label htmlFor={styles.job - title}>Job Title:</label>
+          <label htmlFor="job-title">Job Title:</label>
           <input
             type="text"
             className={styles.input__field}
@@ -165,7 +165,7 @@ const EditJobForm = () => {
         </div>
 
         <div className={styles.input__wrap}>
-          <label htmlFor={styles.job - description}>Job Description:</label>
+          <label htmlFor="job-description">Job Description:</label>
           <textarea
             name="jobDescription"
             className={styles.text__field}
@@ -184,10 +184,7 @@ const EditJobForm = () => {
             name="requirements"
             editorState={formData.requirements}
             onEditorStateChange={(editorState) =>
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                requirements: editorState,
-              }))
+              handleEditorChange("requirements", editorState)
             }
             required
             wrapperClassName={styles.wrapperClassName}
@@ -201,10 +198,7 @@ const EditJobForm = () => {
             name="benefits"
             editorState={formData.benefits}
             onEditorStateChange={(editorState) =>
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                benefits: editorState,
-              }))
+              handleEditorChange("benefits", editorState)
             }
             required
             wrapperClassName={styles.wrapperClassName}
@@ -218,10 +212,7 @@ const EditJobForm = () => {
             name="educationExperience"
             editorState={formData.educationExperience}
             onEditorStateChange={(editorState) =>
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                educationExperience: editorState,
-              }))
+              handleEditorChange("educationExperience", editorState)
             }
             required
             wrapperClassName={styles.wrapperClassName}
@@ -374,6 +365,9 @@ const EditJobForm = () => {
           <p className={styles.success__msg}>Job Post Edited Successfully</p>
         )}
       </form>
+      </div>
     </section>
   );
 };
+
+export default EditJobForm

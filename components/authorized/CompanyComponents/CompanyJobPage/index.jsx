@@ -82,7 +82,7 @@ const JobPage = () => {
                 {jobs.map((job) => (
                   <tr key={job.jobId}>
                     <td>
-                      <a href={`/jobs/${job.jobId}`} className={styles.job__link}>
+                      <a href={`/company/jobs/${job.jobId}`} className={styles.job__link}>
                         {job.title}
                       </a>
                     </td>
@@ -113,7 +113,7 @@ const JobPage = () => {
               {jobs.map((job) => (
                 <div key={job.jobId} className={styles.job__card}>
                   <div className={styles.job_header}>
-                    <a href="/" className={styles.job__link}>
+                    <a href={`/company/jobs/${job.jobId}`} className={styles.job__link}>
                       {job.title}
                     </a>
                     <button onClick={() => handleMenuClick(job.jobId)} className={styles.dropdown__button}>

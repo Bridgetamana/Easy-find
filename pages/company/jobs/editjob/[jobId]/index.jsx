@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import ProtectedRoute from "@/utils/protectedRoute";
 import CompanyLayout from "../../../layout";
 import EditJobForm from "../../../../../components/authorized/CompanyComponents/EditJobForm";
 
-const PostJobsPage = () => {
+const EditJobsPage = () => {
   return (
     <ProtectedRoute>
       <CompanyLayout>
@@ -15,4 +15,4 @@ const PostJobsPage = () => {
   );
 };
 
-export default PostJobsPage;
+export default EditJobsPage;
