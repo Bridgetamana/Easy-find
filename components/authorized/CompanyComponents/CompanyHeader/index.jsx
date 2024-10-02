@@ -9,6 +9,7 @@ import NotificationTab from "../Notifications";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./style.module.scss";
+import secureLocalStorage from "react-secure-storage";
 
 export default function CompanyHeader() {
   const [showMenu, setShowMenu] = useState(false);
@@ -40,6 +41,13 @@ export default function CompanyHeader() {
   const closeNotifications = () => {
     setShowNotifications(false);
   };
+
+  const signOut = () => {
+
+    // Clear token before redirecting to signi page
+    secureLocalStorage.removeItem("userToken");
+    router.push("/signin");
+    };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -229,6 +237,13 @@ export default function CompanyHeader() {
                 Settings
               </Link>
             </li>
+            <li className={styles.dropdown__link}>
+              <button
+                onClick={signOut} className={`${styles.link} ${styles.signout}`}
+              >
+                Sign Out
+              </button>
+            </li>
           </ul>
           <ul className={styles.nav__list}>
             <li className={` ${styles.nav__item} ${styles.pd_btm} `}>
@@ -240,6 +255,14 @@ export default function CompanyHeader() {
                 }`}
               >
                 Blog
+              </Link>
+            </li>
+            <li className={styles.nav__item}>
+              <Link
+                href="/company/jobs/postjobs"
+                className={styles.nav__button}
+              >
+                Post Job
               </Link>
             </li>
           </ul>
