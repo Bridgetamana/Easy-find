@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./style.module.scss";
+import Link from "next/link";
 
 export default function CallToAction() {
   return (
@@ -18,7 +19,7 @@ export default function CallToAction() {
             find the right talent.
           </h3>
 
-          <button className={styles.cta__button}>Find talents now</button>
+          <Link href='/signin' className={styles.cta__button}>Find talents now</Link>
         </div>
       </div>
     </section>
