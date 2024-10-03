@@ -150,6 +150,10 @@ const BlogDetails = () => {
 
   return (
     <BlogLayout>
+      <button onClick={() => window.history.back()} className='w-fit flex flex-row text-[#2563eb] items-center py-[1rem] px-[1rem] lg:px-[4rem] gap-1'>
+        <i className='bx bx-arrow-back bx-sm' ></i>
+        <p className='py-2 block font-medium transition-all duration-300 ease-in-out transform hover:scale-105 items-center'>Back</p>
+      </button>
       <div className={styles.blogDetails__page}>
         <div className={styles.blogDetails__content}>
           <img
@@ -178,9 +182,6 @@ const BlogDetails = () => {
               {blogData.content || "No content available."}
             </p>
           </div>
-          <button onClick={() => window.history.back()} className='w-fit self-end'>
-             <p className='mt-2 py-2 px-4 block bg-[#2563eb] rounded-lg text-white text-sm font-medium transition-all duration-300 ease-in-out transform hover:scale-105'>Go back</p>
-          </button>
         </div>
       </div>
     </BlogLayout>

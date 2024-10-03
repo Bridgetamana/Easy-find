@@ -135,13 +135,13 @@ export default function UnauthorizedHeader() {
               <BsChevronDown fill="#827f7f" size={10} />
             </h4>
             <li className={styles.dropdown__link}>
-              <Link href="/easy-find" className={styles.link}>
-                How Minu works
+              <Link href="/browse-jobs" className={styles.link}>
+                Browse Jobs
               </Link>
             </li>
             <li className={styles.dropdown__link}>
               <Link href="/become-talent" className={styles.link}>
-                Become a Talent
+                Find Companies
               </Link>
             </li>
             <li className={styles.dropdown__link}>
@@ -159,11 +159,6 @@ export default function UnauthorizedHeader() {
             <li className={styles.dropdown__link}>
               <Link href="/settings" className={styles.link}>
                 Post Jobs
-              </Link>
-            </li>
-            <li className={styles.dropdown__link}>
-              <Link href="/become-member" className={styles.link}>
-                Partnership
               </Link>
             </li>
             <li className={styles.dropdown__link}>

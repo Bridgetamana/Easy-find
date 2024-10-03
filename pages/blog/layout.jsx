@@ -4,9 +4,9 @@ import BlogHeader from '../../components/unauthorized/BlogHeader'
 
 export default function BlogLayout( { children }) {
   return (
-    <div>
+    <div className='flex flex-col min-h-screen'>
       <BlogHeader />
-      <main className="main">{children}</main>
+      <main className="main flex-1 justify-center items-center">{children}</main>
       <Footer />
     </div>
   )

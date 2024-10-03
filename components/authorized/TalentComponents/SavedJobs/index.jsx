@@ -1,38 +1,104 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { db, auth } from "../../../../firebaseConfig/firebase"; 
+import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
 import styles from "./style.module.scss";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
 
-const savedJobsUrl = "https://localhost:3000/saved-jobs/";
-
 export default function SavedJobs() {
   const [savedJobs, setSavedJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [userId, setUserId] = useState(null); 
 
+  
   useEffect(() => {
-    fetchSavedJobs();
+    const currentUser = auth.currentUser; 
+    if (currentUser) {
+      setUserId(currentUser.uid);
+    }
   }, []);
 
+  useEffect(() => {
+    if (userId) {
+      fetchSavedJobs();
+    }
+  }, [userId]);
+
+  
   const fetchSavedJobs = async () => {
+    setIsLoading(true); // Start loading
     try {
-      const response = await axios.get(savedJobsUrl);
-      const savedJobsData = response.data.data;
-      setSavedJobs(savedJobsData);
+      const userId = auth.currentUser?.uid; // Get current user ID
+      if (!userId) {
+        console.error("User is not logged in");
+        return;
+      }
+  
+      // Fetch all job listings
+      const jobListingsRef = collection(db, "jobListings");
+      const jobListingsSnapshot = await getDocs(jobListingsRef);
+      const jobs = [];
+  
+      for (const jobDoc of jobListingsSnapshot.docs) {
+        const savedForLaterRef = collection(jobDoc.ref, "savedForLater");
+        const savedJobsSnapshot = await getDocs(savedForLaterRef);
+  
+        savedJobsSnapshot.forEach((savedJobDoc) => {
+          const savedJobData = savedJobDoc.data();
+          // Check if the saved job belongs to the current user
+          if (savedJobData.userId === userId) {
+            jobs.push({
+              id: savedJobDoc.id,
+              ...savedJobData,
+              jobId: jobDoc.id, // include the jobId for reference
+            });
+          }
+        });
+      }
+  
+      setSavedJobs(jobs);
     } catch (error) {
       console.error("Failed to fetch saved jobs:", error);
+    } finally {
+      setIsLoading(false); // Stop loading regardless of success or error
     }
-  };
+  };  
 
+const handleDelete = async (jobId) => {
+  const userId = auth.currentUser?.uid;
+
+  if (!userId) {
+    console.error("User is not logged in");
+    return;
+  }
+
+  try {
+    const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+
+    await deleteDoc(savedJobRef);
+
+    console.log("Job removed successfully.");
+    setSavedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
+
+  } catch (error) {
+    console.error("Error removing job:", error.message);
+  }
+};
+
+  
   return (
     <section className={styles.savedJobs__section}>
       <div className={styles.savedJobs__container}>
         <div className={styles.savedJobs__header}>
           <h2 className={styles.savedJobs__title}>Saved Jobs</h2>
         </div>
-        {savedJobs.length > 0 ? (
+
+        {isLoading ? (
+          <p>Loading saved jobs...</p>
+        ) : savedJobs.length > 0 ? (
           <ul className={styles.savedJobs__list}>
-            {savedJobs.map((job) => (
-              <li key={job} className={styles.savedJobs__item}>
+            {savedJobs.map((job, index) => (
+              <li key={index} className={styles.savedJobs__item}>
                 <div className={styles.item__header}>
                   <div className={styles.companyLogo}>
                     <img
@@ -41,20 +107,18 @@ export default function SavedJobs() {
                     />
                   </div>
                   <div className={styles.companyNames}>
-                    <h3 className={styles.companyName}>Alpha Alpha</h3>
-                    <p className={styles.jobTitle}>Web Developer</p>
+                    <h3 className={styles.companyName}>{job.company}</h3>
+                    <p className={styles.jobTitle}>{job.title}</p>
                   </div>
                 </div>
                 <div className={styles.item__buttons}>
-                  <Link href="/">
+                  <Link href={`/talent/jobs/details/${job.jobId}`}>
                     <button className={styles.btn__link}>View</button>
                   </Link>
-                  <Link href="/">
+                  <Link href={`/talent/jobs/details/${job.jobId}`}>
                     <button className={styles.btn__link}>Apply</button>
                   </Link>
-                  <Link href="/">
-                    <button className={styles.btn__link}>Remove</button>
-                  </Link>
+                  <button className={styles.btn__link} onClick={() => handleDelete(job.jobId)}>Remove</button>
                 </div>
               </li>
             ))}
@@ -63,7 +127,9 @@ export default function SavedJobs() {
           <div className={styles.no__savedJobs}>
             <h3 className={styles.no__savedJobs__title}>No Saved Jobs</h3>
             <p className={styles.savedJobs__message}>
-              <Link href="/talent/jobs"><IoAddCircle className={styles.savedJobs__icon} /></Link>
+              <Link href="/talent/jobs">
+                <IoAddCircle className={styles.savedJobs__icon} />
+              </Link>
               Your saved jobs will appear here so you can choose which to apply
               for.
             </p>
