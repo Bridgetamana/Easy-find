@@ -1,4 +1,4 @@
-APPLICANT DETAILS CARD 
+//APPLICANT DETAILS CARD 
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 
 export default function Example() {
@@ -76,7 +76,7 @@ export default function Example() {
 }
 
 
-CANDIDATES THAT APPLIED TABLE
+//CANDIDATES THAT APPLIED TABLE
 const people = [
   {
     name: 'Lindsay Walton',
@@ -173,7 +173,7 @@ export default function Example() {
 }
 
 
-NOTOFOCATION MODAL TEXT
+//NOTOFOCATION MODAL TEXT
 'use client'
 
 import { useState } from 'react'
