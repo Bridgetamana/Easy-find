@@ -1,74 +1,103 @@
 @import "../../../../styles/variables.scss";
 
-.notifications__page {
-  margin: 0 auto;
+.notification__dropdown {
+  position: fixed;
+  right: 5%;
+  z-index: 100;
+  animation: fadeInDown 0.7s ease-in-out 0s 1 normal none running;
+  transition: all 0.7s ease 0s;
 
-  .section__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    // border-bottom: 1px solid #e0e6f7;
-    margin-bottom: 1rem;
+
+.notification__page {
+  width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: $white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+  padding: 1rem;
+
+  @media screen and (min-width: $breakpoint-4)  {
+    width: 400px;
+  }
+}
+
+.notification__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.notification__title {
+  font-size: $font-eighteen;
+  font-weight: $font-weight-700;
+}
+
+.close__button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.notification__item {
+  display: flex;
+  align-items: start;
+  border-bottom: 1px solid #e0e6f7;
+  padding: 0.5rem 0;
+
+  &:last-child {
+    border-bottom: none;
   }
 
-  .section__title {
-    font-size: 24px;
-    font-weight: bold;
+  .notification__icon {
+    margin-right: 12px;
+
+    .icon {
+      height: 20px;
+      width: 20px;
+      color: gray;
+    }
+  }
+}
+
+.notification__content {
+  flex: 1;
+
+  .notification__heading {
+    font-size: $font-sixteen;
+    font-weight: 600;
+    color: #252930;
   }
 
-  .close__button {
-    transition: transform 0.2s;
+  .notification__description {
+    margin-top: 3px;
+    font-size: 14px;
+    color: #3a3f49;
+  }
+
+  .delete__button {
+    margin-top: 7px;
+    color: $error;
+    font-size: 14px;
+    cursor: pointer;
 
     &:hover {
-      transform: scale(1.1);
-    }
-  }
-
-  .notification__item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border: 1px solid #e0e6f7;
-    padding: 12px;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-
-    .notification__content {
-      flex: 1;
-      margin-right: 20px;
-    }
-
-    .notification__title {
-      font-size: 16px;
-      font-weight: bold;
-      color: #2563eb;
-      margin-bottom: 5px;
-    }
-
-    .notification__description {
-      font-size: 14px;
-      color: #555;
-      line-height: 1.4;
-    }
-
-    .notification__date {
-      font-size: 12px;
-      color: #888;
-      text-align: right;
+      color: darken($error, 10%);
     }
   }
 }
-.loader {
-  border: 4px solid #eaebee; 
-  border-top: 4px solid #2563eb; 
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto;
-}
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.no__notifications {
+  text-align: center;
+  color: #a1a1a1;
+  padding: 1rem;
+  font-size: 14px;
+}
 }
