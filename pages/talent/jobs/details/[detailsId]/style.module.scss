@@ -219,4 +219,26 @@
         border-radius: 10px;
         background-color: $primary;
     }
+    .apply__button:disabled {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        height: 3rem;
+        padding: 1rem 0;
+        font-size: $font-sixteen;
+        font-weight: $font-weight-500;
+        color: $white;
+        background-color: gray;
+        cursor: not-allowed;
+        border-radius: 10px;
+    }
+      
+      .disabledButton {
+        background-color: gray; 
+    }
+
+
 }
