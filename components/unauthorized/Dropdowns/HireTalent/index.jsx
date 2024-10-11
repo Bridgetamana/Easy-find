@@ -7,7 +7,7 @@ export default function HireTalent() {
     <div className={styles.hireTalent__menu}>
       <ul className={styles.dropdown__list}>
         <li className={styles.dropdown__link}>
-          <Link href="/company/dashboard/post-job" className={styles.link}>
+          <Link href="/signup" className={styles.link}>
             Post Jobs
           </Link>
         </li>

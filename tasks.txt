@@ -48,4 +48,3 @@
         - Candidates that saved the job
     - Company Add Job page [COMLETED]
     - Company Edit Job page (delete job, edit job details)
-    - 

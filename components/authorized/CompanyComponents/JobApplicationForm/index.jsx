@@ -1,22 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
+import Spinner from "@/components/utils/Loaders/Spinner";
 
-export default function JobApplicationForm({ closeApplicationForm }) {
+export default function JobApplicationForm({ closeApplicationForm, onSuccess  }) {
   const [cvSelectedOption, setCvSelectedOption] = useState("");
+  const [loading, setLoading] = useState(false)
+  const [notification, setNotification] = useState({message: "", type: ""})
+  const [notificationVisible, setNotificationVisible] = useState(false);
+
+  const showNotification = (message) => {
+    setNotification({ message, type: "success" });
+    setNotificationVisible(true);
+    
+    setTimeout(() => {
+      setNotificationVisible(false);
+    }, 3000); 
+  };
 
   const handleOptionChange = (e) => {
     setCvSelectedOption(e.target.value);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+  
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000)); 
+  
+      showNotification("Job successfully submitted!");
+  
+      setTimeout(() => {
+        closeApplicationForm();
+      }, 3000); 
+
+      onSuccess();
+  
+    } catch (error) {
+      showNotification("Failed to submit the job!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
+    <>
     <section className={styles.modal__overlay}>
       <div className={styles.modal__container}>
         <button className={styles.modal__close} onClick={closeApplicationForm}>
           &times;
         </button>
         <h2 className={styles.modal__title}> Apply Here</h2>
-
-        <form className={styles.modal__form}>
+       
+        <form className={styles.modal__form} onSubmit={handleSubmit}>
           <div className={styles.modal__field}>
             <label htmlFor="fullName">
               Full Name <span className={styles.asterisk}>*</span>
@@ -135,10 +171,21 @@ export default function JobApplicationForm({ closeApplicationForm }) {
           </div>
 
           <button type="submit" className={styles.modal__submit}>
-            Submit Application
+          {loading ? <Spinner /> :
+            'Submit Application'}
           </button>
         </form>
       </div>
     </section>
+
+    {notification.message && (
+        <div className={`${styles.notification} ${styles[notification.type]} ${notification.message ? styles.show : ''}`}>
+          <span>{notification.message}</span>
+          <div className={styles.notification__progressBar}>
+            <div className={styles.notification__progress}></div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
