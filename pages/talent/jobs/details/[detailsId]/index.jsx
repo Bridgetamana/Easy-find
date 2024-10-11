@@ -32,7 +32,7 @@ const JobDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [JobApplicationModal, setJobApllicationModal] = useState(false);
   const [applicationSubmitted, setApplicationSubmitted] = useState(false);
-
+ 
   const togglejobApplicationModal = () => {
     setJobApllicationModal(!JobApplicationModal);
   };
@@ -45,6 +45,7 @@ const JobDetails = () => {
     setApplicationSubmitted(true);
     togglejobApplicationModal();
   };
+
 
   const fetchJobDetails = async () => {
     if (!jobId) return;
@@ -127,6 +128,8 @@ const JobDetails = () => {
   const notSpecified = (
     <span className={styles.not__specified}>Not Specified</span>
   );
+
+  
 
   return (
     <ProtectedRoute>
@@ -372,7 +375,9 @@ const JobDetails = () => {
             {/* Application Button */}
             {/* <Link href={`/apply/${job.id}`}> */}
             <button
-              className={styles.apply__button}
+               className={`${styles.apply__button} ${
+                applicationSubmitted ? styles.disabledButton : ""
+              }`}
               onClick={togglejobApplicationModal}
               disabled={applicationSubmitted}
             >
@@ -384,6 +389,8 @@ const JobDetails = () => {
                 <JobApplicationForm
                   closeApplicationForm={closeApplicationForm}
                   onSuccess={handleApplicationSuccess}
+                  jobId={jobId}  
+                  jobDetails={jobDetails}
                 />
               </div>
             )}

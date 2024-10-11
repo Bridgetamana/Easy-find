@@ -26,15 +26,14 @@ export default function SavedJobs() {
 
   
   const fetchSavedJobs = async () => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true); 
     try {
-      const userId = auth.currentUser?.uid; // Get current user ID
+      const userId = auth.currentUser?.uid; 
       if (!userId) {
         console.error("User is not logged in");
         return;
       }
   
-      // Fetch all job listings
       const jobListingsRef = collection(db, "jobListings");
       const jobListingsSnapshot = await getDocs(jobListingsRef);
       const jobs = [];
@@ -45,12 +44,11 @@ export default function SavedJobs() {
   
         savedJobsSnapshot.forEach((savedJobDoc) => {
           const savedJobData = savedJobDoc.data();
-          // Check if the saved job belongs to the current user
           if (savedJobData.userId === userId) {
             jobs.push({
               id: savedJobDoc.id,
               ...savedJobData,
-              jobId: jobDoc.id, // include the jobId for reference
+              jobId: jobDoc.id, 
             });
           }
         });
@@ -60,7 +58,7 @@ export default function SavedJobs() {
     } catch (error) {
       console.error("Failed to fetch saved jobs:", error);
     } finally {
-      setIsLoading(false); // Stop loading regardless of success or error
+      setIsLoading(false); 
     }
   };  
 
