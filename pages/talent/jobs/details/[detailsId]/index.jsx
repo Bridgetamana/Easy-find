@@ -10,8 +10,8 @@ import {
   unsaveJob,
   saveJob,
 } from "@/firebaseConfig/talentStore";
-import { db, auth } from '../../../../../firebaseConfig/firebase'; 
-import { doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
+import { db, auth } from "../../../../../firebaseConfig/firebase";
+import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { BiBadgeCheck } from "react-icons/bi";
 import Button from "@/components/utils/Button";
 import { BsCheck2Circle, BsHeart, BsHeartFill } from "react-icons/bs";
@@ -42,8 +42,8 @@ const JobDetails = () => {
   };
 
   const handleApplicationSuccess = () => {
-    setApplicationSubmitted(true);  // Mark the application as submitted
-    togglejobApplicationModal();  // Close the modal after submission
+    setApplicationSubmitted(true);
+    togglejobApplicationModal();
   };
 
   const fetchJobDetails = async () => {
@@ -65,18 +65,17 @@ const JobDetails = () => {
     }
   }, [jobId]);
 
-
   const handleSaveJob = async (jobId, jobDetails) => {
-    const userId = auth.currentUser?.uid; 
-  
+    const userId = auth.currentUser?.uid;
+
     if (!userId) {
       console.error("User is not logged in");
       return;
     }
-  
+
     try {
       const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
-  
+
       if (isSaved) {
         await deleteDoc(savedJobRef);
         console.log("Job unsaved successfully.");
@@ -90,7 +89,7 @@ const JobDetails = () => {
         });
         console.log("Job saved successfully.");
       }
-  
+
       setIsSaved(!isSaved);
     } catch (error) {
       console.error("Error saving or unsaving job:", error.message);
@@ -101,11 +100,15 @@ const JobDetails = () => {
     const checkIfJobIsSaved = async () => {
       const userId = auth.currentUser?.uid;
       if (!userId) return;
-  
+
       try {
-        const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+        const savedJobRef = doc(
+          db,
+          `jobListings/${jobId}/savedForLater`,
+          userId
+        );
         const docSnap = await getDoc(savedJobRef);
-  
+
         if (docSnap.exists()) {
           setIsSaved(true);
         } else {
@@ -115,12 +118,11 @@ const JobDetails = () => {
         console.error("Error checking if job is saved:", error.message);
       }
     };
-  
+
     if (jobId) {
       checkIfJobIsSaved();
     }
-  }, [jobId]);  
-
+  }, [jobId]);
 
   const notSpecified = (
     <span className={styles.not__specified}>Not Specified</span>
@@ -152,7 +154,10 @@ const JobDetails = () => {
                   {convertTimestamp(jobDetails.datePosted)}
                 </p>
               </div>
-              <button className={styles.save__button}  onClick={() => handleSaveJob(jobId, jobDetails)}>
+              <button
+                className={styles.save__button}
+                onClick={() => handleSaveJob(jobId, jobDetails)}
+              >
                 {isSaved ? (
                   <BsHeartFill fill="#ff0000" />
                 ) : (
@@ -376,7 +381,10 @@ const JobDetails = () => {
             </button>
             {JobApplicationModal && (
               <div>
-                <JobApplicationForm closeApplicationForm={closeApplicationForm}/>
+                <JobApplicationForm
+                  closeApplicationForm={closeApplicationForm}
+                  onSuccess={handleApplicationSuccess}
+                />
               </div>
             )}
           </div>
