@@ -31,6 +31,7 @@ const JobDetails = () => {
   const [jobDetails, setJobDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [JobApplicationModal, setJobApllicationModal] = useState(false);
+  const [applicationSubmitted, setApplicationSubmitted] = useState(false);
 
   const togglejobApplicationModal = () => {
     setJobApllicationModal(!JobApplicationModal);
@@ -38,6 +39,11 @@ const JobDetails = () => {
 
   const closeApplicationForm = () => {
     setJobApllicationModal(false);
+  };
+
+  const handleApplicationSuccess = () => {
+    setApplicationSubmitted(true);  // Mark the application as submitted
+    togglejobApplicationModal();  // Close the modal after submission
   };
 
   const fetchJobDetails = async () => {
@@ -363,9 +369,10 @@ const JobDetails = () => {
             <button
               className={styles.apply__button}
               onClick={togglejobApplicationModal}
+              disabled={applicationSubmitted}
             >
               <BiBadgeCheck fill="#fff" />
-              Apply Now
+              {applicationSubmitted ? "Applied" : "Apply"}
             </button>
             {JobApplicationModal && (
               <div>
