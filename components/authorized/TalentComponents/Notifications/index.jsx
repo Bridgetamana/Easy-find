@@ -1,59 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { getFirestore, collection, onSnapshot } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import styles from "./style.module.scss";
 import { MdClose } from "react-icons/md";
 import { InboxIcon } from '@heroicons/react/24/outline';
+import { fetchNotifications } from "../../../../firebaseConfig/talentStore"; 
 
 export default function NotificationTab({ closeNotifications }) {
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
-  const db = getFirestore();
-  const auth = getAuth();
-  const TALENT = "talentCollection"; 
+
+  const handleDelete = () => {
+    console.log("deleted")
+  };
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
+    const loadNotifications = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedNotifications = await fetchNotifications();
+        setNotifications(fetchedNotifications);
+      } catch (error) {
+        console.error('Error loading notifications:', error);
+      } finally {
         setIsLoading(false);
       }
-    });
+    };
 
-    return () => unsubscribeAuth();
-  }, [auth]);
-
-  useEffect(() => {
-    if (!user) {
-      setNotifications([]);
-      setIsLoading(false);
-      return;
-    }
-
-    const notificationsRef = collection(db, TALENT, user.uid, "notifications"); 
-    const unsubscribeNotifications = onSnapshot(
-      notificationsRef,
-      (snapshot) => {
-        if (snapshot.empty) {
-          setNotifications([]);
-        } else {
-      const newNotifications = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setNotifications(newNotifications);
-        }
-      setIsLoading(false); 
-    }, (error) => {
-      console.error("Error fetching notifications:", error);
-      setIsLoading(false);
-    });
-
-    return () => unsubscribeNotifications(); 
-  }, [db, user]);
+    loadNotifications();
+  }, []); 
 
   return (
     <div className={styles.notification__dropdown}>
@@ -85,7 +58,7 @@ export default function NotificationTab({ closeNotifications }) {
                     : `You applied to the job post for ${notification.jobTitle}.`}
                 </p>
                 <button
-                  onClick={() => handleDelete(notification.id)}
+                  onClick={() => handleDelete()}
                   className={styles.delete__button}
                 >
                   Delete
