@@ -49,12 +49,22 @@
                 color: $black;
                 font-size: $font-twenty;
                 font-weight: $font-weight-500;
-                display: block;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 height: 4rem;
                 width: 14rem;
                 border-radius: 0.5rem;
                 cursor: pointer;
                 box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px;
+
+                &:hover {
+                    transform: translateY(-3px);
+                  }
+                
+                  &:active {
+                    transform: scale(0.95);
+                  }
             }
         }
 

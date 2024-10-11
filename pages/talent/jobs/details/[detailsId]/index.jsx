@@ -10,6 +10,8 @@ import {
   unsaveJob,
   saveJob,
 } from "@/firebaseConfig/talentStore";
+import { db, auth } from '../../../../../firebaseConfig/firebase'; 
+import { doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
 import { BiBadgeCheck } from "react-icons/bi";
 import Button from "@/components/utils/Button";
 import { BsCheck2Circle, BsHeart, BsHeartFill } from "react-icons/bs";
@@ -57,20 +59,62 @@ const JobDetails = () => {
     }
   }, [jobId]);
 
-  const handleSaveJob = async () => {
+
+  const handleSaveJob = async (jobId, jobDetails) => {
+    const userId = auth.currentUser?.uid; 
+  
+    if (!userId) {
+      console.error("User is not logged in");
+      return;
+    }
+  
     try {
+      const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+  
       if (isSaved) {
-        await unsaveJob(jobId);
+        await deleteDoc(savedJobRef);
+        console.log("Job unsaved successfully.");
       } else {
-        await saveJob(jobId, jobDetails.title);
+        await setDoc(savedJobRef, {
+          userId: userId,
+          jobId: jobId,
+          title: jobDetails.title,
+          company: jobDetails.companyName,
+          savedAt: new Date(),
+        });
+        console.log("Job saved successfully.");
       }
-      // Toggle the save state
+  
       setIsSaved(!isSaved);
     } catch (error) {
-      // Handle errors if necessary
-      console.error("Error handling save:", error.message);
+      console.error("Error saving or unsaving job:", error.message);
     }
   };
+
+  useEffect(() => {
+    const checkIfJobIsSaved = async () => {
+      const userId = auth.currentUser?.uid;
+      if (!userId) return;
+  
+      try {
+        const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+        const docSnap = await getDoc(savedJobRef);
+  
+        if (docSnap.exists()) {
+          setIsSaved(true);
+        } else {
+          setIsSaved(false);
+        }
+      } catch (error) {
+        console.error("Error checking if job is saved:", error.message);
+      }
+    };
+  
+    if (jobId) {
+      checkIfJobIsSaved();
+    }
+  }, [jobId]);  
+
 
   const notSpecified = (
     <span className={styles.not__specified}>Not Specified</span>
@@ -102,7 +146,7 @@ const JobDetails = () => {
                   {convertTimestamp(jobDetails.datePosted)}
                 </p>
               </div>
-              <button className={styles.save__button} onClick={handleSaveJob}>
+              <button className={styles.save__button}  onClick={() => handleSaveJob(jobId, jobDetails)}>
                 {isSaved ? (
                   <BsHeartFill fill="#ff0000" />
                 ) : (

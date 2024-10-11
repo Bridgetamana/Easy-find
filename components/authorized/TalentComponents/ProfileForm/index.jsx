@@ -377,7 +377,7 @@ export default function TalentProfileForm() {
         <div className={styles.form__group}>
           <label htmlFor="desiredSalary">Desired Salary:</label>
           <input
-            type="number"
+            type="num"
             name="minSalary"
             value={formData.minSalary}
             onChange={handleInputChange}
