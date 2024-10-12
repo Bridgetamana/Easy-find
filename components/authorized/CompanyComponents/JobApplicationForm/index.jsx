@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import Spinner from "@/components/utils/Loaders/Spinner";
-import { doc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection } from "firebase/firestore";
 import { db, auth } from '../../../../firebaseConfig/firebase'
 
 
@@ -16,39 +16,31 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
     e.preventDefault();
     setLoading(true);
   
-    const userId = auth.currentUser?.uid;
-  
-    if (!userId) {
-      console.error("User is not logged in");
-      return;
-    }
-  
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      onSuccess();
-
-      setTimeout(() => {
-        closeApplicationForm();
-      }, 4000); 
+      const userId = auth.currentUser?.uid;
+      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
   
-      const appliedJobRef = doc(collection(db, `jobListings/${jobId}/applied`));
+      const appliedJobDoc = await getDoc(appliedJobRef);
+      if (appliedJobDoc.exists()) {
+        console.log("You have already applied for this job.");
+        return; 
+      }
       await setDoc(appliedJobRef, {
-        userId,
-        jobId,
-        title: jobDetails.title,
-        company: jobDetails.companyName,
-        appliedAt: new Date(),
+        userId: userId,
+        jobId: jobId,
       });
   
-      
+      onSuccess(); 
+      setTimeout(() => {
+        closeApplicationForm();
+      }, 4000);
     } catch (error) {
       console.error("Error submitting application:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <section className={styles.modal__overlay}>
       <div className={styles.modal__container}>

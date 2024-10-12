@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../../../firebaseConfig/firebase"; 
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, query, getDoc, getDocs, where, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
 import styles from "./style.module.scss";
-
-// const appliedJobsUrl = "https://localhost:3000/applied-jobs/";
 
 export default function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([]);
@@ -22,68 +20,70 @@ export default function AppliedJobs() {
 
   useEffect(() => {
     if (userId) {
-      fetchAppliedJobs();
+      const unsubscribe = fetchAppliedJobs();
+      return () => unsubscribe(); 
     }
   }, [userId]);
 
-  
-  const fetchAppliedJobs = async () => {
+  const fetchAppliedJobs = () => {
     setIsLoading(true); 
-    try {
-      const userId = auth.currentUser?.uid; 
-      if (!userId) {
-        console.error("User is not logged in");
-        return;
-      }
-  
-      const jobListingsRef = collection(db, "jobListings");
-      const jobListingsSnapshot = await getDocs(jobListingsRef);
+
+    const jobListingsRef = collection(db, "jobListings");
+    const q = query(jobListingsRef);
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const jobs = [];
-  
-      for (const jobDoc of jobListingsSnapshot.docs) {
+
+      querySnapshot.forEach((jobDoc) => {
         const applicationsRef = collection(jobDoc.ref, "applied");
-        const appliedJobsSnapshot = await getDocs(applicationsRef);
-  
-        appliedJobsSnapshot.forEach((appliedJobDoc) => {
-          const appliedJobData = appliedJobDoc.data();
-          if (appliedJobData.userId === userId) {
+        const appliedJobsQuery = query(applicationsRef, where("userId", "==", userId));
+        
+        onSnapshot(appliedJobsQuery, (appliedJobsSnapshot) => {
+          appliedJobsSnapshot.forEach((appliedJobDoc) => {
+            const appliedJobData = appliedJobDoc.data();
             jobs.push({
               id: appliedJobDoc.id,
               ...appliedJobData,
               jobId: jobDoc.id, 
             });
-          }
+          });
+
+          setAppliedJobs(jobs); 
+          setIsLoading(false); 
         });
-      }
+      });
+    });
+
+    return unsubscribe;
+  };
+
+  const handleWithdraw = async (jobId) => {
+    const userId = auth.currentUser?.uid;
   
-      setAppliedJobs(jobs);
-    } catch (error) {
-      console.error("Failed to fetch applied jobs:", error);
-    } finally {
-      setIsLoading(false); 
+    if (!userId) {
+      console.error("User is not logged in");
+      return;
     }
-  };  
-
-const handleWithdraw = async (jobId) => {
-  const userId = auth.currentUser?.uid;
-
-  if (!userId) {
-    console.error("User is not logged in");
-    return;
-  }
-
-  try {
-    const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
-
-    await deleteDoc(appliedJobRef);
-
-    console.log("Application Withdrawn successfully.");
-    setAppliedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
-
-  } catch (error) {
-    console.error("Error removing job:", error.message);
-  }
-};
+  
+    try {
+      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
+  
+      await deleteDoc(appliedJobRef);
+  
+      const deletedDoc = await getDoc(appliedJobRef);
+  
+      if (!deletedDoc.exists()) {
+        console.log("Application Withdrawn successfully.");
+  
+        setAppliedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
+      } else {
+        console.error("Failed to delete application from Firestore.");
+      }
+    } catch (error) {
+      console.error("Error removing job:", error.message);
+    }
+  };
+  
 
   return (
     <section className={styles.appliedJobs__section}>

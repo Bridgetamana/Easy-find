@@ -33,6 +33,40 @@ const JobDetails = () => {
   const [JobApplicationModal, setJobApllicationModal] = useState(false);
   const [applicationSubmitted, setApplicationSubmitted] = useState(false);
  
+  useEffect(() => {
+    if (jobId) {
+      checkIfApplied();
+    }
+  }, [jobId]);
+  
+  const checkIfApplied = async () => {
+    const userId = auth.currentUser?.uid;
+    const jobId = detailsId;  
+  
+    if (!userId || !jobId) return;
+  
+    try {
+      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
+      const appliedJobDoc = await getDoc(appliedJobRef);
+  
+      if (appliedJobDoc.exists()) {
+        setApplicationSubmitted(true);
+        console.log("Check if applied:", appliedJobDoc.exists()); 
+      } else {
+        setApplicationSubmitted(false); 
+      }
+    } catch (error) {
+      console.error("Error checking applied job status:", error);
+    }
+  };
+  
+  useEffect(() => {
+    if (jobId) {
+      checkIfApplied();
+    }
+  }, [jobId]);
+  
+  
   const togglejobApplicationModal = () => {
     setJobApllicationModal(!JobApplicationModal);
   };
@@ -41,12 +75,31 @@ const JobDetails = () => {
     setJobApllicationModal(false);
   };
 
-  const handleApplicationSuccess = () => {
-    setApplicationSubmitted(true);
-    togglejobApplicationModal();
+  const handleApplicationSuccess = async () => {
+    const userId = auth.currentUser?.uid;
+    const jobId = detailsId; 
+  
+    if (!userId || !jobId) return;
+  
+    try {
+      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
+      setApplicationSubmitted(true);  
+      togglejobApplicationModal();
+  
+      await setDoc(appliedJobRef, {
+        userId: userId,
+          jobId: jobId,
+          title: jobDetails.title,
+          company: jobDetails.companyName,
+        appliedAt: new Date(),
+      });
+  
+    } catch (error) {
+      console.error("Error applying for job:", error);
+    }
   };
-
-
+  
+  
   const fetchJobDetails = async () => {
     if (!jobId) return;
     setIsLoading(true);
@@ -375,11 +428,11 @@ const JobDetails = () => {
             {/* Application Button */}
             {/* <Link href={`/apply/${job.id}`}> */}
             <button
-               className={`${styles.apply__button} ${
+              className={`${styles.apply__button} ${
                 applicationSubmitted ? styles.disabledButton : ""
               }`}
               onClick={togglejobApplicationModal}
-              disabled={applicationSubmitted}
+              disabled={applicationSubmitted}  // Button is disabled if application is already submitted
             >
               <BiBadgeCheck fill="#fff" />
               {applicationSubmitted ? "Applied" : "Apply"}
