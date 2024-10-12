@@ -139,10 +139,18 @@ export const resetPassword = async (oobCode, newPassword) => {
 };
 
 //Update Talent
-export const updateTalent = async (talent) => {
-  const docRef = doc(db, TALENT, talent.id);
-  await updateDoc(docRef, talent);
+export const updateTalent = async (talent, payload) => {
+  const docRef = doc(db, TALENT, talent.id, `talentCollection/${payload.id}`);
+  await updateDoc(docRef,talent, {
+    username: payload.username,
+    email: payload.email,
+    bio: payload.bio,
+    photo: payload.photo,
+    resume: payload.resume, // Ensure the photo URL is being saved
+    // ...other fields
+  });
 };
+
 
 //Delete Talent
 export const deleteTalent = async (id) => {

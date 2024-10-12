@@ -4,6 +4,7 @@ import styles from "./style.module.scss";
 import { getAuth } from "firebase/auth";
 import { talentStore } from "../../../../firebaseConfig/talentStore";
 import { AiOutlineEnvironment } from "react-icons/ai";
+import LoadingScreen from "@/components/utils/Loaders/Loader";
 require("dotenv").config();
  
 
@@ -89,7 +90,7 @@ export default function TalentProfileData() {
     router.push(`/talent/edit`); 
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p><LoadingScreen /></p>;
   return (
     <div className={styles.profile__page}>
       <div className={styles.profile__details}>
