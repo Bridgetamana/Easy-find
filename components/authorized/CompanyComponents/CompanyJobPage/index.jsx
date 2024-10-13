@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getJobIdsFromCompany, deleteJob  } from "../../../../firebaseConfig/companyStore";
+import {
+  getJobIdsFromCompany,
+  deleteJob,
+} from "../../../../firebaseConfig/companyStore";
 import { CiMenuKebab } from "react-icons/ci";
-import { useRouter } from "next/router"; 
-import styles from "./style.module.scss"; 
+import { useRouter } from "next/router";
+import styles from "./style.module.scss";
 
 const JobPage = () => {
   const router = useRouter();
@@ -58,89 +61,72 @@ const JobPage = () => {
     return <div className={styles.error}>Error fetching jobs: {error.message}</div>;
   }
 
+  if (!jobs.length) {
+    return <div className={styles.no__jobs}>No job posts available.</div>;
+  }
+
   return (
-    <section className={styles.jobs__page}>
-      <h1 className={styles.page__title}> Job Posts</h1>
-
-      <div className={styles.job__container}>
-        {jobs.length === 0 ? (
-          <p>No jobs posted yet.</p>
-        ) : (
-          <>
-            {/* Table view */}
-            <table className={styles.jobs__table}>
-              <thead>
-                <tr>
-                  <th>Job Title</th>
-                  <th>Applicants</th>
-                  <th>Date Posted</th>
-                  <th>Job Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobs.map((job) => (
-                  <tr key={job.jobId}>
-                    <td>
-                      <a href={`/company/jobs/${job.jobId}`} className={styles.job__link}>
-                        {job.title}
-                      </a>
-                    </td>
-                    <td>{job.applicantCount || "No applicants yet"}</td>
-                    <td>{job.createdAt.toDate().toDateString()}</td>
-                    <td className={styles.job__status}>{job.active ? "Active" : "Inactive"}</td>
-                    <td>
-                      <div className={styles.dropdown}>
-                        <button onClick={() => handleMenuClick(job.jobId)} className={styles.dropdown__button}>
-                          <CiMenuKebab />
-                        </button>
-                        {activeDropdown === job.jobId && (
-                          <div className={styles.dropdown__menu}>
-                            <button onClick={() => handleEditJob(job.jobId)}>Edit</button>
-                            <button onClick={() => handleDeleteJob(job.jobId)}>Delete</button>
-                            <button onClick={() => handleCloseJob(job.jobId)}>Close</button>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Card view */}
-            <div className={styles.jobs__grid}>
-              {jobs.map((job) => (
-                <div key={job.jobId} className={styles.job__card}>
-                  <div className={styles.job_header}>
-                    <a href={`/company/jobs/${job.jobId}`} className={styles.job__link}>
-                      {job.title}
-                    </a>
-                    <button onClick={() => handleMenuClick(job.jobId)} className={styles.dropdown__button}>
-                      <CiMenuKebab />
-                    </button>
-                    
-                  </div>
-                  <div className={styles.dropdown}>
-                    {activeDropdown === job.jobId && (
-                      <div className={styles.dropdown__menu}>
-                        <button onClick={() => handleEditJob(job.jobId)}>Edit</button>
-                        <button onClick={() => handleDeleteJob(job.jobId)}>Delete</button>
-                        <button onClick={() => handleCloseJob(job.jobId)}>Close</button>
-                      </div>
-                    )}
-                  </div>
-                  <p>Applicants: {job.applicantCount || "No applicants yet"}</p>
-                  <p>Date Posted: {job.createdAt.toDate().toDateString()}</p>
-                  <p>Job Status: {job.active ? "Active" : "Inactive"}</p>
-                 
+    <div className={styles.table__container}>
+      <table className={styles.jobs__table}>
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Applicants</th>
+            <th>Date Posted</th>
+            <th>Job Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {jobs.map((job) => (
+            <tr key={job.jobId}>
+              <td>
+                <a
+                  href={`/company/jobs/${job.jobId}`}
+                  className={styles.job__link}
+                >
+                  {job.title}
+                </a>
+              </td>
+              <td>{job.applicantCount || "No applicants yet"}</td>
+              <td>{job.createdAt.toDate().toDateString()}</td>
+              <td>
+                <span
+                  className={`${styles.job__status} ${
+                    job.active ? styles.active : styles.inactive
+                  }`}
+                >
+                  {job.active ? "Active" : "Inactive"}
+                </span>
+              </td>
+              <td className="text-right">
+                <div className={styles.dropdown}>
+                  <button
+                    onClick={() => handleMenuClick(job.jobId)}
+                    className={styles.dropdown__button}
+                  >
+                    <CiMenuKebab />
+                  </button>
+                  {activeDropdown === job.jobId && (
+                    <div className={styles.dropdown__menu}>
+                      <button onClick={() => handleEditJob(job.jobId)}>
+                        Edit
+                      </button>
+                      <button onClick={() => handleDeleteJob(job.jobId)}>
+                        Delete
+                      </button>
+                      <button onClick={() => handleCloseJob(job.jobId)}>
+                        Close
+                      </button>
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    </section>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
