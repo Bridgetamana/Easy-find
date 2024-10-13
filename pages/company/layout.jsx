@@ -1,6 +1,7 @@
 import React from "react";
 import Footer from "@/components/authorized/Footer";
 import CompanyHeader from "@/components/authorized/CompanyComponents/CompanyHeader";
+import styles from "./style.module.scss"; // Import your styles
 
 const metadata = {
   title: "EasyFind",
@@ -10,9 +11,9 @@ const metadata = {
 
 export default function CompanyLayout({ children }) {
   return (
-    <div className="app">
+    <div className={styles.app}>
       <CompanyHeader />
-      <main className="main">{children}</main>
+      <main className={styles.main}>{children}</main>
       <Footer />
     </div>
   );
