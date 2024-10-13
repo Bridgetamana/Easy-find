@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   getJobIdsFromCompany,
   deleteJob,
+  updateJobStatus,
 } from "../../../../firebaseConfig/companyStore";
 import { CiMenuKebab } from "react-icons/ci";
 import { useRouter } from "next/router";
@@ -49,8 +50,17 @@ const JobPage = () => {
     }
   };
 
-  const handleCloseJob = () => {
-    console.log("close button has been clicked");
+  const handleCloseJob = async (jobId, isActive) => {
+    try {
+      await updateJobStatus(jobId, isActive);
+      setJobs((prevJobs) =>
+        prevJobs.map((job) =>
+          job.jobId === jobId ? { ...job, active: !isActive } : job
+        )
+      );
+    } catch (error) {
+      console.error("Error updating job status:", error);
+    }
   };
 
   if (loading) {
@@ -115,8 +125,8 @@ const JobPage = () => {
                       <button onClick={() => handleDeleteJob(job.jobId)}>
                         Delete
                       </button>
-                      <button onClick={() => handleCloseJob(job.jobId)}>
-                        Close
+                      <button onClick={() => handleCloseJob(job.jobId, job.active)}>
+                        {job.active ? "Close" : "Open"}
                       </button>
                     </div>
                   )}

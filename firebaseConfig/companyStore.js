@@ -250,3 +250,25 @@ export const getJobDetailsById = async (jobId) => {
   }
 };
 
+// Function to update job status
+export const updateJobStatus = async (jobId, isActive) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
+  try {
+    const companyId = user.uid;
+    const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
+    
+    await updateDoc(jobRef, {
+      active: !isActive 
+    });
+  } catch (error) {
+    console.error("Error updating job status:", error);
+    throw error;
+  }
+};
+
