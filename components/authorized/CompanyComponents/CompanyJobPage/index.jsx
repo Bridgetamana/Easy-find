@@ -160,7 +160,7 @@ const JobPage = () => {
                       <button onClick={() => handleCloseJob(job.jobId, job.active)}>
                         {job.active ? "Close" : "Open"}
                       </button>
-                      <button onClick={() => handleViewApplicants(job.jobId)}> 
+                      <button onClick={() => router.push(`/company/jobs/${job.jobId}/applicants`)}> 
                         View Applicants
                       </button>
                     </div>
