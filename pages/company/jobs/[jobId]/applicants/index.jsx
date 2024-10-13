@@ -8,7 +8,6 @@ import styles from "./style.module.scss";
 import Link from "next/link";
 import Button from "@/components/utils/Button";
 
-
 const ApplicantsPage = () => {
   const router = useRouter();
   const { jobId } = router.query;
@@ -51,7 +50,6 @@ const ApplicantsPage = () => {
     return (
       <div className={styles.noApplicantsContainer}>
         <div>No applicants found for this job.</div>
-        
         <Link href="/company/jobs/postjobs" className={styles.postJobButton}>
           Post Job
         </Link>
@@ -62,7 +60,7 @@ const ApplicantsPage = () => {
     <CompanyLayout>
       <div className={styles.applicantsContainer}>
         <div className={styles.header}>
-        <Link href="/company/jobs">
+          <Link href="/company/jobs">
             <Button
               type="button"
               title="Back to Jobs"
@@ -87,7 +85,9 @@ const ApplicantsPage = () => {
                   <dl className={styles.detailsList}>
                     <div className={styles.detailItem}>
                       <dt className={styles.detailLabel}>Full name</dt>
-                      <dd className={styles.detailValue}>{jobId}</dd>
+                      <dd className={styles.detailValue}>
+                        {applicant.name}
+                      </dd>{" "}
                     </div>
                     <div className={styles.detailItem}>
                       <dt className={styles.detailLabel}>Application for</dt>
@@ -102,45 +102,57 @@ const ApplicantsPage = () => {
                     <div className={styles.detailItem}>
                       <dt className={styles.detailLabel}>Salary expectation</dt>
                       <dd className={styles.detailValue}>
-                        ${applicant.salaryExpectation}
+                        ${applicant.salaryExpectation}{" "}
                       </dd>
                     </div>
                     <div className={styles.detailItem}>
                       <dt className={styles.detailLabel}>About</dt>
                       <dd className={styles.detailValue}>
-                        Fugiat ipsum ipsum deserunt culpa aute sint do nostrud
-                        anim incididunt cillum culpa consequat. Excepteur qui
-                        ipsum aliquip consequat sint. Sit id mollit nulla mollit
-                        nostrud in ea officia proident. Irure nostrud pariatur
-                        mollit ad adipisicing reprehenderit deserunt qui eu.
+                        {applicant.about || "No details provided."}{" "}
                       </dd>
                     </div>
                     <div className={styles.detailItem}>
                       <dt className={styles.detailLabel}>Attachments</dt>
                       <dd className={styles.detailAttachments}>
-                        <ul role="list" className={styles.attachmentList}>
-                          <li className={styles.attachmentItem}>
-                            <div className={styles.attachmentContent}>
-                              <PaperClipIcon
-                                aria-hidden="true"
-                                className={styles.attachmentIcon}
-                              />
-                              <div className={styles.attachmentInfo}>
-                                <span >
-                                  resume_back_end_developer.pdf
-                                </span>
-                              </div>
-                            </div>
-                            <div className={styles.attachmentDownload}>
-                              <a
-                                href="#"
-                              >
-                                Download
-                              </a>
-                            </div>
-                          </li>
-                          
-                        </ul>
+                        {applicant.attachment &&
+                        applicant.attachment.length > 0 ? ( 
+                          <ul role="list" className={styles.attachmentList}>
+                            {applicant.attachment.map(
+                              (
+                                attachment
+                              ) => (
+                                <li
+                                  key={attachment.id}
+                                  className={styles.attachmentItem}
+                                >
+                                  <div className={styles.attachmentContent}>
+                                    <PaperClipIcon
+                                      aria-hidden="true"
+                                      className={styles.attachmentIcon}
+                                    />
+                                    <div className={styles.attachmentInfo}>
+                                      <span className={styles.attachmentName}>
+                                        {attachment.name}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className={styles.attachmentDownload}>
+                                    <a
+                                      href={attachment.url}
+                                      className={styles.downloadLink}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      Download
+                                    </a>
+                                  </div>
+                                </li>
+                              )
+                            )}
+                          </ul>
+                        ) : (
+                          <div>No attachments found.</div>
+                        )}
                       </dd>
                     </div>
                   </dl>
