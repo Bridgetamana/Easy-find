@@ -272,3 +272,37 @@ export const updateJobStatus = async (jobId, isActive) => {
   }
 };
 
+// Function to get total number of applicants
+export const getApplicantCount = async (jobId, companyId) => {
+  try {
+    const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
+    const applicantSnapshot = await getDocs(applicantsRef);
+
+    return applicantSnapshot.size; 
+  } catch (error) {
+    console.error("Error fetching applicant count:", error);
+    return 0;
+  }
+};
+
+//Function to get Applicants details
+export const getApplicantsByJobId = async (jobId, companyId) => {
+  try {
+    const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
+    const applicantSnapshot = await getDocs(applicantsRef);
+    
+    if (applicantSnapshot.empty) {
+      return [];
+    }
+    
+    const applicants = applicantSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return applicants;
+  } catch (error) {
+    console.error("Error fetching applicants:", error);
+    return [];
+  }
+};

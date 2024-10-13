@@ -3,9 +3,12 @@ import {
   getJobIdsFromCompany,
   deleteJob,
   updateJobStatus,
+  getApplicantCount, 
+  getApplicantsByJobId, 
 } from "../../../../firebaseConfig/companyStore";
 import { CiMenuKebab } from "react-icons/ci";
 import { useRouter } from "next/router";
+import { getAuth } from "firebase/auth";
 import styles from "./style.module.scss";
 
 const JobPage = () => {
@@ -15,11 +18,29 @@ const JobPage = () => {
   const [error, setError] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(false);
 
+  const [applicantDetails, setApplicantDetails] = useState(null);
+  const [showApplicants, setShowApplicants] = useState(null);
+  const auth = getAuth();
+  const user = auth.currentUser;
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const jobData = await getJobIdsFromCompany();
-        setJobs(jobData);
+        
+        if (!user) {
+          throw new Error("User not authenticated");
+        }
+
+        const companyId = user.uid;
+        const jobsWithApplicants = await Promise.all(
+          jobData.map(async (job) => {
+            const applicantCount = await getApplicantCount(job.jobId, companyId);
+            return { ...job, applicantCount };
+          })
+        );
+
+        setJobs(jobsWithApplicants);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching jobs:", err);
@@ -29,7 +50,7 @@ const JobPage = () => {
     };
 
     fetchJobs();
-  }, []);
+  }, [user]);
 
   const handleMenuClick = (jobId) => {
     setActiveDropdown(activeDropdown === jobId ? false : jobId);
@@ -45,6 +66,7 @@ const JobPage = () => {
       alert('Job deleted successfully');
 
       setJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
+      setActiveDropdown(activeDropdown === jobId ? false : jobId);
     } catch (error) {
       alert('Error deleting job: ' + error.message);
     }
@@ -61,6 +83,14 @@ const JobPage = () => {
     } catch (error) {
       console.error("Error updating job status:", error);
     }
+  };
+
+  const handleViewApplicants = async (jobId) => {
+    const companyId = user.uid;
+    const applicants = await getApplicantsByJobId(jobId, companyId);
+    setApplicantDetails(applicants);
+    setShowApplicants(jobId);
+    setActiveDropdown(activeDropdown === jobId ? false : jobId);
   };
 
   if (loading) {
@@ -103,7 +133,9 @@ const JobPage = () => {
               <td>
                 <span
                   className={`${styles.job__status} ${
-                    job.active ? styles.active : styles.inactive
+                  job.active 
+                  ? styles.active 
+                  : styles.inactive
                   }`}
                 >
                   {job.active ? "Active" : "Inactive"}
@@ -127,6 +159,9 @@ const JobPage = () => {
                       </button>
                       <button onClick={() => handleCloseJob(job.jobId, job.active)}>
                         {job.active ? "Close" : "Open"}
+                      </button>
+                      <button onClick={() => handleViewApplicants(job.jobId)}> 
+                        View Applicants
                       </button>
                     </div>
                   )}
