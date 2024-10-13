@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { addJobPost } from "@/firebaseConfig/companyStore";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+import { EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./style.module.scss";
