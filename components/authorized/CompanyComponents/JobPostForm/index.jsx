@@ -25,17 +25,12 @@ const JobPostForm = () => {
     salaryType: "",
     employmentType: "",
     jobLevel: "",
-    educationExperience: "",
+    educationExperience: EditorState.createEmpty(),
     experience: "",
     deadline: "",
     coverLetterRequired: false,
   };
   const [formData, setFormData] = useState(initialFormData);
-
-  // function to convert EditorState to HTML
-  const convertEditorStateToHtml = (editorState) => {
-    return draftToHtml(convertToRaw(editorState.getCurrentContent()));
-  };
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
@@ -59,8 +54,9 @@ const JobPostForm = () => {
       salaryMax: formData.salaryMax,
       jobType: formData.employmentType,
       location: formData.location,
-      requirements: convertEditorStateToHtml(formData.requirements),
-      benefits: convertEditorStateToHtml(formData.benefits),
+      requirements: formData.requirements,
+      benefits: formData.benefits,
+      educationExperience: formData.educationExperience,
       experience: formData.experience,
       deadline: formatDate(new Date(formData.deadline)),
       createdAt: new Date(),

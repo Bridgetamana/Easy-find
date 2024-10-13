@@ -113,17 +113,43 @@ import {
   };
   
   // Function to add a job to the companycollection
-  export const addJobPost = async (companyId, jobData) => {
-    try {
-      const companyRef = doc(db, COMPANY, companyId);
-      const jobsCollectionRef = collection(companyRef, "jobs");
-  
-      await addDoc(jobsCollectionRef, jobData);
-    } catch (error) {
-      console.error("Error adding job to company's collection:", error);
-      throw error;
-    }
-  };
+const stripHtmlTags = (htmlString) => {
+ return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+};
+
+export const addJobPost = async (companyId, jobData) => {
+  try {
+    const companyRef = doc(db, COMPANY, companyId);
+    const jobsCollectionRef = collection(companyRef, "jobs");
+
+    const convertEditorStateToHtml = (editorState) => {
+      if (!editorState) {
+        return "";
+      }
+      const contentState = editorState.getCurrentContent();
+      if (!contentState.hasText()) {
+        return "";
+      }
+      const htmlContent = draftToHtml(convertToRaw(contentState));
+      const plainTextContent = stripHtmlTags(htmlContent);
+      return plainTextContent;
+    };
+
+    const cleanJobData = {
+      ...jobData,
+      requirements: convertEditorStateToHtml(jobData.requirements),      
+      benefits: convertEditorStateToHtml(jobData.benefits),             
+      educationExperience: convertEditorStateToHtml(jobData.educationExperience), 
+      createdAt: new Date(),                                              
+    };
+
+    await addDoc(jobsCollectionRef, cleanJobData);
+  } catch (error) {
+    console.error("Error adding job to company's collection:", error);
+    throw error;
+  }
+};
+
 
   // Function to get a jobID from the companycollection
   export const getJobIdsFromCompany = async () => {
