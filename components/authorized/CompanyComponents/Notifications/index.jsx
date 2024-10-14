@@ -2,15 +2,20 @@ import React, { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import { InboxIcon } from '@heroicons/react/24/outline';
 import styles from "./style.module.scss";
-import { fetchNotifications } from "../../../../firebaseConfig/talentStore"; 
-
+import { fetchNotifications, deleteNotification } from "../../../../firebaseConfig/companyStore"; 
 
 export default function NotificationTab({ closeNotifications }) {
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleDelete = () => {
-    console.log("deleted")
+  const handleDelete = async (notificationId) => {
+    try {
+      await deleteNotification(notificationId);
+      
+      setNotifications(notifications.filter((notification) => notification.id !== notificationId));
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+    }
   };
 
   useEffect(() => {
@@ -18,9 +23,10 @@ export default function NotificationTab({ closeNotifications }) {
       setIsLoading(true);
       try {
         const fetchedNotifications = await fetchNotifications();
-        setNotifications(fetchedNotifications);
+        setNotifications(fetchedNotifications || []);
       } catch (error) {
         console.error('Error loading notifications:', error);
+        setNotifications([]); 
       } finally {
         setIsLoading(false);
       }
@@ -52,15 +58,21 @@ export default function NotificationTab({ closeNotifications }) {
               </div>
               <div className={styles.notification__content}>
                 <p className={styles.notification__heading}>
-                  {notification.type === "save" ? "Job Saved" : "Job Applied"}
+                  {notification.type === "application"
+                    ? "New Job Application"
+                    : notification.type === "jobStatusUpdate"
+                    ? "Job Status Updated"
+                    : "Notification"}
                 </p>
                 <p className={styles.notification__description}>
-                  {notification.type === "save"
-                    ? `Jane saved the job post for ${notification.jobTitle}.`
-                    : `Jane applied to the job post for ${notification.jobTitle}.`}
+                  {notification.type === "application"
+                    ? `${notification.candidateName} applied for the job post for ${notification.jobTitle}.`
+                    : notification.type === "jobStatusUpdate"
+                    ? `Job ID: ${notification.jobId} status has been updated.`
+                    : "You have a new notification."}
                 </p>
                 <button
-                  onClick={() => handleDelete()}
+                  onClick={() => handleDelete(notification.id)}
                   className={styles.delete__button}
                 >
                   Delete
