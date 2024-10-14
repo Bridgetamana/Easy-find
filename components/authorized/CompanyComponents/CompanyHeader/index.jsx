@@ -270,7 +270,7 @@ export default function CompanyHeader() {
       </div>
 
       {showNotifications && (
-        <div className={styles.notification__dropdown}>
+        <div>
           <NotificationTab closeNotifications={closeNotifications} />
         </div>
       )}

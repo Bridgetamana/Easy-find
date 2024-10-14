@@ -1,52 +1,71 @@
-import React, { useState } from "react";
-import styles from "./style.module.scss";
+import React, { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
+import { InboxIcon } from '@heroicons/react/24/outline';
+import styles from "./style.module.scss";
+import { fetchNotifications } from "../../../../firebaseConfig/talentStore"; 
 
-const notificationsData = [
-  {
-    id: 1,
-    type: 'save',
-    talentName: 'John Doe',
-    jobTitle: 'Software Engineer',
-    date: '2023-08-03',
-  },
-  {
-    id: 2,
-    type: 'apply',
-    talentName: 'Jane Smith',
-    jobTitle: 'Web Developer',
-    date: '2023-09-15',
-  },
-];
 
 export default function NotificationTab({ closeNotifications }) {
-  const [notifications, setNotifications] = useState(notificationsData);
+  const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const handleDelete = () => {
+    console.log("deleted")
+  };
+
+  useEffect(() => {
+    const loadNotifications = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedNotifications = await fetchNotifications();
+        setNotifications(fetchedNotifications);
+      } catch (error) {
+        console.error('Error loading notifications:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadNotifications(); 
+  }, []);
+
+  
   return (
-    <div className={styles.notifications__page}>
-      <div className={styles.section__header}>
-        <h1 className={styles.section__title}>Notifications</h1>
-        <button className={styles.close__button} onClick={closeNotifications}>
-          <MdClose fill="#827f7f" size={24} />
-        </button>
-      </div>
-      <div className={styles.notifications__list}>
-        {notifications.length === 0 ? ( 
-          <p className={styles.no_notifications}>
-            Nothing right now. Check back later!
-          </p>
+    <div className={styles.notification__dropdown}>
+      <div className={styles.notification__page}>
+        <div className={styles.notification__header}>
+          <h1 className={styles.notification__title}>Notifications</h1>
+          <button onClick={closeNotifications} className={styles.close__button}>
+            <MdClose fill="#827f7f" size={24} />
+          </button>
+        </div>
+
+        {isLoading ? (
+          <div className={styles.loader}></div>
+        ) : notifications.length === 0 ? (
+          <div className={styles.no__notifications}>No Notifications!</div>
         ) : (
           notifications.map((notification) => (
             <div key={notification.id} className={styles.notification__item}>
-              <p className={styles.notification__date}>{notification.date}</p>
+              <div className={styles.notification__icon}>
+                <InboxIcon aria-hidden="true" className={styles.icon} />
+              </div>
               <div className={styles.notification__content}>
+                <p className={styles.notification__heading}>
+                  {notification.type === "save" ? "Job Saved" : "Job Applied"}
+                </p>
                 <p className={styles.notification__description}>
                   {notification.type === "save"
-                    ? `${notification.talentName} saved the job post for ${notification.jobTitle}.`
-                    : `${notification.talentName} applied to the job post for ${notification.jobTitle}.`}
+                    ? `Jane saved the job post for ${notification.jobTitle}.`
+                    : `Jane applied to the job post for ${notification.jobTitle}.`}
                 </p>
+                <button
+                  onClick={() => handleDelete()}
+                  className={styles.delete__button}
+                >
+                  Delete
+                </button>
               </div>
-              
             </div>
           ))
         )}

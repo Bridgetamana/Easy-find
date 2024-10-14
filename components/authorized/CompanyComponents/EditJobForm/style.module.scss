@@ -93,3 +93,23 @@
         }
     }
 }
+
+.toggle__wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .toggle__label {
+    font-size: $font-sixteen;
+    font-weight: $font-weight-500;
+    color: $black;
+    margin-right: 1rem;
+  }
+  
+  .toggle__input {
+    width: 15px;
+    height: 15px;
+    accent-color: $primary;
+    cursor: pointer;
+  }
