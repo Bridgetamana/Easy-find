@@ -10,6 +10,7 @@ import TalentFeatures from "@/components/unauthorized/Features";
 import TestimonialsSection from "@/components/unauthorized/Testimonials";
 import CallToAction from "@/components/unauthorized/CallToAction";
 import Footer from "@/components/unauthorized/Footer";
+import AboutBlog from "@/components/unauthorized/AboutBlog";
 
 export default function Home() {
   return (
@@ -21,7 +22,7 @@ export default function Home() {
         </div>
         <TargetAudience />
         {/* <TalentFeatures /> */}
-        
+        <AboutBlog />
         {/* <BrowseJobs /> */}
         <CallToAction />
         <TestimonialsSection />
