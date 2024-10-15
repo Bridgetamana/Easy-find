@@ -28,7 +28,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { auth, db } from "./firebase";
+import { auth, db, storage } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -39,6 +39,7 @@ import {
   confirmPasswordReset,
   browserSessionPersistence,
 } from "firebase/auth";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 const TALENT = "talentCollection";
 
@@ -140,17 +141,37 @@ export const resetPassword = async (oobCode, newPassword) => {
 
 //Update Talent
 export const updateTalent = async (talent, payload) => {
-  const docRef = doc(db, TALENT, talent.id, `talentCollection/${payload.id}`);
-  await updateDoc(docRef,talent, {
-    username: payload.username,
-    email: payload.email,
-    bio: payload.bio,
-    photo: payload.photo,
-    resume: payload.resume, // Ensure the photo URL is being saved
-    // ...other fields
-  });
-};
+  try {
+    const docRef = doc(db, "talentCollection", talent.id);
 
+    let photoUrl = payload.photo; 
+    let resumeUrl = payload.resume;
+
+    if (payload.photo instanceof File) {
+      const photoStorageRef = ref(storage, `talents/${talent.id}/profilePhoto`);
+      const photoSnapshot = await uploadBytes(photoStorageRef, payload.photo);
+      photoUrl = await getDownloadURL(photoSnapshot.ref); 
+    }
+
+    // Checking if new resume is being uploaded
+    if (payload.resume instanceof File) {
+      const resumeStorageRef = ref(storage, `talents/${talent.id}/resume`);
+      const resumeSnapshot = await uploadBytes(resumeStorageRef, payload.resume);
+      resumeUrl = await getDownloadURL(resumeSnapshot.ref); 
+    }
+
+    await updateDoc(docRef, {
+      username: payload.username,
+      email: payload.email,
+      bio: payload.bio,
+      photo: photoUrl,
+      resume: resumeUrl,
+    });
+  } catch (error) {
+    console.error("Error updating talent:", error);
+    throw error;
+  }
+};
 
 //Delete Talent
 export const deleteTalent = async (id) => {
