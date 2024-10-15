@@ -82,9 +82,8 @@ const JobGrid = ({ searchInput }) => {
     }
   };
 
-  const handleDetailsPage = (jobId) => {
-    setSelectedJob(jobId);
-    setDetailsPage(true);
+  const handleDetailsPage = (jobId, companyId) => {
+    router.push(`/talent/jobs/details/${companyId}/${jobId}`);
   };
 
   return (
@@ -323,11 +322,12 @@ const JobGrid = ({ searchInput }) => {
                   <p className={styles.company__pay}>
                     ${salaryMinFormatted} - ${salaryMaxFormatted}
                   </p>
-                  <Link href={`/talent/jobs/details/${job.id}`}>
-                    <button className={styles.apply__button}>
-                      View More
-                    </button>
-                  </Link>
+                 <button
+                  className={styles.apply__button}
+                  onClick={() => handleDetailsPage(job.id, job.companyId)}
+                >
+                  View More
+                </button>
                 </div>
               </div>
             );

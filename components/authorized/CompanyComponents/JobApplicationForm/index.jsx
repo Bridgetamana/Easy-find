@@ -26,19 +26,15 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
         }
 
         const userId = user.uid;
-
-        // Fetch user profile data (this function should already be defined in your talentStore)
         const userProfile = await talentStore.getTalentStoreById(userId);
 
         if (userProfile) {
-          // Fetch resume details if it exists
           if (userProfile.resume) {
             const storage = getStorage();
             const resumeRef = ref(storage, userProfile.resume);
             const metadata = await getMetadata(resumeRef);
-            const downloadURL = await getDownloadURL(resumeRef); // Fetch the download URL
-            
-            // Set the uploaded CV URL and filename
+            const downloadURL = await getDownloadURL(resumeRef); 
+
             setUploadedCV({ url: downloadURL, name: metadata.name });
           }
         } else {
@@ -69,7 +65,7 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
       await setDoc(appliedJobRef, {
         userId: userId,
         jobId: jobId,
-        resume: cvSelectedOption === "applyWithUploadedCV" ? uploadedCV.url : null, // Add the CV URL if selected
+        resume: cvSelectedOption === "applyWithUploadedCV" ? uploadedCV.url : null, 
       });
   
       onSuccess(); 
@@ -152,7 +148,8 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
               Resume <span className={styles.asterisk}>*</span>
             </label>
             <div className={styles.checkbox__group}>
-              <div className={styles.checkbox__option}>
+              <div className="flex flex-col mb-[0.5rem]">
+                <div className={styles.checkbox__option}>
                 <input
                   type="radio"
                   id="applyWithUploadedCV"
@@ -168,9 +165,9 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
                 >
                   Apply with my uploaded CV
                 </label>
-                {/* Display the uploaded CV name if selected */}
+                </div>
                 {cvSelectedOption === "applyWithUploadedCV" && uploadedCV.name && (
-                  <p className={styles.uploadedCVName}>{uploadedCV.name}</p> // Fixed to render name
+                  <p className="self-center">{uploadedCV.name}</p>
                 )}
               </div>
               <div className={styles.checkbox__option}>
