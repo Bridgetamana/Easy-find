@@ -4,7 +4,6 @@ import styles from "./style.module.scss";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
 import { db, storage, auth } from "../../../../firebaseConfig/firebase"; 
-import { doc, updateDoc } from "firebase/firestore";
 import { updateTalent, talentStore,} from '../../../../firebaseConfig/talentStore';
 import {
   ref,
@@ -96,81 +95,77 @@ export default function TalentProfileForm() {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
-  
+
     // Validate the form data
     if (formData.email.length < 1 || formData.username.length < 1) {
-      setErrorMsg("Email and username must have at least 1 character.");
-      setTimeout(() => {
-        setErrorMsg("");
-      }, 3000);
-      return;
+        setErrorMsg("Email and username must have at least 1 character.");
+        setTimeout(() => {
+            setErrorMsg("");
+        }, 3000);
+        return;
     }
-  
+
     try {
-      setIsLoading(true);
-      const payload = { ...formData, id };
-  
-      // Upload photo if it exists and validate it
-      if (formData.photo instanceof File) {
-        if (formData.photo.size > 5 * 1024 * 1024) {
-          setErrorMsg("File size must be less than 5 MB.");
-          return;
+        setIsLoading(true);
+        const payload = { ...formData, id };
+
+        // Upload photo if it exists and validate it
+        if (formData.photo instanceof File) {
+            if (formData.photo.size > 5 * 1024 * 1024) {
+                setErrorMsg("File size must be less than 5 MB.");
+                return;
+            }
+
+            const validImageTypes = ["image/jpeg", "image/png"];
+            if (!validImageTypes.includes(formData.photo.type)) {
+                setErrorMsg("Invalid file type. Only JPG and PNG are allowed.");
+                return;
+            }
+
+            const photoRef = ref(storage, `profilePhotos/${id}/${formData.photo.name}`);
+            await uploadBytes(photoRef, formData.photo);
+            const photoURL = await getDownloadURL(photoRef);
+            payload.photo = photoURL; 
         }
-  
-        const validImageTypes = ["image/jpeg", "image/png"];
-        if (!validImageTypes.includes(formData.photo.type)) {
-          setErrorMsg("Invalid file type. Only JPG and PNG are allowed.");
-          return;
+
+        if (formData.resume instanceof File) {
+            if (formData.resume.size > 5 * 1024 * 1024) {
+                setErrorMsg("File size must be less than 5 MB.");
+                return;
+            }
+
+            const validResumeTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+            if (!validResumeTypes.includes(formData.resume.type)) {
+                setErrorMsg("Invalid file type. Only PDF, DOC, and DOCX are allowed.");
+                return;
+            }
+
+            const resumeRef = ref(storage, `resumes/${id}/${formData.resume.name}`);
+            await uploadBytes(resumeRef, formData.resume);
+            const resumeURL = await getDownloadURL(resumeRef);
+            payload.resume = resumeURL; 
         }
-  
-        const photoRef = ref(storage, `profilePhotos/${id}/${formData.photo.name}`);
-        await uploadBytes(photoRef, formData.photo);
-        const photoURL = await getDownloadURL(photoRef);
-        payload.photo = photoURL;
-      }
-  
-      // Upload resume if it exists and validate it
-      if (formData.resume instanceof File) {
-        if (formData.resume.size > 5 * 1024 * 1024) {
-          setErrorMsg("File size must be less than 5 MB.");
-          return;
-        }
-  
-        const validResumeTypes = ["application/pdf"];
-        if (!validResumeTypes.includes(formData.resume.type)) {
-          setErrorMsg("Invalid file type. Only PDF is allowed.");
-          return;
-        }
-  
-        const resumeRef = ref(storage, `resumes/${id}/${formData.resume.name}`);
-        await uploadBytes(resumeRef, formData.resume);
-        const resumeURL = await getDownloadURL(resumeRef);
-        payload.resume = resumeURL;
-      }
-  
-      // Update the user data in Firestore
-      await updateTalent(payload);
-  
-      setSuccessMsg("Profile updated successfully.");
-      setTimeout(() => {
-        setSuccessMsg("");
-      }, 3000);
-  
-      // Redirect to the talent profile
-      router.push("/talent/profile");
+
+        await updateTalent({ id }, payload); 
+
+        setSuccessMsg("Profile updated successfully.");
+        setTimeout(() => {
+            setSuccessMsg("");
+        }, 3000);
+
+        router.push("/talent/profile");
     } catch (error) {
-      console.error("Error updating profile:", error);
-      console.error("Error details:", error.code, error.message); // Log detailed error information
-      setErrorMsg(error.message);
-      setTimeout(() => {
-        setErrorMsg("");
-      }, 3000);
+        console.error("Error updating profile:", error);
+        setErrorMsg(error.message);
+        setTimeout(() => {
+            setErrorMsg("");
+        }, 3000);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
-  
-  if (isLoading) return <p><LoadingScreen /></p>;
+};
+
+  if (isLoading) return <div><LoadingScreen /></div>;
 
   return (
     <div className={styles.profile__page}>
@@ -184,7 +179,7 @@ export default function TalentProfileForm() {
               name="photo"
               onChange={handleInputChange}
               className={styles.form__input}
-              // value={formData.photo}
+              value={formData.photo}
             />
           </div>
           {formData.photo && (
