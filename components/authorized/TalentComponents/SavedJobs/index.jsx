@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../../../firebaseConfig/firebase"; 
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 import styles from "./style.module.scss";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
@@ -10,7 +10,6 @@ export default function SavedJobs() {
   const [isLoading, setIsLoading] = useState(true); 
   const [userId, setUserId] = useState(null); 
 
-  
   useEffect(() => {
     const currentUser = auth.currentUser; 
     if (currentUser) {
@@ -24,7 +23,6 @@ export default function SavedJobs() {
     }
   }, [userId]);
 
-  
   const fetchSavedJobs = async () => {
     setIsLoading(true); 
     try {
@@ -34,26 +32,32 @@ export default function SavedJobs() {
         return;
       }
   
-      const jobListingsRef = collection(db, "jobListings");
-      const jobListingsSnapshot = await getDocs(jobListingsRef);
+      const companiesRef = collection(db, "companyCollection");
+      const companiesSnapshot = await getDocs(companiesRef);
       const jobs = [];
-  
-      for (const jobDoc of jobListingsSnapshot.docs) {
-        const savedForLaterRef = collection(jobDoc.ref, "savedForLater");
-        const savedJobsSnapshot = await getDocs(savedForLaterRef);
-  
-        savedJobsSnapshot.forEach((savedJobDoc) => {
-          const savedJobData = savedJobDoc.data();
-          if (savedJobData.userId === userId) {
+
+      // Loop through all companies
+      for (const companyDoc of companiesSnapshot.docs) {
+        const jobsRef = collection(companyDoc.ref, "jobs");
+        const jobsSnapshot = await getDocs(jobsRef);
+
+        // Loop through jobs for each company
+        for (const jobDoc of jobsSnapshot.docs) {
+          const savedForLaterRef = doc(db, `companyCollection/${companyDoc.id}/jobs/${jobDoc.id}/savedForLater/${userId}`);
+          const savedJobDoc = await getDoc(savedForLaterRef);
+
+          if (savedJobDoc.exists()) {
+            const savedJobData = savedJobDoc.data();
             jobs.push({
               id: savedJobDoc.id,
               ...savedJobData,
-              jobId: jobDoc.id, 
+              jobId: jobDoc.id,
+              companyId: companyDoc.id,  // Include companyId for reference
             });
           }
-        });
+        }
       }
-  
+
       setSavedJobs(jobs);
     } catch (error) {
       console.error("Failed to fetch saved jobs:", error);
@@ -62,26 +66,26 @@ export default function SavedJobs() {
     }
   };  
 
-const handleDelete = async (jobId) => {
-  const userId = auth.currentUser?.uid;
+  const handleDelete = async (jobId, companyId) => {
+    const userId = auth.currentUser?.uid;
 
-  if (!userId) {
-    console.error("User is not logged in");
-    return;
-  }
+    if (!userId) {
+      console.error("User is not logged in");
+      return;
+    }
 
-  try {
-    const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+    try {
+      const savedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/savedForLater`, userId);
 
-    await deleteDoc(savedJobRef);
+      await deleteDoc(savedJobRef);
 
-    console.log("Job removed successfully.");
-    setSavedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
+      console.log("Job removed successfully.");
+      setSavedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
 
-  } catch (error) {
-    console.error("Error removing job:", error.message);
-  }
-};
+    } catch (error) {
+      console.error("Error removing job:", error.message);
+    }
+  };
 
   
   return (

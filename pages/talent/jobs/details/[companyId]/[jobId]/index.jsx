@@ -10,7 +10,7 @@ import {
   unsaveJob,
   saveJob,
 } from "@/firebaseConfig/talentStore";
-import { db, auth } from "../../../../../firebaseConfig/firebase";
+import { db, auth } from "../../../../../../firebaseConfig/firebase";
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { BiBadgeCheck } from "react-icons/bi";
 import Button from "@/components/utils/Button";
@@ -20,33 +20,49 @@ import LoadingScreen from "@/components/utils/Loaders/Loader";
 import ProtectedRoute from "@/utils/protectedRoute";
 import Link from "next/link";
 import styles from "./style.module.scss";
-import TalentLayout from "../../../layout";
-import JobApplicationForm from "../../../../../components/authorized/CompanyComponents/JobApplicationForm";
+import TalentLayout from "../../../../../layout";
+import JobApplicationForm from "../../../../../../components/authorized/CompanyComponents/JobApplicationForm";
 
 const JobDetails = () => {
   const router = useRouter();
-  const { detailsId } = router.query;
-  const jobId = detailsId;
+  const { companyId, jobId } = router.query;
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [JobApplicationModal, setJobApllicationModal] = useState(false);
   const [applicationSubmitted, setApplicationSubmitted] = useState(false);
  
+  const fetchJobDetails = async () => {
+    if (!jobId || !companyId) return; 
+    setIsLoading(true);
+    try {
+      const response = await getJobById(companyId, jobId); 
+      setJobDetails(response);
+    } catch (error) {
+      console.error("Error fetching job details:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobDetails();
+  }, [jobId, companyId]); 
+
   useEffect(() => {
     if (jobId) {
       checkIfApplied();
     }
+    
   }, [jobId]);
   
   const checkIfApplied = async () => {
     const userId = auth.currentUser?.uid;
-    const jobId = detailsId;  
   
-    if (!userId || !jobId) return;
+    if (!userId || !jobId || !companyId) return; 
   
     try {
-      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
+      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
       const appliedJobDoc = await getDoc(appliedJobRef);
   
       if (appliedJobDoc.exists()) {
@@ -77,12 +93,11 @@ const JobDetails = () => {
 
   const handleApplicationSuccess = async () => {
     const userId = auth.currentUser?.uid;
-    const jobId = detailsId; 
   
-    if (!userId || !jobId) return;
+    if (!userId || !jobId || !companyId) return;
   
     try {
-      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
+      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
       setApplicationSubmitted(true);  
       togglejobApplicationModal();
   
@@ -90,7 +105,6 @@ const JobDetails = () => {
         userId: userId,
           jobId: jobId,
           title: jobDetails.title,
-          company: jobDetails.companyName,
         appliedAt: new Date(),
       });
   
@@ -99,26 +113,6 @@ const JobDetails = () => {
     }
   };
   
-  
-  const fetchJobDetails = async () => {
-    if (!jobId) return;
-    setIsLoading(true);
-    try {
-      const response = await getJobById(jobId);
-      setJobDetails(response);
-    } catch (error) {
-      console.error("Error fetching job details:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (jobId) {
-      fetchJobDetails();
-    }
-  }, [jobId]);
-
   const handleSaveJob = async (jobId, jobDetails) => {
     const userId = auth.currentUser?.uid;
 
@@ -128,7 +122,7 @@ const JobDetails = () => {
     }
 
     try {
-      const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+      const savedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/savedForLater`, userId);
 
       if (isSaved) {
         await deleteDoc(savedJobRef);
@@ -138,7 +132,6 @@ const JobDetails = () => {
           userId: userId,
           jobId: jobId,
           title: jobDetails.title,
-          company: jobDetails.companyName,
           savedAt: new Date(),
         });
         console.log("Job saved successfully.");
@@ -153,12 +146,12 @@ const JobDetails = () => {
   useEffect(() => {
     const checkIfJobIsSaved = async () => {
       const userId = auth.currentUser?.uid;
-      if (!userId) return;
+      if (!userId || !companyId) return;
 
       try {
         const savedJobRef = doc(
           db,
-          `jobListings/${jobId}/savedForLater`,
+          `companyCollection/${companyId}/jobs/${jobId}/savedForLater`,
           userId
         );
         const docSnap = await getDoc(savedJobRef);
@@ -182,7 +175,6 @@ const JobDetails = () => {
     <span className={styles.not__specified}>Not Specified</span>
   );
 
-  
 
   return (
     <ProtectedRoute>
@@ -377,14 +369,18 @@ const JobDetails = () => {
               </div>
               <div className={styles.skills__content}>
                 <ul className={styles.skills__list}>
-                  {jobDetails.skills.map((skill, index) => (
+                {jobDetails?.skills?.length > 0 ? (
+                  jobDetails.skills.map((skill, index) => (
                     <li className={styles.skills__item} key={index}>
                       <p className={styles.skills__text}>
                         <BsCheck2Circle fill="#66789c" />
                         {skill}
                       </p>
                     </li>
-                  ))}
+                  ))
+                ) : (
+                  <p>No skills listed</p> 
+                )}
                 </ul>
               </div>
             </section>
@@ -412,16 +408,20 @@ const JobDetails = () => {
                 <h2 className={styles.skills__title}>Job Benefits</h2>
               </div>
               <div className={styles.skills__content}>
-                <ul className={styles.skills__list}>
-                  {jobDetails.benefits.map((benefit, index) => (
+              <ul className={styles.skills__list}>
+                {Array.isArray(jobDetails?.benefits) && jobDetails.benefits.length > 0 ? (
+                  jobDetails.benefits.map((benefit, index) => (
                     <li className={styles.skills__item} key={index}>
                       <p className={styles.skills__text}>
                         <BsCheck2Circle fill="#66789c" />
                         {benefit}
                       </p>
                     </li>
-                  ))}
-                </ul>
+                  ))
+                ) : (
+                  <p>No benefits listed</p>
+                )}
+              </ul>
               </div>
             </section>
 
