@@ -271,7 +271,7 @@ export default function TalentHeader() {
         </nav>
       </div>
       {showNotifications && (
-        <div className={styles.notification__dropdown}>
+        <div>
           <NotificationTab closeNotifications={closeNotifications} />
         </div>
       )}

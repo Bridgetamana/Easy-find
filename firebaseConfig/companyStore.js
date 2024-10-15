@@ -113,17 +113,43 @@ import {
   };
   
   // Function to add a job to the companycollection
-  export const addJobPost = async (companyId, jobData) => {
-    try {
-      const companyRef = doc(db, COMPANY, companyId);
-      const jobsCollectionRef = collection(companyRef, "jobs");
-  
-      await addDoc(jobsCollectionRef, jobData);
-    } catch (error) {
-      console.error("Error adding job to company's collection:", error);
-      throw error;
-    }
-  };
+const stripHtmlTags = (htmlString) => {
+ return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+};
+
+export const addJobPost = async (companyId, jobData) => {
+  try {
+    const companyRef = doc(db, COMPANY, companyId);
+    const jobsCollectionRef = collection(companyRef, "jobs");
+
+    const convertEditorStateToHtml = (editorState) => {
+      if (!editorState) {
+        return "";
+      }
+      const contentState = editorState.getCurrentContent();
+      if (!contentState.hasText()) {
+        return "";
+      }
+      const htmlContent = draftToHtml(convertToRaw(contentState));
+      const plainTextContent = stripHtmlTags(htmlContent);
+      return plainTextContent;
+    };
+
+    const cleanJobData = {
+      ...jobData,
+      requirements: convertEditorStateToHtml(jobData.requirements),      
+      benefits: convertEditorStateToHtml(jobData.benefits),             
+      educationExperience: convertEditorStateToHtml(jobData.educationExperience), 
+      createdAt: new Date(),                                              
+    };
+
+    await addDoc(jobsCollectionRef, cleanJobData);
+  } catch (error) {
+    console.error("Error adding job to company's collection:", error);
+    throw error;
+  }
+};
+
 
   // Function to get a jobID from the companycollection
   export const getJobIdsFromCompany = async () => {
@@ -224,3 +250,59 @@ export const getJobDetailsById = async (jobId) => {
   }
 };
 
+// Function to update job status
+export const updateJobStatus = async (jobId, isActive) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
+  try {
+    const companyId = user.uid;
+    const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
+    
+    await updateDoc(jobRef, {
+      active: !isActive 
+    });
+  } catch (error) {
+    console.error("Error updating job status:", error);
+    throw error;
+  }
+};
+
+// Function to get total number of applicants
+export const getApplicantCount = async (jobId, companyId) => {
+  try {
+    const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
+    const applicantSnapshot = await getDocs(applicantsRef);
+
+    return applicantSnapshot.size; 
+  } catch (error) {
+    console.error("Error fetching applicant count:", error);
+    return 0;
+  }
+};
+
+//Function to get Applicants details
+export const getApplicantsByJobId = async (jobId, companyId) => {
+  try {
+    const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
+    const applicantSnapshot = await getDocs(applicantsRef);
+    
+    if (applicantSnapshot.empty) {
+      return [];
+    }
+    
+    const applicants = applicantSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return applicants;
+  } catch (error) {
+    console.error("Error fetching applicants:", error);
+    return [];
+  }
+};
