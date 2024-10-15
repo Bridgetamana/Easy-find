@@ -1,17 +1,57 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import Spinner from "@/components/utils/Loaders/Spinner";
-import { doc, setDoc, getDoc, collection } from "firebase/firestore";
-import { db, auth } from '../../../../firebaseConfig/firebase'
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db, auth } from '../../../../firebaseConfig/firebase';
+import { getDownloadURL, getMetadata, ref, getStorage } from "firebase/storage";
+import { talentStore } from "@/firebaseConfig/talentStore";
 
+export default function JobApplicationForm({ closeApplicationForm, onSuccess, jobId, jobDetails }) {
+  const [cvSelectedOption, setCvSelectedOption] = useState("applyWithUploadedCV");
+  const [loading, setLoading] = useState(false);
+  const [uploadedCV, setUploadedCV] = useState({ url: null, name: null });
 
-export default function JobApplicationForm({ closeApplicationForm, onSuccess, jobId, jobDetails  }) {
-  const [cvSelectedOption, setCvSelectedOption] = useState("");
-  const [loading, setLoading] = useState(false)
-  
   const handleOptionChange = (e) => {
     setCvSelectedOption(e.target.value);
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = auth.currentUser;
+
+        if (!user) {
+          console.error("No user is logged in");
+          return;
+        }
+
+        const userId = user.uid;
+
+        // Fetch user profile data (this function should already be defined in your talentStore)
+        const userProfile = await talentStore.getTalentStoreById(userId);
+
+        if (userProfile) {
+          // Fetch resume details if it exists
+          if (userProfile.resume) {
+            const storage = getStorage();
+            const resumeRef = ref(storage, userProfile.resume);
+            const metadata = await getMetadata(resumeRef);
+            const downloadURL = await getDownloadURL(resumeRef); // Fetch the download URL
+            
+            // Set the uploaded CV URL and filename
+            setUploadedCV({ url: downloadURL, name: metadata.name });
+          }
+        } else {
+          console.error("User profile not found");
+        }
+      } catch (error) {
+        console.error("An error occurred while fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -25,9 +65,11 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
         console.log("You have already applied for this job.");
         return; 
       }
+
       await setDoc(appliedJobRef, {
         userId: userId,
         jobId: jobId,
+        resume: cvSelectedOption === "applyWithUploadedCV" ? uploadedCV.url : null, // Add the CV URL if selected
       });
   
       onSuccess(); 
@@ -40,7 +82,7 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
       setLoading(false);
     }
   };
-  
+
   return (
     <section className={styles.modal__overlay}>
       <div className={styles.modal__container}>
@@ -79,7 +121,7 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
           <div className={styles.modal__field}>
             <label htmlFor="phone">Phone Number</label>
             <input
-              type="tel"
+              type="number"
               id="phone"
               name="phone"
               placeholder="Your phone number"
@@ -126,6 +168,10 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
                 >
                   Apply with my uploaded CV
                 </label>
+                {/* Display the uploaded CV name if selected */}
+                {cvSelectedOption === "applyWithUploadedCV" && uploadedCV.name && (
+                  <p className={styles.uploadedCVName}>{uploadedCV.name}</p> // Fixed to render name
+                )}
               </div>
               <div className={styles.checkbox__option}>
                 <input

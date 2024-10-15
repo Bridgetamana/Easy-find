@@ -3,7 +3,7 @@ import { MdEdit } from "react-icons/md";
 import styles from "./style.module.scss";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
-import { db, storage, auth } from "../../../../firebaseConfig/firebase"; 
+import { db, storage, auth} from "../../../../firebaseConfig/firebase"; 
 import { updateTalent, talentStore,} from '../../../../firebaseConfig/talentStore';
 import {
   ref,
@@ -73,43 +73,51 @@ export default function TalentProfileForm() {
     }
   }, [id]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value, files } = e.target;
-
+  
     if (files && files.length > 0) {
       const file = files[0];
-      const imageUrl = URL.createObjectURL(file);
-
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: file,
-        photo: imageUrl,
-      }));
+      if (name === 'photo') {
+          const photoRef = ref(storage, `profilePhotos/${id}/${file.name}`);
+          await uploadBytes(photoRef, file);
+          const photoURL = await getDownloadURL(photoRef);
+          setFormData((prevData) => ({
+              ...prevData,
+              photo: photoURL,
+          }));
+        }
     } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
+      setFormData((prevData) => ({
+        ...prevData,
         [name]: value,
       }));
     }
   };
-
+  
   const handleSaveClick = async (e) => {
     e.preventDefault();
 
-    // Validate the form data
     if (formData.email.length < 1 || formData.username.length < 1) {
-        setErrorMsg("Email and username must have at least 1 character.");
-        setTimeout(() => {
-            setErrorMsg("");
-        }, 3000);
-        return;
+      setErrorMsg("Email and username must have at least 1 character.");
+      setTimeout(() => {
+          setErrorMsg("");
+      }, 3000);
+      return;
+    }
+
+    if (formData.company.length < 1 || formData.position.length < 1) {
+      setErrorMsg("Please add any experience you've had");
+      setTimeout(() => {
+          setErrorMsg("");
+      }, 3000);
+      return;
     }
 
     try {
         setIsLoading(true);
         const payload = { ...formData, id };
 
-        // Upload photo if it exists and validate it
         if (formData.photo instanceof File) {
             if (formData.photo.size > 5 * 1024 * 1024) {
                 setErrorMsg("File size must be less than 5 MB.");
@@ -179,7 +187,6 @@ export default function TalentProfileForm() {
               name="photo"
               onChange={handleInputChange}
               className={styles.form__input}
-              value={formData.photo}
             />
           </div>
           {formData.photo && (
@@ -415,7 +422,7 @@ export default function TalentProfileForm() {
         <div className={styles.form__group}>
           <label htmlFor="desiredSalary">Desired Salary:</label>
           <input
-            type="num"
+            type="number"
             name="minSalary"
             value={formData.minSalary}
             onChange={handleInputChange}
@@ -423,7 +430,7 @@ export default function TalentProfileForm() {
             placeholder="Enter your desired minimum salary"
           />
           <input
-            type="num"
+            type="number"
             name="maxSalary"
             value={formData.maxSalary}
             onChange={handleInputChange}

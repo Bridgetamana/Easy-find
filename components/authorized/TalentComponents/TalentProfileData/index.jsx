@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router"; 
 import styles from "./style.module.scss"; 
 import { getAuth } from "firebase/auth";
-import { getStorage, ref, getMetadata } from "firebase/storage";
+import { getStorage, ref, getMetadata, getDownloadURL } from "firebase/storage";
 import { talentStore } from "../../../../firebaseConfig/talentStore";
 import { AiOutlineEnvironment } from "react-icons/ai";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
@@ -54,6 +54,16 @@ export default function TalentProfileData() {
         const userProfile = await talentStore.getTalentStoreById(userId);
 
         if (userProfile) {
+          let photoURL = null;
+
+          if (userProfile.photo) {
+            const storage = getStorage();
+            const photoPath = userProfile.photo; 
+            const photoRef = ref(storage, photoPath);
+      
+            photoURL = await getDownloadURL(photoRef);
+          }
+
           let resumeFilename = null;
             if (userProfile.resume) {
                 const storage = getStorage();
@@ -66,7 +76,7 @@ export default function TalentProfileData() {
                 username: userProfile.username || "",
                 email: userProfile.email || "",
                 bio: userProfile.bio || "",
-                photo: userProfile.photo || null,  
+                photo: photoURL,
                 dob: userProfile.dob || "",
                 gender: userProfile.gender || "",
                 pronouns: userProfile.pronouns || "",
@@ -80,7 +90,7 @@ export default function TalentProfileData() {
                 mobile: userProfile.mobile || "",
                 resume: {
                   url: userProfile.resume,
-                  filename: resumeFilename, // Store the filename here
+                  filename: resumeFilename, 
                 },
                 skills: userProfile.skills || "",
                 institute: userProfile.institute || "",
@@ -118,7 +128,7 @@ export default function TalentProfileData() {
           <div className={styles.profile__column}>
             {formData.photo && (
               <img
-                src={formData.photo.url}
+                src={formData.photo}
                 alt="Profile"
                 className={styles.profile__image}
               />

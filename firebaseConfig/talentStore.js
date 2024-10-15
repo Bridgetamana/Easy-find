@@ -166,6 +166,22 @@ export const updateTalent = async (talent, payload) => {
       bio: payload.bio,
       photo: photoUrl,
       resume: resumeUrl,
+      dob: payload.dob,
+      gender: payload.gender,
+      pronouns: payload.pronouns,
+      jobTitle: payload.jobTitle,
+      minSalary: payload.minSalary,
+      maxSalary: payload.maxSalary,
+      linkedin: payload.linkedin,
+      portfolio: payload.portfolio,
+      address: payload.address,
+      phone: payload.phone,
+      mobile: payload.mobile,
+      skills: payload.skills,
+      institute: payload.institute,
+      degree: payload.degree,
+      company: payload.company,
+      position: payload.position,
     });
   } catch (error) {
     console.error("Error updating talent:", error);
