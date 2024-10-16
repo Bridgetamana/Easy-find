@@ -40,7 +40,6 @@ const JobGrid = ({ searchInput }) => {
       const searchTerm = searchInput.toLowerCase(); 
       const filtered = jobs.filter((job) =>
         job.title.toLowerCase().includes(searchTerm) ||
-        job.companyName.toLowerCase().includes(searchTerm) ||
         job.location.toLowerCase().includes(searchTerm)
       );
 
