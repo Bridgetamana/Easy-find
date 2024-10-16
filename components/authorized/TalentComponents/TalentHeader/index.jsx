@@ -152,22 +152,22 @@ export default function TalentHeader() {
             className={styles.logo}
           />
         </div>
-        <div>
+        <di className={styles.icons__wrap}>
           <button
             type="button"
             className={styles.menu__button}
             onClick={toggleNotifications}
           >
-            <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
+            <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
           </button>
           <button
             type="button"
             className={styles.menu__button}
             onClick={toggleMenu}
           >
-            <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
+            <FiMenu size={24} stroke="#2563eb" fill="#2563eb" />
           </button>
-        </div>
+        </di>
         <nav
           className={`${styles.nav__bar} ${
             showMenu ? styles.show__navbar : styles.nav__bar
