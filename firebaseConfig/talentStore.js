@@ -228,11 +228,11 @@ export const getJobById = async (companyId, jobId) => {
 };
 
 // get jobs based on search input
-export const searchJobs = (searchInput, setJobs, setNoResults) => {
+export const searchJobs = (searchInput, setJobs, setNoResults, userId) => {
   if (!searchInput.trim()) return;
 
   const q = query(
-    collection(db, JOBS),
+    collection(db, `companyCollection/${userId}/jobs`), 
     where("title", ">=", searchInput),
     where("title", "<=", searchInput + "\uf8ff")
   );
