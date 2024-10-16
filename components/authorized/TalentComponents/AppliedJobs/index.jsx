@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { db, auth } from "../../../../firebaseConfig/firebase"; 
-import { collection, query, getDoc, getDocs, where, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import { db, auth } from "../../../../firebaseConfig/firebase";
+import {
+  collection,
+  query,
+  getDoc,
+  getDocs,
+  where,
+  deleteDoc,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
 import styles from "./style.module.scss";
 
 export default function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); 
-  const [userId, setUserId] = useState(null); 
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const currentUser = auth.currentUser; 
+    const currentUser = auth.currentUser;
     if (currentUser) {
       setUserId(currentUser.uid);
     }
@@ -21,35 +29,47 @@ export default function AppliedJobs() {
   useEffect(() => {
     if (userId) {
       const unsubscribe = fetchAppliedJobs();
-      return () => unsubscribe(); 
+      return () => unsubscribe();
     }
   }, [userId]);
 
+  // Fetches the applied jobs from the appropriate collection and subcollection
   const fetchAppliedJobs = () => {
-    setIsLoading(true); 
+    setIsLoading(true);
 
-    const jobListingsRef = collection(db, "jobListings");
-    const q = query(jobListingsRef);
+    // Assume the applied jobs are stored under 'companyCollection/{companyId}/jobs/{jobId}/applied'
+    const companyCollectionRef = collection(db, "companyCollection");
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(companyCollectionRef, (companySnapshot) => {
       const jobs = [];
 
-      querySnapshot.forEach((jobDoc) => {
-        const applicationsRef = collection(jobDoc.ref, "applied");
-        const appliedJobsQuery = query(applicationsRef, where("userId", "==", userId));
-        
-        onSnapshot(appliedJobsQuery, (appliedJobsSnapshot) => {
-          appliedJobsSnapshot.forEach((appliedJobDoc) => {
-            const appliedJobData = appliedJobDoc.data();
-            jobs.push({
-              id: appliedJobDoc.id,
-              ...appliedJobData,
-              jobId: jobDoc.id, 
+      companySnapshot.forEach((companyDoc) => {
+        const jobsRef = collection(companyDoc.ref, "jobs");
+        const jobsQuery = query(jobsRef);
+
+        onSnapshot(jobsQuery, (jobsSnapshot) => {
+          jobsSnapshot.forEach((jobDoc) => {
+            const appliedRef = collection(jobDoc.ref, "applied");
+            const appliedJobsQuery = query(
+              appliedRef,
+              where("userId", "==", userId)
+            );
+
+            onSnapshot(appliedJobsQuery, (appliedSnapshot) => {
+              appliedSnapshot.forEach((appliedJobDoc) => {
+                const appliedJobData = appliedJobDoc.data();
+                jobs.push({
+                  id: appliedJobDoc.id,
+                  ...appliedJobData,
+                  jobId: jobDoc.id,
+                  companyId: companyDoc.id, // Including companyId for handling if needed
+                });
+              });
+
+              setAppliedJobs(jobs);
+              setIsLoading(false);
             });
           });
-
-          setAppliedJobs(jobs); 
-          setIsLoading(false); 
         });
       });
     });
@@ -57,25 +77,32 @@ export default function AppliedJobs() {
     return unsubscribe;
   };
 
-  const handleWithdraw = async (jobId) => {
+  const handleWithdraw = async (jobId, companyId) => {
     const userId = auth.currentUser?.uid;
-  
+
     if (!userId) {
       console.error("User is not logged in");
       return;
     }
-  
+
     try {
-      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
-  
+      // Modify the path to match your actual Firestore structure
+      const appliedJobRef = doc(
+        db,
+        `companyCollection/${companyId}/jobs/${jobId}/applied`,
+        userId
+      );
+
       await deleteDoc(appliedJobRef);
-  
+
       const deletedDoc = await getDoc(appliedJobRef);
-  
+
       if (!deletedDoc.exists()) {
         console.log("Application Withdrawn successfully.");
-  
-        setAppliedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
+
+        setAppliedJobs((prevJobs) =>
+          prevJobs.filter((job) => job.jobId !== jobId)
+        );
       } else {
         console.error("Failed to delete application from Firestore.");
       }
@@ -83,7 +110,6 @@ export default function AppliedJobs() {
       console.error("Error removing job:", error.message);
     }
   };
-  
 
   return (
     <section className={styles.appliedJobs__section}>
@@ -91,7 +117,7 @@ export default function AppliedJobs() {
         <div className={styles.appliedJobs__header}>
           <h2 className={styles.appliedJobs__title}>Applied Jobs</h2>
         </div>
-        
+
         {isLoading ? (
           <p>Loading applied jobs...</p>
         ) : appliedJobs.length > 0 ? (
@@ -114,7 +140,12 @@ export default function AppliedJobs() {
                   <Link href={`/talent/jobs/details/${job.jobId}`}>
                     <button className={styles.btn__link}>View</button>
                   </Link>
-                  <button className={styles.btn__link} onClick={() => handleWithdraw(job.jobId)}>Withdraw</button>
+                  <button
+                    className={styles.btn__link}
+                    onClick={() => handleWithdraw(job.jobId)}
+                  >
+                    Withdraw
+                  </button>
                 </div>
               </li>
             ))}
@@ -123,7 +154,9 @@ export default function AppliedJobs() {
           <div className={styles.no__appliedJobs}>
             <h3 className={styles.no__appliedJobs__title}>No Applied Jobs</h3>
             <p className={styles.appliedJobs__message}>
-              <Link href="/talent/jobs"><IoAddCircle className={styles.appliedJobs__icon} /></Link>
+              <Link href="/talent/jobs">
+                <IoAddCircle className={styles.appliedJobs__icon} />
+              </Link>
               Your applied jobs will appear here so you can keep track of your
               applications.
             </p>
