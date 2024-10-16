@@ -155,3 +155,8 @@ export default DisplayPage;
 - **DisplayPage.js**: Displays the rich text as HTML, provides an "Edit" button, and allows the user to edit the content using the Draft.js editor.
 
 This setup provides you with a fully functioning rich text editor with Firestore integration, where users can write, view, and edit their rich text content.
+
+
+
+### ***Additional Resources***:
+- **How to use Custom Alert Dialog**: Kindly check signup or signin page for the implementation of custom alert dialog.
