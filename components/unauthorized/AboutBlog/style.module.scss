@@ -1,28 +1,28 @@
 @import "../../../styles/variables.scss";
 
-.aboutBlog__section{
+.aboutBlog__section {
+  background-color: $accent;
+  padding: 4rem 2rem;
+
+  .description {
+    color: $black;
+  }
+
+  .buttonContainer {
+    margin-top: 1rem;
+  }
+
+  .action__button {
+    font-size: $font-sixteen;
+    font-weight: $font-weight-600;
+    color: $primary;
     background-color: $accent;
-    padding: 4rem 0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-top: 2rem;
 
-    .description {
-        color: $black;
+    &:hover {
+      background-color: $neutral;
     }
-
-    .buttonContainer {
-        margin-top: 1rem;
-    }
-
-    .action__button{
-        font-size: $font-sixteen;
-        font-weight: $font-weight-600;
-        color: $primary;
-        background-color: $accent;
-        padding: 10px 20px;
-        border-radius: 10px;
-        margin-top: 2rem;
-
-        &:hover {
-            background-color: $neutral; 
-        }
-    }
+  }
 }
