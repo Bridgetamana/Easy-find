@@ -11,6 +11,7 @@ import {
   getDownloadURL,
 } from "firebase/storage"; 
 import LoadingScreen from "@/components/utils/Loaders/Loader";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
 export default function TalentProfileForm() {
   
@@ -43,6 +44,7 @@ export default function TalentProfileForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [alert, setAlert] = useState(null)
 
   const router = useRouter();
   const [id, setId] = useState(null); 
@@ -142,9 +144,9 @@ export default function TalentProfileForm() {
                 return;
             }
 
-            const validResumeTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+            const validResumeTypes = ["application/pdf"];
             if (!validResumeTypes.includes(formData.resume.type)) {
-                setErrorMsg("Invalid file type. Only PDF, DOC, and DOCX are allowed.");
+                setErrorMsg("Invalid file type. Only PDF is allowed.");
                 return;
             }
 
@@ -155,11 +157,14 @@ export default function TalentProfileForm() {
         }
 
         await updateTalent({ id }, payload); 
-
-        setSuccessMsg("Profile updated successfully.");
-        setTimeout(() => {
-            setSuccessMsg("");
-        }, 3000);
+        showAlert(
+          {
+            type: "success",
+            message: "Profile updated successfully.",
+            timeout: 3000,
+          },
+          setAlert
+        );
 
         router.push("/talent/profile");
     } catch (error) {
@@ -189,6 +194,7 @@ export default function TalentProfileForm() {
               className={styles.form__input}
             />
           </div>
+          {alert && alert.component}
           {formData.photo && (
             <img src={formData.photo} alt="Profile" className={styles.image} />
           )}
@@ -356,9 +362,16 @@ export default function TalentProfileForm() {
           <label htmlFor="resume">Update Resume:</label>
           <input
             type="file"
-            accept=".pdf,.doc,.docx"
+            accept=".pdf,.doc, .docx"
             name="resume"
-            onChange={handleInputChange}
+            onChange={(e) => {
+              if (e.target.files.length > 0) {
+                setFormData({
+                  ...formData,
+                  resume: e.target.files[0], 
+                });
+              }
+            }} 
             className={styles.form__input}
             placeholder="Upload your resume"
             required

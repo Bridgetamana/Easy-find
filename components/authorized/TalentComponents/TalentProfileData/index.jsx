@@ -6,11 +6,13 @@ import { getStorage, ref, getMetadata, getDownloadURL } from "firebase/storage";
 import { talentStore } from "../../../../firebaseConfig/talentStore";
 import { AiOutlineEnvironment } from "react-icons/ai";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
+import CustomModal from "@/components/utils/CustomModal"
 require("dotenv").config();
  
 
 export default function TalentProfileData() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     id: "",
     username: "",
@@ -65,12 +67,14 @@ export default function TalentProfileData() {
           }
 
           let resumeFilename = null;
-            if (userProfile.resume) {
-                const storage = getStorage();
-                const resumeRef = ref(storage, userProfile.resume);
-                const metadata = await getMetadata(resumeRef);
-                resumeFilename = metadata.name; 
-            }
+          let resumeURL = null;
+          if (userProfile.resume) {
+            const storage = getStorage();
+            const resumeRef = ref(storage, userProfile.resume);
+            const metadata = await getMetadata(resumeRef);
+            resumeFilename = metadata.name;
+            resumeURL = await getDownloadURL(resumeRef); 
+          }
             setFormData({
                 id: userId,
                 username: userProfile.username || "",
@@ -89,8 +93,8 @@ export default function TalentProfileData() {
                 phone: userProfile.phone || "",
                 mobile: userProfile.mobile || "",
                 resume: {
-                  url: userProfile.resume,
-                  filename: resumeFilename, 
+                  url: resumeURL,  // Store the download URL here
+                  filename: resumeFilename,
                 },
                 skills: userProfile.skills || "",
                 institute: userProfile.institute || "",
@@ -114,6 +118,8 @@ export default function TalentProfileData() {
   const handleEditClick = () => {
     router.push(`/talent/edit`); 
   };
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   if (isLoading) return <div><LoadingScreen /></div>;
 
@@ -224,20 +230,37 @@ export default function TalentProfileData() {
             {formData.resume === null ? (
                 <p className={styles.text}>No resume uploaded</p>
             ) : (
-                <div>
-                    <p className={styles.text}>
-                        {formData.resume.filename || "Resume"} 
-                    </p>
-                    <a
-                        href={formData.resume.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.text__button}
-                        style={{ marginRight: '10px' }}
-                    >
-                        View Resume
-                    </a>
-                </div>
+              <div>
+                <p className={styles.text}>
+                  {formData.resume?.filename || "Resume"} 
+                </p>
+                <button
+                  onClick={toggleModal}
+                  className={styles.text__button}
+                  style={{ marginRight: '10px' }}
+                >
+                  View Resume
+                </button>
+          
+                <CustomModal
+                  open={isModalOpen}
+                  onClose={toggleModal}
+                  title="View Resume"
+                  description={(
+                    <iframe
+                      src={formData.resume?.url}
+                      title="Resume Viewer"
+                      width="100%"
+                      height="400px"
+                      style={{ border: 'none' }}
+                    />
+                  )}
+                  cancelButtonText="Close"
+                  cancelButtonBgColor="bg-blue-500"
+                  cancelButtonTextColor="text-white"
+                  showConfirmButton={true}
+                />
+              </div>            
             )}
           </div>
 

@@ -12,12 +12,14 @@ import {
 } from "firebase/firestore";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import styles from "./style.module.scss";
 
 export default function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState(null);
+  const [alert, setAlert] = useState(null)
 
   useEffect(() => {
     const currentUser = auth.currentUser;
@@ -33,11 +35,8 @@ export default function AppliedJobs() {
     }
   }, [userId]);
 
-  // Fetches the applied jobs from the appropriate collection and subcollection
   const fetchAppliedJobs = () => {
     setIsLoading(true);
-
-    // Assume the applied jobs are stored under 'companyCollection/{companyId}/jobs/{jobId}/applied'
     const companyCollectionRef = collection(db, "companyCollection");
 
     const unsubscribe = onSnapshot(companyCollectionRef, (companySnapshot) => {
@@ -62,7 +61,7 @@ export default function AppliedJobs() {
                   id: appliedJobDoc.id,
                   ...appliedJobData,
                   jobId: jobDoc.id,
-                  companyId: companyDoc.id, // Including companyId for handling if needed
+                  companyId: companyDoc.id, 
                 });
               });
 
@@ -86,7 +85,6 @@ export default function AppliedJobs() {
     }
 
     try {
-      // Modify the path to match your actual Firestore structure
       const appliedJobRef = doc(
         db,
         `companyCollection/${companyId}/jobs/${jobId}/applied`,
@@ -98,16 +96,29 @@ export default function AppliedJobs() {
       const deletedDoc = await getDoc(appliedJobRef);
 
       if (!deletedDoc.exists()) {
-        console.log("Application Withdrawn successfully.");
-
         setAppliedJobs((prevJobs) =>
           prevJobs.filter((job) => job.jobId !== jobId)
+        );
+        showAlert(
+          {
+            type: "success",
+            message: "Application Withdrawn successfully.",
+            timeout: 3000,
+          },
+          setAlert
         );
       } else {
         console.error("Failed to delete application from Firestore.");
       }
     } catch (error) {
-      console.error("Error removing job:", error.message);
+      showAlert(
+        {
+          type: "error",
+          message: "Failed to withdraw application",
+          timeout: 3000,
+        },
+        setAlert
+      );
     }
   };
 
@@ -118,6 +129,7 @@ export default function AppliedJobs() {
           <h2 className={styles.appliedJobs__title}>Applied Jobs</h2>
         </div>
 
+        {alert && alert.component}
         {isLoading ? (
           <p>Loading applied jobs...</p>
         ) : appliedJobs.length > 0 ? (
@@ -142,7 +154,7 @@ export default function AppliedJobs() {
                   </Link>
                   <button
                     className={styles.btn__link}
-                    onClick={() => handleWithdraw(job.jobId)}
+                    onClick={() => handleWithdraw(job.jobId, job.companyId)}
                   >
                     Withdraw
                   </button>

@@ -343,12 +343,11 @@ const JobGrid = ({ searchInput }) => {
                     <p className={styles.company__pay}>
                       ${salaryMinFormatted} - ${salaryMaxFormatted}
                     </p>
-                    <button
-                      className={styles.apply__button}
-                      onClick={() => handleDetailsPage(job.id, job.companyId)}
-                    >
-                      View More
-                    </button>
+                    <Link href={`/talent/jobs/details/${job.companyId}/${job.id}`}>
+                      <button className={styles.apply__button}>
+                        View More
+                      </button>
+                    </Link>
                   </div>
                 </div>
               );

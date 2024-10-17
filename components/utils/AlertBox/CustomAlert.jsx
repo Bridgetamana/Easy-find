@@ -12,6 +12,8 @@ export const CustomAlert = ({
   handleClose,
   timeout,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const getIcon = () => {
     switch (type) {
       case "error":
@@ -25,10 +27,12 @@ export const CustomAlert = ({
     }
   };
 
-  useEffect(() => {
+ useEffect(() => {
     if (timeout) {
+      setIsLoading(true); 
       const timeoutId = setTimeout(() => {
-        handleClose(); // Close the alert after the specified time
+        setIsLoading(false); 
+        handleClose(); 
       }, timeout);
       return () => clearTimeout(timeoutId);
     }
@@ -49,6 +53,11 @@ export const CustomAlert = ({
               Close
             </button>
           )}
+          {isLoading && (
+            <div className={styles.loading__bar}>
+              <div className={styles.loading__barfill} style={{ animationDuration: `${timeout}ms` }} />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -62,7 +71,7 @@ export default function showAlert(
   return new Promise((resolve) => {
     const handleClose = () => {
       setAlert(null);
-      resolve(true); // Resolving with true when the close button is clicked
+      resolve(true); 
     };
 
     const alertComponent = (

@@ -6,7 +6,7 @@ import { db, auth } from '../../../../firebaseConfig/firebase';
 import { getDownloadURL, getMetadata, ref, getStorage } from "firebase/storage";
 import { talentStore } from "@/firebaseConfig/talentStore";
 
-export default function JobApplicationForm({ closeApplicationForm, onSuccess, jobId, jobDetails }) {
+export default function JobApplicationForm({ closeApplicationForm, onSuccess, jobId, companyId }) {
   const [cvSelectedOption, setCvSelectedOption] = useState("applyWithUploadedCV");
   const [loading, setLoading] = useState(false);
   const [uploadedCV, setUploadedCV] = useState({ url: null, name: null });
@@ -54,11 +54,10 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
   
     try {
       const userId = auth.currentUser?.uid;
-      const appliedJobRef = doc(db, `jobListings/${jobId}/applied`, userId);
+      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
   
       const appliedJobDoc = await getDoc(appliedJobRef);
       if (appliedJobDoc.exists()) {
-        console.log("You have already applied for this job.");
         return; 
       }
 

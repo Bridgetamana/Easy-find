@@ -152,7 +152,7 @@ export default function TalentHeader() {
             className={styles.logo}
           />
         </div>
-        <div>
+        <div className={styles.header__options}>
           <button
             type="button"
             className={styles.menu__button}
