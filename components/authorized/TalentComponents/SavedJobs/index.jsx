@@ -3,12 +3,14 @@ import { db, auth } from "../../../../firebaseConfig/firebase";
 import { collection, query, where, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 import styles from "./style.module.scss";
 import { IoAddCircle } from "react-icons/io5";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import Link from "next/link";
 
 export default function SavedJobs() {
   const [savedJobs, setSavedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true); 
   const [userId, setUserId] = useState(null); 
+  const [alert, setAlert] = useState(null)
 
   useEffect(() => {
     const currentUser = auth.currentUser; 
@@ -36,12 +38,10 @@ export default function SavedJobs() {
       const companiesSnapshot = await getDocs(companiesRef);
       const jobs = [];
 
-      // Loop through all companies
       for (const companyDoc of companiesSnapshot.docs) {
         const jobsRef = collection(companyDoc.ref, "jobs");
         const jobsSnapshot = await getDocs(jobsRef);
 
-        // Loop through jobs for each company
         for (const jobDoc of jobsSnapshot.docs) {
           const savedForLaterRef = doc(db, `companyCollection/${companyDoc.id}/jobs/${jobDoc.id}/savedForLater/${userId}`);
           const savedJobDoc = await getDoc(savedForLaterRef);
@@ -52,7 +52,7 @@ export default function SavedJobs() {
               id: savedJobDoc.id,
               ...savedJobData,
               jobId: jobDoc.id,
-              companyId: companyDoc.id,  // Include companyId for reference
+              companyId: companyDoc.id,  
             });
           }
         }
@@ -75,18 +75,22 @@ export default function SavedJobs() {
     }
 
     try {
-      const savedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/savedForLater`, userId);
-
+       const savedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/savedForLater/${userId}`);
       await deleteDoc(savedJobRef);
 
-      console.log("Job removed successfully.");
       setSavedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
-
+      showAlert(
+        {
+          type: "success",
+          message: "Job Unsaved!",
+          timeout: 3000,
+        },
+        setAlert
+      );
     } catch (error) {
       console.error("Error removing job:", error.message);
     }
   };
-
   
   return (
     <section className={styles.savedJobs__section}>
@@ -94,7 +98,8 @@ export default function SavedJobs() {
         <div className={styles.savedJobs__header}>
           <h2 className={styles.savedJobs__title}>Saved Jobs</h2>
         </div>
-
+        
+        {alert && alert.component}
         {isLoading ? (
           <p>Loading saved jobs...</p>
         ) : savedJobs.length > 0 ? (
@@ -114,13 +119,13 @@ export default function SavedJobs() {
                   </div>
                 </div>
                 <div className={styles.item__buttons}>
-                  <Link href={`/talent/jobs/details/${job.jobId}`}>
+                  <Link href={`/talent/jobs/details/${job.companyId}/${job.jobId}`}>
                     <button className={styles.btn__link}>View</button>
                   </Link>
-                  <Link href={`/talent/jobs/details/${job.jobId}`}>
+                  <Link href={`/talent/jobs/details/${job.companyId}/${job.jobId}`}>
                     <button className={styles.btn__link}>Apply</button>
                   </Link>
-                  <button className={styles.btn__link} onClick={() => handleDelete(job.jobId)}>Remove</button>
+                  <button className={styles.btn__link} onClick={() => handleDelete(job.jobId, job.companyId)}>Remove</button>
                 </div>
               </li>
             ))}

@@ -20,7 +20,8 @@ import LoadingScreen from "@/components/utils/Loaders/Loader";
 import ProtectedRoute from "@/utils/protectedRoute";
 import Link from "next/link";
 import styles from "./style.module.scss";
-import TalentLayout from "../../../../../layout";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
+import TalentLayout from "../../../../layout";
 import JobApplicationForm from "../../../../../../components/authorized/CompanyComponents/JobApplicationForm";
 
 const JobDetails = () => {
@@ -29,6 +30,7 @@ const JobDetails = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
   const [JobApplicationModal, setJobApllicationModal] = useState(false);
   const [applicationSubmitted, setApplicationSubmitted] = useState(false);
  
@@ -67,7 +69,6 @@ const JobDetails = () => {
   
       if (appliedJobDoc.exists()) {
         setApplicationSubmitted(true);
-        console.log("Check if applied:", appliedJobDoc.exists()); 
       } else {
         setApplicationSubmitted(false); 
       }
@@ -100,6 +101,14 @@ const JobDetails = () => {
       const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
       setApplicationSubmitted(true);  
       togglejobApplicationModal();
+      showAlert(
+        {
+          type: "success",
+          message: "Job application successfully submitted!",
+          timeout: 3000,
+        },
+        setAlert
+      );
   
       await setDoc(appliedJobRef, {
         userId: userId,
@@ -109,7 +118,14 @@ const JobDetails = () => {
       });
   
     } catch (error) {
-      console.error("Error applying for job:", error);
+      showAlert(
+        {
+          type: "error",
+          message: "Error applying for job, Please try again",
+          timeout: 3000,
+        },
+        setAlert
+      );
     }
   };
   
@@ -126,7 +142,14 @@ const JobDetails = () => {
 
       if (isSaved) {
         await deleteDoc(savedJobRef);
-        console.log("Job unsaved successfully.");
+        showAlert(
+          {
+            type: "warning", 
+            message: "Job removed from your saved list.",
+            timeout: 3000, 
+          },
+          setAlert
+        );
       } else {
         await setDoc(savedJobRef, {
           userId: userId,
@@ -134,12 +157,27 @@ const JobDetails = () => {
           title: jobDetails.title,
           savedAt: new Date(),
         });
-        console.log("Job saved successfully.");
+        showAlert(
+          {
+            type: "success",
+            message: "Job successfully saved.",
+            timeout: 3000,
+          },
+          setAlert
+        );
       }
 
       setIsSaved(!isSaved);
     } catch (error) {
-      console.error("Error saving or unsaving job:", error.message);
+      showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: "An error occurred while saving the job.",
+          timeout: 3000,
+        },
+        setAlert
+      );
     }
   };
 
@@ -191,6 +229,7 @@ const JobDetails = () => {
                 />
               </Link>
               {isLoading && <LoadingScreen />}
+              {alert && alert.component}
               <h2 className={styles.details__title}>{jobDetails.title}</h2>
               <div className={styles.details__flex}>
                 <p className={styles.details__type}>
@@ -426,13 +465,12 @@ const JobDetails = () => {
             </section>
 
             {/* Application Button */}
-            {/* <Link href={`/apply/${job.id}`}> */}
             <button
               className={`${styles.apply__button} ${
                 applicationSubmitted ? styles.disabledButton : ""
               }`}
               onClick={togglejobApplicationModal}
-              disabled={applicationSubmitted}  // Button is disabled if application is already submitted
+              disabled={applicationSubmitted}  
             >
               <BiBadgeCheck fill="#fff" />
               {applicationSubmitted ? "Applied" : "Apply"}
