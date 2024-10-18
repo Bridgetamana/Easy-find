@@ -7,6 +7,7 @@ import {
   updateCompany,
 } from "../../../../firebaseConfig/companyStore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import LoadingScreen from "../../../utils/Loaders/Loader";
 
 export default function CompanyProfileForm() {
   const initialFormData = {
@@ -127,7 +128,7 @@ export default function CompanyProfileForm() {
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <LoadingScreen/>;
 
   return (
     <div className={styles.profile__page}>

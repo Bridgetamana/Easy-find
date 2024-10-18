@@ -4,6 +4,7 @@ import styles from "./style.module.scss";
 import { getAuth } from "firebase/auth";
 import { companyStore } from "../../../../firebaseConfig/companyStore";
 import { AiOutlineEnvironment } from "react-icons/ai";
+import LoadingScreen from "../../../utils/Loaders/Loader";
 
 export default function CompanyProfileData() {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +72,7 @@ export default function CompanyProfileData() {
     router.push(`/company/edit/${companyId}`);
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <LoadingScreen />;
   return (
     <div className={styles.profile__page}>
       <div className={styles.profile__details}>

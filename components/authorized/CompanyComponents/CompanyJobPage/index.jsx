@@ -10,6 +10,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
 import styles from "./style.module.scss";
+import LoadingScreen from "../../../utils/Loaders/Loader";
 
 const JobPage = () => {
   const router = useRouter();
@@ -94,11 +95,11 @@ const JobPage = () => {
   };
 
   if (loading) {
-    return <div className={styles.spinner}>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   if (error) {
-    return <div className={styles.error}>Error fetching jobs: {error.message}</div>;
+    return <div>{error}</div>;
   }
 
   if (!jobs.length) {

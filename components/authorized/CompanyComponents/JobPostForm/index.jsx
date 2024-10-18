@@ -45,7 +45,6 @@ const JobPostForm = () => {
     const cleanFormData = {
       title: formData.jobTitle,
       description: formData.jobDescription,
-      datePosted: formatDate(new Date()), // Format the date to YYYY-MM-DD
       deadline: formatDate(new Date(formData.deadline)), // Format the deadline date to YYYY-MM-DD
       industry: formData.industry,
       jobLevel: formData.jobLevel,
@@ -60,10 +59,6 @@ const JobPostForm = () => {
       deadline: formatDate(new Date(formData.deadline)),
       createdAt: new Date(),
       active: true,
-      inactive: false,
-      saved: true,
-      seen: true,
-      applied: true,
       isCoverLetterRequired: isCoverLetterRequired    
     };
 
