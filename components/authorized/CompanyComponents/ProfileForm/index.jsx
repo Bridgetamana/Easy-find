@@ -26,8 +26,18 @@ export default function CompanyProfileForm() {
 
   const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState({
+    fullName: "",
+    email: "",
+    bio: "",
+    location: "",
+    phone: "",
+    website: "",
+    linkedin: "",
+    industry: "",
+    size: "",
+  });
 
   const router = useRouter();
   const { id } = router.query;
@@ -75,20 +85,64 @@ export default function CompanyProfileForm() {
         ...prevFormData,
         [name]: value,
       }));
+      setErrorMsg((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
     }
   };
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
+    setErrorMsg({
+      fullName: "",
+      email: "",
+      bio: "",
+      location: "",
+      phone: "",
+      website: "",
+      linkedin: "",
+      industry: "",
+      size: "",
+    });
 
-    // Validate the form data
-    if (formData.email.length < 1 || formData.fullName.length < 1) {
-      setErrorMsg("Email and full name must have at least 1 character.");
-      setTimeout(() => {
-        setErrorMsg("");
-      }, 3000);
-      return;
+    let hasError = false;
+
+    if (!formData.fullName) {
+      setErrorMsg((prev) => ({ ...prev, fullName: "Full Name is required." }));
+      hasError = true;
+    } else if (formData.fullName.length < 2) {
+      setErrorMsg((prev) => ({ ...prev, fullName: "Full Name must be at least 2 characters long." }));
+      hasError = true;
     }
+
+    if (!formData.email) {
+      setErrorMsg((prev) => ({ ...prev, email: "Email is required." }));
+      hasError = true;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrorMsg((prev) => ({ ...prev, email: "Email address is invalid." }));
+      hasError = true;
+    }
+
+    if (!formData.bio) {
+      setErrorMsg((prev) => ({ ...prev, bio: "Bio is required." }));
+      hasError = true;
+    } else if (formData.bio.length < 10) {
+      setErrorMsg((prev) => ({ ...prev, bio: "Bio must be at least 10 characters long." }));
+      hasError = true;
+    }
+
+    if (!formData.location) {
+      setErrorMsg((prev) => ({ ...prev, location: "Location is required." }));
+      hasError = true;
+    }
+
+    if (!formData.phone) {
+      setErrorMsg((prev) => ({ ...prev, phone: "Phone number is required." }));
+      hasError = true;
+    }
+
+    if (hasError) return;
 
     try {
       setIsLoading(true);
@@ -107,9 +161,9 @@ export default function CompanyProfileForm() {
       router.push("/company/profile");
     } catch (error) {
       console.error("Error updating profile:", error);
-      setErrorMsg(error.message);
+      setErrorMsg((prev) => ({ ...prev, general: error.message }));
       setTimeout(() => {
-        setErrorMsg("");
+        setErrorMsg((prev) => ({ ...prev, general: "" }));
       }, 3000);
     } finally {
       setIsLoading(false);
@@ -162,6 +216,7 @@ export default function CompanyProfileForm() {
             placeholder="Enter your full name"
             required
           />
+          {errorMsg.fullName && <p className={styles.error}>{errorMsg.fullName}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -175,6 +230,7 @@ export default function CompanyProfileForm() {
             placeholder="Enter your email address"
             required
           />
+          {errorMsg.email && <p className={styles.error}>{errorMsg.email}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -188,19 +244,21 @@ export default function CompanyProfileForm() {
             placeholder="Enter your bio"
             required
           />
+          {errorMsg.bio && <p className={styles.error}>{errorMsg.bio}</p>}
         </div>
 
         <div className={styles.form__group}>
           <label htmlFor="address">Location:</label>
           <input
             type="text"
-            name="address"
-            value={formData.address || ""}
+            name="location"
+            value={formData.location || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your address"
             required
           />
+          {errorMsg.location && <p className={styles.error}>{errorMsg.location}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -214,6 +272,7 @@ export default function CompanyProfileForm() {
             placeholder="Enter your phone number"
             required
           />
+          {errorMsg.phone && <p className={styles.error}>{errorMsg.phone}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -225,19 +284,23 @@ export default function CompanyProfileForm() {
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your website link"
+            required
           />
+          {errorMsg.website && <p className={styles.error}>{errorMsg.website}</p>}
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="linkedin">Linkedin:</label>
+          <label htmlFor="linkedin">LinkedIn:</label>
           <input
             type="text"
             name="linkedin"
             value={formData.linkedin || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your company's linkedin"
+            placeholder="Enter your company's LinkedIn"
+            required
           />
+          {errorMsg.linkedin && <p className={styles.error}>{errorMsg.linkedin}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -249,7 +312,9 @@ export default function CompanyProfileForm() {
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your industry"
+            required
           />
+          {errorMsg.industry && <p className={styles.error}>{errorMsg.industry}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -259,6 +324,7 @@ export default function CompanyProfileForm() {
             value={formData.size || ""}
             onChange={handleInputChange}
             className={styles.form__input}
+            required
           >
             <option value="" disabled>
               Select your company size
@@ -269,9 +335,10 @@ export default function CompanyProfileForm() {
             <option value="200-500">200-500 employees</option>
             <option value="500+">500+ employees</option>
           </select>
+          {errorMsg.size && <p className={styles.error}>{errorMsg.size}</p>}
         </div>
 
-        {errorMsg && <p className={styles.error}>{errorMsg}</p>}
+        {errorMsg.general && <p className={styles.error}>{errorMsg.general}</p>}
         {successMsg && <p className={styles.success}>{successMsg}</p>}
         <button onClick={handleSaveClick} className={styles.save__button}>
           {isLoading ? <div className={styles.spinner}></div> : "Save"}
