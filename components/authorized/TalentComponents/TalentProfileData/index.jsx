@@ -93,7 +93,7 @@ export default function TalentProfileData() {
                 phone: userProfile.phone || "",
                 mobile: userProfile.mobile || "",
                 resume: {
-                  url: resumeURL,  // Store the download URL here
+                  url: resumeURL,  
                   filename: resumeFilename,
                 },
                 skills: userProfile.skills || "",

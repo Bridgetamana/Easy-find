@@ -19,7 +19,7 @@ export default function FindJob() {
         </li>
         <li className={styles.dropdown__link}>
           <Link href="/terms" className={styles.link}>
-            Terms
+            Terms and Conditions
           </Link>
         </li>
       </ul>

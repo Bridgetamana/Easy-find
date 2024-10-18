@@ -120,6 +120,11 @@ export default function TalentProfileForm() {
         setIsLoading(true);
         const payload = { ...formData, id };
 
+        if (formData.jobTitle && formData.jobTitle.length > 0) {
+          const jobTitleKeywords = generateKeywords(formData.jobTitle);
+          payload.jobTitleKeywords = jobTitleKeywords; 
+      }
+
         if (formData.photo instanceof File) {
             if (formData.photo.size > 5 * 1024 * 1024) {
                 setErrorMsg("File size must be less than 5 MB.");
@@ -157,14 +162,11 @@ export default function TalentProfileForm() {
         }
 
         await updateTalent({ id }, payload); 
-        showAlert(
-          {
-            type: "success",
-            message: "Profile updated successfully.",
-            timeout: 3000,
-          },
-          setAlert
-        );
+
+        if (payload.jobTitleKeywords) {
+          const userRef = doc(db, 'talentCollection', id); 
+          await updateDoc(userRef, { jobTitleKeywords: payload.jobTitleKeywords });
+        }
 
         router.push("/talent/profile");
     } catch (error) {
@@ -175,7 +177,24 @@ export default function TalentProfileForm() {
         }, 3000);
     } finally {
         setIsLoading(false);
+        showAlert(
+          {
+            type: "success",
+            message: "Profile updated successfully.",
+            timeout: 2000,
+          },
+          setAlert
+        );
     }
+};
+
+const generateKeywords = (jobTitle) => {
+  const keywords = jobTitle
+    .split(" ") 
+    .map(word => word.toLowerCase()) 
+    .filter(word => word.length > 0); 
+
+  return keywords;
 };
 
   if (isLoading) return <div><LoadingScreen /></div>;
