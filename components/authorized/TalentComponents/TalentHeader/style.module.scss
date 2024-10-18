@@ -49,6 +49,12 @@
             }
         }
 
+        .icons__wrap{
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         .menu__button {
             height: -webkit-fit-content;
             height: -moz-fit-content;

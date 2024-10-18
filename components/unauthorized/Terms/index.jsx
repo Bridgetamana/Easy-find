@@ -73,10 +73,6 @@ export default function Terms() {
               </p>
             </li>
           </ol>
-          <div className={styles.buttons__wrap}>
-            <button onClick={() => console.log("Accepted")} className={styles.accept__btn}>Accept</button>
-            <button onClick={() => window.history.back()} className={styles.close__btn}>Close</button>
-          </div>
         </div>
       </div>
     </section>

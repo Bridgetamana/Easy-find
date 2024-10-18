@@ -1,28 +1,32 @@
 @import "../../../../styles/variables.scss";
+  
 
 .hero__section{
 
     .hero__content{
         background-color: $accent;
-        padding: 2rem;
+        padding: 1rem;
         border-radius: 1rem;
         width: 90%;
         margin: 0 auto;
+
+        @media screen and (min-width: $breakpoint-3) {
+            padding: 2rem;
+        }
 
         .content__header{
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
 
             .hero__title{
-                font-size: $font-forty;
-                font-weight: 500;
-                font-family: $font-logo;
+                font-size: $font-thirtyFour;
+                font-weight: 600;
+                font-family: $font-text;
                 color: $black;
                 line-height: 1;
-                letter-spacing: -2px;
     
                 .title__span{
                     color: $primary;
@@ -30,8 +34,8 @@
             }
     
             .hero__text{
-                font-size: $font-eighteen;
-                font-weight: 400;
+                font-size: $font-sixteen;
+                font-weight: 500;
                 color: $black;
                 line-height: 1.2;
                 margin-top: .5rem;
@@ -58,6 +62,7 @@
             .content__box{
                 display: flex;
                 flex-direction: column;
+                justify-content: center;
                 padding: 1rem;
                 border-radius: 1rem;
                 background-color: $secondary;
@@ -71,18 +76,22 @@
                     transform: scale(1.05);
                 }
 
+                @media screen and (min-width: $breakpoint-3) {
+                    height: 220px;
+                    
+                }
+
                 .box__title{
-                    font-size: $font-twenty;
-                    font-weight: 500;
+                    font-size: $font-eighteen;
+                    font-weight: 600;
                     color: $black;
-                    margin-top: 1rem;
                     text-align: left;
                 }
 
                 .box__text{
-                    font-size: $font-sixteen;
+                    font-size: $font-fourteen;
                     font-weight: 400;
-                    color: $lightGray;
+                    color: $black;
                     margin-top: .75rem;
                     text-align: left;
                     line-height: 1.2;
