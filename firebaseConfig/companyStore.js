@@ -218,7 +218,6 @@ export const updateJobDetails = async (jobId, updatedData) => {
     const companyId = user.uid; 
       const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
       await updateDoc(jobRef, updatedData);
-      console.log("Job details updated successfully");
     } catch (error) {
       console.error("Error updating job details:", error);
       throw error;
