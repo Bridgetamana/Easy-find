@@ -326,6 +326,26 @@ export const fetchNotifications = async () => {
   }
 };
 
+// Function to delete notification from talent collection
+export const deleteNotification = async (notificationId) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error("User is not authenticated.");
+    return;
+  }
+
+  try {
+    const notificationsRef = collection(db, TALENT, user.uid, 'notifications');
+    const notificationDocRef = doc(notificationsRef, notificationId);
+
+    await deleteDoc(notificationDocRef);
+  } catch (error) {
+    console.error("Error deleting notification:", error.message);
+  }
+};
+
 // Function to unsave a job ID from the user's saved jobs array
 export const unsaveJob = async (jobId) => {
   try {

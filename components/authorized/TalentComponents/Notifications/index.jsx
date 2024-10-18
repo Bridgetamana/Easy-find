@@ -2,15 +2,21 @@ import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { MdClose } from "react-icons/md";
 import { InboxIcon } from '@heroicons/react/24/outline';
-import { fetchNotifications } from "../../../../firebaseConfig/talentStore"; 
+import { fetchNotifications, deleteNotification } from "../../../../firebaseConfig/talentStore"; 
 
 export default function NotificationTab({ closeNotifications }) {
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleDelete = () => {
-    console.log("deleted")
+  const handleDelete = async (notificationId) => {
+    try {
+      await deleteNotification(notificationId);
+        setNotifications(notifications.filter((notification) => notification.id !== notificationId));
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+    }
   };
+  
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -58,7 +64,7 @@ export default function NotificationTab({ closeNotifications }) {
                     : `You applied to the job post for ${notification.jobTitle}.`}
                 </p>
                 <button
-                  onClick={() => handleDelete()}
+                  onClick={() => handleDelete(notification.id)}
                   className={styles.delete__button}
                 >
                   Delete
