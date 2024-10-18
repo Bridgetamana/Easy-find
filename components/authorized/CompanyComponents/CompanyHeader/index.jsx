@@ -43,11 +43,10 @@ export default function CompanyHeader() {
   };
 
   const signOut = () => {
-
     // Clear token before redirecting to signi page
     secureLocalStorage.removeItem("userToken");
     router.push("/signin");
-    };
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -139,7 +138,6 @@ export default function CompanyHeader() {
                 <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
               </button>
             </li>
-            
           </ul>
         </nav>
       </div>
@@ -155,14 +153,14 @@ export default function CompanyHeader() {
             className={styles.menu__button}
             onClick={toggleNotifications}
           >
-            <MdNotifications size={32} stroke="#2563eb" fill="#2563eb" />
+            <MdNotifications size={24} stroke="#2563eb" fill="#2563eb" />
           </button>
           <button
             type="button"
             className={styles.menu__button}
             onClick={toggleMenu}
           >
-            <FiMenu size={32} stroke="#2563eb" fill="#2563eb" />
+            <FiMenu size={24} stroke="#2563eb" fill="#2563eb" />
           </button>
         </div>
         <nav
@@ -185,25 +183,12 @@ export default function CompanyHeader() {
             <li className={`${styles.item} ${styles.pd_btm} `}>
               <Link
                 href="/company/"
-                onClick={() => handleMenuClick("home")}
-                className={`${styles.nav__link} ${
-                  active === styles.home ? styles.active__link : ""
-                }`}
+                className={styles.link}
+                onClick={closeMenu}
               >
                 Home
               </Link>
             </li>
-            {/* <li className={styles.nav__item}>
-              <Link
-                href="/company/testimonials"
-                onClick={() => handleMenuClick("testimonials")}
-                className={`${styles.nav__link} ${
-                  active === styles.testimonials ? styles.active__link : ""
-                }`}
-              >
-                Testimonials
-              </Link>
-            </li> */}
           </ul>
           <ul className={styles.dropdown__list}>
             <h4 className={styles.nav__head}>
@@ -221,15 +206,6 @@ export default function CompanyHeader() {
             </li>
             <li className={styles.dropdown__link}>
               <Link
-                href="/company/dashboard"
-                className={styles.link}
-                onClick={closeMenu}
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li className={styles.dropdown__link}>
-              <Link
                 href="/company/settings"
                 className={styles.link}
                 onClick={closeMenu}
@@ -238,8 +214,18 @@ export default function CompanyHeader() {
               </Link>
             </li>
             <li className={styles.dropdown__link}>
+              <Link
+                href="/company/jobs"
+                className={styles.link}
+                onClick={closeMenu}
+              >
+                Jobs
+              </Link>
+            </li>
+            <li className={styles.dropdown__link}>
               <button
-                onClick={signOut} className={`${styles.link} ${styles.signout}`}
+                onClick={signOut}
+                className={`${styles.link} ${styles.signout}`}
               >
                 Sign Out
               </button>

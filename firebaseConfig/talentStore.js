@@ -129,8 +129,6 @@ export const resetPassword = async (oobCode, newPassword) => {
 
     await confirmPasswordReset(auth, oobCode, newPassword);
 
-    console.log('Password reset successful.');
-
     return true; // Password reset successful
   } catch (error) {
     console.error('Error resetting password:', error.message);
@@ -265,7 +263,6 @@ export const saveJob = async (jobId, jobTitle) => {
     }
 
   try {
-    console.log("User UID:", user.uid);
     // Get the user's document reference
     const userDocRef = doc(db, TALENT, user.uid);
 
@@ -332,7 +329,6 @@ export const deleteNotification = async (notificationId) => {
   const user = auth.currentUser;
 
   if (!user) {
-    console.error("User is not authenticated.");
     return;
   }
 
@@ -362,8 +358,6 @@ export const unsaveJob = async (jobId) => {
     await userDocRef.update({
       saved: db.FieldValue.arrayRemove(jobId),
     });
-
-    console.log('Job unsaved successfully!');
   } catch (error) {
     console.error('Error unsaving job:', error.message);
     throw error;

@@ -6,9 +6,9 @@ import CompanyLayout from "../../layout";
 export default function CompanyProfileFormPage() {
   return (
     <ProtectedRoute>
-        <CompanyLayout>
+      <CompanyLayout>
         <CompanyProfileForm />
-        </CompanyLayout>
+      </CompanyLayout>
     </ProtectedRoute>
   );
 }
