@@ -63,8 +63,11 @@
     }
 }
 .no__featuredJobs {
-    font-size: $font-twenty;
-    color: $black;
-    font-weight: 500;
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    padding: .7rem;
+    gap: 0.5rem;
+    font-size: $font-sixteen;
+    color: $gray;
+    font-weight: 400;
 }

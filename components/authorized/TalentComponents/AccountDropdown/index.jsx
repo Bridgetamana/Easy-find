@@ -28,6 +28,11 @@ export default function AccountDropdown() {
           </Link>
         </li>
         <li className={styles.dropdown__link}>
+          <Link href="/talent/terms" className={styles.link}>
+            Terms
+          </Link>
+        </li>
+        <li className={styles.dropdown__link}>
           <button onClick={signOut} className={`${styles.link} ${styles.signout}`}>
             Sign Out
           </button>

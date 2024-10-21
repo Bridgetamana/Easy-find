@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import { getAuth } from "firebase/auth";
 import { talentStore } from '@/firebaseConfig/talentStore';
-import { db } from "../../../../firebaseConfig/firebase"; 
+import { db, auth } from "../../../../firebaseConfig/firebase"; 
 import { collection, query, where, getDocs } from "firebase/firestore";
-import Spinner from '@/components/utils/Loaders/Spinner';
 import styles from "./style.module.scss"
+
 
 export default function FeaturedJobs() {
     const [featuredJobs, setFeaturedJobs] = useState([]);
-    const [userProfile, setUserProfile] = useState(null);
+    const [userProfile, setUserProfile] = useState([]);
     const [isLoading, setIsLoading] = useState(true); 
 
     useEffect(() => {
@@ -19,48 +19,62 @@ export default function FeaturedJobs() {
             if (user) {
                 const userId = user.uid;
                 const userProfile = await talentStore.getTalentStoreById(userId);
-                setUserProfile(userProfile); 
+                 setUserProfile(userProfile); 
             }
         };
     
         fetchUserProfile();
     }, []);
-
-    const fetchFeaturedJobs = async () => {
-        setIsLoading(true); 
-        try {
-            const jobsRef = collection(db, 'companyCollection/${companyId}/jobs'); 
-           
-            const q = query(
-                jobsRef, 
-                where('titleKeywords', 'array-contains-any', userProfile.jobTitleKeywords),
-                where('SalaryMin', '>=', userProfile.minSalary), 
-                where('SalaryMax', '<=', userProfile.maxSalary)
-            );
-    
-            const querySnapshot = await getDocs(q);
-            const jobs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setFeaturedJobs(jobs); 
-        } catch (error) {
-            console.error("Error fetching jobs:", error);
-        }finally {
-            setIsLoading(false); 
-        }
-    };
     
     useEffect(() => {
         if (userProfile) {
             fetchFeaturedJobs();
         }
     }, [userProfile]);
+
+    const fetchFeaturedJobs = async () => {
+        setIsLoading(true);
+        try {
+            const companiesRef = collection(db, 'companyCollection');
+            const companiesSnapshot = await getDocs(companiesRef);
     
+            const jobs = []; 
+    
+            for (const companyDoc of companiesSnapshot.docs) {
+                const companyId = companyDoc.id; 
+                const jobsRef = collection(companyDoc.ref, 'jobs');
+    
+                const q = query(
+                    jobsRef,
+                    where('titleKeywords', 'array-contains-any', userProfile.jobTitleKeywords), 
+                    where('SalaryMin', '>=', userProfile.minSalary), 
+                    where('SalaryMax', '<=', userProfile.maxSalary)
+                );
+    
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach(doc => {
+                    jobs.push({
+                        id: doc.id,
+                        ...doc.data(),
+                        companyId 
+                    });
+                });
+            }
+
+            setFeaturedJobs(jobs); 
+        } catch (error) {
+            console.error("Error fetching jobs:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
   return (
     <div className='bg-white w-[90%] p-[3rem] my-[3rem] mx-auto rounded-2xl flex flex-col items-start'>
       <h1 className='text-[28px] md:text-[32px] text-black font-medium'>Featured Jobs</h1>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+
         {isLoading ? (
-          <div><Spinner/></div>
+          <p>Loading featured jobs ....</p>
         ) : featuredJobs.length > 0 ? (
             <ul className={styles.featuredJobs__list}>
                 {featuredJobs.map((job, index) => (
@@ -91,7 +105,6 @@ export default function FeaturedJobs() {
         ) : (
             <p className={styles.no__featuredJobs}>No featured jobs available at the moment.</p>  
         )}
-      </div>
     </div>
   )
 }
