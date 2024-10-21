@@ -1,151 +1,149 @@
 @import "../../../../styles/variables.scss";
 
 .activeJobs__section {
-    .activeJobs__container{
-        .section__header{
-            margin-bottom: 2rem;
+  background-color: $white;
+  padding: 2rem 1rem;
+  margin: 2rem auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 1rem;
+
+  @media screen and (min-width: $breakpoint-3) {
+    padding: 3rem;
+    width: 90%;
+  }
+
+  .activeJobs__container {
+    width: 100%;
+
+    .section__header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 1.5rem;
+
+      .section__title {
+        font-size: $font-twentyFour;
+        color: $black;
+        font-weight: 500;
+
+        @media screen and (min-width: $breakpoint-3) {
+          font-size: $font-thirtyTwo;
         }
 
-        .jobPosting {
-            box-shadow: 1px -1px 10px 0px rgb(100 100 100 / 15%);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-    
-            .jobPosting__header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 2rem;
-                gap: 1rem;
-    
-                .jobPosting__title {
-                    font-size: $font-twentyFour;
-                    color: $black;
-                }
-    
-                .edit__button {
-                    width: 7rem;
-                    height: 2.5rem;
-                    background: $primary;
-                    color: $white;
-                    padding: 0.5rem;
-                    font-size: $font-sixteen;
-                    font-weight: $font-weight-500;
-                    border-radius: 10px;
-                    display: grid;
-                    place-items: center;
-
-                    @media screen and (max-width: $breakpoint-3) {
-                        font-size: $font-eighteen;
-                    }
-                }
-            }
-
-            .job__description{
-                margin-bottom: 1rem;
-
-                .job__subtitle{
-                    font-size: $font-sixteen;
-                    font-weight: $font-weight-500;
-                    color: $black;
-                    margin-bottom: 0.5rem;
-                }
-
-                .job__text{
-                    font-size: $font-sixteen;
-                    color: $lightGray;
-                    margin-bottom: 0.5rem;
-                }
-            }
-    
-            .post__column{
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-                margin-bottom: 1rem;
-
-                .post__container{
-                    
-                    .jobPosting__subtitle {
-                        font-size: $font-sixteen;
-                        font-weight: $font-weight-500;
-                        color: $black;
-                        margin-bottom: 0.5rem;
-                    }
-                    
-                    .jobPosting__text {
-                        font-size: $font-sixteen;
-                        color: $lightGray;
-                        margin-bottom: 0.5rem;
-                    }
-    
-                    .jobPosting__listItem {
-                        margin-left: 1rem;
-        
-                        li {
-                            font-size: $font-sixteen;
-                            color: $lightGray;
-                            margin-bottom: 0.5rem;
-                            list-style: circle;
-                        }
-                    }
-                }
-            }
-
-            .post__row{
-                .post__container{
-                    
-                    .jobPosting__subtitle {
-                        font-size: $font-sixteen;
-                        font-weight: $font-weight-500;
-                        color: $black;
-                        margin-bottom: 0.5rem;
-                    }
-                    
-                    .jobPosting__text {
-                        font-size: $font-sixteen;
-                        color: $lightGray;
-                        margin-bottom: 0.5rem;
-                    }
-    
-                    .jobPosting__listItem {
-                        margin-left: 1rem;
-        
-                        li {
-                            font-size: $font-sixteen;
-                            color: $lightGray;
-                            margin-bottom: 0.5rem;
-                            list-style: circle;
-                        }
-                    }
-                }
-            }
-    
-            .jobPosting__actions {
-                background-color: $accent;
-                border-radius: 10px;
-                padding: 1rem;
-    
-                .candidate__info {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    .total__candidates {
-                        font-size: $font-sixteen;
-                        color: $black;
-                    }
-
-                    .view__button {
-                        color: $primary;
-                        font-size: $font-sixteen;
-                        font-weight: $font-weight-500;
-                        background: none;
-                        text-decoration: underline;
-                    }
-                }
-            }
+        @media screen and (min-width: $breakpoint-4) {
+          font-size: $font-thirtySix;
         }
+      }
     }
+
+    .activePostings__list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      width: 100%;
+
+      @media screen and (min-width: $breakpoint-3) {
+        grid-template-columns: repeat(2, 1fr); 
+      }
+
+      .jobPosting {
+        width: 100%;
+        border-left: 3px solid $accent;
+        background: $backdrop;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .jobPosting__header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 1.5rem;
+
+          .jobPosting__title {
+            font-size: $font-twenty;
+            color: $black;
+
+            @media screen and (min-width: $breakpoint-3) {
+              font-size: $font-twentyFour;
+            }
+          }
+
+          .edit__button {
+            width: 6rem;
+            height: 2.2rem;
+            background: $primary;
+            color: $white;
+            padding: 0.4rem;
+            font-size: $font-sixteen;
+            font-weight: $font-weight-500;
+            border-radius: 0.5rem;
+            text-align: center;
+
+            @media screen and (min-width: $breakpoint-3) {
+              font-size: $font-eighteen;
+            }
+          }
+        }
+
+        .job__description {
+          margin-bottom: 1rem;
+          min-height: 80px;
+          max-height: 120px;
+          overflow: hidden; 
+          text-overflow: ellipsis;
+
+          .job__subtitle {
+            font-size: $font-sixteen;
+            font-weight: $font-weight-500;
+            color: $black;
+            margin-bottom: 0.5rem;
+          }
+
+          .job__text {
+            font-size: $font-sixteen;
+            color: $lightGray;
+          }
+        }
+
+        .jobPosting__actions {
+          background-color: $accent;
+          border-radius: 0.5rem;
+          padding: 0.75rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 150px;
+
+          .view__button {
+            color: $primary;
+            font-size: $font-sixteen;
+            font-weight: $font-weight-500;
+            background: none;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+.no__jobs {
+    font-size: $font-sixteen;
+    font-weight: $font-weight-600;
+    color: $black;
+    border: 1px dashed $primary;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 80vw;
+    text-align: center;
+    margin: 3rem auto;
 }

@@ -22,7 +22,7 @@ const JobPage = () => {
   const [applicantDetails, setApplicantDetails] = useState(null);
   const [showApplicants, setShowApplicants] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 1;
+  const jobsPerPage = 10;
   const auth = getAuth();
   const user = auth.currentUser;
 
