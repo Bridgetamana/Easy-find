@@ -21,6 +21,8 @@ const JobPage = () => {
 
   const [applicantDetails, setApplicantDetails] = useState(null);
   const [showApplicants, setShowApplicants] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 1;
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -94,6 +96,28 @@ const JobPage = () => {
     setActiveDropdown(activeDropdown === jobId ? false : jobId);
   };
 
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+
+  const pageNumbers = Math.ceil(jobs.length / jobsPerPage);
+
+  const handleClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < pageNumbers) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -119,7 +143,7 @@ const JobPage = () => {
           </tr>
         </thead>
         <tbody>
-          {jobs.map((job) => (
+          {currentJobs.map((job) => (
             <tr key={job.jobId}>
               <td>
                 <a
@@ -172,6 +196,39 @@ const JobPage = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <div className={styles.pagination}>
+        <button
+          className={styles.pagination__button}
+          onClick={handlePreviousClick}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+
+        {Array.from({ length: pageNumbers }, (_, index) => index + 1).map(
+          (pageNumber) => (
+            <button
+              className={`${styles.pagination__number} ${
+                currentPage === pageNumber ? styles.pagination__number__active : ""
+              }`}
+              key={pageNumber}
+              onClick={() => handleClick(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          )
+        )}
+
+        <button
+          className={styles.pagination__button}
+          onClick={handleNextClick}
+          disabled={currentPage === pageNumbers}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
