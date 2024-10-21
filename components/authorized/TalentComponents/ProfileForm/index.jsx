@@ -3,7 +3,8 @@ import { MdEdit } from "react-icons/md";
 import styles from "./style.module.scss";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
-import { db, storage, auth} from "../../../../firebaseConfig/firebase"; 
+import { doc, updateDoc } from "firebase/firestore";
+import { db, storage,  auth} from "../../../../firebaseConfig/firebase"; 
 import { updateTalent, talentStore,} from '../../../../firebaseConfig/talentStore';
 import {
   ref,
@@ -166,7 +167,7 @@ export default function TalentProfileForm() {
         if (payload.jobTitleKeywords) {
           const userRef = doc(db, 'talentCollection', id); 
           await updateDoc(userRef, { jobTitleKeywords: payload.jobTitleKeywords });
-        }
+      }
 
         router.push("/talent/profile");
     } catch (error) {
@@ -190,10 +191,9 @@ export default function TalentProfileForm() {
 
 const generateKeywords = (jobTitle) => {
   const keywords = jobTitle
-    .split(" ") 
-    .map(word => word.toLowerCase()) 
-    .filter(word => word.length > 0); 
-
+      .split(" ") 
+      .map(word => word.toLowerCase()) 
+      .filter(word => word.length > 0); 
   return keywords;
 };
 

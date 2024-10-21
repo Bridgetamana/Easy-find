@@ -1,0 +1,52 @@
+@import "../../../../styles/variables.scss";
+
+.terms__container{
+    margin: 1.5rem auto;
+    width: 90%;
+
+    .terms__header{
+        font-size: $font-twentyEight;
+        color: $black;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+
+        @media screen and (min-width: $breakpoint-3) {
+            font-size: $font-thirtyTwo;
+        }
+
+        @media screen and (min-width: $breakpoint-4) {
+            font-size: $font-thirtySix;
+        }
+    }
+
+    .terms__list{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        padding-left: 2rem;
+        gap: 1rem;
+        width: 100%;
+        list-style-type: decimal;
+
+        .terms__item{
+            font-size: $font-sixteen;
+            padding: 10px 5px;
+        }
+
+        .platform__text{
+            color: $primary;
+            font-weight: $font-weight-600;
+            font-size: $font-fourteen;
+        }
+
+        .unordered__list{
+            list-style-type: disc;
+        }
+    }
+    .terms__accept{
+        padding: .5rem 2rem;
+        font-weight: $font-weight-500;
+        font-size: $font-eighteen;
+    }
+}
