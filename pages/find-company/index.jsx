@@ -147,7 +147,7 @@ const FindCompanies = () => {
                 </div>
               ))
             ) : (
-              <p>No companies found.</p>
+              <p className={styles.no__company}>No companies found.</p>
             )}
           </div>
 

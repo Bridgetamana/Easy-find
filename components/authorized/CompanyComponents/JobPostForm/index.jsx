@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { addJobPost } from "@/firebaseConfig/companyStore";
 import { EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
+import dynamic from "next/dynamic";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./style.module.scss";
+
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then(mod => mod.Editor),
+  { ssr: false }
+);
 
 const JobPostForm = () => {
   const [isLoading, setIsLoading] = useState(false);
