@@ -13,7 +13,7 @@ export default function FindJob() {
           </Link>
         </li>
         <li className={styles.dropdown__link}>
-          <Link href="/become-talent" className={styles.link}>
+          <Link href="/find-company" className={styles.link}>
             Find Companies
           </Link>
         </li>

@@ -40,20 +40,21 @@ import {
   export const companyStore = {
     // Company Store
     async getCompanyStore() {
-      const q = query(collection(db, COMPANY), orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
-      const companyStore = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      return companyStore;
-    },
+      try {
+        const q = collection(db, COMPANY);
+        const querySnapshot = await getDocs(q);
+        
+        const companyIds = querySnapshot.docs.map((doc) => ({
+          companyId: doc.id, 
+          ...doc.data()   
+        }));
   
-    async getCompanyStoreById(id) {
-      const docRef = doc(db, COMPANY, id);
-      const docSnap = await getDoc(docRef);
-      return docSnap.data();
-    },
+      return companyIds;
+      } catch (error) {
+        console.error("Error fetching company IDs:", error);
+        return [];
+      }
+    }
   };
   
   //Add New Company
