@@ -325,7 +325,6 @@ export function convertFutureTimestamp(timestamp) {
   }
 }
 
-
 // Function to save a job ID to the user's saved jobs array
 export const saveJob = async (jobId, jobTitle) => {
   const auth = getAuth();
@@ -436,4 +435,6 @@ export const unsaveJob = async (jobId) => {
     throw error;
   }
 };
+
+
 
