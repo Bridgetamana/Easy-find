@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { EditorState, ContentState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import htmlToDraft from "html-to-draftjs";
-import draftToHtml from "draftjs-to-html";
 import { useRouter } from "next/router";
 import {
   getJobDetailsById,
   updateJobDetails,
 } from "@/firebaseConfig/companyStore";
+import dynamic from "next/dynamic";
+
 import styles from "./style.module.scss";
 import LoadingScreen from "../../../utils/Loaders/Loader";
+
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  { ssr: false }
+);
+
+const htmlToDraft = dynamic(() => import("html-to-draftjs"), { ssr: false });
+
+const draftToHtml = dynamic(() => import("draftjs-to-html"), { ssr: false });
 
 const EditJobForm = () => {
   const router = useRouter();
