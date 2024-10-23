@@ -3,7 +3,16 @@ import { MdEdit } from "react-icons/md";
 import styles from "./style.module.scss";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
-import { updateTalent, talentStore } from '../../../../firebaseConfig/talentStore';
+import { doc, updateDoc } from "firebase/firestore";
+import { db, storage,  auth} from "../../../../firebaseConfig/firebase"; 
+import { updateTalent, talentStore,} from '../../../../firebaseConfig/talentStore';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage"; 
+import LoadingScreen from "@/components/utils/Loaders/Loader";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
 export default function TalentProfileForm() {
   
@@ -36,6 +45,7 @@ export default function TalentProfileForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [alert, setAlert] = useState(null)
 
   const router = useRouter();
   const [id, setId] = useState(null); 
@@ -66,68 +76,128 @@ export default function TalentProfileForm() {
     }
   }, [id]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value, files } = e.target;
-
+  
     if (files && files.length > 0) {
       const file = files[0];
-      const imageUrl = URL.createObjectURL(file);
-
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: file,
-        photo: imageUrl,
-      }));
+      if (name === 'photo') {
+          const photoRef = ref(storage, `profilePhotos/${id}/${file.name}`);
+          await uploadBytes(photoRef, file);
+          const photoURL = await getDownloadURL(photoRef);
+          setFormData((prevData) => ({
+              ...prevData,
+              photo: photoURL,
+          }));
+        }
     } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
+      setFormData((prevData) => ({
+        ...prevData,
         [name]: value,
       }));
     }
   };
-
+  
   const handleSaveClick = async (e) => {
     e.preventDefault();
-  
-    // Validate the form data
+
     if (formData.email.length < 1 || formData.username.length < 1) {
       setErrorMsg("Email and username must have at least 1 character.");
       setTimeout(() => {
-        setErrorMsg("");
+          setErrorMsg("");
       }, 3000);
       return;
     }
-  
-    try {
-      setIsLoading(true);
 
-      const payload = {
-        ...formData,
-        id, 
-      };
-     
-      // Update the user data
-      await updateTalent(payload);
-  
-      setSuccessMsg("Profile updated successfully.");
+    if (formData.company.length < 1 || formData.position.length < 1) {
+      setErrorMsg("Please add any experience you've had");
       setTimeout(() => {
-        setSuccessMsg("");
+          setErrorMsg("");
       }, 3000);
-  
-      // Redirect to the talent profile
-      router.push("/talent/profile");
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      setErrorMsg(error.message);
-      setTimeout(() => {
-        setErrorMsg("");
-      }, 3000);
-    } finally {
-      setIsLoading(false);
+      return;
     }
-  };
-  
-  if (isLoading) return <p>Loading...</p>;
+
+    try {
+        setIsLoading(true);
+        const payload = { ...formData, id };
+
+        if (formData.jobTitle && formData.jobTitle.length > 0) {
+          const jobTitleKeywords = generateKeywords(formData.jobTitle);
+          payload.jobTitleKeywords = jobTitleKeywords; 
+      }
+
+        if (formData.photo instanceof File) {
+            if (formData.photo.size > 5 * 1024 * 1024) {
+                setErrorMsg("File size must be less than 5 MB.");
+                return;
+            }
+
+            const validImageTypes = ["image/jpeg", "image/png"];
+            if (!validImageTypes.includes(formData.photo.type)) {
+                setErrorMsg("Invalid file type. Only JPG and PNG are allowed.");
+                return;
+            }
+
+            const photoRef = ref(storage, `profilePhotos/${id}/${formData.photo.name}`);
+            await uploadBytes(photoRef, formData.photo);
+            const photoURL = await getDownloadURL(photoRef);
+            payload.photo = photoURL; 
+        }
+
+        if (formData.resume instanceof File) {
+            if (formData.resume.size > 5 * 1024 * 1024) {
+                setErrorMsg("File size must be less than 5 MB.");
+                return;
+            }
+
+            const validResumeTypes = ["application/pdf"];
+            if (!validResumeTypes.includes(formData.resume.type)) {
+                setErrorMsg("Invalid file type. Only PDF is allowed.");
+                return;
+            }
+
+            const resumeRef = ref(storage, `resumes/${id}/${formData.resume.name}`);
+            await uploadBytes(resumeRef, formData.resume);
+            const resumeURL = await getDownloadURL(resumeRef);
+            payload.resume = resumeURL; 
+        }
+
+        await updateTalent({ id }, payload); 
+
+        if (payload.jobTitleKeywords) {
+          const userRef = doc(db, 'talentCollection', id); 
+          await updateDoc(userRef, { jobTitleKeywords: payload.jobTitleKeywords });
+      }
+
+        router.push("/talent/profile");
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        setErrorMsg(error.message);
+        setTimeout(() => {
+            setErrorMsg("");
+        }, 3000);
+    } finally {
+        setIsLoading(false);
+        showAlert(
+          {
+            type: "success",
+            message: "Profile updated successfully.",
+            timeout: 2000,
+          },
+          setAlert
+        );
+    }
+};
+
+const generateKeywords = (jobTitle) => {
+  const keywords = jobTitle
+      .split(" ") 
+      .map(word => word.toLowerCase()) 
+      .filter(word => word.length > 0); 
+  return keywords;
+};
+
+  if (isLoading) return <div><LoadingScreen /></div>;
 
   return (
     <div className={styles.profile__page}>
@@ -141,9 +211,9 @@ export default function TalentProfileForm() {
               name="photo"
               onChange={handleInputChange}
               className={styles.form__input}
-              // value={formData.photo}
             />
           </div>
+          {alert && alert.component}
           {formData.photo && (
             <img src={formData.photo} alt="Profile" className={styles.image} />
           )}
@@ -311,9 +381,16 @@ export default function TalentProfileForm() {
           <label htmlFor="resume">Update Resume:</label>
           <input
             type="file"
-            accept=".pdf,.doc,.docx"
+            accept=".pdf,.doc, .docx"
             name="resume"
-            onChange={handleInputChange}
+            onChange={(e) => {
+              if (e.target.files.length > 0) {
+                setFormData({
+                  ...formData,
+                  resume: e.target.files[0], 
+                });
+              }
+            }} 
             className={styles.form__input}
             placeholder="Upload your resume"
             required
@@ -377,7 +454,7 @@ export default function TalentProfileForm() {
         <div className={styles.form__group}>
           <label htmlFor="desiredSalary">Desired Salary:</label>
           <input
-            type="num"
+            type="number"
             name="minSalary"
             value={formData.minSalary}
             onChange={handleInputChange}
@@ -385,7 +462,7 @@ export default function TalentProfileForm() {
             placeholder="Enter your desired minimum salary"
           />
           <input
-            type="num"
+            type="number"
             name="maxSalary"
             value={formData.maxSalary}
             onChange={handleInputChange}

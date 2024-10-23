@@ -1,11 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
+import Spinner from "@/components/utils/Loaders/Spinner";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db, auth } from '../../../../firebaseConfig/firebase';
+import { getDownloadURL, getMetadata, ref, getStorage } from "firebase/storage";
+import { talentStore } from "@/firebaseConfig/talentStore";
 
-export default function JobApplicationForm({ closeApplicationForm }) {
-  const [cvSelectedOption, setCvSelectedOption] = useState("");
+export default function JobApplicationForm({ closeApplicationForm, onSuccess, jobId, companyId }) {
+  const [cvSelectedOption, setCvSelectedOption] = useState("applyWithUploadedCV");
+  const [loading, setLoading] = useState(false);
+  const [uploadedCV, setUploadedCV] = useState({ url: null, name: null });
 
   const handleOptionChange = (e) => {
     setCvSelectedOption(e.target.value);
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = auth.currentUser;
+
+        if (!user) {
+          console.error("No user is logged in");
+          return;
+        }
+
+        const userId = user.uid;
+        const userProfile = await talentStore.getTalentStoreById(userId);
+
+        if (userProfile) {
+          if (userProfile.resume) {
+            const storage = getStorage();
+            const resumeRef = ref(storage, userProfile.resume);
+            const metadata = await getMetadata(resumeRef);
+            const downloadURL = await getDownloadURL(resumeRef); 
+
+            setUploadedCV({ url: downloadURL, name: metadata.name });
+          }
+        } else {
+          console.error("User profile not found");
+        }
+      } catch (error) {
+        console.error("An error occurred while fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+  
+    try {
+      const userId = auth.currentUser?.uid;
+      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
+  
+      const appliedJobDoc = await getDoc(appliedJobRef);
+      if (appliedJobDoc.exists()) {
+        return; 
+      }
+
+      await setDoc(appliedJobRef, {
+        userId: userId,
+        jobId: jobId,
+        resume: cvSelectedOption === "applyWithUploadedCV" ? uploadedCV.url : null, 
+      });
+  
+      onSuccess(); 
+      setTimeout(() => {
+        closeApplicationForm();
+      }, 4000);
+    } catch (error) {
+      console.error("Error submitting application:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -15,8 +85,8 @@ export default function JobApplicationForm({ closeApplicationForm }) {
           &times;
         </button>
         <h2 className={styles.modal__title}> Apply Here</h2>
-
-        <form className={styles.modal__form}>
+       
+        <form className={styles.modal__form} onSubmit={handleSubmit}>
           <div className={styles.modal__field}>
             <label htmlFor="fullName">
               Full Name <span className={styles.asterisk}>*</span>
@@ -46,7 +116,7 @@ export default function JobApplicationForm({ closeApplicationForm }) {
           <div className={styles.modal__field}>
             <label htmlFor="phone">Phone Number</label>
             <input
-              type="tel"
+              type="number"
               id="phone"
               name="phone"
               placeholder="Your phone number"
@@ -77,7 +147,8 @@ export default function JobApplicationForm({ closeApplicationForm }) {
               Resume <span className={styles.asterisk}>*</span>
             </label>
             <div className={styles.checkbox__group}>
-              <div className={styles.checkbox__option}>
+              <div className="flex flex-col mb-[0.5rem]">
+                <div className={styles.checkbox__option}>
                 <input
                   type="radio"
                   id="applyWithUploadedCV"
@@ -93,6 +164,10 @@ export default function JobApplicationForm({ closeApplicationForm }) {
                 >
                   Apply with my uploaded CV
                 </label>
+                </div>
+                {cvSelectedOption === "applyWithUploadedCV" && uploadedCV.name && (
+                  <p className="self-center">{uploadedCV.name}</p>
+                )}
               </div>
               <div className={styles.checkbox__option}>
                 <input
@@ -135,7 +210,8 @@ export default function JobApplicationForm({ closeApplicationForm }) {
           </div>
 
           <button type="submit" className={styles.modal__submit}>
-            Submit Application
+          {loading ? <Spinner /> :
+            'Submit Application'}
           </button>
         </form>
       </div>

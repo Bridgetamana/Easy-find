@@ -28,7 +28,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { auth, db } from "./firebase";
+import { auth, db, storage } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -39,6 +39,7 @@ import {
   confirmPasswordReset,
   browserSessionPersistence,
 } from "firebase/auth";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 const TALENT = "talentCollection";
 
@@ -127,9 +128,53 @@ export const resetPassword = async (oobCode, newPassword) => {
 };
 
 //Update Talent
-export const updateTalent = async (talent) => {
-  const docRef = doc(db, TALENT, talent.id);
-  await updateDoc(docRef, talent);
+export const updateTalent = async (talent, payload) => {
+  try {
+    const docRef = doc(db, "talentCollection", talent.id);
+
+    let photoUrl = payload.photo; 
+    let resumeUrl = payload.resume;
+
+    if (payload.photo instanceof File) {
+      const photoStorageRef = ref(storage, `talents/${talent.id}/profilePhoto`);
+      const photoSnapshot = await uploadBytes(photoStorageRef, payload.photo);
+      photoUrl = await getDownloadURL(photoSnapshot.ref); 
+    }
+
+    // Checking if new resume is being uploaded
+    if (payload.resume instanceof File) {
+      const resumeStorageRef = ref(storage, `talents/${talent.id}/resume`);
+      const resumeSnapshot = await uploadBytes(resumeStorageRef, payload.resume);
+      resumeUrl = await getDownloadURL(resumeSnapshot.ref); 
+    }
+
+    await updateDoc(docRef, {
+      username: payload.username,
+      email: payload.email,
+      bio: payload.bio,
+      photo: photoUrl,
+      resume: resumeUrl,
+      dob: payload.dob,
+      gender: payload.gender,
+      pronouns: payload.pronouns,
+      jobTitle: payload.jobTitle,
+      minSalary: payload.minSalary,
+      maxSalary: payload.maxSalary,
+      linkedin: payload.linkedin,
+      portfolio: payload.portfolio,
+      address: payload.address,
+      phone: payload.phone,
+      mobile: payload.mobile,
+      skills: payload.skills,
+      institute: payload.institute,
+      degree: payload.degree,
+      company: payload.company,
+      position: payload.position,
+    });
+  } catch (error) {
+    console.error("Error updating talent:", error);
+    throw error;
+  }
 };
 
 //Delete Talent
@@ -138,31 +183,56 @@ export const deleteTalent = async (id) => {
   await deleteDoc(docRef);
 };
 
-const JOBS = "jobListings";
-//Fetch jobs
+const COMPANIES = "companyCollection";
+
+// Fetch jobs from all companies
 export const getJobs = async () => {
-  const q = query(collection(db, JOBS), orderBy("datePosted", "desc"));
-  const querySnapshot = await getDocs(q);
-  const jobs = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  const companiesSnapshot = await getDocs(collection(db, COMPANIES));
+
+  let jobs = [];
+
+  for (const companyDoc of companiesSnapshot.docs) {
+    const companyId = companyDoc.id;
+    const jobsSnapshot = await getDocs(
+      collection(db, `companyCollection/${companyId}/jobs`)
+    );
+
+    jobsSnapshot.forEach((jobDoc) => {
+      jobs.push({
+        id: jobDoc.id,
+        companyId: companyId, 
+        ...jobDoc.data(),
+      });
+    });
+  }
+
   return jobs;
 };
 
 //Fetch jobs by id
-export const getJobById = async (id) => {
-  const docRef = doc(db, JOBS, id);
-  const docSnap = await getDoc(docRef);
-  return docSnap.data();
+export const getJobById = async (companyId, jobId) => {
+  try {
+    const jobRef = doc(collection(db, COMPANIES, companyId, "jobs"), jobId);
+    const docSnap = await getDoc(jobRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.error("No such job found!");
+      return null; 
+    }
+  } catch (error) {
+    console.error("Error fetching job:", error);
+    throw error; 
+  }
 };
 
 // get jobs based on search input
-export const searchJobs = (searchInput, setJobs, setNoResults) => {
+export const searchJobs = (searchInput, setJobs, setNoResults, userId) => {
   if (!searchInput.trim()) return;
 
   const q = query(
-    collection(db, JOBS),
+    collection(db, `companyCollection/${userId}/jobs`), 
     where("title", ">=", searchInput),
     where("title", "<=", searchInput + "\uf8ff")
   );
@@ -198,20 +268,25 @@ export function convertTimestamp(timestamp) {
     return 'Invalid timestamp';
   }
 
-  const now = new Date();
-  const timestampDate = timestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
+  let timestampDate;
 
+  if (typeof timestamp.toDate === 'function') {
+    timestampDate = timestamp.toDate(); 
+  } else if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+    timestampDate = new Date(timestamp); 
+  } else {
+    return 'Invalid timestamp';
+  }
+
+  const now = new Date();
   const diff = now - timestampDate;
   const days = Math.floor(diff / (24 * 60 * 60 * 1000));
 
   if (days >= 2) {
-    // More than 2 days, show the days ago
     return `${days} days ago`;
   } else if (days === 1) {
-    // Yesterday
     return 'Yesterday';
   } else {
-    // Today
     return 'Today';
   }
 }
@@ -221,10 +296,17 @@ export function convertFutureTimestamp(timestamp) {
     return 'Invalid timestamp';
   }
 
-  const now = new Date();
-  const timestampDate = timestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
+  let timestampDate;
+  if (typeof timestamp.toDate === 'function') {
+    timestampDate = timestamp.toDate(); 
+  } else if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+    timestampDate = new Date(timestamp); 
+  } else {
+    return 'Invalid timestamp';
+  }
 
-  const diff = timestampDate - now;
+  const now = new Date();
+  const diff = timestampDate - now; 
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   if (days >= 2) {
@@ -239,7 +321,7 @@ export function convertFutureTimestamp(timestamp) {
     return 'Today';
   } else {
     // In the past
-    return `${-days} ${days === 1 ? 'day' : 'days'} ago`;
+    return `${-days} ${days === -1 ? 'day' : 'days'} ago`;
   }
 }
 
@@ -353,4 +435,6 @@ export const unsaveJob = async (jobId) => {
     throw error;
   }
 };
+
+
 

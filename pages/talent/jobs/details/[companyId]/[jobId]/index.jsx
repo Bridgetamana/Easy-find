@@ -10,8 +10,8 @@ import {
   unsaveJob,
   saveJob,
 } from "@/firebaseConfig/talentStore";
-import { db, auth } from '../../../../../firebaseConfig/firebase'; 
-import { doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
+import { db, auth } from "../../../../../../firebaseConfig/firebase";
+import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { BiBadgeCheck } from "react-icons/bi";
 import Button from "@/components/utils/Button";
 import { BsCheck2Circle, BsHeart, BsHeartFill } from "react-icons/bs";
@@ -20,31 +20,25 @@ import LoadingScreen from "@/components/utils/Loaders/Loader";
 import ProtectedRoute from "@/utils/protectedRoute";
 import Link from "next/link";
 import styles from "./style.module.scss";
-import TalentLayout from "../../../layout";
-import JobApplicationForm from "../../../../../components/authorized/CompanyComponents/JobApplicationForm";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
+import TalentLayout from "../../../../layout";
+import JobApplicationForm from "../../../../../../components/authorized/CompanyComponents/JobApplicationForm";
 
 const JobDetails = () => {
   const router = useRouter();
-  const { detailsId } = router.query;
-  const jobId = detailsId;
+  const { companyId, jobId } = router.query;
   const [isSaved, setIsSaved] = useState(false);
   const [jobDetails, setJobDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
   const [JobApplicationModal, setJobApllicationModal] = useState(false);
-
-  const togglejobApplicationModal = () => {
-    setJobApllicationModal(!JobApplicationModal);
-  };
-
-  const closeApplicationForm = () => {
-    setJobApllicationModal(false);
-  };
-
+  const [applicationSubmitted, setApplicationSubmitted] = useState(false);
+ 
   const fetchJobDetails = async () => {
-    if (!jobId) return;
+    if (!jobId || !companyId) return; 
     setIsLoading(true);
     try {
-      const response = await getJobById(jobId);
+      const response = await getJobById(companyId, jobId); 
       setJobDetails(response);
     } catch (error) {
       console.error("Error fetching job details:", error);
@@ -54,52 +48,152 @@ const JobDetails = () => {
   };
 
   useEffect(() => {
+    fetchJobDetails();
+  }, [jobId, companyId]); 
+
+  useEffect(() => {
     if (jobId) {
-      fetchJobDetails();
+      checkIfApplied();
+    }
+    
+  }, [jobId]);
+  
+  const checkIfApplied = async () => {
+    const userId = auth.currentUser?.uid;
+  
+    if (!userId || !jobId || !companyId) return; 
+  
+    try {
+      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
+      const appliedJobDoc = await getDoc(appliedJobRef);
+  
+      if (appliedJobDoc.exists()) {
+        setApplicationSubmitted(true);
+      } else {
+        setApplicationSubmitted(false); 
+      }
+    } catch (error) {
+      console.error("Error checking applied job status:", error);
+    }
+  };
+  
+  useEffect(() => {
+    if (jobId) {
+      checkIfApplied();
     }
   }, [jobId]);
-
-
-  const handleSaveJob = async (jobId, jobDetails) => {
-    const userId = auth.currentUser?.uid; 
   
+  
+  const togglejobApplicationModal = () => {
+    setJobApllicationModal(!JobApplicationModal);
+  };
+
+  const closeApplicationForm = () => {
+    setJobApllicationModal(false);
+  };
+
+  const handleApplicationSuccess = async () => {
+    const userId = auth.currentUser?.uid;
+  
+    if (!userId || !jobId || !companyId) return;
+  
+    try {
+      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
+      setApplicationSubmitted(true);  
+      togglejobApplicationModal();
+      showAlert(
+        {
+          type: "success",
+          message: "Job application successfully submitted!",
+          timeout: 3000,
+        },
+        setAlert
+      );
+  
+      await setDoc(appliedJobRef, {
+        userId: userId,
+          jobId: jobId,
+          title: jobDetails.title,
+        appliedAt: new Date(),
+      });
+  
+    } catch (error) {
+      showAlert(
+        {
+          type: "error",
+          message: "Error applying for job, Please try again",
+          timeout: 3000,
+        },
+        setAlert
+      );
+    }
+  };
+  
+  const handleSaveJob = async (jobId, jobDetails) => {
+    const userId = auth.currentUser?.uid;
+
     if (!userId) {
       console.error("User is not logged in");
       return;
     }
-  
+
     try {
-      const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
-  
+      const savedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/savedForLater`, userId);
+
       if (isSaved) {
         await deleteDoc(savedJobRef);
-        console.log("Job unsaved successfully.");
+        showAlert(
+          {
+            type: "warning", 
+            message: "Job removed from your saved list.",
+            timeout: 3000, 
+          },
+          setAlert
+        );
       } else {
         await setDoc(savedJobRef, {
           userId: userId,
           jobId: jobId,
           title: jobDetails.title,
-          company: jobDetails.companyName,
           savedAt: new Date(),
         });
-        console.log("Job saved successfully.");
+        showAlert(
+          {
+            type: "success",
+            message: "Job successfully saved.",
+            timeout: 3000,
+          },
+          setAlert
+        );
       }
-  
+
       setIsSaved(!isSaved);
     } catch (error) {
-      console.error("Error saving or unsaving job:", error.message);
+      showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: "An error occurred while saving the job.",
+          timeout: 3000,
+        },
+        setAlert
+      );
     }
   };
 
   useEffect(() => {
     const checkIfJobIsSaved = async () => {
       const userId = auth.currentUser?.uid;
-      if (!userId) return;
-  
+      if (!userId || !companyId) return;
+
       try {
-        const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+        const savedJobRef = doc(
+          db,
+          `companyCollection/${companyId}/jobs/${jobId}/savedForLater`,
+          userId
+        );
         const docSnap = await getDoc(savedJobRef);
-  
+
         if (docSnap.exists()) {
           setIsSaved(true);
         } else {
@@ -109,16 +203,16 @@ const JobDetails = () => {
         console.error("Error checking if job is saved:", error.message);
       }
     };
-  
+
     if (jobId) {
       checkIfJobIsSaved();
     }
-  }, [jobId]);  
-
+  }, [jobId]);
 
   const notSpecified = (
     <span className={styles.not__specified}>Not Specified</span>
   );
+
 
   return (
     <ProtectedRoute>
@@ -135,6 +229,7 @@ const JobDetails = () => {
                 />
               </Link>
               {isLoading && <LoadingScreen />}
+              {alert && alert.component}
               <h2 className={styles.details__title}>{jobDetails.title}</h2>
               <div className={styles.details__flex}>
                 <p className={styles.details__type}>
@@ -146,7 +241,10 @@ const JobDetails = () => {
                   {convertTimestamp(jobDetails.datePosted)}
                 </p>
               </div>
-              <button className={styles.save__button}  onClick={() => handleSaveJob(jobId, jobDetails)}>
+              <button
+                className={styles.save__button}
+                onClick={() => handleSaveJob(jobId, jobDetails)}
+              >
                 {isSaved ? (
                   <BsHeartFill fill="#ff0000" />
                 ) : (
@@ -310,14 +408,18 @@ const JobDetails = () => {
               </div>
               <div className={styles.skills__content}>
                 <ul className={styles.skills__list}>
-                  {jobDetails.skills.map((skill, index) => (
+                {jobDetails?.skills?.length > 0 ? (
+                  jobDetails.skills.map((skill, index) => (
                     <li className={styles.skills__item} key={index}>
                       <p className={styles.skills__text}>
                         <BsCheck2Circle fill="#66789c" />
                         {skill}
                       </p>
                     </li>
-                  ))}
+                  ))
+                ) : (
+                  <p>No skills listed</p> 
+                )}
                 </ul>
               </div>
             </section>
@@ -345,31 +447,42 @@ const JobDetails = () => {
                 <h2 className={styles.skills__title}>Job Benefits</h2>
               </div>
               <div className={styles.skills__content}>
-                <ul className={styles.skills__list}>
-                  {jobDetails.benefits.map((benefit, index) => (
+              <ul className={styles.skills__list}>
+                {Array.isArray(jobDetails?.benefits) && jobDetails.benefits.length > 0 ? (
+                  jobDetails.benefits.map((benefit, index) => (
                     <li className={styles.skills__item} key={index}>
                       <p className={styles.skills__text}>
                         <BsCheck2Circle fill="#66789c" />
                         {benefit}
                       </p>
                     </li>
-                  ))}
-                </ul>
+                  ))
+                ) : (
+                  <p>No benefits listed</p>
+                )}
+              </ul>
               </div>
             </section>
 
             {/* Application Button */}
-            {/* <Link href={`/apply/${job.id}`}> */}
             <button
-              className={styles.apply__button}
+              className={`${styles.apply__button} ${
+                applicationSubmitted ? styles.disabledButton : ""
+              }`}
               onClick={togglejobApplicationModal}
+              disabled={applicationSubmitted}  
             >
               <BiBadgeCheck fill="#fff" />
-              Apply Now
+              {applicationSubmitted ? "Applied" : "Apply"}
             </button>
             {JobApplicationModal && (
               <div>
-                <JobApplicationForm closeApplicationForm={closeApplicationForm}/>
+                <JobApplicationForm
+                  closeApplicationForm={closeApplicationForm}
+                  onSuccess={handleApplicationSuccess}
+                  jobId={jobId}  
+                  jobDetails={jobDetails}
+                />
               </div>
             )}
           </div>

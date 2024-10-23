@@ -9,6 +9,7 @@ import SavedJobs from "@/components/authorized/TalentComponents/SavedJobs";
 import UserName from "@/components/authorized/TalentComponents/UserName";
 import TalentLayout from "./layout";
 import TalentHero from "@/components/authorized/TalentComponents/TalentHero";
+import FeaturedJobs from "@/components/authorized/TalentComponents/FeatureJobs";
 
 const HomePage = () => {
   return (
@@ -17,6 +18,7 @@ const HomePage = () => {
         <UserName />
         <TalentHero />
         {/* <ExpectationSection /> */}
+        <FeaturedJobs />
         <SavedJobs />
         <AppliedJobs />
       </TalentLayout>

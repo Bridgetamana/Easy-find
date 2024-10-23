@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../../../firebaseConfig/firebase"; 
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 import styles from "./style.module.scss";
 import { IoAddCircle } from "react-icons/io5";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import Link from "next/link";
 
 export default function SavedJobs() {
   const [savedJobs, setSavedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true); 
   const [userId, setUserId] = useState(null); 
+  const [alert, setAlert] = useState(null)
 
-  
   useEffect(() => {
     const currentUser = auth.currentUser; 
     if (currentUser) {
@@ -24,67 +25,72 @@ export default function SavedJobs() {
     }
   }, [userId]);
 
-  
   const fetchSavedJobs = async () => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true); 
     try {
-      const userId = auth.currentUser?.uid; // Get current user ID
+      const userId = auth.currentUser?.uid; 
       if (!userId) {
         console.error("User is not logged in");
         return;
       }
   
-      // Fetch all job listings
-      const jobListingsRef = collection(db, "jobListings");
-      const jobListingsSnapshot = await getDocs(jobListingsRef);
+      const companiesRef = collection(db, "companyCollection");
+      const companiesSnapshot = await getDocs(companiesRef);
       const jobs = [];
-  
-      for (const jobDoc of jobListingsSnapshot.docs) {
-        const savedForLaterRef = collection(jobDoc.ref, "savedForLater");
-        const savedJobsSnapshot = await getDocs(savedForLaterRef);
-  
-        savedJobsSnapshot.forEach((savedJobDoc) => {
-          const savedJobData = savedJobDoc.data();
-          // Check if the saved job belongs to the current user
-          if (savedJobData.userId === userId) {
+
+      for (const companyDoc of companiesSnapshot.docs) {
+        const jobsRef = collection(companyDoc.ref, "jobs");
+        const jobsSnapshot = await getDocs(jobsRef);
+
+        for (const jobDoc of jobsSnapshot.docs) {
+          const savedForLaterRef = doc(db, `companyCollection/${companyDoc.id}/jobs/${jobDoc.id}/savedForLater/${userId}`);
+          const savedJobDoc = await getDoc(savedForLaterRef);
+
+          if (savedJobDoc.exists()) {
+            const savedJobData = savedJobDoc.data();
             jobs.push({
               id: savedJobDoc.id,
               ...savedJobData,
-              jobId: jobDoc.id, // include the jobId for reference
+              jobId: jobDoc.id,
+              companyId: companyDoc.id,  
             });
           }
-        });
+        }
       }
-  
+
       setSavedJobs(jobs);
     } catch (error) {
       console.error("Failed to fetch saved jobs:", error);
     } finally {
-      setIsLoading(false); // Stop loading regardless of success or error
+      setIsLoading(false); 
     }
   };  
 
-const handleDelete = async (jobId) => {
-  const userId = auth.currentUser?.uid;
+  const handleDelete = async (jobId, companyId) => {
+    const userId = auth.currentUser?.uid;
 
-  if (!userId) {
-    console.error("User is not logged in");
-    return;
-  }
+    if (!userId) {
+      console.error("User is not logged in");
+      return;
+    }
 
-  try {
-    const savedJobRef = doc(db, `jobListings/${jobId}/savedForLater`, userId);
+    try {
+       const savedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/savedForLater/${userId}`);
+      await deleteDoc(savedJobRef);
 
-    await deleteDoc(savedJobRef);
-
-    console.log("Job removed successfully.");
-    setSavedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
-
-  } catch (error) {
-    console.error("Error removing job:", error.message);
-  }
-};
-
+      setSavedJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
+      showAlert(
+        {
+          type: "success",
+          message: "Job Unsaved!",
+          timeout: 3000,
+        },
+        setAlert
+      );
+    } catch (error) {
+      console.error("Error removing job:", error.message);
+    }
+  };
   
   return (
     <section className={styles.savedJobs__section}>
@@ -92,7 +98,8 @@ const handleDelete = async (jobId) => {
         <div className={styles.savedJobs__header}>
           <h2 className={styles.savedJobs__title}>Saved Jobs</h2>
         </div>
-
+        
+        {alert && alert.component}
         {isLoading ? (
           <p>Loading saved jobs...</p>
         ) : savedJobs.length > 0 ? (
@@ -112,13 +119,13 @@ const handleDelete = async (jobId) => {
                   </div>
                 </div>
                 <div className={styles.item__buttons}>
-                  <Link href={`/talent/jobs/details/${job.jobId}`}>
+                  <Link href={`/talent/jobs/details/${job.companyId}/${job.jobId}`}>
                     <button className={styles.btn__link}>View</button>
                   </Link>
-                  <Link href={`/talent/jobs/details/${job.jobId}`}>
+                  <Link href={`/talent/jobs/details/${job.companyId}/${job.jobId}`}>
                     <button className={styles.btn__link}>Apply</button>
                   </Link>
-                  <button className={styles.btn__link} onClick={() => handleDelete(job.jobId)}>Remove</button>
+                  <button className={styles.btn__link} onClick={() => handleDelete(job.jobId, job.companyId)}>Remove</button>
                 </div>
               </li>
             ))}

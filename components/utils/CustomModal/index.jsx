@@ -94,16 +94,16 @@ export default function CustomModal({
                 </div>
                 {showConfirmButton === true && (
                   <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                    <button
+                    {/* <button
                       type="button"
                       className={`inline-flex w-full justify-center rounded-md ${confirmButtonBgColor} px-3 py-2 text-sm font-semibold ${confirmButtonTextColor} shadow-sm hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-${buttonBgColor} sm:col-start-2`}
                       onClick={onConfirm}
                     >
                       {confirmButtonText}
-                    </button>
+                    </button> */}
                     <button
                       type="button"
-                      className={`mt-3 inline-flex w-full justify-center rounded-md ${cancelButtonBgColor} px-3 py-2 text-sm font-semibold ${cancelButtonTextColor} shadow-sm ring-1 ring-inset ring-gray-300 hover:backdrop-contrast-75 sm:col-start-1 sm:mt-0`}
+                      className={`mt-3 inline-flex self-end w-full justify-center rounded-md ${cancelButtonBgColor} px-3 py-2 text-sm font-semibold ${cancelButtonTextColor} shadow-sm ring-1 ring-inset ring-gray-300 hover:backdrop-contrast-75 sm:col-start-1 sm:mt-0`}
                       onClick={onCancel || onClose}
                       ref={cancelButtonRef}
                     >

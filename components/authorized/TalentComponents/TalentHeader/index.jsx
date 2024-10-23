@@ -152,7 +152,7 @@ export default function TalentHeader() {
             className={styles.logo}
           />
         </div>
-        <di className={styles.icons__wrap}>
+        <div className={styles.header__options}>
           <button
             type="button"
             className={styles.menu__button}
@@ -167,7 +167,7 @@ export default function TalentHeader() {
           >
             <FiMenu size={24} stroke="#2563eb" fill="#2563eb" />
           </button>
-        </di>
+        </div>
         <nav
           className={`${styles.nav__bar} ${
             showMenu ? styles.show__navbar : styles.nav__bar
