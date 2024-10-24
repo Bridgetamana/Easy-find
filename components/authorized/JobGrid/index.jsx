@@ -4,7 +4,6 @@ import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
 import { getJobs, searchJobs } from "@/firebaseConfig/talentStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
-import JobDetails from "../JobDetails";
 import { useRouter } from "next/navigation";
 import styles from "./style.module.scss";
 

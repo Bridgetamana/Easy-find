@@ -2,56 +2,70 @@ import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import styles from "./style.module.scss";
 import { useRouter } from "next/router";
-import { updateCompany } from '../../../../firebaseConfig/companyStore';
+import {
+  companyStore,
+  updateCompany,
+} from "../../../../firebaseConfig/companyStore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import LoadingScreen from "../../../utils/Loaders/Loader";
 
 export default function CompanyProfileForm() {
-  
   const initialFormData = {
     id: null,
-    username: "",
+    fullName: "",
     email: "",
     bio: "",
-    photo: null,
-    dob: "",
-    gender: "",
-    pronouns: "",
-    jobTitle: "",
-    minSalary: "",
-    maxSalary: "",
     linkedin: "",
-    portfolio: "",
-    address: "",
+    photo: null,
+    location: "",
     phone: "",
-    mobile: "",
-    resume: null,
-    skills: "",
-    institute: "",
-    degree: "",
-    company: "",
-    position: "",
+    website: "",
+    industry: "",
+    size: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState({
+    fullName: "",
+    email: "",
+    bio: "",
+    location: "",
+    phone: "",
+    website: "",
+    linkedin: "",
+    industry: "",
+    size: "",
+  });
 
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    if (id) {
-      const fetchUserData = async () => {
-        try {
-          const data = await companyStore.getCompanyStoreById(id);
-          setFormData(data);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-      };
+    const fetchCompanyData = async () => {
+      if (!id) {
+        return;
+      }
 
-      fetchUserData();
-    }
+      try {
+        setIsLoading(true);
+        const data = await companyStore.getCompanyStoreById(id);
+
+        if (data) {
+          setFormData((prevState) => ({
+            ...prevState,
+            ...data,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching company data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCompanyData();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -71,52 +85,104 @@ export default function CompanyProfileForm() {
         ...prevFormData,
         [name]: value,
       }));
+      setErrorMsg((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
     }
   };
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
-  
-    // Validate the form data
-    if (formData.email.length < 1 || formData.username.length < 1) {
-      setErrorMsg("Email and username must have at least 1 character.");
-      setTimeout(() => {
-        setErrorMsg("");
-      }, 3000);
-      return;
+    setErrorMsg({
+      fullName: "",
+      email: "",
+      bio: "",
+      location: "",
+      phone: "",
+      website: "",
+      linkedin: "",
+      industry: "",
+      size: "",
+    });
+
+    let hasError = false;
+
+    if (!formData.fullName) {
+      setErrorMsg((prev) => ({ ...prev, fullName: "Full Name is required." }));
+      hasError = true;
+    } else if (formData.fullName.length < 2) {
+      setErrorMsg((prev) => ({ ...prev, fullName: "Full Name must be at least 2 characters long." }));
+      hasError = true;
     }
-  
+
+    if (!formData.email) {
+      setErrorMsg((prev) => ({ ...prev, email: "Email is required." }));
+      hasError = true;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrorMsg((prev) => ({ ...prev, email: "Email address is invalid." }));
+      hasError = true;
+    }
+
+    if (!formData.bio) {
+      setErrorMsg((prev) => ({ ...prev, bio: "Bio is required." }));
+      hasError = true;
+    } else if (formData.bio.length < 10) {
+      setErrorMsg((prev) => ({ ...prev, bio: "Bio must be at least 10 characters long." }));
+      hasError = true;
+    }
+
+    if (!formData.location) {
+      setErrorMsg((prev) => ({ ...prev, location: "Location is required." }));
+      hasError = true;
+    }
+
+    if (!formData.phone) {
+      setErrorMsg((prev) => ({ ...prev, phone: "Phone number is required." }));
+      hasError = true;
+    }
+
+    if (hasError) return;
+
     try {
       setIsLoading(true);
-  
-      // Prepare the payload with ID
+
       const payload = {
         ...formData,
-        id, // Ensure that the user ID is included
+        id,
       };
-  
-      // Update the user data
       await updateCompany(payload);
-  
+
       setSuccessMsg("Profile updated successfully.");
       setTimeout(() => {
         setSuccessMsg("");
       }, 3000);
-  
-      // Redirect to the company profile
+
       router.push("/company/profile");
     } catch (error) {
       console.error("Error updating profile:", error);
-      setErrorMsg(error.message);
+      setErrorMsg((prev) => ({ ...prev, general: error.message }));
       setTimeout(() => {
-        setErrorMsg("");
+        setErrorMsg((prev) => ({ ...prev, general: "" }));
       }, 3000);
     } finally {
       setIsLoading(false);
     }
   };
-  
-  if (isLoading) return <p>Loading...</p>;
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        photo: imageUrl,
+        file,
+      }));
+    }
+  };
+
+  if (isLoading) return <LoadingScreen/>;
 
   return (
     <div className={styles.profile__page}>
@@ -128,28 +194,29 @@ export default function CompanyProfileForm() {
               type="file"
               accept="image/*"
               name="photo"
-              onChange={handleInputChange}
+              onChange={handleImageUpload}
               className={styles.form__input}
-              // value={formData.photo}
             />
           </div>
-          {formData.photo && (
+          {formData.photo ? (
             <img src={formData.photo} alt="Profile" className={styles.image} />
+          ) : (
+            <img src="" alt="Default Profile" className={styles.image} />
           )}
         </div>
+
         <div className={styles.form__group}>
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="fullName">Full Name:</label>
           <input
             type="text"
-            name="username"
-            value={formData.username}
+            name="fullName"
+            value={formData.fullName || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your name"
-            title="Start with capital letter and use only letters"
-            pattern="^[A-Z][a-z]+$"
+            placeholder="Enter your full name"
             required
           />
+          {errorMsg.fullName && <p className={styles.error}>{errorMsg.fullName}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -157,12 +224,13 @@ export default function CompanyProfileForm() {
           <input
             type="email"
             name="email"
-            value={formData.email}
+            value={formData.email || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your email address"
             required
           />
+          {errorMsg.email && <p className={styles.error}>{errorMsg.email}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -170,105 +238,27 @@ export default function CompanyProfileForm() {
           <input
             type="text"
             name="bio"
-            value={formData.bio}
+            value={formData.bio || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your bio"
             required
           />
+          {errorMsg.bio && <p className={styles.error}>{errorMsg.bio}</p>}
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="dob">Date of Birth:</label>
-          <input
-            type="date"
-            name="dob"
-            value={formData.dob}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your date of birth"
-          />
-        </div>
-
-        <div className={styles.form__group}>
-          <label htmlFor="pronouns">Pronouns:</label>
-          <select
-            name="pronouns"
-            className={styles.form__select}
-            value={formData.pronouns}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="">Select pronouns</option>
-            <option value="She/Her">She/Her</option>
-            <option value="He/Him">He/Him</option>
-            <option value="They/Them">They/Them</option>
-          </select>
-        </div>
-
-        <div className={styles.form__group}>
-          <label htmlFor="gender">Gender:</label>
-          <select
-            name="gender"
-            className={styles.form__select}
-            value={formData.gender}
-            onChange={handleInputChange}
-          >
-            <option value="">Select gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Others">Others</option>
-          </select>
-        </div>
-
-        <div className={styles.form__group}>
-          <label htmlFor="jobTitle">Job Title:</label>
+          <label htmlFor="address">Location:</label>
           <input
             type="text"
-            name="jobTitle"
-            value={formData.jobTitle}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your job title"
-            required
-          />
-        </div>
-
-        <div className={styles.form__group}>
-          <label htmlFor="socialLinks">LinkedIn Link:</label>
-          <input
-            type="text"
-            name="linkedin"
-            value={formData.linkedin}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your LinkedIn link"
-          />
-        </div>
-
-        <div className={styles.form__group}>
-          <label htmlFor="socialLinks">Portfolio Link:</label>
-          <input
-            type="link"
-            name="portfolio"
-            value={formData.portfolio}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your portfolio link"
-          />
-        </div>
-
-        <div className={styles.form__group}>
-          <label htmlFor="address">Address:</label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
+            name="location"
+            value={formData.location || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your address"
             required
           />
+          {errorMsg.location && <p className={styles.error}>{errorMsg.location}</p>}
         </div>
 
         <div className={styles.form__group}>
@@ -276,113 +266,79 @@ export default function CompanyProfileForm() {
           <input
             type="text"
             name="phone"
-            value={formData.phone}
+            value={formData.phone || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your phone number"
             required
           />
+          {errorMsg.phone && <p className={styles.error}>{errorMsg.phone}</p>}
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="mobile">Mobile:</label>
+          <label htmlFor="website">Website:</label>
           <input
             type="text"
-            name="mobile"
-            value={formData.mobile}
+            name="website"
+            value={formData.website || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your mobile number"
-          />
-        </div>
-
-        <div className={styles.form__group}>
-          <label htmlFor="resume">Update Resume:</label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            name="resume"
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Upload your resume"
+            placeholder="Enter your website link"
             required
           />
+          {errorMsg.website && <p className={styles.error}>{errorMsg.website}</p>}
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="skills">Skills:</label>
+          <label htmlFor="linkedin">LinkedIn:</label>
           <input
             type="text"
-            name="skills"
-            value={formData.skills}
+            name="linkedin"
+            value={formData.linkedin || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your skills"
+            placeholder="Enter your company's LinkedIn"
             required
           />
-        </div>
-        <div className={styles.form__group}>
-          <label htmlFor="skills">Education:</label>
-          <input
-            type="text"
-            name="institute"
-            value={formData.institute}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your institute"
-          />
-          <input
-            type="text"
-            name="degree"
-            value={formData.degree}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your degree"
-            required
-          />
+          {errorMsg.linkedin && <p className={styles.error}>{errorMsg.linkedin}</p>}
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="skills">Experience:</label>
+          <label htmlFor="industry">Industry:</label>
           <input
             type="text"
-            name="company"
-            value={formData.company}
+            name="industry"
+            value={formData.industry || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your company"
+            placeholder="Enter your industry"
             required
           />
-          <input
-            type="text"
-            name="position"
-            value={formData.position}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your position"
-          />
+          {errorMsg.industry && <p className={styles.error}>{errorMsg.industry}</p>}
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="desiredSalary">Desired Salary:</label>
-          <input
-            type="number"
-            name="minSalary"
-            value={formData.minSalary}
+          <label htmlFor="size">Company Size:</label>
+          <select
+            name="size"
+            value={formData.size || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your desired minimum salary"
-          />
-          <input
-            type="num"
-            name="maxSalary"
-            value={formData.maxSalary}
-            onChange={handleInputChange}
-            className={styles.form__input}
-            placeholder="Enter your desired maximum salary"
-          />
+            required
+          >
+            <option value="" disabled>
+              Select your company size
+            </option>
+            <option value="2-10">2-10 employees</option>
+            <option value="10-50">10-50 employees</option>
+            <option value="50-200">50-200 employees</option>
+            <option value="200-500">200-500 employees</option>
+            <option value="500+">500+ employees</option>
+          </select>
+          {errorMsg.size && <p className={styles.error}>{errorMsg.size}</p>}
         </div>
-        {errorMsg && <p className={styles.error}>{errorMsg}</p>}
+
+        {errorMsg.general && <p className={styles.error}>{errorMsg.general}</p>}
         {successMsg && <p className={styles.success}>{successMsg}</p>}
         <button onClick={handleSaveClick} className={styles.save__button}>
           {isLoading ? <div className={styles.spinner}></div> : "Save"}

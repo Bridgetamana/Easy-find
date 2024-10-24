@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { addJobPost } from "@/firebaseConfig/companyStore";
 import { EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
+import dynamic from "next/dynamic";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./style.module.scss";
+
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then(mod => mod.Editor),
+  { ssr: false }
+);
 
 const JobPostForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +50,6 @@ const JobPostForm = () => {
     const cleanFormData = {
       title: formData.jobTitle,
       description: formData.jobDescription,
-      datePosted: formatDate(new Date()), // Format the date to YYYY-MM-DD
       deadline: formatDate(new Date(formData.deadline)), // Format the deadline date to YYYY-MM-DD
       industry: formData.industry,
       jobLevel: formData.jobLevel,
@@ -60,10 +64,6 @@ const JobPostForm = () => {
       deadline: formatDate(new Date(formData.deadline)),
       createdAt: new Date(),
       active: true,
-      inactive: false,
-      saved: true,
-      seen: true,
-      applied: true,
       isCoverLetterRequired: isCoverLetterRequired    
     };
 

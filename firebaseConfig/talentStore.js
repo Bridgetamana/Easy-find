@@ -100,24 +100,14 @@ export const loginUser = async (email, password, setUser) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Step 1: Fetch the user's document from Firestore using the user's UID
-    const userDocRef = doc(db, "talentCollection", user.uid); 
-    const userDocSnap = await getDoc(userDocRef);
+    // Set user information in context
+    setUser({
+      username: user.email,
+      uid: user.uid
+    });
 
-    if (userDocSnap.exists()) {
-      const userData = userDocSnap.data();
+    return user; 
 
-      // Step 2: Set user information in the context with fullName from Firestore
-      setUser({
-        username: userData.fullName, 
-        email: user.email,           
-        uid: user.uid                
-      });
-
-      return user;
-    } else {
-      throw new Error("User document not found");
-    }
   } catch (error) {
     throw error;
   }
@@ -129,8 +119,6 @@ export const resetPassword = async (oobCode, newPassword) => {
     await verifyPasswordResetCode(auth, oobCode, newPassword);
 
     await confirmPasswordReset(auth, oobCode, newPassword);
-
-    console.log('Password reset successful.');
 
     return true; // Password reset successful
   } catch (error) {
@@ -348,7 +336,6 @@ export const saveJob = async (jobId, jobTitle) => {
     }
 
   try {
-    console.log("User UID:", user.uid);
     // Get the user's document reference
     const userDocRef = doc(db, TALENT, user.uid);
 
@@ -409,6 +396,25 @@ export const fetchNotifications = async () => {
   }
 };
 
+// Function to delete notification from talent collection
+export const deleteNotification = async (notificationId) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    return;
+  }
+
+  try {
+    const notificationsRef = collection(db, TALENT, user.uid, 'notifications');
+    const notificationDocRef = doc(notificationsRef, notificationId);
+
+    await deleteDoc(notificationDocRef);
+  } catch (error) {
+    console.error("Error deleting notification:", error.message);
+  }
+};
+
 // Function to unsave a job ID from the user's saved jobs array
 export const unsaveJob = async (jobId) => {
   try {
@@ -425,11 +431,11 @@ export const unsaveJob = async (jobId) => {
     await userDocRef.update({
       saved: db.FieldValue.arrayRemove(jobId),
     });
-
-    console.log('Job unsaved successfully!');
   } catch (error) {
     console.error('Error unsaving job:', error.message);
     throw error;
   }
 };
+
+
 

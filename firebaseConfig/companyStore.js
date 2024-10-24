@@ -40,20 +40,21 @@ import {
   export const companyStore = {
     // Company Store
     async getCompanyStore() {
-      const q = query(collection(db, COMPANY), orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
-      const companyStore = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      return companyStore;
-    },
+      try {
+        const q = collection(db, COMPANY);
+        const querySnapshot = await getDocs(q);
+        
+        const companyIds = querySnapshot.docs.map((doc) => ({
+          companyId: doc.id, 
+          ...doc.data()   
+        }));
   
-    async getCompanyStoreById(id) {
-      const docRef = doc(db, COMPANY, id);
-      const docSnap = await getDoc(docRef);
-      return docSnap.data();
-    },
+      return companyIds;
+      } catch (error) {
+        console.error("Error fetching company IDs:", error);
+        return [];
+      }
+    }
   };
   
   //Add New Company
@@ -218,7 +219,6 @@ export const updateJobDetails = async (jobId, updatedData) => {
     const companyId = user.uid; 
       const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
       await updateDoc(jobRef, updatedData);
-      console.log("Job details updated successfully");
     } catch (error) {
       console.error("Error updating job details:", error);
       throw error;
@@ -266,6 +266,11 @@ export const updateJobStatus = async (jobId, isActive) => {
     await updateDoc(jobRef, {
       active: !isActive 
     });
+
+    // Send notification for job status update
+    const notificationMessage = `Job ID: ${jobId} status has been updated.`;
+    await sendNotification(companyId, 'jobStatusUpdate', notificationMessage, { jobId });
+
   } catch (error) {
     console.error("Error updating job status:", error);
     throw error;
@@ -306,3 +311,66 @@ export const getApplicantsByJobId = async (jobId, companyId) => {
     return [];
   }
 };
+
+// Function to send Notification
+export const sendNotification = async (companyId, notificationType, message, additionalData) => {
+
+  const notificationsRef = collection(doc(db, COMPANY, companyId), "notifications");
+
+  const notificationData = {
+    type: notificationType,
+    message: message,
+    date: new Date().toISOString(),
+    ...additionalData
+  };
+
+  await addDoc(notificationsRef, notificationData);
+};
+
+// Function to fetch notifications
+export const fetchNotifications = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
+  try {
+    const companyId = user.uid;
+    const notificationsRef = collection(db, COMPANY, companyId, 'notifications');
+    const notificationsQuery = query(notificationsRef, orderBy('date', 'desc'));
+    const querySnapshot = await getDocs(notificationsQuery);
+
+    const notifications = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return notifications;
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    throw error;
+  }
+};
+
+// Function to delete notification from company collection
+export const deleteNotification = async (notificationId) => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const companyId = user.uid; 
+    const notificationDocRef = doc(db, COMPANY, companyId, "notifications", notificationId);
+
+    await deleteDoc(notificationDocRef);
+  } catch (error) {
+    console.error("Error deleting notification:", error);
+    throw error;
+  }
+};
+
