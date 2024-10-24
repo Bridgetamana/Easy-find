@@ -33,6 +33,10 @@ export default function FeaturedJobs() {
     }, [userProfile]);
 
     const fetchFeaturedJobs = async () => {
+        if (!userProfile.jobTitleKeywords || userProfile.jobTitleKeywords.length === 0) {
+            console.error("No job title keywords available.");
+            return;  
+        }
         setIsLoading(true);
         try {
             const companiesRef = collection(db, 'companyCollection');
@@ -47,8 +51,8 @@ export default function FeaturedJobs() {
                 const q = query(
                     jobsRef,
                     where('titleKeywords', 'array-contains-any', userProfile.jobTitleKeywords), 
-                    where('SalaryMin', '>=', userProfile.minSalary), 
-                    where('SalaryMax', '<=', userProfile.maxSalary)
+                    where('salaryMin', '>=', userProfile.minSalary), 
+                    where('salaryMax', '<=', userProfile.maxSalary)
                 );
     
                 const querySnapshot = await getDocs(q);

@@ -117,7 +117,7 @@ export default function TalentHeader() {
             </li>
             <li className={styles.nav__item}>
               <Link
-                href="/blog"
+                href="/talent/blog"
                 onClick={() => handleMenuClick("blog")}
                 className={`${styles.nav__link} ${
                   active === styles.blog ? styles.active__link : ""

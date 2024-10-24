@@ -10,6 +10,7 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
   const [cvSelectedOption, setCvSelectedOption] = useState("applyWithUploadedCV");
   const [loading, setLoading] = useState(false);
   const [uploadedCV, setUploadedCV] = useState({ url: null, name: null });
+  const [isCoverLetterRequired, setIsCoverLetterRequired] = useState(false);
 
   const handleOptionChange = (e) => {
     setCvSelectedOption(e.target.value);
@@ -47,6 +48,26 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
 
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try { 
+        const jobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}`);
+        const jobDoc = await getDoc(jobRef);
+
+        if (jobDoc.exists()) {
+          const jobData = jobDoc.data();
+          setIsCoverLetterRequired(jobData.coverLetterRequired || false); 
+        } else {
+          console.error("Job document doesn't exist.");
+        }
+      } catch (error) {
+        console.error('Error fetching job details:', error);
+      }
+    };
+
+    fetchJobDetails();
+  }, [companyId, jobId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -199,13 +220,14 @@ export default function JobApplicationForm({ closeApplicationForm, onSuccess, jo
           </div>
 
           <div className={styles.modal__field}>
-            <label htmlFor="coverLetter">Cover Letter</label>
+            <label htmlFor="coverLetter">Cover Letter {isCoverLetterRequired && <span className={styles.asterisk}>*</span>}
+            </label>
             <textarea
               id="coverLetter"
               name="coverLetter"
               rows="6"
               placeholder="Tell us about yourself"
-              required
+              required={isCoverLetterRequired}
             ></textarea>
           </div>
 

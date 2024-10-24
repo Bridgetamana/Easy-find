@@ -22,12 +22,12 @@ export default function TalentHero() {
             Add a professional profile picture, a concise bio highlighting your skills and experience to make your profile stand out to potential employers.
             </p>
           </Link>
-          <div className={styles.content__box}>
+          <Link href="/talent/jobs" className={styles.content__box}>
             <h3 className={styles.box__title}>Explore Jobs</h3>
             <p className={styles.box__text}>
             Browse through a wide range of job postings from top companies on EasyFind. Use our search filters to find the perfect match for your career goals.
             </p>
-          </div>
+          </Link>
           <div className={styles.content__box}>
             <h3 className={styles.box__title}>Get Hired</h3>
             <p className={styles.box__text}>

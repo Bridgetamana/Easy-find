@@ -99,8 +99,8 @@ import customLoader from '../../utils/Loaders/imageLoader';
 import styles from "./style.module.scss";
 
 const BlogList = () => {
-  const [featuredBlog, setFeaturedBlog] = useState(null); // Featured blog state
-  const [blogs, setBlogs] = useState([]); // Other blogs state
+  const [featuredBlog, setFeaturedBlog] = useState(null); 
+  const [blogs, setBlogs] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
@@ -108,7 +108,6 @@ const BlogList = () => {
   const { category } = router.query; 
   const postsRef = useRef([]);
 
-  // Fetch Featured Blog
   useEffect(() => {
     const fetchFeaturedBlog = async () => {
       try {
@@ -137,21 +136,14 @@ const BlogList = () => {
         const blogCollection = collection(db, 'blogCollection');
         let blogQuery;
   
-        console.log('Selected Category:', category);
-  
         if (!category || category === 'all') {
-          // Fetch all blogs except the featured one
           blogQuery = query(blogCollection, where('isFeatured', '==', false));
         } else {
-          // Fetch blogs of the specific category, excluding the featured one
           blogQuery = query(blogCollection, where('category', '==', category), where('isFeatured', '==', false));
         }
   
-        console.log('Query:', blogQuery);
-  
         const blogSnapshot = await getDocs(blogQuery);
         const blogList = blogSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        console.log('Fetched Blogs:', blogList);
   
         setBlogs(blogList);
         setLoading(false);
@@ -165,7 +157,7 @@ const BlogList = () => {
     fetchBlogs();
   }, [category]);
 
-  // Intersection Observer for Animations
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
