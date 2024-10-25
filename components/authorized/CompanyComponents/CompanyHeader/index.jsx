@@ -9,6 +9,7 @@ import NotificationTab from "../Notifications";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./style.module.scss";
+import { useRouter } from "next/router";
 import secureLocalStorage from "react-secure-storage";
 
 export default function CompanyHeader() {
@@ -43,6 +44,7 @@ export default function CompanyHeader() {
   };
 
   const signOut = () => {
+    const router = useRouter();
     // Clear token before redirecting to signi page
     secureLocalStorage.removeItem("userToken");
     router.push("/signin");
