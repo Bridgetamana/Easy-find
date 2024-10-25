@@ -480,7 +480,8 @@ const JobDetails = () => {
                 <JobApplicationForm
                   closeApplicationForm={closeApplicationForm}
                   onSuccess={handleApplicationSuccess}
-                  jobId={jobId}  
+                  jobId={jobId}
+                  companyId={companyId}  
                   jobDetails={jobDetails}
                 />
               </div>

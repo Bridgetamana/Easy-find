@@ -6,25 +6,22 @@
     align-items: flex-start;
     gap: 1rem;
     width: 100%;
-    margin-top: 1.5rem;
 
     .featuredJobs__item {
         width: 48%;
-        display: grid;
         border-left: 3px solid $accent;
         position: relative;
         background: $backdrop;
         border-radius: 0.75rem;
         padding: 1.5rem;
-        gap: 20px;
 
         .item__header {
             display: flex;
-            align-items: center;
-            gap: 1rem;
+            margin-bottom: 20px;
 
             .companyLogo {
                 flex: 0 0 60px;
+                margin-right: 16px;
                 display: flex;
                 -webkit-box-align: center;
                 align-items: center;
@@ -35,6 +32,7 @@
 
             .companyNames {
                 width: 100%;
+                height: 60px;
 
                 .jobTitle{
                     width: 100%;
@@ -67,7 +65,7 @@
 .no__featuredJobs {
     display: flex;
     align-items: center;
-    padding: .7rem 0;
+    padding: .7rem;
     gap: 0.5rem;
     font-size: $font-sixteen;
     color: $gray;
