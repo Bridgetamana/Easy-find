@@ -1,18 +1,17 @@
 import React from "react";
 import CompanyLayout from "./layout";
-import Hero from "@/components/authorized/TalentComponents/TalentHero";
-import CompanyService from '@/components/authorized/CompanyComponents/CompanyService';
-import CompanyDescription from '@/components/authorized/CompanyDescription';
+import CompanyHero from "@/components/authorized/CompanyComponents/CompanyHero";
 import ActiveJobs from '@/components/authorized/CompanyComponents/ActiveJobs';
 import InActiveJobs from '@/components/authorized/CompanyComponents/InActiveJobs';
 import ProtectedRoute from "@/utils/protectedRoute";
+import UserName from "../../components/authorized/CompanyComponents/UserName";
 
 const HomePage = () => {
   return (
     <ProtectedRoute>
       <CompanyLayout>
-        <CompanyDescription />
-        <CompanyService />
+        <UserName />
+        <CompanyHero />
         <ActiveJobs />
         <InActiveJobs />
       </CompanyLayout>

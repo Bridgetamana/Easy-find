@@ -1,0 +1,28 @@
+@import "../../../../styles/variables.scss";
+
+.username__section{
+
+    .username__content{
+        // background-color: $white;
+        padding: 2rem 1rem;
+        border-radius: 1rem;
+        width: 90%;
+        margin: 0 auto;
+
+        .content__header{
+
+            .username__title{
+                font-size: $font-twenty;
+                font-weight: 500;
+                font-family: $font-text;
+                color: $black;
+                line-height: 1;
+                letter-spacing: -1px;
+    
+                .title__span{
+                    color: $primary;
+                }
+            }
+        }
+    }
+}

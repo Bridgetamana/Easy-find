@@ -7,7 +7,6 @@ export default function TalentHero() {
     <section className={styles.hero__section}>
       <div className={styles.hero__content}>
         <div className={styles.content__header}>
-          {/* <h2 className="hero__title">Welcome back, User</h2> */}
           <p className={styles.hero__text}>
             Each month, more than 3 million job seekers turn to EasyFind website
             in their search for work, making over 140,000 applications every
