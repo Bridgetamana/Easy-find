@@ -114,7 +114,7 @@ export default function CompanyHeader() {
             </li>
             <li className={styles.nav__item}>
               <Link
-                href="/blog"
+                href="/company/blog"
                 onClick={() => handleMenuClick("blog")}
                 className={`${styles.nav__link} ${
                   active === styles.blog ? styles.active__link : ""

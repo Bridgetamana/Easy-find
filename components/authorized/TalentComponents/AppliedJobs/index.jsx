@@ -149,7 +149,7 @@ export default function AppliedJobs() {
                   </div>
                 </div>
                 <div className={styles.item__buttons}>
-                  <Link href={`/talent/jobs/details/${job.jobId}`}>
+                  <Link href={`/talent/jobs/details/${job.companyId}/${job.jobId}`}>
                     <button className={styles.btn__link}>View</button>
                   </Link>
                   <button
