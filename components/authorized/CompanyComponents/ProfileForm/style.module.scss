@@ -73,6 +73,14 @@
             label {
                 font-size: $font-sixteen;
                 font-weight: $font-weight-500;
+
+                .required {
+                    color: $error;
+                    font-weight: $font-weight-600;
+                    margin-left: 6px;
+                    margin-right: 4px;
+                    text-align: center;
+                }
             }
 
             .form__input {

@@ -20,6 +20,7 @@ export default function CompanyProfileData() {
     industry: "",
     website: "",
     photo: null, 
+    others: "",
   });
 
   const router = useRouter();
@@ -156,6 +157,14 @@ export default function CompanyProfileData() {
               </a>
             </p>
           </div>
+
+          <div className={styles.profile__box}>
+            <h4 className={styles.title}>Others</h4>
+            <p className={styles.text}>
+              <strong>Others: </strong> {formData.others}
+            </p>
+          </div>
+          
         </div>
 
         <button onClick={handleEditClick} className={styles.edit__button}>
