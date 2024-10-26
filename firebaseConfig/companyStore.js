@@ -219,29 +219,30 @@ export const addJobPost = async (companyId, jobData) => {
 
 // Function to get a jobID from the companycollection
 export const getJobIdsFromCompany = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
+  const companyId = user.uid;
   try {
-    const companyQuerySnapshot = await getDocs(collection(db, COMPANY));
+    const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
+    const jobsQuerySnapshot = await getDocs(jobsCollectionRef);
 
     const jobIds = [];
-
-    for (const companyDoc of companyQuerySnapshot.docs) {
-      const companyId = companyDoc.id;
-
-      const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
-
-      const jobsQuerySnapshot = await getDocs(jobsCollectionRef);
-
-      jobsQuerySnapshot.forEach((jobDoc) => {
-        jobIds.push({
-          companyId: companyId,
-          jobId: jobDoc.id,
-          ...jobDoc.data()
-        });
+    jobsQuerySnapshot.forEach((jobDoc) => {
+      jobIds.push({
+        companyId: companyId,
+        jobId: jobDoc.id,
+        ...jobDoc.data(),
       });
-    }
+    });
+
     return jobIds;
   } catch (error) {
-    console.error("Error fetching job IDs from company collection:", error);
+    console.error("Error fetching job IDs from company:", error);
     throw error;
   }
 };
