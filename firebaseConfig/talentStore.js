@@ -194,7 +194,10 @@ export const getJobs = async () => {
   for (const companyDoc of companiesSnapshot.docs) {
     const companyId = companyDoc.id;
     const jobsSnapshot = await getDocs(
-      collection(db, `companyCollection/${companyId}/jobs`)
+      query(
+        collection(db, `companyCollection/${companyId}/jobs`),
+        where("active", "==", true)
+      )
     );
 
     jobsSnapshot.forEach((jobDoc) => {
@@ -216,7 +219,13 @@ export const getJobById = async (companyId, jobId) => {
     const docSnap = await getDoc(jobRef);
 
     if (docSnap.exists()) {
-      return docSnap.data();
+      const jobData = docSnap.data();
+
+      if (jobData.active) {
+        return jobData;
+      } else {
+        return null; 
+      }
     } else {
       console.error("No such job found!");
       return null; 

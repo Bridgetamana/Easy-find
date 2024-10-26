@@ -7,6 +7,8 @@ import {
   updateCompany,
 } from "../../../../firebaseConfig/companyStore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+import { storage } from "../../../../firebaseConfig/firebase";
 import LoadingScreen from "../../../utils/Loaders/Loader";
 
 export default function CompanyProfileForm() {
@@ -35,6 +37,7 @@ export default function CompanyProfileForm() {
     phone: "",
     website: "",
     linkedin: "",
+    photo: null,
     industry: "",
     size: "",
   });
@@ -73,12 +76,9 @@ export default function CompanyProfileForm() {
 
     if (files && files.length > 0) {
       const file = files[0];
-      const imageUrl = URL.createObjectURL(file);
-
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: file,
-        photo: imageUrl,
       }));
     } else {
       setFormData((prevFormData) => ({
@@ -147,8 +147,15 @@ export default function CompanyProfileForm() {
     try {
       setIsLoading(true);
 
+      let imageUrl = formData.photo;
+
+      if (formData.photo instanceof File) {
+        imageUrl = await handleImageUpload(formData.photo);
+      }
+
       const payload = {
         ...formData,
+        photo: imageUrl,
         id,
       };
       await updateCompany(payload);
@@ -170,18 +177,38 @@ export default function CompanyProfileForm() {
     }
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        photo: imageUrl,
-        file,
-      }));
+      const auth = getAuth(); 
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const storageRef = ref(
+          storage,
+          `profilePhotos/${user.uid}/${file.name}`
+        );
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          photo: downloadURL,
+        }));
+        console.log("Image uploaded successfully:", downloadURL);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
-
   if (isLoading) return <LoadingScreen/>;
 
   return (
@@ -199,7 +226,15 @@ export default function CompanyProfileForm() {
             />
           </div>
           {formData.photo ? (
-            <img src={formData.photo} alt="Profile" className={styles.image} />
+            <img
+              src={
+                formData.photo instanceof File
+                  ? URL.createObjectURL(formData.photo)
+                  : formData.photo
+              }
+              alt="Profile"
+              className={styles.image}
+            />
           ) : (
             <img src="" alt="Default Profile" className={styles.image} />
           )}
@@ -216,7 +251,9 @@ export default function CompanyProfileForm() {
             placeholder="Enter your full name"
             required
           />
-          {errorMsg.fullName && <p className={styles.error}>{errorMsg.fullName}</p>}
+          {errorMsg.fullName && (
+            <p className={styles.error}>{errorMsg.fullName}</p>
+          )}
         </div>
 
         <div className={styles.form__group}>
@@ -258,7 +295,9 @@ export default function CompanyProfileForm() {
             placeholder="Enter your address"
             required
           />
-          {errorMsg.location && <p className={styles.error}>{errorMsg.location}</p>}
+          {errorMsg.location && (
+            <p className={styles.error}>{errorMsg.location}</p>
+          )}
         </div>
 
         <div className={styles.form__group}>
@@ -286,7 +325,9 @@ export default function CompanyProfileForm() {
             placeholder="Enter your website link"
             required
           />
-          {errorMsg.website && <p className={styles.error}>{errorMsg.website}</p>}
+          {errorMsg.website && (
+            <p className={styles.error}>{errorMsg.website}</p>
+          )}
         </div>
 
         <div className={styles.form__group}>
@@ -300,7 +341,9 @@ export default function CompanyProfileForm() {
             placeholder="Enter your company's LinkedIn"
             required
           />
-          {errorMsg.linkedin && <p className={styles.error}>{errorMsg.linkedin}</p>}
+          {errorMsg.linkedin && (
+            <p className={styles.error}>{errorMsg.linkedin}</p>
+          )}
         </div>
 
         <div className={styles.form__group}>
@@ -314,7 +357,9 @@ export default function CompanyProfileForm() {
             placeholder="Enter your industry"
             required
           />
-          {errorMsg.industry && <p className={styles.error}>{errorMsg.industry}</p>}
+          {errorMsg.industry && (
+            <p className={styles.error}>{errorMsg.industry}</p>
+          )}
         </div>
 
         <div className={styles.form__group}>

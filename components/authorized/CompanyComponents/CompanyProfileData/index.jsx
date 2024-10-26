@@ -19,7 +19,7 @@ export default function CompanyProfileData() {
     teamSize: "", 
     industry: "",
     website: "",
-    profilePicture: null, 
+    photo: null, 
   });
 
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function CompanyProfileData() {
             linkedin: companyProfile.linkedin || "",
             phone: companyProfile.phone || "",
             size: companyProfile.size || "",
-            profilePicture: companyProfile.profilePicture || null,
+            photo: companyProfile.photo || null,
           });
         }
       } catch (error) {
@@ -82,9 +82,9 @@ export default function CompanyProfileData() {
         </h4>
         <div className={styles.profile__top}>
           <div className={styles.profile__column}>
-            {formData.profilePicture ? (
+            {formData.photo ? (
               <img
-                src={formData.profilePicture}
+                src={formData.photo}
                 alt="Company Logo"
                 className={styles.profile__image}
               />

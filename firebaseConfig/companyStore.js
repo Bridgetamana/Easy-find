@@ -54,7 +54,22 @@ import {
         console.error("Error fetching company IDs:", error);
         return [];
       }
-    }
+    },
+    async getCompanyStoreById(companyId) {
+      try {
+        const docRef = doc(db, COMPANY, companyId);
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          return { id: docSnapshot.id, ...docSnapshot.data() };
+        } else {
+          console.error("No such document!");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error fetching company data by ID:", error);
+        return null;
+      }
+    },
   };
   
   //Add New Company
