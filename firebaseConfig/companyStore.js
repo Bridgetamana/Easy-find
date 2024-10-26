@@ -13,124 +13,174 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    onSnapshot,
-    orderBy,
-    query,
-    serverTimestamp,
-    setDoc,
-    updateDoc,
-  } from "firebase/firestore";
-  import { db } from "./firebase";
-  import {
-    createUserWithEmailAndPassword,
-    getAuth,
-    sendEmailVerification,
-    signOut,
-  } from "firebase/auth";
-  import showAlert from "@/components/utils/AlertBox/CustomAlert";
-  
-  const COMPANY = "companyCollection";
-  
-  export const companyStore = {
-    // Company Store
-    async getCompanyStore() {
-      try {
-        const q = collection(db, COMPANY);
-        const querySnapshot = await getDocs(q);
-        
-        const companyIds = querySnapshot.docs.map((doc) => ({
-          companyId: doc.id, 
-          ...doc.data()   
-        }));
-  
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "./firebase";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  sendEmailVerification,
+  signOut,
+  signInWithEmailAndPassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+  deleteUser,
+} from "firebase/auth";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
+
+const COMPANY = "companyCollection";
+
+const reauthenticateUser = async (user, currentPassword) => {
+  const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  await reauthenticateWithCredential(user, credential);
+};
+
+export const companyStore = {
+  // Company Store
+
+  async getCompanyStore() {
+    try {
+      const q = collection(db, COMPANY);
+      const querySnapshot = await getDocs(q);
+
+      const companyIds = querySnapshot.docs.map((doc) => ({
+        companyId: doc.id, 
+        ...doc.data()
+      }));
+
       return companyIds;
-      } catch (error) {
-        console.error("Error fetching company IDs:", error);
-        return [];
-      }
-    },
-    async getCompanyStoreById(companyId) {
-      try {
-        const docRef = doc(db, COMPANY, companyId);
-        const docSnapshot = await getDoc(docRef);
-        if (docSnapshot.exists()) {
-          return { id: docSnapshot.id, ...docSnapshot.data() };
-        } else {
-          console.error("No such document!");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error fetching company data by ID:", error);
+    } catch (error) {
+      console.error("Error fetching company IDs:", error);
+      return [];
+    }
+  },
+
+  async getCompanyStoreById(companyId) {
+    try {
+      const docRef = doc(db, COMPANY, companyId);
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        return { id: docSnapshot.id, ...docSnapshot.data() };
+      } else {
+        console.error("No such document!");
         return null;
       }
-    },
-  };
-  
-  //Add New Company
-  export const registerCompany = async (fullName, email, password) => {
-    const auth = getAuth();
-    try {
-      // Step 1: Create the user with Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-  
-      const user = userCredential.user;
-  
-      // Step 2: Send email verification
-      await sendEmailVerification(user);
-  
-      // Step 3: Create the user in Firestore
-      const newUserId = userCredential.user.uid;
-      await setDoc(doc(db, COMPANY, newUserId), {
-        fullName: fullName,
-        email: email,
-        user: "company",
-      });
-      return newUserId;
     } catch (error) {
+      console.error("Error fetching company data by ID:", error);
+      return null;
+    }
+  },
+
+  async deleteCompanyAccount(user, password) {
+    try {
+      const credential = EmailAuthProvider.credential(user.email, password);
+      await reauthenticateWithCredential(user, credential);
+
+      const userDocRef = doc(db, COMPANY, user.uid);
+      await deleteDoc(userDocRef);
+
+      await deleteUser(user);
+
+      console.log("Account successfully deleted.");
+    } catch (error) {
+      console.error("Error deleting account:", error);
       throw error;
     }
-  };
-  
-  //Handle Login Company
-  export const loginCompany = async (email, password) => {
-    const auth = getAuth();
+  },
+
+  async updateCompanyPassword(user, currentPassword, newPassword) {
     try {
-      const userCredential = await auth.signInWithEmailAndPassword(
-        email,
-        password
-      );
-      const user = userCredential.user;
-      return user;
+      await reauthenticateUser(user, currentPassword);
+      await updatePassword(user, newPassword); 
+      return "Password updated successfully.";
     } catch (error) {
+      console.error("Error updating password:", error);
       throw error;
     }
-  };
-  
-  //Update Company
-  export const updateCompany = async (company) => {
-    const docRef = doc(db, COMPANY, company.id);
-    await updateDoc(docRef, company);
-  };
-  
-  //Delete Company
-  export const deleteCompany = async (id) => {
-    const docRef = doc(db, COMPANY, id);
-    await deleteDoc(docRef);
-  };
-  
-  // Function to add a job to the companycollection
+  },
+};
+
+export const registerCompany = async (fullName, email, password) => {
+  const auth = getAuth();
+  try {
+    // Step 1: Create the user with Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = userCredential.user;
+
+    // Step 2: Send email verification
+    await sendEmailVerification(user);
+
+    // Step 3: Create the user in Firestore
+    const newUserId = userCredential.user.uid;
+    await setDoc(doc(db, COMPANY, newUserId), {
+      fullName: fullName,
+      email: email,
+      user: "company",
+    });
+    return newUserId;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Handle Login Company
+export const loginCompany = async (email, password, selectedRole) => {
+  console.log("loginCompany function triggered"); // Check if function is running
+  const auth = getAuth();
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    const userDoc = await getDoc(doc(db, "companyCollection", user.uid));
+    const userData = userDoc.data();
+
+    console.log("Firestore user role:", userData.user);
+    console.log("Selected role on sign-in:", selectedRole);
+
+    if (userData.user !== selectedRole) {
+      throw new Error(`You checked the wrong box. Please select '${userData.user}' as your role.`);
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
+  }
+};
+
+
+//Update Company
+export const updateCompany = async (company) => {
+  const docRef = doc(db, COMPANY, company.id);
+  await updateDoc(docRef, company);
+};
+
+//Delete Company
+export const deleteCompany = async (id) => {
+  const docRef = doc(db, COMPANY, id);
+  await deleteDoc(docRef);
+};
+
+// Function to add a job to the companycollection
 const stripHtmlTags = (htmlString) => {
- return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+  return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
 };
 
 export const addJobPost = async (companyId, jobData) => {
@@ -153,10 +203,10 @@ export const addJobPost = async (companyId, jobData) => {
 
     const cleanJobData = {
       ...jobData,
-      requirements: convertEditorStateToHtml(jobData.requirements),      
-      benefits: convertEditorStateToHtml(jobData.benefits),             
-      educationExperience: convertEditorStateToHtml(jobData.educationExperience), 
-      createdAt: new Date(),                                              
+      requirements: convertEditorStateToHtml(jobData.requirements),
+      benefits: convertEditorStateToHtml(jobData.benefits),
+      educationExperience: convertEditorStateToHtml(jobData.educationExperience),
+      createdAt: new Date(),
     };
 
     await addDoc(jobsCollectionRef, cleanJobData);
@@ -167,59 +217,59 @@ export const addJobPost = async (companyId, jobData) => {
 };
 
 
-  // Function to get a jobID from the companycollection
-  export const getJobIdsFromCompany = async () => {
-    try {
-      const companyQuerySnapshot = await getDocs(collection(db, COMPANY));
-      
-      const jobIds = [];
-  
-      for (const companyDoc of companyQuerySnapshot.docs) {
-        const companyId = companyDoc.id;
-  
-        const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
-  
-        const jobsQuerySnapshot = await getDocs(jobsCollectionRef);
-  
-        jobsQuerySnapshot.forEach((jobDoc) => {
-          jobIds.push({
-            companyId: companyId,
-            jobId: jobDoc.id,
-            ...jobDoc.data() 
-          });
-        });
-      }
-      return jobIds;
-    } catch (error) {
-      console.error("Error fetching job IDs from company collection:", error);
-      throw error;
-    }
-  };
+// Function to get a jobID from the companycollection
+export const getJobIdsFromCompany = async () => {
+  try {
+    const companyQuerySnapshot = await getDocs(collection(db, COMPANY));
 
-  // Function to delete a job from the companycollection
-  export const deleteJob = async (jobId) => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-  
-    if (!user) {
-      throw new Error('User not authenticated.');
+    const jobIds = [];
+
+    for (const companyDoc of companyQuerySnapshot.docs) {
+      const companyId = companyDoc.id;
+
+      const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
+
+      const jobsQuerySnapshot = await getDocs(jobsCollectionRef);
+
+      jobsQuerySnapshot.forEach((jobDoc) => {
+        jobIds.push({
+          companyId: companyId,
+          jobId: jobDoc.id,
+          ...jobDoc.data()
+        });
+      });
     }
-  
-    try {
-      const companyId = user.uid;
-        if (!companyId || !jobId) {
-        throw new Error('Company ID and Job ID are required.');
-      }
-  
-      const jobRef = doc(db, COMPANY, companyId, 'jobs', jobId);
-  
-      // Delete the job document
-      await deleteDoc(jobRef);
-      } catch (error) {
-      console.error('Error deleting job:', error.message);
-      throw error;
+    return jobIds;
+  } catch (error) {
+    console.error("Error fetching job IDs from company collection:", error);
+    throw error;
+  }
+};
+
+// Function to delete a job from the companycollection
+export const deleteJob = async (jobId) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error('User not authenticated.');
+  }
+
+  try {
+    const companyId = user.uid;
+    if (!companyId || !jobId) {
+      throw new Error('Company ID and Job ID are required.');
     }
-  };
+
+    const jobRef = doc(db, COMPANY, companyId, 'jobs', jobId);
+
+    // Delete the job document
+    await deleteDoc(jobRef);
+  } catch (error) {
+    console.error('Error deleting job:', error.message);
+    throw error;
+  }
+};
 
 // Function to update job details
 export const updateJobDetails = async (jobId, updatedData) => {
@@ -230,14 +280,14 @@ export const updateJobDetails = async (jobId, updatedData) => {
     throw new Error("User not authenticated.");
   }
 
-    try {
-    const companyId = user.uid; 
-      const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
-      await updateDoc(jobRef, updatedData);
-    } catch (error) {
-      console.error("Error updating job details:", error);
-      throw error;
-    }
+  try {
+    const companyId = user.uid;
+    const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
+    await updateDoc(jobRef, updatedData);
+  } catch (error) {
+    console.error("Error updating job details:", error);
+    throw error;
+  }
 };
 
 // Function to get job details
@@ -277,9 +327,9 @@ export const updateJobStatus = async (jobId, isActive) => {
   try {
     const companyId = user.uid;
     const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
-    
+
     await updateDoc(jobRef, {
-      active: !isActive 
+      active: !isActive
     });
 
     // Send notification for job status update
@@ -298,7 +348,7 @@ export const getApplicantCount = async (jobId, companyId) => {
     const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
     const applicantSnapshot = await getDocs(applicantsRef);
 
-    return applicantSnapshot.size; 
+    return applicantSnapshot.size;
   } catch (error) {
     console.error("Error fetching applicant count:", error);
     return 0;
@@ -310,11 +360,11 @@ export const getApplicantsByJobId = async (jobId, companyId) => {
   try {
     const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
     const applicantSnapshot = await getDocs(applicantsRef);
-    
+
     if (applicantSnapshot.empty) {
       return [];
     }
-    
+
     const applicants = applicantSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
@@ -379,7 +429,7 @@ export const deleteNotification = async (notificationId) => {
       throw new Error("User not authenticated");
     }
 
-    const companyId = user.uid; 
+    const companyId = user.uid;
     const notificationDocRef = doc(db, COMPANY, companyId, "notifications", notificationId);
 
     await deleteDoc(notificationDocRef);

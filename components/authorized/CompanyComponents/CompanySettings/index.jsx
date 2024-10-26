@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { deleteCompany } from "../../../../firebaseConfig/companyStore";
+import { getAuth } from "firebase/auth";
+import { companyStore } from "../../../../firebaseConfig/companyStore";
 import CustomModal from "../../../utils/CustomModal/index";
 import styles from "./style.module.scss";
 
@@ -8,42 +9,49 @@ export default function SecuritySettings() {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [deleteConfirmation, setDeleteConfirmation] = useState("");
+  const [deleteConfirmationPassword, setDeleteConfirmationPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
   const router = useRouter();
-  const { id } = router.query;
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-  const handleChangePassword = (e) => {
+  const handleChangePassword = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       setErrorMsg("Passwords do not match.");
       return;
     }
 
-    setSuccessMsg("Password updated successfully.");
+    try {
+      await companyStore.updateCompanyPassword(user, password, newPassword);
+      setSuccessMsg("Password updated successfully.");
+      setErrorMsg(""); 
+    } catch (error) {
+      if (error.code === "auth/wrong-password") {
+        setErrorMsg("Current password is incorrect.");
+      } else {
+        setErrorMsg("Failed to update password. Please try again.");
+      }
+    }
   };
 
   const handleDeleteAccount = () => {
-    if (!deleteConfirmation) {
-      setErrorMsg("Please enter your password to confirm.");
-      return;
-    }
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   };
 
   const confirmDeleteAccount = async () => {
     try {
       setIsDeleting(true);
       setIsModalOpen(false);
-      await deleteCompany(id);
+      await companyStore.deleteCompanyAccount(user, deleteConfirmationPassword);
       router.push("/");
     } catch (error) {
       console.error("Error deleting account:", error);
-      setErrorMsg("Failed to delete account. Please try again.");
+      setErrorMsg("Failed to delete account. Please check your password and try again.");
     } finally {
       setIsDeleting(false);
     }
@@ -57,10 +65,10 @@ export default function SecuritySettings() {
         <div className={styles.changePassword__section}>
           <h3 className={styles.section__title}>Change Password</h3>
           <div className={styles.form__group}>
-            <label htmlFor="password">Current Password:</label>
+            <label htmlFor="currentPassword">Current Password:</label>
             <input
               type="password"
-              id="password"
+              id="currentPassword"
               value={password}
               className={styles.changePassword__input}
               onChange={(e) => setPassword(e.target.value)}
@@ -102,11 +110,11 @@ export default function SecuritySettings() {
           <div className={styles.form__group}>
             <label htmlFor="deleteConfirmation">Type Password:</label>
             <input
-              type="text"
-              id="deleteConfirmation"
+              type="password"
+              id="deleteConfirmationPassword"
               className={styles.deleteAccount__input}
-              value={deleteConfirmation}
-              onChange={(e) => setDeleteConfirmation(e.target.value)}
+              value={deleteConfirmationPassword}
+              onChange={(e) => setDeleteConfirmationPassword(e.target.value)}
             />
           </div>
 
@@ -117,6 +125,7 @@ export default function SecuritySettings() {
           >
             {isDeleting ? "Deleting..." : "Delete Account"}
           </button>
+          {errorMsg && <p className={styles.error}>{errorMsg}</p>}
         </div>
       </div>
 
