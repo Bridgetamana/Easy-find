@@ -187,25 +187,11 @@ export const addJobPost = async (companyId, jobData) => {
   try {
     const companyRef = doc(db, COMPANY, companyId);
     const jobsCollectionRef = collection(companyRef, "jobs");
-
-    const convertEditorStateToHtml = (editorState) => {
-      if (!editorState) {
-        return "";
-      }
-      const contentState = editorState.getCurrentContent();
-      if (!contentState.hasText()) {
-        return "";
-      }
-      const htmlContent = draftToHtml(convertToRaw(contentState));
-      const plainTextContent = stripHtmlTags(htmlContent);
-      return plainTextContent;
-    };
-
     const cleanJobData = {
       ...jobData,
-      requirements: convertEditorStateToHtml(jobData.requirements),
-      benefits: convertEditorStateToHtml(jobData.benefits),
-      educationExperience: convertEditorStateToHtml(jobData.educationExperience),
+      requirements: stripHtmlTags(jobData.requirements),
+      benefits: stripHtmlTags(jobData.benefits),
+      educationExperience: stripHtmlTags(jobData.educationExperience),
       createdAt: new Date(),
     };
 
