@@ -225,6 +225,15 @@ export default function CompanyHeader() {
               </Link>
             </li>
             <li className={styles.dropdown__link}>
+              <Link
+                href="/company/terms"
+                className={styles.link}
+                onClick={closeMenu}
+              >
+                Terms
+              </Link>
+            </li>
+            <li className={styles.dropdown__link}>
               <button
                 onClick={signOut}
                 className={`${styles.link} ${styles.signout}`}
