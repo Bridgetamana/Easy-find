@@ -319,55 +319,42 @@ export function convertFutureTimestamp(timestamp) {
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   if (days >= 2) {
-    // More than 2 days in the future, show the full date
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
     return timestampDate.toLocaleDateString(undefined, options);
   } else if (days === 1) {
-    // Tomorrow
     return 'Tomorrow';
   } else if (days === 0) {
-    // Today
     return 'Today';
   } else {
-    // In the past
     return `${-days} ${days === -1 ? 'day' : 'days'} ago`;
   }
 }
 
 
-// Function to save a job ID to the user's saved jobs array
 export const saveJob = async (jobId, jobTitle) => {
   const auth = getAuth();
-    // Ensure the user is authenticated
     const user = auth.currentUser;
     if (!user) {
       throw new Error('User not authenticated');
     }
 
   try {
-    // Get the user's document reference
     const userDocRef = doc(db, TALENT, user.uid);
 
-    // Check if the document exists
     const userDocSnapshot = await getDoc(userDocRef);
     if (!userDocSnapshot.exists()) {
-      // Document does not exist, create it 
       await setDoc(userDocRef, { jobs: { saved: [] } });
     } else {
-      // If document exists, ensure the `jobs` field has the `saved` array
       const userDocData = userDocSnapshot.data();
       if (!userDocData.jobs) {
-        // Create the `jobs` field with an empty `saved` array 
         await updateDoc(userDocRef, { jobs: { saved: [] } });
       }
     }
 
-    // Update the user's document with the new saved job ID
     await updateDoc(userDocRef, {
       'jobs.saved': arrayUnion(jobId),
     });
 
-    // Create a notification for the specific user
     const notificationsRef = collection(userDocRef, 'notifications');
     const notificationDocRef = await addDoc(notificationsRef, {
       type: 'save',
@@ -427,16 +414,13 @@ export const deleteNotification = async (notificationId) => {
 // Function to unsave a job ID from the user's saved jobs array
 export const unsaveJob = async (jobId) => {
   try {
-    // Ensure the user is authenticated
     const user = auth.currentUser;
     if (!user) {
       throw new Error('User not authenticated');
     }
 
-    // Get the user's document reference
     const userDocRef = db.collection('users').doc(user.uid);
 
-    // Update the user's document to remove the job ID from the saved array
     await userDocRef.update({
       saved: db.FieldValue.arrayRemove(jobId),
     });

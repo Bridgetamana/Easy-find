@@ -11,32 +11,38 @@ export default function FeaturedJobs() {
     const [userProfile, setUserProfile] = useState([]);
     const [isLoading, setIsLoading] = useState(true); 
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            const auth = getAuth();
-            const user = auth.currentUser;
-    
-            if (user) {
-                const userId = user.uid;
-                const userProfile = await talentStore.getTalentStoreById(userId);
-                 setUserProfile(userProfile); 
-            }
-        };
-    
-        fetchUserProfile();
-    }, []);
-    
-    useEffect(() => {
-        if (userProfile) {
-            fetchFeaturedJobs();
+   
+useEffect(() => {
+    const fetchUserProfile = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+            const userId = user.uid;
+            const profile = await talentStore.getTalentStoreById(userId);
+            setUserProfile(profile || {}); 
+        } else {
+            setUserProfile({}); 
         }
-    }, [userProfile]);
+    };
+
+    fetchUserProfile();
+}, []);
+
+useEffect(() => {
+    if (userProfile && userProfile.jobTitleKeywords) {
+        fetchFeaturedJobs();
+    }
+}, [userProfile]);
 
     const fetchFeaturedJobs = async () => {
-        if (!userProfile.jobTitleKeywords || userProfile.jobTitleKeywords.length === 0) {
-            console.error("No job title keywords available.");
-            return;  
+        if (!userProfile || !userProfile.jobTitleKeywords || userProfile.jobTitleKeywords.length === 0) {
+            console.warn("No job title keywords available for this user.");
+            setFeaturedJobs([]); 
+            setIsLoading(false);
+            return;
         }
+        
         setIsLoading(true);
         try {
             const companiesRef = collection(db, 'companyCollection');
@@ -107,7 +113,11 @@ export default function FeaturedJobs() {
                 ))}
             </ul>
         ) : (
-            <p className={styles.no__featuredJobs}>No featured jobs available at the moment.</p>  
+            <p className={styles.no__featuredJobs}>
+                {userProfile && userProfile.jobTitleKeywords
+                ? "No featured jobs available at the moment."
+                : "Please complete your profile to view relevant jobs."}
+            </p>
         )}
     </div>
   )
