@@ -1,0 +1,120 @@
+@import "../../../../../../styles/variables.scss";
+
+.applicantDetailContainer {
+  padding: 1.5rem;
+  background-color: $white;
+  overflow: hidden;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $black;
+    }
+  }
+
+  .detailsList {
+    margin-top: 2rem;
+
+    .detailItem {
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid $placeholder;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      @media (min-width: 640px) {
+        display: grid;
+        gap: 1rem;
+        padding: 1.5rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .detailLabel {
+        font-size: 0.875rem;
+        color: $black;
+      }
+
+      .detailValue {
+        margin-top: 4px;
+        font-size: 0.875rem;
+        color: $black;
+        @media (min-width: 640px) {
+          grid-column: span 2 / span 2;
+          margin-top: 0;
+        }
+      }
+
+      .detailAttachments {
+        margin-top: 0.5rem;
+        @media (min-width: 640px) {
+          grid-column: span 2 / span 2;
+          margin-top: 0;
+        }
+
+        .attachmentList {
+          border: 1px solid $placeholder;
+          border-radius: 6px;
+
+          .attachmentItem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+
+            .attachmentContent {
+              display: flex;
+              align-items: center;
+              width: 0;
+              flex: 1 1 0%;
+
+              .attachmentIcon {
+                height: 1.25rem;
+                width: 1.25rem;
+                color: $black;
+              }
+
+              .attachmentInfo {
+                display: flex;
+                min-width: 0;
+                flex: 1 1 0%;
+                gap: 8px;
+                flex-direction: column;
+                margin-left: 1rem;
+
+                span {
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+
+                .attachmentSize {
+                  color: $black;
+                  flex-shrink: 0;
+                }
+              }
+            }
+
+            .attachmentDownload {
+              margin-left: 1rem;
+              flex-shrink: 0;
+              a {
+                color: $primary;
+                cursor: pointer;
+
+                &:hover {
+                  color: $primary;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
