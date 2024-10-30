@@ -201,23 +201,23 @@ const BlogList = () => {
           <div className="relative w-full h-[550px]">
             <Image
               loader={customLoader}
-              src={featuredBlog.image || '/assets/images/blogImage.png'} // Dynamic image from Firebase
+              src={featuredBlog.image || '/assets/images/blogImage.png'} 
               alt={featuredBlog.title}
               fill
               className="object-cover rounded-2xl"
               priority
             />
-            <div className="absolute inset-0 flex flex-col-reverse md:flex-row items-end justify-between text-zinc-900 lg:text-white">
-              <div className="p-8 basis-10/12">
+            <div className="absolute inset-0 flex flex-row items-end justify-between text-white">
+              <div className="p-5 md:p-8 basis-10/12">
                 <p className="font-bold py-1">Featured</p>
-                <h2 className="text-2xl lg:text-4xl font-bold py-2 animate-swoop-in">
+                <h2 className="text-xl lg:text-4xl font-bold py-2 animate-swoop-in">
                   {featuredBlog.title}
                 </h2>
-                <p className="text-sm py-2 leading-6 animate-swoop-in delay-300 font-semibold">
+                <p className="hidden md:block text-sm py-2 leading-6 animate-swoop-in delay-300 font-semibold">
                   {featuredBlog.summary}...
                 </p>
               </div>
-              <Link href={`/blog/${featuredBlog.id}`} className='flex items-center justify-center basis-2/12 group px-4 pb-10 bg-transparent h-full text-white hover:text-black hover:bg-opacity-70 hover:bg-stone-500'>
+              <Link href={`/blog/${featuredBlog.id}`} className='flex items-end md:items-center justify-center basis-2/12 group px-4 mb-20 md:mb-10 bg-transparent h-full text-white hover:text-black hover:bg-opacity-70 hover:bg-stone-500'>
                   <i className="bx bx-lg bx-fade-right-hover mt-8 pt-8 bx-right-arrow-alt group-hover:text-black transition-transform transform group-hover:translate-x-2"></i>
               </Link>
             </div>
@@ -226,10 +226,10 @@ const BlogList = () => {
       )}
       
       <nav className={styles.category__nav}>
-        <Link href="/blog" className={`${styles.category__Link} sm:text-sm`}>All</Link>
-        <Link href="/blog?category=job-application" className={`${styles.category__Link} sm:text-sm`}>Job Application</Link>
-        <Link href="/blog?category=resume-tips" className={`${styles.category__Link} sm:text-sm`}>Resume Tips</Link>
-        <Link href="/blog?category=getting-a-job" className={`${styles.category__Link} sm:text-sm`}>Getting a Job</Link>
+        <Link href="/blog" className={`${styles.category__Link}`}>All</Link>
+        <Link href="/blog?category=job-application" className={`${styles.category__Link}`}>Job Application</Link>
+        <Link href="/blog?category=resume-tips" className={`${styles.category__Link}`}>Resume Tips</Link>
+        <Link href="/blog?category=getting-a-job" className={`${styles.category__Link}`}>Getting a Job</Link>
       </nav>
 
        <div className={styles.featured__content}>

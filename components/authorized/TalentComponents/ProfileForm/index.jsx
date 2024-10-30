@@ -101,27 +101,27 @@ export default function TalentProfileForm() {
   const handleSaveClick = async (e) => {
     e.preventDefault();
 
-    if (formData.email.length < 1 || formData.username.length < 1) {
+    if (!formData || !formData.email?.length || !formData.username?.length) {
       setErrorMsg("Email and username must have at least 1 character.");
       setTimeout(() => {
           setErrorMsg("");
       }, 3000);
       return;
-    }
+  }
 
-    if (formData.company.length < 1 || formData.position.length < 1) {
-      setErrorMsg("Please add any experience you've had");
+  if (!formData.company?.length || !formData.position?.length) {
+      setErrorMsg("Please add any experience you've had.");
       setTimeout(() => {
           setErrorMsg("");
       }, 3000);
       return;
-    }
+  }
 
     try {
-        setIsLoading(true);
-        const payload = { ...formData, id };
+      setIsLoading(true);
+      let payload = { ...formData, id };
 
-        if (formData.jobTitle && formData.jobTitle.length > 0) {
+      if (formData.jobTitle && formData.jobTitle.length > 0) {
           const jobTitleKeywords = generateKeywords(formData.jobTitle);
           payload.jobTitleKeywords = jobTitleKeywords; 
       }
@@ -162,40 +162,37 @@ export default function TalentProfileForm() {
             payload.resume = resumeURL; 
         }
 
-        await updateTalent({ id }, payload); 
-
-        if (payload.jobTitleKeywords) {
-          const userRef = doc(db, 'talentCollection', id); 
-          await updateDoc(userRef, { jobTitleKeywords: payload.jobTitleKeywords });
-      }
-
-        router.push("/talent/profile");
-    } catch (error) {
-        console.error("Error updating profile:", error);
-        setErrorMsg(error.message);
-        setTimeout(() => {
-            setErrorMsg("");
-        }, 3000);
-    } finally {
-        setIsLoading(false);
-        showAlert(
-          {
-            type: "success",
-            message: "Profile updated successfully.",
-            timeout: 2000,
-          },
-          setAlert
+        payload = Object.fromEntries(
+          Object.entries(payload).filter(([_, value]) => value !== undefined)
         );
-    }
-};
 
-const generateKeywords = (jobTitle) => {
-  const keywords = jobTitle
-      .split(" ") 
-      .map(word => word.toLowerCase()) 
-      .filter(word => word.length > 0); 
-  return keywords;
-};
+          await updateTalent({ id }, payload); 
+
+          if (payload.jobTitleKeywords) {
+            const userRef = doc(db, 'talentCollection', id); 
+            await updateDoc(userRef, { jobTitleKeywords: payload.jobTitleKeywords });
+        }
+
+          router.push("/talent/profile");
+      } catch (error) {
+          console.error("Error updating profile:", error);
+          setErrorMsg(error.message);
+          setTimeout(() => {
+              setErrorMsg("");
+          }, 3000);
+
+      } finally {
+        setIsLoading(false)
+      }
+    };
+
+  const generateKeywords = (jobTitle) => {
+    const keywords = jobTitle
+        .split(" ") 
+        .map(word => word.toLowerCase()) 
+        .filter(word => word.length > 0); 
+    return keywords;
+  };
 
   if (isLoading) return <div><LoadingScreen /></div>;
 

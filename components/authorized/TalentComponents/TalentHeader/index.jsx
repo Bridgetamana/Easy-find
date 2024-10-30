@@ -8,6 +8,8 @@ import { MdNotifications } from "react-icons/md";
 import NotificationTab from "../Notifications";
 import AccountDropdown from "../AccountDropdown";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import secureLocalStorage from "react-secure-storage";
 import Image from "next/image";
 import styles from "./style.module.scss";
 
@@ -17,6 +19,12 @@ export default function TalentHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
+  const router = useRouter();
+  
+  const signOut = () => {
+  secureLocalStorage.removeItem("userToken");
+  router.push("/signin");
+  };
 
   const handleMenuClick = (key) => {
     setActive(key);
@@ -246,19 +254,15 @@ export default function TalentHeader() {
               </Link>
             </li>
             <li className={styles.dropdown__link}>
-              <Link
-                href="/talent/testimonials"
-                className="link"
-                onClick={closeMenu}
-              >
-                Testimonials
-              </Link>
+              <button onClick={signOut} className={`${styles.link} ${styles.signout}`}>
+                Sign Out
+              </button>
             </li>
           </ul>
           <ul className={styles.nav__list}>
             <li className={`${styles.nav__item} ${styles.pd_btm}`}>
               <Link
-                href="/blog"
+                href="/talent/blog"
                 onClick={() => handleMenuClick("blog")}
                 className={`${styles.nav__link} ${
                   active === styles.blog ? styles.active__link : ""

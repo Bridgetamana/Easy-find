@@ -60,9 +60,26 @@ export default function BlogHeader() {
             </li>
             <RxDividerVertical size={24} />
             <li className={styles.nav__item}>
-              <Link href="/signin" className={styles.nav__link}>
-                Sign In
+            {isTalentPath ? (
+              <li>
+              <Link
+                href="/talent/jobs"
+                onClick={() => handleMenuClick("jobs")}
+                className={styles.nav__link}>
+                Jobs
               </Link>
+              </li>
+            ): isCompanyPath ? (
+              <li>
+                  <Link href="/company/jobs/postjobs" className={styles.nav__link}>Post Job</Link> 
+              </li>
+            ) : (
+              <li>
+                <Link href="/signin" className={styles.nav__link}>
+                  Sign In
+                </Link>  
+              </li>
+              )}
             </li>
             <li className={styles.nav__item}>
               <Link href="/signup" passHref>
@@ -113,14 +130,41 @@ export default function BlogHeader() {
 
           <ul className={styles.nav__list}>
             <li className={styles.nav__item}>
-              <Link href="/" className={styles.nav__link}>
-                Home
-              </Link>
+            {isTalentPath ? (
+              <li>
+                  <Link href="/talent" className={styles.nav__link}>Home</Link> 
+              </li>
+          ) : isCompanyPath ? (
+              <li>
+                  <Link href="/company" className={styles.nav__link}>Home</Link> 
+              </li>
+          ) : (
+              <li>
+                  <Link href="/" className={styles.nav__link}>Home</Link> 
+              </li>
+          )}
             </li>
             <li className={styles.nav__item}>
-              <Link href="/signin" className={styles.nav__link}>
-                Sign In
+            {isTalentPath ? (
+              <li>
+              <Link
+                href="/talent/jobs"
+                onClick={() => handleMenuClick("jobs")}
+                className={styles.nav__link}>
+                Jobs
               </Link>
+              </li>
+            ): isCompanyPath ? (
+              <li>
+                  <Link href="/company/jobs/postjobs" className={styles.nav__link}>Post Job</Link> 
+              </li>
+            ) : (
+              <li>
+                <Link href="/signin" className={styles.nav__link}>
+                  Sign In
+                </Link>  
+              </li>
+              )}
             </li>
             <li className={styles.nav__item}>
               <Link href="/signup" className={styles.nav__button}>

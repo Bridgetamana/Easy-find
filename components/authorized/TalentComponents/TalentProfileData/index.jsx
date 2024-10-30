@@ -226,8 +226,8 @@ export default function TalentProfileData() {
           </div>
 
           <div className={styles.profile__box}>
-            <h4 className={styles.title}>Resume*</h4>
-            {formData.resume === null ? (
+            <h4 className={styles.title}>Resume</h4>
+            {!formData.resume || !formData.resume.url ? (
                 <p className={styles.text}>No resume uploaded</p>
             ) : (
               <div>
@@ -251,7 +251,7 @@ export default function TalentProfileData() {
                       src={formData.resume?.url}
                       title="Resume Viewer"
                       width="100%"
-                      height="400px"
+                      height="100%"
                       style={{ border: 'none' }}
                     />
                   )}

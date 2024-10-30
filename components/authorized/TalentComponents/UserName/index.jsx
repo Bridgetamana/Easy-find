@@ -10,7 +10,7 @@ export default function UserName() {
       <div className={styles.username__content}>
         <div className={styles.content__header}>
           <h2 className={styles.username__title}>
-            Welcome back, {user ? user.username : "User"}!
+            Welcome back, <span className={styles.username__usertitle}>{user ? user.username : "User"}!</span>
           </h2>
         </div>
       </div>

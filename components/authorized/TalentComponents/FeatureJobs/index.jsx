@@ -12,36 +12,45 @@ export default function FeaturedJobs() {
     const [isLoading, setIsLoading] = useState(true); 
 
    
-useEffect(() => {
-    const fetchUserProfile = async () => {
-        const auth = getAuth();
-        const user = auth.currentUser;
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            const auth = getAuth();
+            const user = auth.currentUser;
 
-        if (user) {
-            const userId = user.uid;
-            const profile = await talentStore.getTalentStoreById(userId);
-            setUserProfile(profile || {}); 
-        } else {
-            setUserProfile({}); 
+            if (user) {
+                const userId = user.uid;
+                const profile = await talentStore.getTalentStoreById(userId);
+                setUserProfile(profile || {}); 
+            } else {
+                setUserProfile({}); 
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
+
+    useEffect(() => {
+        if (userProfile && userProfile.jobTitleKeywords) {
+            fetchFeaturedJobs();
         }
-    };
+    }, [userProfile]);
 
-    fetchUserProfile();
-}, []);
-
-useEffect(() => {
-    if (userProfile && userProfile.jobTitleKeywords) {
-        fetchFeaturedJobs();
-    }
-}, [userProfile]);
+    useEffect(() => {
+        if (userProfile && userProfile.jobTitleKeywords?.length > 0) {
+            fetchFeaturedJobs();
+        } else {
+            // Exit loading state if user profile is incomplete
+            setIsLoading(false);
+        }
+    }, [userProfile]);
 
     const fetchFeaturedJobs = async () => {
-        if (!userProfile || !userProfile.jobTitleKeywords || userProfile.jobTitleKeywords.length === 0) {
-            console.warn("No job title keywords available for this user.");
-            setFeaturedJobs([]); 
-            setIsLoading(false);
-            return;
-        }
+        // if (!userProfile || !userProfile.jobTitleKeywords || userProfile.jobTitleKeywords.length === 0) {
+        //     console.warn("No job title keywords available for this user.");
+        //     setFeaturedJobs([]); 
+        //     setIsLoading(false);
+        //     return;
+        // }
         
         setIsLoading(true);
         try {
