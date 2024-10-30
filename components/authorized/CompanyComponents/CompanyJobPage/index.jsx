@@ -3,8 +3,8 @@ import {
   getJobIdsFromCompany,
   deleteJob,
   updateJobStatus,
-  getApplicantCount, 
-  getApplicantsByJobId, 
+  getApplicantCount,
+  getApplicantsByJobId,
 } from "../../../../firebaseConfig/companyStore";
 import { CiMenuKebab } from "react-icons/ci";
 import { useRouter } from "next/router";
@@ -30,7 +30,7 @@ const JobPage = () => {
     const fetchJobs = async () => {
       try {
         const jobData = await getJobIdsFromCompany();
-        
+
         if (!user) {
           throw new Error("User not authenticated");
         }
@@ -38,7 +38,10 @@ const JobPage = () => {
         const companyId = user.uid;
         const jobsWithApplicants = await Promise.all(
           jobData.map(async (job) => {
-            const applicantCount = await getApplicantCount(job.jobId, companyId);
+            const applicantCount = await getApplicantCount(
+              job.jobId,
+              companyId
+            );
             return { ...job, applicantCount };
           })
         );
@@ -47,7 +50,7 @@ const JobPage = () => {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching jobs:", err);
-        setError(err);
+        setError(err.message || "An error occurred while fetching jobs.");
         setLoading(false);
       }
     };
@@ -65,13 +68,13 @@ const JobPage = () => {
 
   const handleDeleteJob = async (jobId) => {
     try {
-      await deleteJob(jobId); 
-      alert('Job deleted successfully');
+      await deleteJob(jobId);
+      alert("Job deleted successfully");
 
       setJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
       setActiveDropdown(activeDropdown === jobId ? false : jobId);
     } catch (error) {
-      alert('Error deleting job: ' + error.message);
+      alert("Error deleting job: " + error.message);
     }
   };
 
@@ -122,113 +125,126 @@ const JobPage = () => {
     return <LoadingScreen />;
   }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!jobs.length) {
-    return <div className={styles.no__jobs}>No job posts available.</div>;
-  }
-
   return (
     <div className={styles.table__container}>
-      <table className={styles.jobs__table}>
-        <thead>
-          <tr>
-            <th>Job Title</th>
-            <th>Applicants</th>
-            <th>Date Posted</th>
-            <th>Job Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentJobs.map((job) => (
-            <tr key={job.jobId}>
-              <td>
-                <a
-                  href={`/company/jobs/${job.jobId}`}
-                  className={styles.job__link}
-                >
-                  {job.title}
-                </a>
-              </td>
-              <td>{job.applicantCount || "No applicants yet"}</td>
-              <td>{job.createdAt.toDate().toDateString()}</td>
-              <td>
-                <span
-                  className={`${styles.job__status} ${
-                  job.active 
-                  ? styles.active 
-                  : styles.inactive
-                  }`}
-                >
-                  {job.active ? "Active" : "Inactive"}
-                </span>
-              </td>
-              <td className="text-right">
-                <div className={styles.dropdown}>
-                  <button
-                    onClick={() => handleMenuClick(job.jobId)}
-                    className={styles.dropdown__button}
-                  >
-                    <CiMenuKebab />
-                  </button>
-                  {activeDropdown === job.jobId && (
-                    <div className={styles.dropdown__menu}>
-                      <button onClick={() => handleEditJob(job.jobId)}>
-                        Edit
+      {error && <div className={styles.error}>{error}</div>}
+      {!loading && !jobs.length && (
+        <div className={styles.no__jobs__container}>
+          <p className={styles.no__jobs__message}>No job posts available.</p>
+        </div>
+      )}
+
+      {jobs.length > 0 && (
+        <>
+          <table className={styles.jobs__table}>
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Applicants</th>
+                <th>Date Posted</th>
+                <th>Job Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentJobs.map((job) => (
+                <tr key={job.jobId}>
+                  <td>
+                    <a
+                      href={`/company/jobs/${job.jobId}`}
+                      className={styles.job__link}
+                    >
+                      {job.title}
+                    </a>
+                  </td>
+                  <td>{job.applicantCount || "No applicants yet"}</td>
+                  <td>{job.createdAt.toDate().toDateString()}</td>
+                  <td>
+                    <span
+                      className={`${styles.job__status} ${
+                        job.active ? styles.active : styles.inactive
+                      }`}
+                    >
+                      {job.active ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="text-right">
+                    <div className={styles.dropdown}>
+                      <button
+                        onClick={() => handleMenuClick(job.jobId)}
+                        className={styles.dropdown__button}
+                      >
+                        <CiMenuKebab />
                       </button>
-                      <button onClick={() => handleDeleteJob(job.jobId)}>
-                        Delete
-                      </button>
-                      <button onClick={() => handleCloseJob(job.jobId, job.active)}>
-                        {job.active ? "Close" : "Open"}
-                      </button>
-                      <button onClick={() => router.push(`/company/jobs/${job.jobId}/applicants`)}> 
-                        View Applicants
-                      </button>
+                      {activeDropdown === job.jobId && (
+                        <div className={styles.dropdown__menu}>
+                          <button onClick={() => handleEditJob(job.jobId)}>
+                            Edit
+                          </button>
+                          <button onClick={() => handleDeleteJob(job.jobId)}>
+                            Delete
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleCloseJob(job.jobId, job.active)
+                            }
+                          >
+                            {job.active ? "Close" : "Open"}
+                          </button>
+                          <button
+                            onClick={() =>
+                              router.push(
+                                `/company/jobs/${job.jobId}/applicants`
+                              )
+                            }
+                          >
+                            View Applicants
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-      {/* Pagination */}
-      <div className={styles.pagination}>
-        <button
-          className={styles.pagination__button}
-          onClick={handlePreviousClick}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-
-        {Array.from({ length: pageNumbers }, (_, index) => index + 1).map(
-          (pageNumber) => (
+          {/* Pagination */}
+          <div className={styles.pagination}>
             <button
-              className={`${styles.pagination__number} ${
-                currentPage === pageNumber ? styles.pagination__number__active : ""
-              }`}
-              key={pageNumber}
-              onClick={() => handleClick(pageNumber)}
+              className={styles.pagination__button}
+              onClick={handlePreviousClick}
+              disabled={currentPage === 1}
             >
-              {pageNumber}
+              Previous
             </button>
-          )
-        )}
 
-        <button
-          className={styles.pagination__button}
-          onClick={handleNextClick}
-          disabled={currentPage === pageNumbers}
-        >
-          Next
-        </button>
-      </div>
+            {Array.from({ length: pageNumbers }, (_, index) => index + 1).map(
+              (pageNumber) => (
+                <button
+                  className={`${styles.pagination__number} ${
+                    currentPage === pageNumber
+                      ? styles.pagination__number__active
+                      : ""
+                  }`}
+                  key={pageNumber}
+                  onClick={() => handleClick(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              )
+            )}
+
+            <button
+              className={styles.pagination__button}
+              onClick={handleNextClick}
+              disabled={currentPage === pageNumbers}
+            >
+              Next
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

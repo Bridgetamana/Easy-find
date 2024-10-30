@@ -16,30 +16,14 @@ const Editor = dynamic(
   { ssr: false }
 );
 
-const htmlToDraft = dynamic(() => import("html-to-draftjs"), { ssr: false });
-
-const draftToHtml = dynamic(() => import("draftjs-to-html"), { ssr: false });
-
 const EditJobForm = () => {
   const router = useRouter();
   const { jobId } = router.query;
 
-  const [isEditMode, setIsEditMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isCoverLetterRequired, setIsCoverLetterRequired] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(null);
-
-  const convertHtmlToEditorState = (htmlContent) => {
-    const contentBlock = htmlToDraft(htmlContent);
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(
-        contentBlock.contentBlocks
-      );
-      return EditorState.createWithContent(contentState);
-    }
-    return EditorState.createEmpty();
-  };
 
   const initialFormData = {
     jobTitle: "",
@@ -58,22 +42,36 @@ const EditJobForm = () => {
     deadline: "",
   };
   const [formData, setFormData] = useState(initialFormData);
+  const [htmlToDraft, setHtmlToDraft] = useState(null);
+  const [draftToHtml, setDraftToHtml] = useState(null);
 
-  // function to convert EditorState to HTML
-  const stripHtmlTags = (htmlString) => {
-    return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+  useEffect(() => {
+    const loadLibraries = async () => {
+      const htmlToDraftModule = await import("html-to-draftjs");
+      const draftToHtmlModule = await import("draftjs-to-html");
+      setHtmlToDraft(() => htmlToDraftModule.default);
+      setDraftToHtml(() => draftToHtmlModule.default);
+    };
+    loadLibraries();
+  }, []);
+
+  // Convert HTML to EditorState
+  const convertHtmlToEditorState = (htmlContent) => {
+    if (htmlToDraft) {
+      const contentBlock = htmlToDraft(htmlContent);
+      if (contentBlock) {
+        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+        return EditorState.createWithContent(contentState);
+      }
+    }
+    return EditorState.createEmpty();
   };
+
+  // Convert EditorState to HTML
   const convertEditorStateToHtml = (editorState) => {
-    if (!editorState) {
-      return "";
-    }
+    if (!draftToHtml || !editorState) return "";
     const contentState = editorState.getCurrentContent();
-    if (!contentState.hasText()) {
-      return "";
-    }
-    const htmlContent = draftToHtml(convertToRaw(contentState));
-    const plainTextContent = stripHtmlTags(htmlContent);
-    return plainTextContent;
+    return draftToHtml(convertToRaw(contentState));
   };
 
   useEffect(() => {
@@ -90,11 +88,9 @@ const EditJobForm = () => {
       setFormData({
         jobTitle: jobData.title || "",
         jobDescription: jobData.description || "",
-        requirements: convertHtmlToEditorState(jobData.requirements || ""), // Convert HTML to EditorState
-        benefits: convertHtmlToEditorState(jobData.benefits || ""), // Convert HTML to EditorState
-        educationExperience: convertHtmlToEditorState(
-          jobData.educationExperience || ""
-        ), // Convert HTML to EditorState
+        requirements: convertHtmlToEditorState(jobData.requirements || ""),
+        benefits: convertHtmlToEditorState(jobData.benefits || ""),
+        educationExperience: convertHtmlToEditorState(jobData.educationExperience || ""),
         location: jobData.location || "",
         industry: jobData.industry || "",
         salaryMin: jobData.salaryMin || "",
@@ -103,9 +99,7 @@ const EditJobForm = () => {
         employmentType: jobData.jobType || "",
         jobLevel: jobData.jobLevel || "",
         experience: jobData.experience || "",
-        deadline: jobData.deadline
-          ? formatDate(new Date(jobData.deadline))
-          : "",
+        deadline: jobData.deadline ? formatDate(new Date(jobData.deadline)) : "",
         coverLetterRequired: jobData.coverLetterRequired || "",
       });
     } catch (error) {
@@ -118,8 +112,6 @@ const EditJobForm = () => {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
-
-    // Convert the EditorState fields to HTML
     const cleanFormData = {
       title: formData.jobTitle,
       description: formData.jobDescription,
@@ -133,11 +125,8 @@ const EditJobForm = () => {
       location: formData.location,
       requirements: convertEditorStateToHtml(formData.requirements),
       benefits: convertEditorStateToHtml(formData.benefits),
-      educationExperience: convertEditorStateToHtml(
-        formData.educationExperience
-      ),
+      educationExperience: convertEditorStateToHtml(formData.educationExperience),
       experience: formData.experience,
-      deadline: formatDate(new Date(formData.deadline)),
       createdAt: new Date(),
       active: true,
       isCoverLetterRequired: isCoverLetterRequired,

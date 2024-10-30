@@ -25,7 +25,6 @@ const FindCompanies = () => {
     const fetchCompanies = async () => {
       try {
         const fetchedCompanies = await companyStore.getCompanyStore();
-        console.log("Fetched Companies:", fetchedCompanies); // Log the fetched companies
         setCompanies(fetchedCompanies);
         setLoading(false);
       } catch (error) {
@@ -118,7 +117,7 @@ const FindCompanies = () => {
                   <div className={styles.card__info}>
                     <div className={styles.card__company}>
                       <div className={styles.card__logo}>
-                        <img src={company.companyLogo} alt={company.fullName} />
+                        <img src={company.photo} alt={company.fullName} />
                         <div className={styles.company__info}>
                           <h5 className={styles.company__name}>
                             {company.fullName}
@@ -138,7 +137,7 @@ const FindCompanies = () => {
                     </div>
                   </div>
                   <div className={styles.card__flex}>
-                    <Link href="">
+                    <Link href={`/company/${company.id}`}>
                       <button className={styles.apply__button}>
                         View More
                       </button>

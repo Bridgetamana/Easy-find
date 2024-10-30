@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { addJobPost } from "@/firebaseConfig/companyStore";
-import { EditorState } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import dynamic from "next/dynamic";
+import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./style.module.scss";
 
 const Editor = dynamic(
-  () => import("react-draft-wysiwyg").then(mod => mod.Editor),
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
   { ssr: false }
 );
 
@@ -57,14 +58,13 @@ const JobPostForm = () => {
       salaryMax: formData.salaryMax,
       jobType: formData.employmentType,
       location: formData.location,
-      requirements: formData.requirements,
-      benefits: formData.benefits,
-      educationExperience: formData.educationExperience,
+      requirements: draftToHtml(convertToRaw(formData.requirements.getCurrentContent())),
+      benefits: draftToHtml(convertToRaw(formData.benefits.getCurrentContent())),
+      educationExperience: draftToHtml(convertToRaw(formData.educationExperience.getCurrentContent())),
       experience: formData.experience,
-      deadline: formatDate(new Date(formData.deadline)),
       createdAt: new Date(),
       active: true,
-      isCoverLetterRequired: isCoverLetterRequired    
+      isCoverLetterRequired: isCoverLetterRequired,
     };
 
     setIsLoading(true);
@@ -307,14 +307,13 @@ const JobPostForm = () => {
           </div>
 
           <div className={styles.input__wrap}>
-            <label htmlFor="deadline">Deadline:</label>
+            <label htmlFor="deadline">Application Deadline:</label>
             <input
               type="date"
               className={styles.input__field}
               name="deadline"
               value={formData.deadline}
               onChange={handleChange}
-              placeholder="Deadline"
               required
             />
           </div>
