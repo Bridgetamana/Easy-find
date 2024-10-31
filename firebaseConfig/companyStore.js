@@ -31,6 +31,8 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
+  setPersistence,
+  browserSessionPersistence,
   signOut,
   signInWithEmailAndPassword,
   EmailAuthProvider,
@@ -141,29 +143,27 @@ export const registerCompany = async (fullName, email, password) => {
 };
 
 //Handle Login Company
-export const loginCompany = async (email, password, selectedRole) => {
-  console.log("loginCompany function triggered"); // Check if function is running
+export const loginCompany = async (email, password, setUser) => {
   const auth = getAuth();
+
   try {
+    await setPersistence(auth, browserSessionPersistence); 
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    const userDoc = await getDoc(doc(db, "companyCollection", user.uid));
-    const userData = userDoc.data();
+    // Set user information in context
+    setUser({
+      username: user.email,
+      uid: user.uid
+    });
 
-    console.log("Firestore user role:", userData.user);
-    console.log("Selected role on sign-in:", selectedRole);
+    return user; 
 
-    if (userData.user !== selectedRole) {
-      throw new Error(`You checked the wrong box. Please select '${userData.user}' as your role.`);
-    }
-
-    return user;
   } catch (error) {
-    console.error("Error logging in:", error);
     throw error;
   }
 };
+
 
 
 //Update Company
