@@ -100,13 +100,23 @@ export const loginUser = async (email, password, setUser) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Set user information in context
-    setUser({
-      username: user.email,
-      uid: user.uid
-    });
+    // Step 1: Fetch the user's document from Firestore using the user's UID
+    const userDocRef = doc(db, "talentCollection", user.uid); 
+    const userDocSnap = await getDoc(userDocRef);
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
 
-    return user; 
+      // Step 2: Set user information in the context with fullName from Firestore
+      setUser({
+        username: userData.fullName, 
+        email: user.email,           
+        uid: user.uid                
+      });
+
+      return user;
+    } else {
+      throw new Error("User document not found");
+    } 
 
   } catch (error) {
     throw error;
