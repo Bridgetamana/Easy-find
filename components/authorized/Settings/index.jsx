@@ -3,19 +3,25 @@ import React from 'react';
 import { useState } from 'react';
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword, deleteUser } from "firebase/auth";
 import { deleteTalent } from '@/firebaseConfig/talentStore';
+import { IoEye, IoEyeOff } from "react-icons/io5";
 import showAlert from '@/components/utils/AlertBox/CustomAlert';
+import Spinner from '@/components/utils/Loaders/Spinner';
 import styles from './style.module.scss';
 
 export default function TalentSettings() {
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
+    const [passwordLoading, setPasswordLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
     const [alert, setAlert] = useState(null)
   
     const handleChangePassword = async () => {
       const auth = getAuth();
       const user = auth.currentUser;
+      setPasswordLoading(true)
 
       
     try {
@@ -40,12 +46,15 @@ export default function TalentSettings() {
       );
     } catch (error) {
       console.error("Failed to change password:", error.message);
+    } finally {
+      setPasswordLoading(false)
     }
   };
   
   const handleDeleteAccount = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
+    setDeleteLoading(true)
   
     try {
       if (!deleteConfirmation) {
@@ -68,7 +77,13 @@ export default function TalentSettings() {
       router.push("/"); 
     } catch (error) {
       console.error("Failed to delete account:", error);
+    }finally {
+      setDeleteLoading(false)
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
   
     return (
@@ -81,36 +96,64 @@ export default function TalentSettings() {
             <h3 className={styles.section__title}>Change Password</h3>
             <div className={styles.form__group}>
               <label htmlFor="password">Current Password:</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                className={styles.changePassword__input}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className={styles.password__field}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  className={styles.changePassword__input}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className={styles.toggleButton} 
+                >
+                  {showPassword ? <IoEyeOff /> : <IoEye /> }
+                </button>
+              </div>
             </div>
             <div className={styles.form__group}>
               <label htmlFor="newPassword">New Password:</label>
-              <input
-                type="password"
-                id="newPassword"
-                className={styles.changePassword__input}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
+              <div className={styles.password__field}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="newPassword"
+                  className={styles.changePassword__input}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className={styles.toggleButton} 
+                >
+                  {showPassword ? <IoEyeOff /> : <IoEye /> }
+                </button>
+              </div>  
             </div>
             <div className={styles.form__group}>
               <label htmlFor="confirmPassword">Confirm New Password:</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                className={styles.changePassword__input}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+              <div className={styles.password__field}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  className={styles.changePassword__input}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className={styles.toggleButton} 
+                >
+                  {showPassword ? <IoEyeOff /> : <IoEye /> }
+                </button>
+              </div>  
             </div>
             <button className={styles.settings__button} onClick={handleChangePassword}>
-              Change Password
+            {passwordLoading ? <Spinner /> :
+            'Change Password'}
             </button>
           </div>
 
@@ -130,7 +173,8 @@ export default function TalentSettings() {
               className={styles.settings__button}
               onClick={handleDeleteAccount}
             >
-              Delete Account
+              {deleteLoading ? <Spinner /> :
+            'Delete'}
             </button>
           </div>
 

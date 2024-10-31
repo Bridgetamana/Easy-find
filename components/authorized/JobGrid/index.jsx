@@ -23,13 +23,21 @@ const JobGrid = ({ searchInput }) => {
   //Display all jobs
   useEffect(() => {
     const fetchJobs = async () => {
-      const jobList = await getJobs();
-      setJobs(jobList);
-      setFilteredJobs(jobList);
+      setIsLoading(true); 
+      try {
+        const jobList = await getJobs();
+        setJobs(jobList);
+        setFilteredJobs(jobList);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      } finally {
+        setIsLoading(false); 
+      }
     };
-
+  
     fetchJobs();
   }, []);
+  
 
   useEffect(() => {
     if (!searchInput || searchInput.trim() === "") {
@@ -288,7 +296,6 @@ const JobGrid = ({ searchInput }) => {
             </div>
           </div>
         </div>
-        {isLoading && <LoadingScreen />}
 
         {/* Job listings */}
         {filteredJobs.length > 0 ? (
@@ -311,6 +318,7 @@ const JobGrid = ({ searchInput }) => {
                   className={`${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`}
                   key={job.id}
                 >
+                  {isLoading && <LoadingScreen />}
                   <div className={styles.card__info}>
                     <div className={styles.card__company}>
                       <div className={styles.card__logo}>

@@ -31,7 +31,7 @@ export default function JobHero({ setSearchInput }) {
             value={searchValue} 
             onChange={handleInputChange} 
           />
-          <Link href="/search" className={styles.hero__button}>
+          <Link href="#" className={styles.hero__button}>
             <HiOutlineArrowNarrowRight className={styles.search__icon} />
             <p>Find Jobs</p>
           </Link>
