@@ -298,7 +298,9 @@ const JobGrid = ({ searchInput }) => {
         </div>
 
         {/* Job listings */}
-        {filteredJobs.length > 0 ? (
+        {isLoading ? (
+          <p className="text-center text-[18px] my-12">Loading jobs...</p>
+        ) : filteredJobs.length > 0 ? (
           <div
             className={`${styles.grid__body} grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}
           >
@@ -318,7 +320,6 @@ const JobGrid = ({ searchInput }) => {
                   className={`${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`}
                   key={job.id}
                 >
-                  {isLoading && <LoadingScreen />}
                   <div className={styles.card__info}>
                     <div className={styles.card__company}>
                       <div className={styles.card__logo}>
@@ -363,6 +364,7 @@ const JobGrid = ({ searchInput }) => {
         ) : (
           <p className={styles.no__jobs}>No jobs found.</p>
         )}
+
 
         {/* Pagination */}
         <div className={styles.pagination}>

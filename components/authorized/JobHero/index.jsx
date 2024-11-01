@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
 import styles from './style.module.scss';
 
@@ -31,10 +30,10 @@ export default function JobHero({ setSearchInput }) {
             value={searchValue} 
             onChange={handleInputChange} 
           />
-          <Link href="#" className={styles.hero__button}>
+          <button  className={styles.hero__button} onClick={() => setSearchValue("")}>
             <HiOutlineArrowNarrowRight className={styles.search__icon} />
             <p>Find Jobs</p>
-          </Link>
+          </button>
         </div>
       </div>
     </div>

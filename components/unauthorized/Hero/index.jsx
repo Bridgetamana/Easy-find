@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Stats from "./Stats";
+import Link from "next/link";
 
 export default function Heroine() {
   return (
