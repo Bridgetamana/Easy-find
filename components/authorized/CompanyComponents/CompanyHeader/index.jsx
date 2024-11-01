@@ -114,13 +114,13 @@ export default function CompanyHeader() {
             </li>
             <li className={styles.nav__item}>
               <Link
-                href="/company/blog"
+                href="/company/jobs"
                 onClick={() => handleMenuClick("blog")}
                 className={`${styles.nav__link} ${
                   active === styles.blog ? styles.active__link : ""
                 }`}
               >
-                Blog
+                Jobs
               </Link>
             </li>
             <li className={styles.nav__item}>
@@ -217,20 +217,16 @@ export default function CompanyHeader() {
             </li>
             <li className={styles.dropdown__link}>
               <Link
-                href="/company/jobs"
-                className={styles.link}
-                onClick={closeMenu}
-              >
-                Jobs
-              </Link>
-            </li>
-            <li className={styles.dropdown__link}>
-              <Link
                 href="/company/terms"
                 className={styles.link}
                 onClick={closeMenu}
               >
                 Terms
+              </Link>
+            </li>
+            <li className={styles.dropdown__link}>
+              <Link href="/blog" onClick={closeMenu} className={styles.link}>
+                Blog
               </Link>
             </li>
             <li className={styles.dropdown__link}>
@@ -245,13 +241,13 @@ export default function CompanyHeader() {
           <ul className={styles.nav__list}>
             <li className={` ${styles.nav__item} ${styles.pd_btm} `}>
               <Link
-                href="/blog"
+                href="/company/jobs"
                 onClick={() => handleMenuClick("blog")}
                 className={`${styles.nav__link} ${
                   active === styles.blog ? styles.active__link : ""
                 }`}
               >
-                Blog
+                Jobs
               </Link>
             </li>
             <li className={styles.nav__item}>

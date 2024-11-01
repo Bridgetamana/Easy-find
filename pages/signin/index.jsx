@@ -5,6 +5,7 @@ import Spinner from "@/components/utils/Loaders/Spinner";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { loginUser } from "@/firebaseConfig/talentStore";
+import { loginCompany } from "@/firebaseConfig/companyStore";
 import { useUser } from "../../context/userContext";
 import { db } from "@/firebaseConfig/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -43,7 +44,14 @@ export default function Signin() {
         }, setAlert);
         return;
       }
-      const userCredential = await loginUser(email, password, setUser);
+
+      let userCredential;
+      if (isTalent) {
+        userCredential = await loginUser(email, password, setUser);
+      } else if (isCompany) {
+        userCredential = await loginCompany(email, password, setUser);
+      }
+
       const user = userCredential;
       const userUID = user.uid;
   
