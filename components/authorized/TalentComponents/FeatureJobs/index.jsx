@@ -39,19 +39,11 @@ export default function FeaturedJobs() {
         if (userProfile && userProfile.jobTitleKeywords?.length > 0) {
             fetchFeaturedJobs();
         } else {
-            // Exit loading state if user profile is incomplete
             setIsLoading(false);
         }
     }, [userProfile]);
 
     const fetchFeaturedJobs = async () => {
-        // if (!userProfile || !userProfile.jobTitleKeywords || userProfile.jobTitleKeywords.length === 0) {
-        //     console.warn("No job title keywords available for this user.");
-        //     setFeaturedJobs([]); 
-        //     setIsLoading(false);
-        //     return;
-        // }
-        
         setIsLoading(true);
         try {
             const companiesRef = collection(db, 'companyCollection');
@@ -63,12 +55,18 @@ export default function FeaturedJobs() {
                 const companyId = companyDoc.id; 
                 const jobsRef = collection(companyDoc.ref, 'jobs');
     
-                const q = query(
-                    jobsRef,
-                    where('titleKeywords', 'array-contains-any', userProfile.jobTitleKeywords), 
-                    where('salaryMin', '>=', userProfile.minSalary), 
-                    where('salaryMax', '<=', userProfile.maxSalary)
-                );
+                const filters = [];
+                if (userProfile.jobTitleKeywords && userProfile.jobTitleKeywords.length > 0) {
+                    filters.push(where('titleKeywords', 'array-contains-any', userProfile.jobTitleKeywords));
+                }
+                if (userProfile.minSalary != null) {
+                    filters.push(where('salaryMin', '>=', userProfile.minSalary));
+                }
+                if (userProfile.maxSalary != null) {
+                    filters.push(where('salaryMax', '<=', userProfile.maxSalary));
+                }
+    
+                const q = query(jobsRef, ...filters);
     
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach(doc => {
@@ -79,7 +77,7 @@ export default function FeaturedJobs() {
                     });
                 });
             }
-
+    
             setFeaturedJobs(jobs); 
         } catch (error) {
             console.error("Error fetching jobs:", error);
@@ -87,6 +85,8 @@ export default function FeaturedJobs() {
             setIsLoading(false);
         }
     };
+    
+    
     
   return (
     <div className='bg-white w-[90%] p-[3rem] my-[3rem] mx-auto rounded-2xl flex flex-col items-start'>

@@ -220,7 +220,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="username"
-            value={formData.username}
+            value={formData.username || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your name"
@@ -235,7 +235,7 @@ export default function TalentProfileForm() {
           <input
             type="email"
             name="email"
-            value={formData.email}
+            value={formData.email || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your email address"
@@ -248,7 +248,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="bio"
-            value={formData.bio}
+            value={formData.bio || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your bio"
@@ -261,7 +261,7 @@ export default function TalentProfileForm() {
           <input
             type="date"
             name="dob"
-            value={formData.dob}
+            value={formData.dob || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your date of birth"
@@ -273,7 +273,7 @@ export default function TalentProfileForm() {
           <select
             name="pronouns"
             className={styles.form__select}
-            value={formData.pronouns}
+            value={formData.pronouns || ""}
             onChange={handleInputChange}
             required
           >
@@ -289,7 +289,7 @@ export default function TalentProfileForm() {
           <select
             name="gender"
             className={styles.form__select}
-            value={formData.gender}
+            value={formData.gender || ""}
             onChange={handleInputChange}
           >
             <option value="">Select gender</option>
@@ -304,7 +304,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="jobTitle"
-            value={formData.jobTitle}
+            value={formData.jobTitle || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your job title"
@@ -317,7 +317,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="linkedin"
-            value={formData.linkedin}
+            value={formData.linkedin || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your LinkedIn link"
@@ -329,7 +329,7 @@ export default function TalentProfileForm() {
           <input
             type="link"
             name="portfolio"
-            value={formData.portfolio}
+            value={formData.portfolio || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your portfolio link"
@@ -341,7 +341,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="address"
-            value={formData.address}
+            value={formData.address || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your address"
@@ -354,7 +354,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="phone"
-            value={formData.phone}
+            value={formData.phone || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your phone number"
@@ -367,7 +367,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="mobile"
-            value={formData.mobile}
+            value={formData.mobile || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your mobile number"
@@ -399,7 +399,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="skills"
-            value={formData.skills}
+            value={formData.skills || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your skills"
@@ -411,7 +411,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="institute"
-            value={formData.institute}
+            value={formData.institute || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your institute"
@@ -419,7 +419,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="degree"
-            value={formData.degree}
+            value={formData.degree || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your degree"
@@ -432,7 +432,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="company"
-            value={formData.company}
+            value={formData.company || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your company"
@@ -441,7 +441,7 @@ export default function TalentProfileForm() {
           <input
             type="text"
             name="position"
-            value={formData.position}
+            value={formData.position || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your position"
@@ -453,7 +453,7 @@ export default function TalentProfileForm() {
           <input
             type="number"
             name="minSalary"
-            value={formData.minSalary}
+            value={formData.minSalary || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your desired minimum salary"
@@ -461,7 +461,7 @@ export default function TalentProfileForm() {
           <input
             type="number"
             name="maxSalary"
-            value={formData.maxSalary}
+            value={formData.maxSalary || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your desired maximum salary"

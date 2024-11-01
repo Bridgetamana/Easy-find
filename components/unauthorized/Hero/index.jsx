@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Stats from "./Stats";
+import Link from "next/link";
 
 export default function Heroine() {
   return (
@@ -34,12 +35,12 @@ export default function Heroine() {
                 className="block w-full rounded-md border border-gray-300 px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm outline-none focus:border-rose-500 focus:ring-rose-500"
                 placeholder="Job Title, Skill or Company"
               />
-              <button
-                type="submit"
+              <Link
+                href='/browse-jobs'
                 className="mt-3 w-full rounded-md border border-transparent bg-gray-800 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:inline-flex sm:w-auto sm:flex-shrink-0 sm:items-center"
               >
                 Find jobs
-              </button>
+              </Link>
             </form>
             <p className="mt-3 text-sm text-gray-500">
               <span  className="font-medium text-gray-900">
