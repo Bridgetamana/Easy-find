@@ -137,7 +137,7 @@ const FindCompanies = () => {
                     </div>
                   </div>
                   <div className={styles.card__flex}>
-                    <Link href={`/company/${company.id}`}>
+                    <Link href={`/company/${company.companyId}`}>
                       <button className={styles.apply__button}>
                         View More
                       </button>

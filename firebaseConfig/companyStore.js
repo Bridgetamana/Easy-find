@@ -25,6 +25,7 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import {
@@ -172,12 +173,6 @@ export const updateCompany = async (company) => {
   await updateDoc(docRef, company);
 };
 
-//Delete Company
-export const deleteCompany = async (id) => {
-  const docRef = doc(db, COMPANY, id);
-  await deleteDoc(docRef);
-};
-
 // Function to add a job to the companycollection
 const stripHtmlTags = (htmlString) => {
   return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
@@ -276,6 +271,21 @@ export const updateJobDetails = async (jobId, updatedData) => {
     throw error;
   }
 };
+
+export const getActiveJobCount = async (companyId) => {
+  try {
+    const activeJobsSnapshot = await getDocs(query(
+      collection(db, `companyCollection/${companyId}/jobs`),
+      where("active", "==", true)
+    ));
+
+    return activeJobsSnapshot.size;
+  } catch (error) {
+    console.error("Error fetching active job count:", error);
+    return 0;
+  }
+};
+
 
 // Function to get job details
 export const getJobDetailsById = async (jobId) => {

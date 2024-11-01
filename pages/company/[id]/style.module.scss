@@ -1,0 +1,140 @@
+@import "../../../styles/variables";
+
+.companyDetails__section {
+  margin: 2rem auto;
+  width: 90%;
+
+  .details__header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .profile__image {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      margin: 10px 0;
+
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+
+    .details__title {
+      @include title;
+      margin-top: 1.5rem;
+    }
+
+    .details__flex {
+      display: flex;
+      gap: 1rem;
+
+      .details__location,
+      .details__posted {
+        font-size: $font-fourteen;
+        color: $lightGray;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+    }
+  }
+  .about__section {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid $neutral;
+    border-radius: 10px;
+
+    .info__header {
+      display: block;
+
+      .info__title {
+        font-size: $font-twentyFour;
+        font-weight: $font-weight-600;
+        color: $black;
+        border-bottom: 1px solid $neutral;
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    .info__content {
+      display: grid;
+      margin-top: 1.5rem;
+      gap: 1rem;
+
+      @media screen and (min-width: $breakpoint-4) {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .info__pill {
+        width: 7rem;
+        background-color: lighten($primary, 40%);
+        color: darken($primary, 30%);
+        font-size: 13px;
+        line-height: 15px;
+        padding: 5px 10px;
+        border-radius: 50px;
+        margin-bottom: 10px;
+      }
+
+      .info__item {
+        display: grid;
+        grid-template-columns: 15% 55%;
+        align-content: center;
+        width: 250px;
+
+        .info__left {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          .info__icon {
+            font-size: 20px;
+            color: #66789c;
+          }
+
+          .info__title {
+            font-size: $font-fourteen;
+            font-weight: $font-weight-500;
+            color: #66789c;
+          }
+
+          
+        }
+
+        .info__right {
+          .info__text {
+            font-size: $font-fourteen;
+            font-weight: $font-weight-500;
+            color: $black;
+          }
+
+          .not__specified {
+            font-size: $font-fourteen;
+            font-weight: $font-weight-500;
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  .companyInfo__section {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+    .description__header {
+      display: block;
+
+      .description__title {
+        font-size: $font-twentyFour;
+        font-weight: $font-weight-600;
+        color: $black;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
