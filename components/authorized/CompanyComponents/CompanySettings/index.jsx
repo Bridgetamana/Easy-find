@@ -7,6 +7,7 @@ import CustomModal from "../../../utils/CustomModal/index";
 import showAlert from "../../../utils/AlertBox/CustomAlert";
 import styles from "./style.module.scss";
 import Spinner from "@/components/utils/Loaders/Spinner";
+import secureLocalStorage from "react-secure-storage";
 
 export default function SecuritySettings() {
   const [password, setPassword] = useState("");
@@ -65,7 +66,11 @@ export default function SecuritySettings() {
         },
         setAlert
       );
-      setErrorMsg({ new: "", confirm: "", current: "" }); 
+
+      secureLocalStorage.removeItem("userToken");
+      router.push("/signin");
+
+      setErrorMsg({ new: "", confirm: "", current: "" });
     } catch (error) {
       handlePasswordChangeError(error);
     }
