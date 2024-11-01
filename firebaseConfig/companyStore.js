@@ -45,7 +45,7 @@ import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
 const COMPANY = "companyCollection";
 
-const reauthenticateUser = async (user, currentPassword) => {
+async function reauthenticateUser(user, currentPassword) {
   const credential = EmailAuthProvider.credential(user.email, currentPassword);
   await reauthenticateWithCredential(user, credential);
 };
@@ -199,10 +199,14 @@ export const addJobPost = async (companyId, jobData) => {
 
 
 // Function to get a jobID from the companycollection
-export const getJobIdsFromCompany = async (companyId) => {
-  if (!companyId) {
-    throw new Error("Company ID is required.");
+export const getJobIdsFromCompany = async () => {
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User not authenticated.");
   }
+  const companyId = user.uid;
 
   try {
     const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
