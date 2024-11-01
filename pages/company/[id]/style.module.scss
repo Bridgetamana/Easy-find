@@ -138,3 +138,142 @@
     }
   }
 }
+
+.jobs__card {
+    width: 100%;
+    border: 2px solid #f1f1f1;
+    overflow: hidden;
+    margin-bottom: 24px;
+    position: relative;
+    background: #f8faff;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 1rem;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+
+    &:hover{
+        border: 1px solid $primary;
+    }
+
+    .card__company {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+
+        .card__logo {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+
+            img {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 10px;
+                background-color: $secondary;
+                object-fit: cover;
+            }
+
+            .company__info {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+
+                .company__name {
+                    font-size: $font-eighteen;
+                    font-weight: $font-weight-600;
+                    color: $black;
+                }
+
+                .company__location {
+                    font-size: $font-twelve;
+                    color: $lightGray;
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                }
+            }
+        }
+
+    }
+
+    .card__info {
+        .card__title {
+            font-size: $font-sixteen;
+            font-weight: $font-weight-600;
+            color: $black;
+        }
+
+        .card__flex {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-top: 0.25rem;
+            gap: 1rem;
+
+            .card__location,
+            .card__time {
+                font-size: $font-twelve;
+                color: $lightGray;
+                display: flex;
+                align-items: center;
+                gap: 3px;
+            }
+        }
+
+        .card__description{
+            font-size: $font-fourteen;
+            color: $lightGray;
+            margin-top: .5rem;
+        }
+
+        .card__tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+
+            li {
+                width: fit-content;
+                padding: 0.15rem 0.5rem;
+                background: $accent;
+                color: $black;
+                font-size: $font-twelve;
+                text-align: center;
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .card__flex{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        // margin-top: 1rem;
+
+        .company__pay {
+            color: $primary;
+            font-size: $font-twelve;
+            font-weight: $font-weight-600;
+            line-height: 1.2;
+        }
+        .apply__button{
+            border: none;
+            background-color: $secondary;
+            color: $primary;
+            font-size: $font-sixteen;
+            font-weight: $font-weight-600;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            
+            &:hover{
+                background-color: $primary;
+                color: $white;
+                transform: none;
+            }
+        }
+    }
+}
