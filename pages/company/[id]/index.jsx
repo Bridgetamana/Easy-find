@@ -1,12 +1,21 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { companyStore } from "../../../firebaseConfig/companyStore";
-import { getActiveJobCount } from "../../../firebaseConfig/companyStore";
+import {
+  getActiveJobCount,
+  getActiveJobIdsFromCompany,
+} from "../../../firebaseConfig/companyStore";
 import LoadingScreen from "../../../components/utils/Loaders/Loader";
 import Button from "@/components/utils/Button";
 import styles from "./style.module.scss";
 import CompaniesLayout from "./layout";
-import { AiOutlineMail } from "react-icons/ai";
+import {
+  AiOutlineClockCircle,
+  AiOutlineEnvironment,
+  AiOutlineMail,
+} from "react-icons/ai";
+import { CgBriefcase } from "react-icons/cg";
+import Link from "next/link";
 import { BiBuilding, BiPhone } from "react-icons/bi";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { BsBriefcase } from "react-icons/bs";
@@ -18,6 +27,7 @@ const CompanyDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openJobsCount, setOpenJobsCount] = useState(0);
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     if (id) {
@@ -27,8 +37,10 @@ const CompanyDetail = () => {
           setCompany(companyData);
 
           const activeJobs = await getActiveJobCount(id);
-
           setOpenJobsCount(activeJobs);
+
+          const jobData = await getActiveJobIdsFromCompany(id);
+          setJobs(jobData);
         } catch (error) {
           console.error("Error fetching company details or job count:", error);
           setError("Could not fetch company data.");
@@ -152,9 +164,58 @@ const CompanyDetail = () => {
             <div className={styles.description__header}>
               <h2 className={styles.description__title}>Jobs available</h2>
             </div>
-            <p className={styles.description__text}>
-              "Incoming"
-            </p>
+            <div
+              className={`grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}
+            >
+              {jobs.length > 0 ? (
+                jobs.map((job) => (
+                  <div
+                    key={job.jobId}
+                    className={`${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`}
+                  >
+                    <div className={styles.card__info}>
+                      <div className={styles.card__company}>
+                        <div className={styles.card__logo}>
+                          <img src={job.companyLogo} alt={job.companyName} />
+                          <div className={styles.company__info}>
+                            <h5 className={styles.company__name}>
+                              {job.companyName}
+                            </h5>
+                            <p className={styles.company__location}>
+                              <AiOutlineEnvironment />
+                              {job.location}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <h4 className={styles.card__title}>{job.title}</h4>
+                      <div className={styles.card__flex}>
+                        <p className={styles.card__location}>
+                          <CgBriefcase />
+                          {job.jobType}
+                        </p>
+                        <p className={styles.card__time}>
+                          <AiOutlineClockCircle />
+                          {job.datePosted}
+                        </p>
+                      </div>
+                    </div>
+                    <div className={styles.card__flex}>
+                      <p className={styles.company__pay}>
+                        NGN{job.salaryMin} - NGN{job.salaryMax}
+                      </p>
+                      <Link href={`/signin`}>
+                        <button className={styles.apply__button}>
+                          View More
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No open jobs.</p>
+              )}
+            </div>
           </section>
         </div>
       )}

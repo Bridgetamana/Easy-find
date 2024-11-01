@@ -199,15 +199,11 @@ export const addJobPost = async (companyId, jobData) => {
 
 
 // Function to get a jobID from the companycollection
-export const getJobIdsFromCompany = async () => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-
-  if (!user) {
-    throw new Error("User not authenticated.");
+export const getJobIdsFromCompany = async (companyId) => {
+  if (!companyId) {
+    throw new Error("Company ID is required.");
   }
 
-  const companyId = user.uid;
   try {
     const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
     const jobsQuerySnapshot = await getDocs(jobsCollectionRef);
@@ -227,6 +223,34 @@ export const getJobIdsFromCompany = async () => {
     throw error;
   }
 };
+
+export const getActiveJobIdsFromCompany = async (companyId) => {
+  if (!companyId) {
+    throw new Error("Company ID is required.");
+  }
+
+  try {
+    const jobsCollectionRef = collection(db, COMPANY, companyId, "jobs");
+    const jobsQuerySnapshot = await getDocs(query(
+      collection(db, `companyCollection/${companyId}/jobs`),
+      where("active", "==", true)));
+
+    const jobIds = [];
+    jobsQuerySnapshot.forEach((jobDoc) => {
+      jobIds.push({
+        companyId: companyId,
+        jobId: jobDoc.id,
+        ...jobDoc.data(),
+      });
+    });
+
+    return jobIds;
+  } catch (error) {
+    console.error("Error fetching job IDs from company:", error);
+    throw error;
+  }
+};
+
 
 // Function to delete a job from the companycollection
 export const deleteJob = async (jobId) => {
