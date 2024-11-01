@@ -25,12 +25,15 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
+  setPersistence,
+  browserSessionPersistence,
   signOut,
   signInWithEmailAndPassword,
   EmailAuthProvider,
@@ -141,41 +144,33 @@ export const registerCompany = async (fullName, email, password) => {
 };
 
 //Handle Login Company
-export const loginCompany = async (email, password, selectedRole) => {
-  console.log("loginCompany function triggered"); // Check if function is running
+export const loginCompany = async (email, password, setUser) => {
   const auth = getAuth();
+
   try {
+    await setPersistence(auth, browserSessionPersistence); 
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    const userDoc = await getDoc(doc(db, "companyCollection", user.uid));
-    const userData = userDoc.data();
+    // Set user information in context
+    setUser({
+      username: user.email,
+      uid: user.uid
+    });
 
-    console.log("Firestore user role:", userData.user);
-    console.log("Selected role on sign-in:", selectedRole);
+    return user; 
 
-    if (userData.user !== selectedRole) {
-      throw new Error(`You checked the wrong box. Please select '${userData.user}' as your role.`);
-    }
-
-    return user;
   } catch (error) {
-    console.error("Error logging in:", error);
     throw error;
   }
 };
+
 
 
 //Update Company
 export const updateCompany = async (company) => {
   const docRef = doc(db, COMPANY, company.id);
   await updateDoc(docRef, company);
-};
-
-//Delete Company
-export const deleteCompany = async (id) => {
-  const docRef = doc(db, COMPANY, id);
-  await deleteDoc(docRef);
 };
 
 // Function to add a job to the companycollection
@@ -276,6 +271,21 @@ export const updateJobDetails = async (jobId, updatedData) => {
     throw error;
   }
 };
+
+export const getActiveJobCount = async (companyId) => {
+  try {
+    const activeJobsSnapshot = await getDocs(query(
+      collection(db, `companyCollection/${companyId}/jobs`),
+      where("active", "==", true)
+    ));
+
+    return activeJobsSnapshot.size;
+  } catch (error) {
+    console.error("Error fetching active job count:", error);
+    return 0;
+  }
+};
+
 
 // Function to get job details
 export const getJobDetailsById = async (jobId) => {

@@ -37,11 +37,11 @@ export default function CompanyDropdown({ closeMenu }) {
         </li>
         <li className={styles.dropdown__link}>
           <Link
-            href="/company/jobs"
+            href="/blog"
             className={styles.link}
             onClick={closeMenu}
           >
-            Jobs
+            Blog
           </Link>
         </li>
         <li className={styles.dropdown__link}>
