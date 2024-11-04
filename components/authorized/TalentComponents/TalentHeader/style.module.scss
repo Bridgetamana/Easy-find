@@ -124,6 +124,11 @@
             }
 
             .dropdown__list {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                
                 .nav__head {
                     color: $black;
                     font-size: $font-eighteen;
@@ -133,11 +138,6 @@
                     align-items: center;
                     gap: 0.5rem;
                 }
-
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
 
                 .dropdown__link {
                     .link {

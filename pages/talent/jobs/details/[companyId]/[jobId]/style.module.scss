@@ -19,8 +19,8 @@
         }
 
         .details__title {
-            @include title;
             margin-top: 1.5rem;
+            @include title;
         }
 
         .details__flex {

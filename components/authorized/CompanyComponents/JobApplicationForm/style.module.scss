@@ -1,6 +1,15 @@
 @import "../../../../styles/variables.scss";
 
 .modal__overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(71, 70, 70, 0.5);
+    display: flex;
+    justify-content: flex-end;
+    z-index: 1000;
   
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
@@ -12,16 +21,6 @@
     -moz-appearance: textfield;
     appearance: none;
     }
-
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(71, 70, 70, 0.5);
-    display: flex;
-    justify-content: flex-end;
-    z-index: 1000;
   }
   
   .modal__container {
