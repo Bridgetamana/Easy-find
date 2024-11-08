@@ -22,10 +22,10 @@ export default function Home() {
         </div>
         <TargetAudience />
         {/* <TalentFeatures /> */}
-        <AboutBlog />
+        {/* <AboutBlog /> */}
         {/* <BrowseJobs /> */}
-        <CallToAction />
         <TestimonialsSection />
+        <CallToAction />
         <Footer />
       </div>
     </div>
