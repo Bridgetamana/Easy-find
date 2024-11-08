@@ -82,8 +82,8 @@
               
             
             .settings__button{
-                @include button;
                 width: 11rem;
+                @include button;
             }
 
         }
@@ -124,9 +124,9 @@
             }
 
             .settings__button{
-                @include button;
                 width: 11rem;
                 background: $error;
+                @include button;
 
                 &:hover{
                     background: darken($error, 10%);

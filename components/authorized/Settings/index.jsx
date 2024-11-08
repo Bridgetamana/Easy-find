@@ -13,6 +13,7 @@ export default function TalentSettings() {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
     const [passwordLoading, setPasswordLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
@@ -85,6 +86,9 @@ export default function TalentSettings() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
   
     return (
       <section className={styles.settings__section}>
@@ -117,7 +121,7 @@ export default function TalentSettings() {
               <label htmlFor="newPassword">New Password:</label>
               <div className={styles.password__field}>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showNewPassword ? "text" : "password"}
                   id="newPassword"
                   className={styles.changePassword__input}
                   value={newPassword}
@@ -125,10 +129,10 @@ export default function TalentSettings() {
                 />
                 <button
                   type="button"
-                  onClick={togglePasswordVisibility}
+                  onClick={toggleNewPasswordVisibility}
                   className={styles.toggleButton} 
                 >
-                  {showPassword ? <IoEyeOff /> : <IoEye /> }
+                  {showNewPassword ? <IoEyeOff /> : <IoEye /> }
                 </button>
               </div>  
             </div>
@@ -136,7 +140,7 @@ export default function TalentSettings() {
               <label htmlFor="confirmPassword">Confirm New Password:</label>
               <div className={styles.password__field}>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showNewPassword ? "text" : "password"}
                   id="confirmPassword"
                   className={styles.changePassword__input}
                   value={confirmPassword}
@@ -144,10 +148,10 @@ export default function TalentSettings() {
                 />
                 <button
                   type="button"
-                  onClick={togglePasswordVisibility}
+                  onClick={toggleNewPasswordVisibility}
                   className={styles.toggleButton} 
                 >
-                  {showPassword ? <IoEyeOff /> : <IoEye /> }
+                  {showNewPassword ? <IoEyeOff /> : <IoEye /> }
                 </button>
               </div>  
             </div>
