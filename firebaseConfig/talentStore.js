@@ -37,7 +37,7 @@ import {
   setPersistence,
   verifyPasswordResetCode,
   confirmPasswordReset,
-  browserSessionPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
@@ -96,7 +96,7 @@ export const loginUser = async (email, password, setUser) => {
   const auth = getAuth();
 
   try {
-    await setPersistence(auth, browserSessionPersistence); 
+    await setPersistence(auth, browserLocalPersistence); 
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
