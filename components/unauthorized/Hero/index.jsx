@@ -3,9 +3,9 @@ import Image from "next/image";
 import Stats from "./Stats";
 import Link from "next/link";
 
-export default function Heroine() {
+export default function Hero() {
   return (
-    <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 lg:mt-24 min-h-[calc(100vh_-_80px_)] lg:min-h-[calc(100vh_-_120px_)]">
+    <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 lg:mt-24 min-h-[calc(100vh_-_80px_)] lg:min-h-full">
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
         <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
           <>
