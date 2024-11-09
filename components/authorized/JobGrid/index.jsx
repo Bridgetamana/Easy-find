@@ -99,7 +99,7 @@ const JobGrid = ({ searchInput }) => {
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Explore the latest job openings
           </p>
-          <h2 className="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+          <h2 className="text-lg font-semibold leading-8 tracking-tight text-blue-600">
             Discover jobs most relevant to you
           </h2>
         </div>
