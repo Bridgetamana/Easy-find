@@ -16,6 +16,7 @@ export default function SecuritySettings() {
   const [showPassword, setShowPassword] = useState(false);
   const [deleteConfirmationPassword, setDeleteConfirmationPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [errorMsg, setErrorMsg] = useState({ new: "", confirm: "" });
   const [alert, setAlert] = useState(null);
@@ -54,6 +55,7 @@ export default function SecuritySettings() {
     }
 
     try {
+      setIsUpdating(true)
       await companyStore.updateCompanyPassword(user, password, newPassword);
       showAlert(
         {
@@ -73,6 +75,8 @@ export default function SecuritySettings() {
       setErrorMsg({ new: "", confirm: "", current: "" });
     } catch (error) {
       handlePasswordChangeError(error);
+    } finally {
+      setIsUpdating(false)
     }
   };
 
@@ -282,7 +286,7 @@ export default function SecuritySettings() {
             className={styles.settings__button}
             onClick={handleChangePassword}
           >
-            Change Password
+            {isUpdating ? <Spinner /> : "Change Password"}
           </button>
         </div>
 
