@@ -34,27 +34,56 @@
                 color: $black;
             }
 
-            .form__group{
+            .form__group {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
                 gap: 0.5rem;
-                
-                label{
+              
+                label {
+                  font-size: $font-sixteen;
+                  font-weight: $font-weight-500;
+                  color: $black;
+                }
+              
+                .password__field {
+                  position: relative;
+                  display: flex;
+                  width: 100%;
+                  background: $secondary;
+                  border-radius: 10px;
+                  padding: 0 1rem;
+              
+                  .changePassword__input {
                     font-size: $font-sixteen;
-                    font-weight: $font-weight-500;
-                    color: $black;
+                    font-weight: $font-weight-400;
+                    font-family: inherit;
+                    border: none;
+                    outline: none;
+                    border-radius: 10px;
+                    width: 100%;
+                    background: $secondary; 
+                    padding: 1rem;
+                    padding-right: 2.5rem;
+                    height: 3rem;
+                  }
+              
+                  .showPassword__button {
+                    position: absolute;
+                    top: 50%;
+                    right: 1rem;
+                    width: 20px;
+                    transition: all 0.3s ease-in-out;
+                    color: #007bff;
+                    cursor: pointer;
+                  }
                 }
-    
-                .changePassword__input{
-                    @include inputField;
-                }
-
-            }
+              }
+              
             
             .settings__button{
-                @include button;
                 width: 11rem;
+                @include button;
             }
 
         }
@@ -95,9 +124,9 @@
             }
 
             .settings__button{
-                @include button;
                 width: 11rem;
                 background: $error;
+                @include button;
 
                 &:hover{
                     background: darken($error, 10%);

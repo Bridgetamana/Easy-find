@@ -18,18 +18,26 @@ const JobGrid = ({ searchInput }) => {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [noResults, setNoResults] = useState(false);
   const router = useRouter();
-  const jobsPerPage = 8;
+  const jobsPerPage = 6;
 
   //Display all jobs
   useEffect(() => {
     const fetchJobs = async () => {
-      const jobList = await getJobs();
-      setJobs(jobList);
-      setFilteredJobs(jobList);
+      setIsLoading(true); 
+      try {
+        const jobList = await getJobs();
+        setJobs(jobList);
+        setFilteredJobs(jobList);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      } finally {
+        setIsLoading(false); 
+      }
     };
-
+  
     fetchJobs();
   }, []);
+  
 
   useEffect(() => {
     if (!searchInput || searchInput.trim() === "") {
@@ -60,9 +68,9 @@ const JobGrid = ({ searchInput }) => {
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+  const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
 
-  const pageNumbers = Math.ceil(jobs.length / jobsPerPage);
+  const pageNumbers = Math.ceil(filteredJobs.length / jobsPerPage);
 
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -85,7 +93,7 @@ const JobGrid = ({ searchInput }) => {
   };
 
   return (
-    <section className={` ${styles.job__grid} py-12 my-24 bg-white`}>
+    <section className={` ${styles.job__grid} pt-12 pb-6 mt-24 bg-white`}>
       <div className="w-[90%] m-auto">
         <div className="mx-auto max-w-xl text-center my-6">
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -288,14 +296,15 @@ const JobGrid = ({ searchInput }) => {
             </div>
           </div>
         </div>
-        {isLoading && <LoadingScreen />}
 
         {/* Job listings */}
-        {filteredJobs.length > 0 ? (
+        {isLoading ? (
+          <p className="text-center text-[18px] my-12">Loading jobs...</p>
+        ) : currentJobs.length > 0 ? (
           <div
             className={`${styles.grid__body} grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}
           >
-            {filteredJobs.map((job) => {
+            {currentJobs.map((job) => {
               const salaryMinFormatted = job.minSalary?.toLocaleString();
               const salaryMaxFormatted = job.maxSalary?.toLocaleString();
               const timePostedFormatted = new Date(
@@ -356,6 +365,7 @@ const JobGrid = ({ searchInput }) => {
           <p className={styles.no__jobs}>No jobs found.</p>
         )}
 
+
         {/* Pagination */}
         <div className={styles.pagination}>
           <button
@@ -369,8 +379,8 @@ const JobGrid = ({ searchInput }) => {
           {Array.from({ length: pageNumbers }, (_, index) => index + 1).map(
             (pageNumber) => (
               <button
-                className={`pagination__button ${
-                  currentPage === pageNumber ? "pagination__active" : ""
+                className={`${styles.pagination__button} ${
+                  currentPage === pageNumber ? styles.pagination__active : ""
                 }`}
                 key={pageNumber}
                 onClick={() => handleClick(pageNumber)}

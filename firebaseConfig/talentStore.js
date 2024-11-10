@@ -37,7 +37,7 @@ import {
   setPersistence,
   verifyPasswordResetCode,
   confirmPasswordReset,
-  browserSessionPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
@@ -96,7 +96,7 @@ export const loginUser = async (email, password, setUser) => {
   const auth = getAuth();
 
   try {
-    await setPersistence(auth, browserSessionPersistence); 
+    await setPersistence(auth, browserLocalPersistence); 
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
@@ -151,14 +151,13 @@ export const updateTalent = async (talent, payload) => {
       photoUrl = await getDownloadURL(photoSnapshot.ref); 
     }
 
-    // Checking if new resume is being uploaded
     if (payload.resume instanceof File) {
       const resumeStorageRef = ref(storage, `talents/${talent.id}/resume`);
       const resumeSnapshot = await uploadBytes(resumeStorageRef, payload.resume);
       resumeUrl = await getDownloadURL(resumeSnapshot.ref); 
     }
 
-    await updateDoc(docRef, {
+    const updateData = {
       username: payload.username,
       email: payload.email,
       bio: payload.bio,
@@ -180,7 +179,13 @@ export const updateTalent = async (talent, payload) => {
       degree: payload.degree,
       company: payload.company,
       position: payload.position,
-    });
+    };
+
+    Object.keys(updateData).forEach(
+      (key) => updateData[key] === undefined && delete updateData[key]
+    );
+
+    await updateDoc(docRef, updateData);
   } catch (error) {
     console.error("Error updating talent:", error);
     throw error;

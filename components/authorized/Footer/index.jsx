@@ -16,7 +16,7 @@ export default function Footer() {
           />
         </div>
         <p className={styles.footer__left}>
-          &copy; {new Date().getFullYear()} EasyFind. All rights reserved
+          &copy; {new Date().getFullYear()} EasyFind.<span className="block pl-0.5 md:inline-flex">All rights reserved</span>
         </p>
       </div>
     </footer>
