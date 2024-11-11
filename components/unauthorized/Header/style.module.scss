@@ -130,14 +130,14 @@
                     .nav__title {
                         color: $primary;
                         font-size: $font-twentyFour;
-                        font-weight: 500;
+                        font-weight: $font-weight-500;
                         text-transform: none;
                     }
 
                     .nav__link {
                         color: $black;
                         font-size: $font-eighteen;
-                        font-weight: 600;
+                        font-weight:  $font-weight-600;
                         text-transform: capitalize;
 
                         &:hover {
@@ -148,7 +148,7 @@
                     .active__link {
                         color: $primary;
                         font-size: $font-twentyFour;
-                        font-weight: 700;
+                        font-weight: $font-weight-700;
                         text-transform: capitalize;
                     }
 
@@ -251,9 +251,8 @@
                         display: flex;
                         align-items: center;
                         gap: 0.35rem;
-                        color: $black;
                         font-size: $font-sixteen;
-                        font-weight: $font-weight-500;
+                        font-weight: $font-weight-700;
                         line-height: $line-height-1-6;
                         transition: all 0.3s ease-in-out;
                         color: $primary;
