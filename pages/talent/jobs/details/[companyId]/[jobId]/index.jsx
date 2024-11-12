@@ -22,6 +22,7 @@ import Link from "next/link";
 import styles from "./style.module.scss";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import TalentLayout from "../../../../layout";
+import { submitJobApplication } from "@/firebaseConfig/companyStore";
 import JobApplicationForm from "../../../../../../components/authorized/CompanyComponents/JobApplicationForm";
 
 const JobDetails = () => {
@@ -52,35 +53,28 @@ const JobDetails = () => {
   }, [jobId, companyId]); 
 
   useEffect(() => {
+    const checkIfApplied = async () => {
+      const userId = auth.currentUser?.uid;
+    
+      if (!userId || !companyId) return; 
+    
+      try {
+        const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
+        const appliedJobDoc = await getDoc(appliedJobRef);
+    
+        if (appliedJobDoc.exists()) {
+          setApplicationSubmitted(true);
+        } else {
+          setApplicationSubmitted(false); 
+        }
+      } catch (error) {
+        console.error("Error checking applied job status:", error);
+      }
+    };
     if (jobId) {
       checkIfApplied();
     }
     
-  }, [jobId]);
-  
-  const checkIfApplied = async () => {
-    const userId = auth.currentUser?.uid;
-  
-    if (!userId || !jobId || !companyId) return; 
-  
-    try {
-      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
-      const appliedJobDoc = await getDoc(appliedJobRef);
-  
-      if (appliedJobDoc.exists()) {
-        setApplicationSubmitted(true);
-      } else {
-        setApplicationSubmitted(false); 
-      }
-    } catch (error) {
-      console.error("Error checking applied job status:", error);
-    }
-  };
-  
-  useEffect(() => {
-    if (jobId) {
-      checkIfApplied();
-    }
   }, [jobId]);
   
   
@@ -92,13 +86,19 @@ const JobDetails = () => {
     setJobApllicationModal(false);
   };
 
-  const handleApplicationSuccess = async () => {
+  const handleApplicationSuccess = async (applicationData) => {
     const userId = auth.currentUser?.uid;
   
     if (!userId || !jobId || !companyId) return;
   
     try {
-      const appliedJobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}/applied`, userId);
+      const result = await submitJobApplication(companyId, jobId, {
+        ...applicationData,
+        userId: userId,
+        title: jobDetails.title,
+        appliedAt: new Date(),
+      });
+  
       setApplicationSubmitted(true);  
       togglejobApplicationModal();
       showAlert(
@@ -109,15 +109,8 @@ const JobDetails = () => {
         },
         setAlert
       );
-  
-      await setDoc(appliedJobRef, {
-        userId: userId,
-          jobId: jobId,
-          title: jobDetails.title,
-        appliedAt: new Date(),
-      });
-  
     } catch (error) {
+      console.error("Error submitting application:", error);
       showAlert(
         {
           type: "error",

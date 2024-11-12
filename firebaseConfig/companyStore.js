@@ -417,6 +417,40 @@ export const sendNotification = async (companyId, notificationType, message, add
   await addDoc(notificationsRef, notificationData);
 };
 
+export const submitJobApplication = async (companyId, jobId, applicantData) => {
+  try {
+    const appliedRef = doc(db, COMPANY, companyId, "jobs", jobId, "applied", applicantData.userId);
+    
+    await setDoc(appliedRef, {
+      ...applicantData,
+      appliedAt: new Date(),
+    });
+
+    const jobRef = doc(db, COMPANY, companyId, "jobs", jobId);
+    const jobSnap = await getDoc(jobRef);
+    
+    let jobTitle = "Unknown Position";
+    if (jobSnap.exists()) {
+      jobTitle = jobSnap.data().title || jobTitle;
+    }
+
+    const notificationMessage = `New application received for position: ${jobTitle}`;
+    await sendNotification(companyId, 'newApplication', notificationMessage, {
+      jobId,
+      applicantName: applicantData.fullName,
+      applicationId: appliedRef.id
+    });
+
+    return {
+      applicationId: appliedRef.id,
+      jobTitle,
+    };
+  } catch (error) {
+    console.error("Error submitting job application:", error);
+    throw error;
+  }
+};
+
 // Function to fetch notifications
 export const fetchNotifications = async () => {
   const auth = getAuth();
