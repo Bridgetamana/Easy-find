@@ -10,6 +10,7 @@ import {
   unsaveJob,
   saveJob,
 } from "@/firebaseConfig/talentStore";
+import { companyStore } from "../../../../../../firebaseConfig/companyStore";
 import { db, auth } from "../../../../../../firebaseConfig/firebase";
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { BiBadgeCheck } from "react-icons/bi";
@@ -34,22 +35,35 @@ const JobDetails = () => {
   const [alert, setAlert] = useState(null);
   const [JobApplicationModal, setJobApllicationModal] = useState(false);
   const [applicationSubmitted, setApplicationSubmitted] = useState(false);
- 
-  const fetchJobDetails = async () => {
+  const fetchJobDetailsAndCompanies = async () => {
     if (!jobId || !companyId) return; 
     setIsLoading(true);
     try {
-      const response = await getJobById(companyId, jobId); 
-      setJobDetails(response);
+      const jobData = await getJobById(jobId, companyId);
+      
+      if (jobData) {
+        const companyInfo = await companyStore.getCompanyStoreById(companyId);
+        
+        const jobWithCompanyInfo = {
+          ...jobData,
+          companyInfo: companyInfo || {}
+        };
+        
+        setJobDetails(jobWithCompanyInfo);
+      } else {
+        console.error("Job not found");
+      }
     } catch (error) {
-      console.error("Error fetching job details:", error);
+      console.error("Error fetching job and company info:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchJobDetails();
+    if (jobId && companyId) {
+      fetchJobDetailsAndCompanies();
+    }
   }, [jobId, companyId]); 
 
   useEffect(() => {
@@ -231,7 +245,7 @@ const JobDetails = () => {
                 </p>
                 <p className={styles.details__posted}>
                   <AiOutlineClockCircle fill="#9d9d9d" />
-                  {convertTimestamp(jobDetails.datePosted)}
+                  {convertTimestamp(jobDetails.createdAt)}
                 </p>
               </div>
               <button
@@ -372,15 +386,7 @@ const JobDetails = () => {
                 <h2 className={styles.description__title}>About Company</h2>
               </div>
               <p className={styles.description__text}>
-                One of the main areas that I work on with my clients is shedding
-                these non-supportive beliefs and replacing them with beliefs
-                that will help them to accomplish their desires. It is truly
-                amazing the damage that we, as parents, can inflict on our
-                children. So why do we do it? For the most part, we don’t do it
-                intentionally or with malice. In the majority of cases, the
-                cause is a well-meaning but unskilled or un-thinking parent, who
-                says the wrong thing at the wrong time, and the message sticks –
-                as simple as that!
+                {jobDetails.companyInfo?.bio}
               </p>
             </section>
 
@@ -417,22 +423,6 @@ const JobDetails = () => {
               </div>
             </section>
 
-            {/* <section className={styles.requiredSkills__section">
-        <div className={styles.skills__header">
-          <h2 className={styles.skills__title">Education + Experience</h2>
-        </div>
-        <div className={styles.skills__content">
-          <ul className={styles.skills__list">
-            <li className={styles.skills__item">
-              <p className={styles.skills__text">
-                <BsCheck2Circle fill="#66789c" />
-                You will sail along until you collide with an immovable object,
-                after which you will sink to the bottom.
-              </p>
-            </li>
-          </ul>
-        </div>
-      </section> */}
 
             {/* <JobBenefits/> */}
             <section className={styles.requiredSkills__section}>

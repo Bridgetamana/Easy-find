@@ -370,35 +370,88 @@ export const updateJobStatus = async (jobId, isActive) => {
 // Function to get total number of applicants
 export const getApplicantCount = async (jobId, companyId) => {
   try {
-    const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
-    const applicantSnapshot = await getDocs(applicantsRef);
-
+    const appliedRef = collection(db, COMPANY, companyId, "jobs", jobId, "applied");
+    const applicantSnapshot = await getDocs(appliedRef);
     return applicantSnapshot.size;
   } catch (error) {
     console.error("Error fetching applicant count:", error);
-    return 0;
+    throw error;
   }
 };
 
 //Function to get Applicants details
 export const getApplicantsByJobId = async (jobId, companyId) => {
   try {
-    const applicantsRef = collection(db, COMPANY, companyId, "jobs", jobId, "applications");
-    const applicantSnapshot = await getDocs(applicantsRef);
+    const appliedRef = collection(db, COMPANY, companyId, "jobs", jobId, "applied");
+    const appliedQuery = query(appliedRef, orderBy("appliedAt", "desc"));
+    const applicantSnapshot = await getDocs(appliedQuery);
 
     if (applicantSnapshot.empty) {
+      console.log("No applicants found for job:", jobId);
       return [];
     }
 
-    const applicants = applicantSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const applicants = await Promise.all(
+      applicantSnapshot.docs.map(async (document) => {
+        const applicantData = document.data();
+        const userId = document.id;
+
+        try {
+          return {
+            id: document.id,
+            ...applicantData,
+            appliedAt: applicantData.appliedAt?.toDate(),
+            status: applicantData.status || 'pending'
+          };
+        } catch (error) {
+          console.error(`Error fetching user profile for ${userId}:`, error);
+          return {
+            id: document.id,
+            ...applicantData,
+            appliedAt: applicantData.appliedAt?.toDate(),
+            status: applicantData.status || 'pending'
+          };
+        }
+      })
+    );
 
     return applicants;
   } catch (error) {
     console.error("Error fetching applicants:", error);
-    return [];
+    throw error;
+  }
+};
+
+export const getApplicantDetails = async (jobId, companyId, userId) => {
+  try {
+    const appliedRef = doc(db, COMPANY, companyId, "jobs", jobId, "applied", userId);
+    const applicantSnap = await getDoc(appliedRef);
+
+    if (!applicantSnap.exists()) {
+      return null;
+    }
+
+    const applicantData = applicantSnap.data();
+
+    return {
+      id: applicantSnap.id,
+      ...applicantData,
+      appliedAt: applicantData.appliedAt?.toDate(),
+      status: applicantData.status || 'pending'
+    };
+  } catch (error) {
+    console.error("Error fetching applicant details:", error);
+    throw error;
+  }
+};
+
+export const updateApplicantStatusInFirestore = async (companyId, jobId, applicantId, newStatus) => {
+  try {
+    const applicantRef = doc(db, COMPANY, companyId, "jobs", jobId, "applied", applicantId);
+    await updateDoc(applicantRef, { status: newStatus });
+  } catch (error) {
+    console.error("Error updating applicant status:", error);
+    throw error;
   }
 };
 
