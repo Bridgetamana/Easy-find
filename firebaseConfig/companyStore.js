@@ -487,11 +487,12 @@ export const submitJobApplication = async (companyId, jobId, applicantData) => {
       jobTitle = jobSnap.data().title || jobTitle;
     }
 
-    const notificationMessage = `New application received for position: ${jobTitle}`;
-    await sendNotification(companyId, 'newApplication', notificationMessage, {
+    await sendNotification(companyId, 'newApplication', `${applicantData.fullName} applied for ${jobTitle}`, {
       jobId,
-      applicantName: applicantData.fullName,
-      applicationId: appliedRef.id
+      jobTitle,
+      candidateName: applicantData.fullName,
+      applicationId: appliedRef.id,
+      type: 'application'
     });
 
     return {
