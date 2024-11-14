@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClockCircle, AiOutlineEnvironment } from "react-icons/ai";
 import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
-import { getJobs, searchJobs } from "@/firebaseConfig/talentStore";
+import { getJobs, searchJobs, convertTimestamp } from "@/firebaseConfig/talentStore";
+import { companyStore } from "../../../firebaseConfig/companyStore";
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import { useRouter } from "next/navigation";
 import styles from "./style.module.scss";
@@ -16,26 +17,38 @@ const JobGrid = ({ searchInput }) => {
   const [detailsPage, setDetailsPage] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [filteredJobs, setFilteredJobs] = useState([]);
+  const [jobsWithCompanyInfo, setJobsWithCompanyInfo] = useState([]);
   const [noResults, setNoResults] = useState(false);
   const router = useRouter();
   const jobsPerPage = 6;
 
   //Display all jobs
   useEffect(() => {
-    const fetchJobs = async () => {
+    const fetchJobsAndCompanies = async () => {
       setIsLoading(true); 
       try {
         const jobList = await getJobs();
-        setJobs(jobList);
-        setFilteredJobs(jobList);
+        
+        const jobsWithCompany = await Promise.all(
+          jobList.map(async (job) => {
+            const companyInfo = await companyStore.getCompanyStoreById(job.companyId);
+            return {
+              ...job,
+              companyInfo: companyInfo || {}
+            };
+          })
+        );
+        
+        setJobs(jobsWithCompany);
+        setFilteredJobs(jobsWithCompany);
       } catch (error) {
-        console.error("Error fetching jobs:", error);
+        console.error("Error fetching jobs and company info:", error);
       } finally {
         setIsLoading(false); 
       }
     };
-  
-    fetchJobs();
+
+    fetchJobsAndCompanies();
   }, []);
   
 
@@ -305,66 +318,61 @@ const JobGrid = ({ searchInput }) => {
             className={`${styles.grid__body} grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}
           >
             {currentJobs.map((job) => {
-              const salaryMinFormatted = job.minSalary?.toLocaleString();
-              const salaryMaxFormatted = job.maxSalary?.toLocaleString();
-              const timePostedFormatted = new Date(
-                job.datePosted
-              ).toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              });
+              const salaryMinFormatted = job.salaryMax?.toLocaleString();
+              const salaryMaxFormatted = job.salaryMin?.toLocaleString();
 
-              return (
-                <div
-                  className={`${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`}
-                  key={job.id}
-                >
-                  <div className={styles.card__info}>
-                    <div className={styles.card__company}>
-                      <div className={styles.card__logo}>
-                        <img src={job.companyLogo} alt={job.companyName} />
-                        <div className={styles.company__info}>
-                          <h5 className={styles.company__name}>
-                            {job.companyName}
-                          </h5>
-                          <p className={styles.company__location}>
-                            <AiOutlineEnvironment />
-                            {job.location}
-                          </p>
-                        </div>
+            return (
+              <div
+                className={`${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`}
+                key={job.id}
+              >
+                <div className={styles.card__info}>
+                  <div className={styles.card__company}>
+                    <div className={styles.card__logo}>
+                      <img 
+                        src={job.companyInfo?.photo} 
+                        alt={job.companyInfo?.fullName || 'Company logo'} 
+                      />
+                      <div className={styles.company__info}>
+                        <h5 className={styles.company__name}>
+                          {job.companyInfo?.fullName || ''}
+                        </h5>
+                        <p className={styles.company__location}>
+                          <AiOutlineEnvironment />
+                          {job.location}
+                        </p>
                       </div>
                     </div>
-                    <h4 className={styles.card__title}>{job.title}</h4>
-                    <div className={styles.card__flex}>
-                      <p className={styles.card__location}>
-                        <CgBriefcase />
-                        {job.jobType}
-                      </p>
-                      <p className={styles.card__time}>
-                        <AiOutlineClockCircle />
-                        {timePostedFormatted}
-                      </p>
-                    </div>
                   </div>
+                  <h4 className={styles.card__title}>{job.title}</h4>
                   <div className={styles.card__flex}>
-                    <p className={styles.company__pay}>
-                      ${salaryMinFormatted} - ${salaryMaxFormatted}
+                    <p className={styles.card__location}>
+                      <CgBriefcase />
+                      {job.jobType}
                     </p>
-                    <Link href={`/talent/jobs/details/${job.companyId}/${job.id}`}>
-                      <button className={styles.apply__button}>
-                        View More
-                      </button>
-                    </Link>
+                    <p className={styles.card__time}>
+                      <AiOutlineClockCircle />
+                      {convertTimestamp(job.createdAt)}
+                    </p>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <p className={styles.no__jobs}>No jobs found.</p>
-        )}
-
+                <div className={styles.card__flex}>
+                  <p className={styles.company__pay}>
+                    NGN{salaryMinFormatted} - NGN{salaryMaxFormatted}
+                  </p>
+                  <Link href={`/talent/jobs/details/${job.companyId}/${job.id}`}>
+                    <button className={styles.apply__button}>
+                      View More
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p className={styles.no__jobs}>No jobs found.</p>
+      )}
 
         {/* Pagination */}
         <div className={styles.pagination}>

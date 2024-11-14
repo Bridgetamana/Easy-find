@@ -58,18 +58,10 @@ export default function NotificationTab({ closeNotifications }) {
               </div>
               <div className={styles.notification__content}>
                 <p className={styles.notification__heading}>
-                  {notification.type === "application"
-                    ? "New Job Application"
-                    : notification.type === "jobStatusUpdate"
-                    ? "Job Status Updated"
-                    : "Notification"}
+                  {notification.type === "newApplication" ? "New Job Application" : notification.message}
                 </p>
                 <p className={styles.notification__description}>
-                  {notification.type === "application"
-                    ? `${notification.candidateName} applied for the job post for ${notification.jobTitle}.`
-                    : notification.type === "jobStatusUpdate"
-                    ? `Job ID: ${notification.jobId} status has been updated.`
-                    : "You have a new notification."}
+                  {notification.message}
                 </p>
                 <button
                   onClick={() => handleDelete(notification.id)}

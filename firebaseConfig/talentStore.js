@@ -228,26 +228,19 @@ export const getJobs = async () => {
 };
 
 //Fetch jobs by id
-export const getJobById = async (companyId, jobId) => {
+export const getJobById = async (jobId, companyId) => {
   try {
-    const jobRef = doc(collection(db, COMPANIES, companyId, "jobs"), jobId);
-    const docSnap = await getDoc(jobRef);
+    const jobRef = doc(db, `companyCollection/${companyId}/jobs/${jobId}`);
+    const jobDoc = await getDoc(jobRef);
 
-    if (docSnap.exists()) {
-      const jobData = docSnap.data();
-
-      if (jobData.active) {
-        return jobData;
-      } else {
-        return null; 
-      }
+    if (jobDoc.exists()) {
+      return { id: jobDoc.id, ...jobDoc.data() };
     } else {
-      console.error("No such job found!");
-      return null; 
+      return null;
     }
   } catch (error) {
     console.error("Error fetching job:", error);
-    throw error; 
+    throw error;
   }
 };
 

@@ -118,3 +118,10 @@
     }
   }
 }
+
+.errorMessage {
+  color: $error;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 1rem;
+}

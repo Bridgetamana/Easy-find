@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { getApplicantsByJobId } from "../../../../../firebaseConfig/companyStore";
+import { getApplicantsByJobId, updateApplicantStatusInFirestore } from "../../../../../firebaseConfig/companyStore";
 import { getAuth } from "firebase/auth";
 import CompanyLayout from "../../../layout";
 import styles from "./style.module.scss";
@@ -16,6 +16,7 @@ const ApplicantsPage = () => {
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [activeDropdown, setActiveDropdown] = useState(false);
+  const [selectedApplicantStatus, setSelectedApplicantStatus] = useState(null);
   const applicantsPerPage = 10;
 
   useEffect(() => {
@@ -42,8 +43,27 @@ const ApplicantsPage = () => {
     fetchApplicants();
   }, [jobId]);
 
-  const handleMenuClick = (jobId) => {
-    setActiveDropdown(activeDropdown === jobId ? false : jobId);
+  const handleMenuClick = (applicantId) => {
+    setActiveDropdown(activeDropdown === applicantId ? false : applicantId);
+  };
+
+  const handleStatusChange = async (applicantId, newStatus) => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        const companyId = user.uid;
+        await updateApplicantStatusInFirestore(companyId, jobId, applicantId, newStatus);
+        setApplicants((prevApplicants) =>
+          prevApplicants.map((applicant) =>
+            applicant.id === applicantId ? { ...applicant, status: newStatus } : applicant
+          )
+        );
+        setSelectedApplicantStatus(null);
+      }
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const indexOfLastApplicant = currentPage * applicantsPerPage;
@@ -68,15 +88,14 @@ const ApplicantsPage = () => {
 
       {!loading && !error && applicants.length > 0 && (
         <div className={styles.table__container}>
-          <h3 className={styles.title}>Applicants for Job ID: {jobId}</h3>
+          <h3 className={styles.title}>Applicants for </h3>
           <table className={styles.applicantsTable}>
             <thead>
               <tr>
                 <th>Full Name</th>
-                <th>Position</th>
                 <th>Email</th>
-                <th>Salary Expectation</th>
-                <th></th>
+                <th>Applied At</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -84,21 +103,22 @@ const ApplicantsPage = () => {
                 <tr key={applicant.id} className={styles.applicantRow}>
                   <td>
                     <Link href={`/company/jobs/${jobId}/applicants/${applicant.id}`}>
-                      {applicant.name}
+                      {applicant.fullName}
                     </Link>
                   </td>
-                  <td>{applicant.position}</td>
                   <td>{applicant.email}</td>
-                  <td>${applicant.salaryExpectation}</td>
-                  <td className="text-right">
-                    <div className={styles.dropdown}>
-                      <button
-                        onClick={() => handleMenuClick(job.jobId)}
-                        className={styles.dropdown__button}
-                      >
-                        <CiMenuKebab />
-                      </button>
-                    </div>
+                  <td>{applicant.appliedAt.toLocaleDateString()}</td>
+                  <td>
+                    <select
+                      value={selectedApplicantStatus || applicant.status}
+                      onChange={(e) => setSelectedApplicantStatus(e.target.value)}
+                      onBlur={() => handleStatusChange(applicant.id, selectedApplicantStatus)}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="interviewed">Interviewed</option>
+                      <option value="rejected">Rejected</option>
+                      <option value="hired">Hired</option>
+                    </select>
                   </td>
                 </tr>
               ))}

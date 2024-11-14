@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
-import { getApplicantsByJobId } from "../../../../../../firebaseConfig/companyStore";
+import { getApplicantDetails } from "../../../../../../firebaseConfig/companyStore";
 import CompanyLayout from "../../../../layout";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import styles from "./style.module.scss";
@@ -22,16 +22,8 @@ const ApplicantDetailsPage = () => {
       if (user && jobId && applicantId) {
         const companyId = user.uid;
         try {
-          const applicantsData = await getApplicantsByJobId(jobId, companyId);
-          const selectedApplicant = applicantsData.find(
-            (applicant) => applicant.id === applicantId
-          );
-
-          if (selectedApplicant) {
-            setApplicant(selectedApplicant);
-          } else {
-            setError("Applicant not found.");
-          }
+          const selectedApplicant = await getApplicantDetails(jobId, companyId, applicantId);
+          setApplicant(selectedApplicant);
         } catch (err) {
           setError(err.message);
         } finally {
@@ -43,24 +35,21 @@ const ApplicantDetailsPage = () => {
     fetchApplicantDetails();
   }, [jobId, applicantId]);
 
-  if (error) return <div>{error}</div>;
+  if (error) return <div className={styles.errorMessage}>{error}</div>;
 
   return (
     <CompanyLayout>
       {loading && <LoadingScreen />}
-      {error && <error />}
-      {applicant ? (
+      {applicant && (
         <div className={styles.applicantDetailContainer}>
           <div className={styles.header}>
-            <h3 className={styles.title}>
-              Applicant Information for {applicant.name}
-            </h3>
+            <h3 className={styles.title}>Applicant Details</h3>
           </div>
           <div className={styles.applicantList}>
             <dl className={styles.detailsList}>
               <div className={styles.detailItem}>
                 <dt className={styles.detailLabel}>Full Name</dt>
-                <dd className={styles.detailValue}>{applicant.name}</dd>
+                <dd className={styles.detailValue}>{applicant.fullName}</dd>
               </div>
               <div className={styles.detailItem}>
                 <dt className={styles.detailLabel}>Position</dt>
@@ -71,10 +60,14 @@ const ApplicantDetailsPage = () => {
                 <dd className={styles.detailValue}>{applicant.email}</dd>
               </div>
               <div className={styles.detailItem}>
-                <dt className={styles.detailLabel}>Salary Expectation</dt>
+                <dt className={styles.detailLabel}>Applied At</dt>
                 <dd className={styles.detailValue}>
-                  ${applicant.salaryExpectation}
+                  {applicant.appliedAt.toLocaleDateString()}
                 </dd>
+              </div>
+              <div className={styles.detailItem}>
+                <dt className={styles.detailLabel}>Status</dt>
+                <dd className={styles.detailValue}>{applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1)}</dd>
               </div>
               <div className={styles.detailItem}>
                 <dt className={styles.detailLabel}>About</dt>
@@ -88,10 +81,7 @@ const ApplicantDetailsPage = () => {
                   {applicant.attachment && applicant.attachment.length > 0 ? (
                     <ul className={styles.attachmentList}>
                       {applicant.attachment.map((attachment) => (
-                        <li
-                          key={attachment.id}
-                          className={styles.attachmentItem}
-                        >
+                        <li key={attachment.id} className={styles.attachmentItem}>
                           <div className={styles.attachmentContent}>
                             <PaperClipIcon
                               aria-hidden="true"
@@ -124,8 +114,6 @@ const ApplicantDetailsPage = () => {
             </dl>
           </div>
         </div>
-      ) : (
-        <div>No applicant details available.</div>
       )}
     </CompanyLayout>
   );
