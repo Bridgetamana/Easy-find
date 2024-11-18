@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./style.module.scss";
-import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -13,18 +12,18 @@ export default function Hero() {
           </p>
         </div>
         <div className={styles.content__boxes}>
-          <Link href='./company/profile' className={styles.content__box}>
+          <div className={styles.content__box}>
             <h3 className={styles.box__title}>Complete Profile</h3>
             <p className={styles.box__text}>
               Add your company logo, name and other important details needed.
             </p>
-          </Link>
-          <Link href='./company/jobs/postjobs' className={styles.content__box}>
+          </div>
+          <div className={styles.content__box}>
             <h3 className={styles.box__title}>Post Job</h3>
             <p className={styles.box__text}>
               Make a job posting with all the necesary criterias you need.
             </p>
-          </Link>
+          </div>
           <div className={styles.content__box}>
             <h3 className={styles.box__title}>Hire talents</h3>
             <p className={styles.box__text}>

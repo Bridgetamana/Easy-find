@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
 import { BsChevronDown } from "react-icons/bs";
@@ -18,20 +18,27 @@ export default function CompanyHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
+  
+  const menuRef = useRef(null);
+  const accountDropdownRef = useRef(null);
+  const notificationsRef = useRef(null);
 
   const handleMenuClick = (key) => {
     setActive(key);
   };
 
-  const toggleMenu = () => {
+  const toggleMenu = (e) => {
+    e.stopPropagation();
     setShowMenu(!showMenu);
   };
 
-  const toggleAccountDropdown = () => {
+  const toggleAccountDropdown = (e) => {
+    e.stopPropagation();
     setAccountDropdown(!accountDropdown);
   };
 
-  const toggleNotifications = () => {
+  const toggleNotifications = (e) => {
+    e.stopPropagation();
     setShowNotifications(!showNotifications);
   };
 
@@ -49,6 +56,28 @@ export default function CompanyHeader() {
     secureLocalStorage.removeItem("userToken");
     router.push("/signin");
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+      
+      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
+        setAccountDropdown(false);
+      }
+      
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,6 +126,7 @@ export default function CompanyHeader() {
               </Link>
             </li>
             <li
+              ref={accountDropdownRef}
               className={
                 accountDropdown ? styles.active__menu : styles.nav__menu
               }
@@ -131,7 +161,7 @@ export default function CompanyHeader() {
                 Post Job
               </Link>
             </li>
-            <li className={styles.nav__item}>
+            <li ref={notificationsRef} className={styles.nav__item}>
               <button
                 type="button"
                 className={styles.menu__button}
@@ -263,7 +293,7 @@ export default function CompanyHeader() {
       </div>
 
       {showNotifications && (
-        <div>
+        <div ref={notificationsRef}>
           <NotificationTab closeNotifications={closeNotifications} />
         </div>
       )}

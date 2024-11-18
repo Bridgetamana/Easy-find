@@ -9,6 +9,28 @@ import CompanyLayout from "../../layout";
 import { BiBuilding, BiEdit } from "react-icons/bi";
 import LoadingScreen from "../../../../components/utils/Loaders/Loader";
 
+const parseListFromPlainText = (text) => {
+  if (!text || typeof text !== 'string') return null;
+  text = text.trim();
+
+  const separator = [
+    '\n',
+  ];
+
+  for (const separator of separator) {
+    const items = text
+      .split(separator)
+      .map(item => item.trim())
+      .filter(item => item.length > 0);
+
+    if (items.length > 1) {
+      return items;
+    }
+  }
+
+  return text.length > 0 ? [text] : null;
+};
+
 const JobDetailsPage = () => {
   const router = useRouter();
   const { jobId } = router.query;
@@ -147,28 +169,34 @@ const JobDetailsPage = () => {
             <div className={styles.description__header}>
               <h2 className={styles.description__title}>Requirements</h2>
             </div>
-            <div className={styles.description__content}>
-              {jobDetails.requirements}
-            </div>
+            {parseListFromPlainText(jobDetails.requirements) ? (
+              <ul className={styles.checkmark__list}>
+                {parseListFromPlainText(jobDetails.requirements).map((req, index) => (
+                  <li key={index} className={styles.checkmark__item}>
+                    {req}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No requirements specified</p>
+            )}
           </section>
           <section className={styles.jobInfo__section}>
             <div className={styles.description__header}>
               <h2 className={styles.description__title}>Job Benefits</h2>
             </div>
-            <div className={styles.description__content}>
-              {jobDetails.benefits}
-            </div>
+            {parseListFromPlainText(jobDetails.benefits) ? (
+              <ul className={styles.checkmark__list}>
+                {parseListFromPlainText(jobDetails.benefits).map((benefit, index) => (
+                  <li key={index} className={styles.checkmark__item}>
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No benefits specified</p>
+            )}
           </section>
-
-          <div className={styles.candidatesSection}>
-            <h2>Candidates That Applied</h2>
-            <p>No candidates have applied yet.</p>
-          </div>
-
-          <div className={styles.candidatesSection}>
-            <h2>Candidates That Saved the Job</h2>
-            <p>No candidates have saved this job yet.</p>
-          </div>
         </div>
       )}
     </CompanyLayout>

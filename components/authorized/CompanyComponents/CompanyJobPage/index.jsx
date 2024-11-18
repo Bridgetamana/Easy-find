@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   getJobIdsFromCompany,
   deleteJob,
@@ -22,6 +22,7 @@ const JobPage = () => {
   const [applicantDetails, setApplicantDetails] = useState(null);
   const [showApplicants, setShowApplicants] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const dropdownRefs = useRef({});
   const jobsPerPage = 10;
   const auth = getAuth();
   const user = auth.currentUser;
@@ -58,6 +59,26 @@ const JobPage = () => {
     fetchJobs();
   }, [user]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      Object.keys(dropdownRefs.current).forEach((jobId) => {
+        const dropdownRef = dropdownRefs.current[jobId];
+        if (
+          dropdownRef &&
+          activeDropdown === jobId &&
+          !dropdownRef.contains(event.target)
+        ) {
+          setActiveDropdown(false);
+        }
+      });
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [activeDropdown]);
+
   const handleMenuClick = (jobId) => {
     setActiveDropdown(activeDropdown === jobId ? false : jobId);
   };
@@ -89,14 +110,6 @@ const JobPage = () => {
     } catch (error) {
       console.error("Error updating job status:", error);
     }
-  };
-
-  const handleViewApplicants = async (jobId) => {
-    const companyId = user.uid;
-    const applicants = await getApplicantsByJobId(jobId, companyId);
-    setApplicantDetails(applicants);
-    setShowApplicants(jobId);
-    setActiveDropdown(activeDropdown === jobId ? false : jobId);
   };
 
   const indexOfLastJob = currentPage * jobsPerPage;
@@ -169,7 +182,8 @@ const JobPage = () => {
                     </span>
                   </td>
                   <td className="text-right">
-                    <div className={styles.dropdown}>
+                    <div className={styles.dropdown}
+                    ref={(el) => dropdownRefs.current[job.jobId] = el}>
                       <button
                         onClick={() => handleMenuClick(job.jobId)}
                         className={styles.dropdown__button}

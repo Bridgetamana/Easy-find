@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
+import { useRouter } from "next/router"; // Add this import
 import { addJobPost } from "@/firebaseConfig/companyStore";
 import { EditorState, convertToRaw } from "draft-js";
 import dynamic from "next/dynamic";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import styles from "./style.module.scss";
 
 const Editor = dynamic(
@@ -13,7 +15,9 @@ const Editor = dynamic(
 );
 
 const JobPostForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState(null); 
   const [isSuccess, setIsSuccess] = useState(false);
   const [isCoverLetterRequired, setIsCoverLetterRequired] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -43,7 +47,16 @@ const JobPostForm = () => {
     const user = auth.currentUser;
 
     if (!user) {
-      console.error("User not authenticated");
+      await showAlert(
+        {
+          type: "error",
+          title: "Authentication Error",
+          message: "Please log in to create a job post",
+          showCloseButton: true,
+          timeout: 3000,
+        },
+        setAlert
+      );
       return;
     }
 
@@ -68,20 +81,36 @@ const JobPostForm = () => {
     };
 
     setIsLoading(true);
-    setIsSuccess(false);
 
     try {
       // Save job post to the company's collection in Firebase
       await addJobPost(user.uid, cleanFormData);
 
-      setIsSuccess(true);
-      setTimeout(() => {
-        setIsSuccess(false);
-        setFormData(initialFormData); 
-      }, 1000);
+      await showAlert(
+        {
+          type: "success",
+          title: "Success",
+          message: "Job post created successfully!",
+          showCloseButton: false,
+          timeout: 2000,
+        },
+        setAlert
+      );
+
+      setFormData(initialFormData);
+      router.push("/company/jobs");
     } catch (error) {
       console.error("Error saving job post:", error);
-      setIsError(true);
+      await showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: "Failed to create job post. Please try again.",
+          showCloseButton: true,
+          timeout: 2000,
+        },
+        setAlert
+      );
     } finally {
       setIsLoading(false);
     }
@@ -116,6 +145,8 @@ const JobPostForm = () => {
 
   return (
     <section className={styles.jobPostings__section}>
+      {alert && alert.component}
+
       <div className={styles.jobPosting__container}>
         <div className={styles.section__header}>
           <h2 className={styles.section__title}>Job Postings</h2>
@@ -222,7 +253,7 @@ const JobPostForm = () => {
           <div className={styles.input__wrap}>
             <label htmlFor="salary">Salary:</label>
             <input
-              type="text"
+              type="number"
               className={styles.input__field}
               name="salaryMin"
               value={formData.salaryMin}
