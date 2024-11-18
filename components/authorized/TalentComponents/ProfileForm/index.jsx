@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MdEdit } from "react-icons/md";
 import styles from "./style.module.scss";
 import { useRouter } from "next/router";
@@ -18,7 +18,7 @@ export default function TalentProfileForm() {
   
   const initialFormData = {
     id: null,
-    username: "",
+    fullName: "",
     email: "",
     bio: "",
     photo: null,
@@ -46,6 +46,7 @@ export default function TalentProfileForm() {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [alert, setAlert] = useState(null)
+  const fileInputRef = useRef(null);
 
   const router = useRouter();
   const [id, setId] = useState(null); 
@@ -75,6 +76,12 @@ export default function TalentProfileForm() {
       fetchUserData();
     }
   }, [id]);
+
+   const handleIconClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   const handleInputChange = async (e) => {
     const { name, value, files } = e.target;
@@ -201,11 +208,12 @@ export default function TalentProfileForm() {
       <div className={styles.profile__form}>
         <div className={styles.profile__image}>
           <div className={styles.edit__image}>
-            <MdEdit size={20} fill="#2563eb" />
+            <MdEdit size={20} fill="#2563eb" className={styles.edit__icon} onClick={handleIconClick}/>
             <input
               type="file"
               accept="image/*"
               name="photo"
+              ref={fileInputRef}
               onChange={handleInputChange}
               className={styles.form__input}
             />
@@ -216,11 +224,11 @@ export default function TalentProfileForm() {
           )}
         </div>
         <div className={styles.form__group}>
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="name">Name:<span className={styles.required}>*</span></label>
           <input
             type="text"
             name="username"
-            value={formData.username || ""}
+            value={formData.fullName || ""}
             onChange={handleInputChange}
             className={styles.form__input}
             placeholder="Enter your name"
@@ -231,7 +239,7 @@ export default function TalentProfileForm() {
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="email">Email:<span className={styles.required}>*</span></label>
           <input
             type="email"
             name="email"
@@ -375,7 +383,7 @@ export default function TalentProfileForm() {
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="resume">Update Resume:</label>
+          <label htmlFor="resume">Update Resume:<span className={styles.required}>*</span></label>
           <input
             type="file"
             accept=".pdf,.doc, .docx"
@@ -428,7 +436,7 @@ export default function TalentProfileForm() {
         </div>
 
         <div className={styles.form__group}>
-          <label htmlFor="skills">Experience:</label>
+          <label htmlFor="skills">Experience:<span className={styles.required}>*</span></label>
           <input
             type="text"
             name="company"

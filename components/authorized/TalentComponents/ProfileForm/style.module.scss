@@ -59,16 +59,17 @@
                 width: 1.75rem;
                 cursor: pointer;
 
+                svg {
+                    cursor: pointer;
+                }
+
                 input {
                     position: absolute;
                     opacity: 0;
                     top: 0;
+                    left: 0;
                     width: 1rem;
                     height: 1rem;
-                }
-
-                svg {
-                    cursor: pointer;
                 }
             }
         }
@@ -85,6 +86,14 @@
             label {
                 font-size: $font-sixteen;
                 font-weight: $font-weight-500;
+
+                .required {
+                    color: $error;
+                    font-weight: $font-weight-600;
+                    margin-left: 6px;
+                    margin-right: 4px;
+                    text-align: center;
+                }
             }
 
             .form__input {
