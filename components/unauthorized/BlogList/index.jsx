@@ -108,6 +108,10 @@ const BlogList = () => {
   const { category } = router.query; 
   const postsRef = useRef([]);
 
+  const isTalentPath = router.pathname.startsWith('/talent');
+  const isCompanyPath = router.pathname.startsWith('/company');
+  const basePath = isTalentPath ? '/talent' : isCompanyPath ? '/company' : '';
+
   useEffect(() => {
     const fetchFeaturedBlog = async () => {
       try {
@@ -207,7 +211,7 @@ const BlogList = () => {
               className="object-cover rounded-2xl"
               priority
             />
-            <div className="absolute inset-0 flex flex-row items-end justify-between text-white">
+            <div className="absolute inset-0 flex flex-row items-end justify-between text-white w-full">
               <div className="p-5 md:p-8 basis-10/12">
                 <p className="font-bold py-1">Featured</p>
                 <h2 className="text-xl lg:text-4xl font-bold py-2 animate-swoop-in">
@@ -217,7 +221,7 @@ const BlogList = () => {
                   {featuredBlog.summary}...
                 </p>
               </div>
-              <Link href={`/blog/${featuredBlog.id}`} className='flex items-end md:items-center justify-center basis-2/12 group px-4 mb-20 md:mb-10 bg-transparent h-full text-white hover:text-black hover:bg-opacity-70 hover:bg-stone-500'>
+              <Link href={`${basePath}/blog/${featuredBlog.id}`} className='flex items-end md:items-center justify-center basis-2/12 group px-4 mb-20 md:mb-0 bg-transparent h-full text-white hover:text-black hover:bg-opacity-70 hover:bg-stone-500 rounded-tr-2xl rounded-br-2xl'>
                   <i className="bx bx-lg bx-fade-right-hover mt-8 pt-8 bx-right-arrow-alt group-hover:text-black transition-transform transform group-hover:translate-x-2"></i>
               </Link>
             </div>
@@ -235,7 +239,10 @@ const BlogList = () => {
        <div className={styles.featured__content}>
          <div className={styles.featured__posts}>
            {blogs.map((post, index) => (
-             <Link href={`/blog/${encodeURIComponent(post.id)}`} key={`${post.id}-${index}`}>
+              <Link
+                href={`${basePath}/blog/${encodeURIComponent(post.id)}`}
+                key={`${post.id}-${index}`}
+              >
                <div
                  ref={(el) => (postsRef.current[index] = el)}
                  className={`${styles.post} ${styles['swoop-in']} ${index === 0 ? styles.featured : ""}`}
