@@ -113,14 +113,10 @@ const BlogList = () => {
     );
   }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div>
       {error ? (
-        <LoadingScreen />
+        <div>{error}</div>
       ) : (
         <section className={styles.featured__component}>
           {!category && featuredBlog && (
@@ -161,24 +157,31 @@ const BlogList = () => {
           )}
 
           <nav className={styles.category__nav}>
-            <Link href="/blog" className={`${styles.category__Link} border-b-2 border-blue-500`}>
+            <Link
+              href="/blog"
+              className={`${styles.category__Link} ${
+                !category ? 'border-b-2 border-blue-500' : ''}`}
+            >
               All
             </Link>
             <Link
               href="/blog?category=job-application"
-              className={`${styles.category__Link}`}
+              className={`${styles.category__Link} ${
+                category === 'job-application' ? 'border-b-2 border-blue-500' : ''}`}
             >
               Job Application
             </Link>
             <Link
               href="/blog?category=resume-tips"
-              className={`${styles.category__Link}`}
+              className={`${styles.category__Link} ${
+                category === 'resume-tips' ? 'border-b-2 border-blue-500' : ''}`}
             >
               Resume Tips
             </Link>
             <Link
               href="/blog?category=getting-a-job"
-              className={`${styles.category__Link}`}
+              className={`${styles.category__Link} ${
+                category === 'getting-a-job' ? 'border-b-2 border-blue-500' : ''}`}
             >
               Getting a Job
             </Link>

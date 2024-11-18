@@ -20,13 +20,11 @@
       grid-template-columns: 1fr;
       margin-bottom: 1rem;
       }
-      
-      @screen lg {
+
         @media (min-width: 1024px) {
           grid-template-columns: repeat(3, 1fr); 
           gap: 1.5rem; 
-        }        @apply grid-cols-3;
-      }
+        }      
 
       .post {
         background-color: #fff;
@@ -70,14 +68,27 @@
   }
 
   .category__nav {
-    @apply flex flex-wrap justify-center gap-4 md:gap-8 mb-12;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+
+    @media (min-width: 768px) {
+      gap: 2rem;
+    }
 
     .category__Link {
-      @apply text-blue-500 hover:text-blue-700 capitalize font-medium text-sm md:text-lg 
-             transition-colors duration-300 pb-1;
+      color: #3b82f6;
+      padding-bottom: 0.25rem;
+
+      @media (min-width: 768px) {
+        font-size: 1.125rem;
+      }
 
       &:hover {
-        @apply border-b-2 border-blue-500;
+        color: #1d4ed8;
+        border-bottom: 2px solid #3b82f6;
       }
     }
   }
