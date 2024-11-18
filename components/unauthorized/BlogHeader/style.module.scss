@@ -177,7 +177,7 @@
                         .nav__link {
                             color: $black;
                             font-size: $font-sixteen;
-                            font-weight: $font-weight-500;
+                            font-weight: $font-weight-400;
                             line-height: $line-height-1-6;
                             transition: all 0.3s ease-in-out;
 
@@ -245,6 +245,17 @@
                         font-size: $font-eighteen;
                         font-weight: $font-weight-500;
                         transition: all 0.3s ease-in-out;
+                    }
+
+                    .account__modal {
+                        position: absolute;
+                        opacity: 1;
+                        visibility: visible;
+                        top: 5rem;
+                        right: 1rem;
+                        transition: 0.3s ease-in-out;
+                        transition: 0.3s ease-in-out;
+                        z-index: 20;
                     }
 
                     .no__show {

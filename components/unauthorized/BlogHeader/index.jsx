@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useRouter } from 'next/router';
 import { CgClose } from "react-icons/cg";
 import { RxDividerVertical } from "react-icons/rx";
+import { BsChevronDown } from "react-icons/bs";
+import AccountDropdown from "@/components/authorized/TalentComponents/AccountDropdown";
+import CompanyDropdown from "@/components/authorized/CompanyComponents/AccountDropdown";
 import Button from '../../utils/Button';
 import { FiMenu } from "react-icons/fi";
 import Link from "next/link";
@@ -9,8 +12,9 @@ import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import Image from "next/image";
 import styles from './style.module.scss';
 
-export default function BlogHeader() {
+export default function BlogHeader({ type }) {
   const [showMenu, setShowMenu] = useState(false);
+  const [accountDropdown, setAccountDropdown] = useState(false);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -20,10 +24,9 @@ export default function BlogHeader() {
     setShowMenu(false);
   };
 
-  const router = useRouter();
-    
-  const isTalentPath = router.pathname.startsWith('/talent');
-  const isCompanyPath = router.pathname.startsWith('/company');
+  const toggleAccountDropdown = () => {
+    setAccountDropdown(!accountDropdown);
+  };
 
 
   return (
@@ -44,11 +47,11 @@ export default function BlogHeader() {
         <nav className={styles.nav__bar}>
           <ul className={styles.nav__list}>
             <li className={styles.nav__item}>
-            {isTalentPath ? (
+            {type === 'talent' ? (
               <li>
                   <Link href="/talent">Home</Link> 
               </li>
-          ) : isCompanyPath ? (
+          ) : type === 'company' ? (
               <li>
                   <Link href="/company">Home</Link> 
               </li>
@@ -58,9 +61,9 @@ export default function BlogHeader() {
               </li>
           )}
             </li>
-            <RxDividerVertical size={24} />
+            
             <li className={styles.nav__item}>
-            {isTalentPath ? (
+            {type === 'talent' ? (
               <li>
               <Link
                 href="/talent/jobs"
@@ -69,28 +72,68 @@ export default function BlogHeader() {
                 Jobs
               </Link>
               </li>
-            ): isCompanyPath ? (
+            ): type === 'company' ? (
               <li>
                   <Link href="/company/jobs/postjobs" className={styles.nav__link}>Post Job</Link> 
               </li>
             ) : (
-              <li>
+              <li className="flex pr-3">
+                <RxDividerVertical size={24} />
                 <Link href="/signin" className={styles.nav__link}>
                   Sign In
                 </Link>  
               </li>
               )}
             </li>
+          
             <li className={styles.nav__item}>
-              <Link href="/signup" passHref>
-                <Button
-                  type="button"
-                  title="Get Started"
-                  variant={styles.nav__button}
-                  icon={<HiOutlineArrowNarrowRight className={styles.search__icon} />}
-                />
-              </Link>
+            {type === 'talent' ? (
+              <li
+                className={
+                  accountDropdown ? styles.active__menu : styles.nav__menu
+                }
+                onClick={toggleAccountDropdown}
+              >
+                Account
+                <BsChevronDown fill="#827f7f" size={10} />
+                <div
+                  className={`${
+                    accountDropdown ? styles.account__modal : styles.no__show
+                  }`}
+                >
+                  <AccountDropdown />
+                </div>
+              </li>
+            ) : type === 'company' ? (
+              <li
+              className={
+                accountDropdown ? styles.active__menu : styles.nav__menu
+              }
+              onClick={toggleAccountDropdown}
+            >
+              Account
+              <BsChevronDown fill="#827f7f" size={10} />
+              <div
+                className={`${
+                  accountDropdown ? styles.account__modal : styles.no__show
+                }`}
+              >
+                <CompanyDropdown />
+              </div>
             </li>
+            ) : (
+              <li>
+                <Link href="/signup" passHref>
+                  <Button
+                    type="button"
+                    title="Get Started"
+                    variant={styles.nav__button}
+                    icon={<HiOutlineArrowNarrowRight className={styles.search__icon} />}
+                  />
+                </Link>
+              </li>
+            )}
+            </li>     
           </ul>
         </nav>
       </div>
@@ -130,11 +173,11 @@ export default function BlogHeader() {
 
           <ul className={styles.nav__list}>
             <li className={styles.nav__item}>
-            {isTalentPath ? (
+            {type === 'talent' ? (
               <li>
                   <Link href="/talent" className={styles.nav__link}>Home</Link> 
               </li>
-          ) : isCompanyPath ? (
+          ) : type === 'company' ? (
               <li>
                   <Link href="/company" className={styles.nav__link}>Home</Link> 
               </li>
@@ -145,7 +188,7 @@ export default function BlogHeader() {
           )}
             </li>
             <li className={styles.nav__item}>
-            {isTalentPath ? (
+            {type === 'talent' ? (
               <li>
               <Link
                 href="/talent/jobs"
@@ -154,7 +197,7 @@ export default function BlogHeader() {
                 Jobs
               </Link>
               </li>
-            ): isCompanyPath ? (
+            ): type === 'company' ? (
               <li>
                   <Link href="/company/jobs/postjobs" className={styles.nav__link}>Post Job</Link> 
               </li>
@@ -167,9 +210,47 @@ export default function BlogHeader() {
               )}
             </li>
             <li className={styles.nav__item}>
+            {type === 'talent' ? (
+              <li
+                className={
+                  accountDropdown ? styles.active__menu : styles.nav__menu
+                }
+                onClick={toggleAccountDropdown}
+              >
+                Account
+                <BsChevronDown fill="#827f7f" size={10} />
+                <div
+                  className={`${
+                    accountDropdown ? styles.account__modal : styles.no__show
+                  }`}
+                >
+                  <AccountDropdown />
+                </div>
+              </li>
+            ) : type === 'company' ? (
+              <li
+              className={
+                accountDropdown ? styles.active__menu : styles.nav__menu
+              }
+              onClick={toggleAccountDropdown}
+            >
+              Account
+              <BsChevronDown fill="#827f7f" size={10} />
+              <div
+                className={`${
+                  accountDropdown ? styles.account__modal : styles.no__show
+                }`}
+              >
+                <CompanyDropdown />
+              </div>
+            </li>
+            ) : (
+              <li className={styles.nav__item}>
               <Link href="/signup" className={styles.nav__button}>
                 Get Started
               </Link>
+              </li>
+            )}
             </li>
           </ul>
         </nav>
