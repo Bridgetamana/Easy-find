@@ -16,6 +16,7 @@ export default function TalentProfileData() {
   const [formData, setFormData] = useState({
     id: "",
     username: "",
+    fullName:"",
     email: "",
     bio: "",
     photo: null,
@@ -77,10 +78,10 @@ export default function TalentProfileData() {
           }
             setFormData({
                 id: userId,
-                username: userProfile.username || "",
+                fullName: userProfile.fullName || "",
                 email: userProfile.email || "",
                 bio: userProfile.bio || "",
-                photo: photoURL,
+                photo: userProfile.photo || "",
                 dob: userProfile.dob || "",
                 gender: userProfile.gender || "",
                 pronouns: userProfile.pronouns || "",
@@ -132,16 +133,22 @@ export default function TalentProfileData() {
         </h4>
         <div className={styles.profile__top}>
           <div className={styles.profile__column}>
-            {formData.photo && (
+            {formData.photo ? (
               <img
                 src={formData.photo}
                 alt="Profile"
                 className={styles.profile__image}
               />
+              ) : (
+                <img
+                  src="/default_company_logo.png"
+                  alt="Default Talent Photo"
+                  className={styles.profile__image}
+                />
             )}
-
+            
             <div className={styles.profile__row}>
-              <h4 className={styles.user__name}>{formData.username}</h4>
+              <h4 className={styles.user__name}>{formData.fullName}</h4>
               <p className={styles.user__address}>
                 <AiOutlineEnvironment />
                 {formData.address}
