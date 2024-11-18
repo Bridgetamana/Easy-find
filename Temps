@@ -47,7 +47,7 @@ export default function Example() {
                     </div>
                   </div>
                   <div className="ml-4 flex-shrink-0">
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
                       Download
                     </a>
                   </div>
@@ -61,7 +61,7 @@ export default function Example() {
                     </div>
                   </div>
                   <div className="ml-4 flex-shrink-0">
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
                       Download
                     </a>
                   </div>
@@ -103,7 +103,7 @@ export default function Example() {
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Add user
           </button>
@@ -157,7 +157,7 @@ export default function Example() {
                     </td>
                     <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">{person.role}</td>
                     <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                      <a href="#" className="text-blue-600 hover:text-blue-900">
                         Edit<span className="sr-only">, {person.name}</span>
                       </a>
                     </td>
@@ -208,13 +208,13 @@ export default function Example() {
                     <div className="mt-3 flex space-x-7">
                       <button
                         type="button"
-                        className="rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="rounded-md bg-white text-sm font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                       >
                         Undo
                       </button>
                       <button
                         type="button"
-                        className="rounded-md bg-white text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="rounded-md bg-white text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                       >
                         Dismiss
                       </button>
@@ -226,7 +226,7 @@ export default function Example() {
                       onClick={() => {
                         setShow(false)
                       }}
-                      className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
                       <span className="sr-only">Close</span>
                       <XMarkIcon aria-hidden="true" className="h-5 w-5" />
