@@ -208,7 +208,7 @@ export default function TalentHeader() {
             showMenu ? styles.show__navbar : styles.nav__bar
           }`}
         >
-          <div className="nav__header">
+          <div className={styles.nav__header}>
             <Image
               src="/assets/images/EasyFind.svg"
               alt="Logo"

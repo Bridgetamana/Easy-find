@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
@@ -18,27 +19,30 @@ export default function CompanyHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
-  
+  const router = useRouter();
+
   const menuRef = useRef(null);
   const accountDropdownRef = useRef(null);
   const notificationsRef = useRef(null);
+
+  const signOut = () => {
+    secureLocalStorage.removeItem("userToken");
+    router.push("/signin");
+  };
 
   const handleMenuClick = (key) => {
     setActive(key);
   };
 
-  const toggleMenu = (e) => {
-    e.stopPropagation();
+  const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
-  const toggleAccountDropdown = (e) => {
-    e.stopPropagation();
+  const toggleAccountDropdown = () => {
     setAccountDropdown(!accountDropdown);
   };
 
-  const toggleNotifications = (e) => {
-    e.stopPropagation();
+  const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
 
@@ -50,32 +54,31 @@ export default function CompanyHeader() {
     setShowNotifications(false);
   };
 
-  const signOut = () => {
-    const router = useRouter();
-    // Clear token before redirecting to signi page
-    secureLocalStorage.removeItem("userToken");
-    router.push("/signin");
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShowMenu(false);
       }
-      
-      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
+
+      if (
+        accountDropdownRef.current &&
+        !accountDropdownRef.current.contains(event.target)
+      ) {
         setAccountDropdown(false);
       }
-      
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target)
+      ) {
         setShowNotifications(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -177,9 +180,17 @@ export default function CompanyHeader() {
       {/* Mobile Header */}
       <div className={styles.mobile__header}>
         <div className={styles.header__logo}>
-          <h2 className={styles.logo__name}>EasyFind</h2>
+          <Image
+            src="/assets/images/EasyFind.svg"
+            alt="Logo"
+            sizes="100px"
+            width={100}
+            height={10}
+            layout="fixed"
+            className={styles.logo}
+          />
         </div>
-        <div>
+        <div className={styles.icons__wrap}>
           <button
             type="button"
             className={styles.menu__button}
@@ -201,7 +212,14 @@ export default function CompanyHeader() {
           }`}
         >
           <div className={styles.nav__header}>
-            <h2 className={styles.logo__name}>EasyFind</h2>
+            <Image
+              src="/assets/images/EasyFind.svg"
+              alt="Logo"
+              sizes="100px"
+              width={100}
+              height={10}
+              className={styles.logo}
+            />
             <button
               type="button"
               className={styles.close__menu}

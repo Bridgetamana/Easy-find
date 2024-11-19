@@ -13,11 +13,11 @@ const parseListFromPlainText = (text) => {
   if (!text || typeof text !== 'string') return null;
   text = text.trim();
 
-  const separator = [
+  const separators = [
     '\n',
   ];
 
-  for (const separator of separator) {
+  for (const separator of separators) {
     const items = text
       .split(separator)
       .map(item => item.trim())
