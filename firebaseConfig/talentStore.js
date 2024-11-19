@@ -37,11 +37,20 @@ import {
   setPersistence,
   verifyPasswordResetCode,
   confirmPasswordReset,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+  deleteUser,
   browserLocalPersistence,
 } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 const TALENT = "talentCollection";
+
+async function reauthenticateUser(user, currentPassword) {
+  const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  await reauthenticateWithCredential(user, credential);
+};
 
 export const talentStore = {
   // Talent Store
@@ -59,6 +68,34 @@ export const talentStore = {
     const docRef = doc(db, TALENT, id);
     const docSnap = await getDoc(docRef);
     return docSnap.data();
+  },
+
+  async deleteTalentAccount(user, password) {
+    try {
+      const credential = EmailAuthProvider.credential(user.email, password);
+      await reauthenticateWithCredential(user, credential);
+
+      const userDocRef = doc(db, TALENT, user.uid);
+      await deleteDoc(userDocRef);
+
+      await deleteUser(user);
+
+      console.log("Account successfully deleted.");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      throw error;
+    }
+  },
+
+  async updateTalentPassword(user, currentPassword, newPassword) {
+    try {
+      await reauthenticateUser(user, currentPassword);
+      await updatePassword(user, newPassword); 
+      return "Password updated successfully.";
+    } catch (error) {
+      console.error("Error updating password:", error);
+      throw error;
+    }
   },
 };
 
@@ -190,12 +227,6 @@ export const updateTalent = async (talent, payload) => {
     console.error("Error updating talent:", error);
     throw error;
   }
-};
-
-//Delete Talent
-export const deleteTalent = async (id) => {
-  const docRef = doc(db, TALENT, id);
-  await deleteDoc(docRef);
 };
 
 const COMPANIES = "companyCollection";
