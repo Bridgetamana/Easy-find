@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
@@ -18,24 +19,30 @@ export default function CompanyHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
-  
+  const router = useRouter();
+
   const menuRef = useRef(null);
   const accountDropdownRef = useRef(null);
   const notificationsRef = useRef(null);
+
+  const signOut = () => {
+    secureLocalStorage.removeItem("userToken");
+    router.push("/signin");
+  };
 
   const handleMenuClick = (key) => {
     setActive(key);
   };
 
-  const toggleMenu = (e) => {
+  const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
-  const toggleAccountDropdown = (e) => {
+  const toggleAccountDropdown = () => {
     setAccountDropdown(!accountDropdown);
   };
 
-  const toggleNotifications = (e) => {
+  const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
 
@@ -47,32 +54,31 @@ export default function CompanyHeader() {
     setShowNotifications(false);
   };
 
-  const signOut = () => {
-    const router = useRouter();
-    // Clear token before redirecting to signi page
-    secureLocalStorage.removeItem("userToken");
-    router.push("/signin");
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShowMenu(false);
       }
-      
-      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
+
+      if (
+        accountDropdownRef.current &&
+        !accountDropdownRef.current.contains(event.target)
+      ) {
         setAccountDropdown(false);
       }
-      
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target)
+      ) {
         setShowNotifications(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
