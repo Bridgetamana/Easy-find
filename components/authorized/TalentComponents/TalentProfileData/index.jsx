@@ -141,7 +141,7 @@ export default function TalentProfileData() {
               />
               ) : (
                 <img
-                  src="/default_company_logo.png"
+                  src="/assets/images/user-icon.png"
                   alt="Default Talent Photo"
                   className={styles.profile__image}
                 />
