@@ -219,8 +219,10 @@ export default function TalentProfileForm() {
             />
           </div>
           {alert && alert.component}
-          {formData.photo && (
+          {formData.photo ? (
             <img src={formData.photo} alt="Profile" className={styles.image} />
+          ) : (
+            <img src="/assets/images/user-icon.png" alt="Default Profile" className={styles.image} />
           )}
         </div>
         <div className={styles.form__group}>

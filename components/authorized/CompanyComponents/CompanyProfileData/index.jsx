@@ -91,7 +91,7 @@ export default function CompanyProfileData() {
               />
             ) : (
               <img
-                src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg"
+                src="/assets/images/user-icon.png"
                 alt="Default Company Logo"
                 className={styles.profile__image}
               />
