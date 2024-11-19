@@ -28,17 +28,14 @@ export default function CompanyHeader() {
   };
 
   const toggleMenu = (e) => {
-    e.stopPropagation();
     setShowMenu(!showMenu);
   };
 
   const toggleAccountDropdown = (e) => {
-    e.stopPropagation();
     setAccountDropdown(!accountDropdown);
   };
 
   const toggleNotifications = (e) => {
-    e.stopPropagation();
     setShowNotifications(!showNotifications);
   };
 
@@ -177,9 +174,17 @@ export default function CompanyHeader() {
       {/* Mobile Header */}
       <div className={styles.mobile__header}>
         <div className={styles.header__logo}>
-          <h2 className={styles.logo__name}>EasyFind</h2>
+          <Image
+            src="/assets/images/EasyFind.svg"
+            alt="Logo"
+            sizes="100px"
+            width={100}
+            height={10}
+            layout="fixed"
+            className={styles.logo}
+          />
         </div>
-        <div>
+        <div className={styles.icons__wrap}>
           <button
             type="button"
             className={styles.menu__button}
@@ -201,7 +206,14 @@ export default function CompanyHeader() {
           }`}
         >
           <div className={styles.nav__header}>
-            <h2 className={styles.logo__name}>EasyFind</h2>
+            <Image
+              src="/assets/images/EasyFind.svg"
+              alt="Logo"
+              sizes="100px"
+              width={100}
+              height={10}
+              className={styles.logo}
+            />
             <button
               type="button"
               className={styles.close__menu}
