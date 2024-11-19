@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
 import { BsChevronDown } from "react-icons/bs";
@@ -20,6 +20,10 @@ export default function TalentHeader() {
   const [active, setActive] = useState(null);
   const [isSticky, setIsSticky] = useState(false);
   const router = useRouter();
+
+  const menuRef = useRef(null);
+  const accountDropdownRef = useRef(null);
+  const notificationsRef = useRef(null);
   
   const signOut = () => {
   secureLocalStorage.removeItem("userToken");
@@ -62,6 +66,28 @@ export default function TalentHeader() {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+      
+      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
+        setAccountDropdown(false);
+      }
+      
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -108,6 +134,7 @@ export default function TalentHeader() {
               </Link>
             </li>
             <li
+              ref={accountDropdownRef}
               className={
                 accountDropdown ? styles.active__menu : styles.nav__menu
               }
@@ -275,7 +302,7 @@ export default function TalentHeader() {
         </nav>
       </div>
       {showNotifications && (
-        <div>
+        <div ref={notificationsRef}>
           <NotificationTab closeNotifications={closeNotifications} />
         </div>
       )}
