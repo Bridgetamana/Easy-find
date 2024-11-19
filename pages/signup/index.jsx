@@ -19,9 +19,11 @@ export default function Signup() {
   const router = useRouter();
   // State for talent
   const [talentFormData, setTalentFormData] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
+    confirmPassword: ""
   });
 
   // State for companies
@@ -29,20 +31,22 @@ export default function Signup() {
     companyName: "",
     companyEmail: "",
     password: "",
+    confirmPassword: ""
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (activeTab === "talents") {
-      handleTalentSub(talentFormData);
+      await handleTalentSub(talentFormData);
     } else if (activeTab === "companies") {
-      handleCompanySub(companyFormData);
+      await handleCompanySub(companyFormData);
     }
   };
 
   //handle talent submit
   const handleTalentSub = async (talentFormData) => {
+    if (!validateForm(talentFormData)) return;
     setIsLoading(true);
 
     const fullName = talentFormData.firstName + " " + talentFormData.lastName;
@@ -63,10 +67,10 @@ export default function Signup() {
           {
             type: "success",
             title: "Success!",
-            message: "Operation completed successfully!",
+            message: "Registration completed successfully!",
             showCloseButton: false,
             handleClose: () => setAlert(null),
-            timeout: 3000,
+            timeout: 2000,
           },
           setAlert
         );
@@ -80,7 +84,7 @@ export default function Signup() {
           title: "Error",
           message: errorMessage,
           showCloseButton: false,
-          timeout: 4000,
+          timeout: 2000,
           handleClose: () => setAlert(null),
         },
         setAlert
@@ -92,6 +96,7 @@ export default function Signup() {
 
   //handle company submit
   const handleCompanySub = async (companyFormData) => {
+    if (!validateForm(companyFormData)) return;
     setIsLoading(true);
 
     const companyName = companyFormData.companyName;
@@ -111,7 +116,7 @@ export default function Signup() {
           {
             type: "success",
             title: "Success!",
-            message: "Registeration completed successfully!",
+            message: "Registration completed successfully!",
             showCloseButton: false,
             handleClose: () => setAlert(null),
             timeout: 3000,
@@ -138,8 +143,25 @@ export default function Signup() {
     }
   };
 
+  const validateForm = (formData) => {
+    
+    const password = formData.password;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const isLengthValid = password.length >= 6;
+    const passwordsMatch = password === formData.confirmPassword;
+
+    if (!hasUppercase || !hasNumber || !isLengthValid || !passwordsMatch) {
+      setPasswordMatch(false);
+      return false;
+    }
+
+    return true;
+  };
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    setPasswordMatch(true);
   };
 
   const handleChange = (e) => {
@@ -163,27 +185,21 @@ export default function Signup() {
     const { name, value } = e.target;
 
     if (activeTab === "talents") {
-      setTalentFormData((prevTalentFormData) => ({
-        ...prevTalentFormData,
-        [name]: value,
-      }));
-      setPasswordMatch(validatePassword(value));
-    } else if (activeTab === "companies") {
-      setCompanyFormData((prevCompanyFormData) => ({
-        ...prevCompanyFormData,
-        [name]: value,
-      }));
-      setPasswordMatch(validatePassword(value));
+      setTalentFormData(prev => ({ ...prev, [name]: value }));
+    } else {
+      setCompanyFormData(prev => ({ ...prev, [name]: value }));
     }
-  };
 
-  //validate password
-  const validatePassword = (password) => {
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const isLengthValid = password.length >= 6;
+    const currentFormData = activeTab === "talents" ? talentFormData : companyFormData;
+    const updatedFormData = { ...currentFormData, [name]: value };
+    
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasNumber = /\d/.test(value);
+    const isLengthValid = value.length >= 6;
+    const passwordsMatch = !updatedFormData.confirmPassword || 
+                         value === updatedFormData.confirmPassword;
 
-    return hasUppercase && hasNumber && isLengthValid;
+    setPasswordMatch(hasUppercase && hasNumber && isLengthValid && passwordsMatch);
   };
 
   const handleTogglePasswordVisibility = () => {
@@ -270,7 +286,7 @@ export default function Signup() {
                     placeholder="Password"
                     className={styles.pass_field}
                     value={talentFormData.password}
-                    onChange={handleChange}
+                    onChange={handlePasswordChange}
                     required
                     disabled={isLoading}
                   />
@@ -295,23 +311,31 @@ export default function Signup() {
                   onChange={handlePasswordChange}
                 />
                 {!passwordMatch && (
-                  <ErrorMessage
-                    text={
-                      talentFormData.password.length < 6
-                        ? "Password must be at least 6 characters long. "
-                        : !/[A-Z]/.test(talentFormData.password)
-                        ? "Password must contain an uppercase letter. "
-                        : !/\d/.test(talentFormData.password)
-                        ? "Password must contain a number. "
-                        : talentFormData.confirmPassword &&
-                          talentFormData.password !==
-                            talentFormData.confirmPassword
-                        ? "Password does not match. "
-                        : ""
-                    }
-                  />
+                  <>
+                    {(talentFormData.password.length < 6 ||
+                      !/[A-Z]/.test(talentFormData.password) ||
+                      !/\d/.test(talentFormData.password) ||
+                      (talentFormData.confirmPassword &&
+                        talentFormData.password !==
+                          talentFormData.confirmPassword)) && (
+                      <ErrorMessage
+                        text={
+                          talentFormData.password.length < 6
+                            ? "Password must be at least 6 characters long. "
+                            : !/[A-Z]/.test(talentFormData.password)
+                            ? "Password must contain an uppercase letter. "
+                            : !/\d/.test(talentFormData.password)
+                            ? "Password must contain a number. "
+                            : talentFormData.confirmPassword &&
+                              talentFormData.password !==
+                                talentFormData.confirmPassword
+                            ? "Password does not match. "
+                            : ""
+                        }
+                      />
+                    )}
+                  </>
                 )}
-
                 <button
                   className={styles.signup__btn}
                   type="submit"
@@ -353,7 +377,7 @@ export default function Signup() {
                     placeholder="Password"
                     className={styles.pass_field}
                     value={companyFormData.password}
-                    onChange={handleChange}
+                    onChange={handlePasswordChange}
                     required
                     disabled={isLoading}
                   />
@@ -378,21 +402,30 @@ export default function Signup() {
                   onChange={handlePasswordChange}
                 />
                 {!passwordMatch && (
-                  <ErrorMessage
-                    text={
-                      companyFormData.password.length < 6
-                        ? "Password must be at least 6 characters long. "
-                        : !/[A-Z]/.test(companyFormData.password)
-                        ? "Password must contain an uppercase letter. "
-                        : !/\d/.test(companyFormData.password)
-                        ? "Password must contain a number. "
-                        : companyFormData.confirmPassword &&
-                          companyFormData.password !==
-                            companyFormData.confirmPassword
-                        ? "Password does not match. "
-                        : ""
-                    }
-                  />
+                  <>
+                    {(companyFormData.password.length < 6 ||
+                      !/[A-Z]/.test(companyFormData.password) ||
+                      !/\d/.test(companyFormData.password) ||
+                      (companyFormData.confirmPassword &&
+                        companyFormData.password !==
+                          companyFormData.confirmPassword)) && (
+                      <ErrorMessage
+                        text={
+                          companyFormData.password.length < 6
+                            ? "Password must be at least 6 characters long. "
+                            : !/[A-Z]/.test(companyFormData.password)
+                            ? "Password must contain an uppercase letter. "
+                            : !/\d/.test(companyFormData.password)
+                            ? "Password must contain a number. "
+                            : companyFormData.confirmPassword &&
+                              companyFormData.password !==
+                                companyFormData.confirmPassword
+                            ? "Password does not match. "
+                            : ""
+                        }
+                      />
+                    )}
+                  </>
                 )}
                 <button
                   className={styles.signup__btn}

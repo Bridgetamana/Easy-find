@@ -1,111 +1,22 @@
-// "use client"
-// import React, { useEffect, useState } from "react";
-// import { MdVerified } from "react-icons/md";
-// import { BsDot } from "react-icons/bs";
-// import { GoUnverified } from "react-icons/go";
-// import axios from "axios";
-// import Link from "next/link"
-// import styles from "./style.module.scss"
-
-// export default function FeaturedPosts() {
-//   const [postData, setPostData] = useState([]);
-
-//   useEffect(() => {
-//     const fetchPosts = async () => {
-//       try {
-//         const response = await axios.get("http://api.mediastack.com/v1/news?access_key=5cb6d7c0f7ce03f04328fca8d7456123&categories=technology");
-//         setPostData(response.data.data);
-//       } catch (error) {
-//         console.error("Error fetching blog posts:", error);
-//       }
-//     };
-
-//     fetchPosts();
-//   }, []);
-
-//   const popularPost = postData.length > 0 ? postData[0] : null;
-
-//   return (
-//     <section className={styles.featured__component}>
-//       <div className={styles.featured__content}>
-        
-
-//         <div className={styles.featured__posts}>
-//         {postData.slice(1).map((post) => (
-//               <Link href={`/blog/details/`} key={post.id}>
-//                 <div className={styles.post}>
-//                 {/* <img
-//                   src={post.attributes.post_coverImage}
-//                   className={styles.post__image}
-//                   alt="Post"
-//                 /> */}
-//                 <div className={styles.post__body}>
-//                   <h2 className={styles.post__title}>{post.attributes.Text}</h2>
-//                   <p className={styles.post__text}>{post.attributes.Content}</p>
-//                   <div className={styles.post__wrap}>
-//                     <img
-//                       src={post.attributes.author_image}
-//                       className={styles.post__author_image}
-//                       alt="Author"
-//                     />
-//                     <div className={styles.post__info}>
-//                       <div className={styles.post__author}>
-//                         {/* Author name */}
-//                         <p className={styles.post__author_name}>
-//                           {post.attributes.author}
-//                         </p>
-//                         {/* Verified icon */}
-//                         {post.attributes.verified === true ? (
-//                           <MdVerified className={styles.post__verified_icon} fill="#05a512" />
-//                         ) : (
-//                           <GoUnverified className={styles.post__verified_icon} fill="#f5a623" />
-//                         )}
-//                         <BsDot />
-//                         {/* Category */}
-//                         <p className={styles.post__category}>
-//                           {post.attributes.category}
-//                         </p>
-//                       </div>
-//                       <div className={styles.post__details}>
-//                         {/* Read time */}
-//                         <p className={styles.post__minutes}>{post.attributes.minutes} min read</p>
-//                         <BsDot />
-//                         {/* Published date */}
-//                         <p className={styles.post__date}>
-//                           {new Date(post.attributes.publishedAt).toDateString()}
-//                         </p>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </Link>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
 "use client";
-import { useState, useEffect, useRef } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../../firebaseConfig/firebase'; 
-import { useRouter } from 'next/router'; 
+import { useState, useEffect, useRef } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../firebaseConfig/firebase";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import LoadingScreen from "../../utils/Loaders/Loader";
-import customLoader from '../../utils/Loaders/imageLoader';
+import customLoader from "../../utils/Loaders/imageLoader";
 import styles from "./style.module.scss";
 
 const BlogList = () => {
-  const [featuredBlog, setFeaturedBlog] = useState(null); 
-  const [blogs, setBlogs] = useState([]); 
+  const [featuredBlog, setFeaturedBlog] = useState(null);
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const router = useRouter();
-  const { category } = router.query; 
+  const { category } = router.query;
   const postsRef = useRef([]);
 
   const isTalentPath = router.pathname.startsWith('/talent');
@@ -115,52 +26,60 @@ const BlogList = () => {
   useEffect(() => {
     const fetchFeaturedBlog = async () => {
       try {
-        const blogCollection = collection(db, 'blogCollection');
-        const featuredQuery = query(blogCollection, where('isFeatured', '==', true));
+        const blogCollection = collection(db, "blogCollection");
+        const featuredQuery = query(
+          blogCollection,
+          where("isFeatured", "==", true)
+        );
         const featuredSnapshot = await getDocs(featuredQuery);
-        
+
         if (!featuredSnapshot.empty) {
           const featuredPost = featuredSnapshot.docs[0].data();
           setFeaturedBlog({ id: featuredSnapshot.docs[0].id, ...featuredPost });
         }
       } catch (err) {
-        console.error('Error fetching featured blog:', err);
-        setError('Failed to load featured blog');
+        console.error("Error fetching featured blog:", err);
+        setError("Failed to load featured blog");
       }
     };
 
     fetchFeaturedBlog();
   }, []);
 
-  // Fetch Other Blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
       try {
-        const blogCollection = collection(db, 'blogCollection');
+        const blogCollection = collection(db, "blogCollection");
         let blogQuery;
-  
-        if (!category || category === 'all') {
-          blogQuery = query(blogCollection, where('isFeatured', '==', false));
+
+        if (!category || category === "all") {
+          blogQuery = query(blogCollection, where("isFeatured", "==", false));
         } else {
-          blogQuery = query(blogCollection, where('category', '==', category), where('isFeatured', '==', false));
+          blogQuery = query(
+            blogCollection,
+            where("category", "==", category),
+            where("isFeatured", "==", false)
+          );
         }
-  
+
         const blogSnapshot = await getDocs(blogQuery);
-        const blogList = blogSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  
+        const blogList = blogSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
         setBlogs(blogList);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching blogs:', err);
-        setError('Failed to load blog posts');
+        console.error("Error fetching blogs:", err);
+        setError("Failed to load blog posts");
         setLoading(false);
       }
     };
-  
+
     fetchBlogs();
   }, [category]);
-
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -173,13 +92,13 @@ const BlogList = () => {
       },
       { threshold: 0.1 }
     );
-    
+
     postsRef.current.forEach((post) => {
       if (post) {
         observer.observe(post);
       }
     });
-    
+
     return () => {
       postsRef.current.forEach((post) => {
         if (post) {
@@ -190,99 +109,145 @@ const BlogList = () => {
   }, [blogs]);
 
   if (loading) {
-    return <div><LoadingScreen /></div>;
+    return (
+      <div>
+        <LoadingScreen />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-center p-8 text-red-600">{error}</div>;
   }
-
 
   return (
     <section className={styles.featured__component}>
-       {!category && featuredBlog && (
-        <div className="relative mb-5 pb-5">
-          <div className="relative w-full h-[550px]">
+      {!category && featuredBlog && (
+        <div className="relative mb-12">
+          <div className="relative w-full h-[550px] group overflow-hidden rounded-2xl">
             <Image
               loader={customLoader}
-              src={featuredBlog.image || '/assets/images/blogImage.png'} 
+              src={featuredBlog.image || "/assets/images/blogImage.png"}
               alt={featuredBlog.title}
               fill
-              className="object-cover rounded-2xl"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
               priority
             />
-            <div className="absolute inset-0 flex flex-row items-end justify-between text-white w-full">
-              <div className="p-5 md:p-8 basis-10/12">
-                <p className="font-bold py-1">Featured</p>
-                <h2 className="text-xl lg:text-4xl font-bold py-2 animate-swoop-in">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                <span className="inline-block px-3 py-1 text-sm font-semibold bg-blue-500 rounded-full mb-4">
+                  Featured
+                </span>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   {featuredBlog.title}
                 </h2>
-                <p className="hidden md:block text-sm py-2 leading-6 animate-swoop-in delay-300 font-semibold">
+                <p className="hidden md:block text-lg mb-6 text-gray-200 max-w-3xl">
                   {featuredBlog.summary}...
                 </p>
+                <Link
+                  href={`${basePath}/blog/${featuredBlog.id}`}
+                  className="inline-flex items-center text-white hover:text-blue-200 transition-colors duration-300 group"
+                >
+                  <span className="mr-2">Read More</span>
+                  <span className="transform transition-transform duration-300 group-hover:translate-x-2">
+                    →
+                  </span>
+                </Link>
               </div>
-              <Link href={`${basePath}/blog/${featuredBlog.id}`} className='flex items-end md:items-center justify-center basis-2/12 group px-4 mb-20 md:mb-0 bg-transparent h-full text-white hover:text-black hover:bg-opacity-70 hover:bg-stone-500 rounded-tr-2xl rounded-br-2xl'>
-                  <i className="bx bx-lg bx-fade-right-hover mt-8 pt-8 bx-right-arrow-alt group-hover:text-black transition-transform transform group-hover:translate-x-2"></i>
-              </Link>
             </div>
           </div>
         </div>
       )}
-      
+
       <nav className={styles.category__nav}>
-        <Link href="/blog" className={`${styles.category__Link}`}>All</Link>
-        <Link href="/blog?category=job-application" className={`${styles.category__Link}`}>Job Application</Link>
-        <Link href="/blog?category=resume-tips" className={`${styles.category__Link}`}>Resume Tips</Link>
-        <Link href="/blog?category=getting-a-job" className={`${styles.category__Link}`}>Getting a Job</Link>
+        <Link
+          href={`${basePath}/blog`}
+          className={`${styles.category__Link} ${
+            !category ? 'border-b-2 border-blue-500' : ''
+          }`}
+        >
+          All
+        </Link>
+        <Link
+          href={`${basePath}/blog?category=job-application`}
+          className={`${styles.category__Link} ${
+            category === 'job-application' ? 'border-b-2 border-blue-500' : ''
+          }`}
+        >
+          Job Application
+        </Link>
+        <Link
+          href={`${basePath}/blog?category=resume-tips`}
+          className={`${styles.category__Link} ${
+            category === 'resume-tips' ? 'border-b-2 border-blue-500' : ''
+          }`}
+        >
+          Resume Tips
+        </Link>
+        <Link
+          href={`${basePath}/blog?category=getting-a-job`}
+          className={`${styles.category__Link} ${
+            category === 'getting-a-job' ? 'border-b-2 border-blue-500' : ''
+          }`}
+        >
+          Getting a Job
+        </Link>
       </nav>
 
-       <div className={styles.featured__content}>
-         <div className={styles.featured__posts}>
-           {blogs.map((post, index) => (
-              <Link
-                href={`${basePath}/blog/${encodeURIComponent(post.id)}`}
-                key={`${post.id}-${index}`}
+      <div className={styles.featured__content}>
+        <div className={styles.featured__posts}>
+          {blogs.map((post, index) => (
+            <Link
+              href={`${basePath}/blog/${encodeURIComponent(post.id)}`}
+              key={`${post.id}-${index}`}
+              className="group"
+            >
+              <div
+                ref={(el) => (postsRef.current[index] = el)}
+                className={`${styles.post} ${styles["swoop-in"]}`}
               >
-               <div
-                 ref={(el) => (postsRef.current[index] = el)}
-                 className={`${styles.post} ${styles['swoop-in']} ${index === 0 ? styles.featured : ""}`}
-               >
-                 {post.image ? (
-                   <img
-                     src={post.image}
-                     className={styles.post__image}
-                     alt="Post"
-                     onError={(e) => {
-                       e.target.src = "/assets/images/blogImage.png";
-                     }}
-                   />
-                 ) : (
-                   <img
-                     src="/assets/images/blogImage.png"
-                     className={styles.post__image}
-                     alt="Default Post"
-                   />
-                 )}
-                 <div className={styles.post__body}>
-                   <h2 className={styles.post__title}>{post.title}</h2>
-                   <p className={styles.post__summary}>{post.summary.slice(0, 70)}...</p>
-                   <div className={styles.post__wrap}>
-                     {post.author && (
-                       <div className={styles.post__author}>
-                         <p className={styles.post__author_name}>{post.author}</p>
-                       </div>
-                     )}
-                     <p className={styles.post__date}>
-                      {new Date(post.datePublished.seconds * 1000).toDateString()}
-                     </p>
-                   </div>
-                 </div>
-               </div>
-             </Link>
-           ))}
-         </div>
-       </div>
-     </section>
+                <div className="relative h-64 overflow-hidden rounded-xl">
+                  <Image
+                    loader={customLoader}
+                    src={post.image || "/assets/images/blogImage.png"}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      e.target.src = "/assets/images/blogImage.png";
+                    }}
+                  />
+                </div>
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300">
+                    {post.title}
+                  </h2>
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    {post.summary}
+                  </p>
+                  <div className="flex justify-between items-center text-sm">
+                    {post.author && (
+                      <span className="font-medium text-gray-900">
+                        {post.author}
+                      </span>
+                    )}
+                    <time className="text-gray-500">
+                      {new Date(
+                        post.datePublished.seconds * 1000
+                      ).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </time>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
