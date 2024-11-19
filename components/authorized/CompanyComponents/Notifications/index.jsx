@@ -1,20 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import { InboxIcon } from '@heroicons/react/24/outline';
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import styles from "./style.module.scss";
-import { fetchNotifications, deleteNotification } from "../../../../firebaseConfig/companyStore"; 
+import { fetchNotifications, deleteNotification } from "@/firebaseConfig/companyStore"; 
 
 export default function NotificationTab({ closeNotifications }) {
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [alert, setAlert] = useState(null); 
 
   const handleDelete = async (notificationId) => {
     try {
       await deleteNotification(notificationId);
       
       setNotifications(notifications.filter((notification) => notification.id !== notificationId));
+      await showAlert(
+        {
+          type: "success",
+          title: "Success",
+          message: "Notification deleted successfully!",
+          showCloseButton: false,
+          timeout: 2000,
+        },
+        setAlert
+      );
     } catch (error) {
       console.error("Error deleting notification:", error);
+      await showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: "Failed to delete notification. Please try again.",
+          showCloseButton: true,
+          timeout: 2000,
+        },
+        setAlert
+      );
     }
   };
 
@@ -38,6 +60,7 @@ export default function NotificationTab({ closeNotifications }) {
   
   return (
     <div className={styles.notification__dropdown}>
+      {alert && alert.component}
       <div className={styles.notification__page}>
         <div className={styles.notification__header}>
           <h1 className={styles.notification__title}>Notifications</h1>
@@ -58,7 +81,7 @@ export default function NotificationTab({ closeNotifications }) {
               </div>
               <div className={styles.notification__content}>
                 <p className={styles.notification__heading}>
-                  {notification.type === "newApplication" ? "New Job Application" : notification.message}
+                  {notification.type === "application" ? "New Job Application" : notification.message}
                 </p>
                 <p className={styles.notification__description}>
                   {notification.message}
