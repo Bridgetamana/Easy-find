@@ -9,6 +9,7 @@ import {
 import { CiMenuKebab } from "react-icons/ci";
 import { useRouter } from "next/router";
 import { getAuth } from "firebase/auth";
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import styles from "./style.module.scss";
 import LoadingScreen from "../../../utils/Loaders/Loader";
 
@@ -18,6 +19,7 @@ const JobPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(false);
+  const [alert, setAlert] = useState(null); 
 
   const [applicantDetails, setApplicantDetails] = useState(null);
   const [showApplicants, setShowApplicants] = useState(null);
@@ -90,12 +92,30 @@ const JobPage = () => {
   const handleDeleteJob = async (jobId) => {
     try {
       await deleteJob(jobId);
-      alert("Job deleted successfully");
-
+      await showAlert(
+        {
+          type: "success",
+          title: "Success",
+          message: "Job deleted successfully!",
+          showCloseButton: false,
+          timeout: 2000,
+        },
+        setAlert
+      );
       setJobs((prevJobs) => prevJobs.filter((job) => job.jobId !== jobId));
       setActiveDropdown(activeDropdown === jobId ? false : jobId);
     } catch (error) {
-      alert("Error deleting job: " + error.message);
+      console.error("Error deleting job post:", error);
+      await showAlert(
+        {
+          type: "error",
+          title: "Error",
+          message: "Failed to delete job post. Please try again.",
+          showCloseButton: true,
+          timeout: 2000,
+        },
+        setAlert
+      );
     }
   };
 
@@ -140,6 +160,7 @@ const JobPage = () => {
 
   return (
     <div className={styles.table__container}>
+      {alert && alert.component}
       {error && <div className={styles.error}>{error}</div>}
       {!loading && !jobs.length && (
         <div className={styles.no__jobs__container}>
