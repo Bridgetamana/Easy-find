@@ -91,7 +91,7 @@ export default function CompanyProfileData() {
               />
             ) : (
               <img
-                src="/default_company_logo.png"
+                src="/assets/images/user-icon.png"
                 alt="Default Company Logo"
                 className={styles.profile__image}
               />
