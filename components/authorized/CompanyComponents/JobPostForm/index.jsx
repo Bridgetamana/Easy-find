@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
-import { useRouter } from "next/router"; // Add this import
+import { useRouter } from "next/router"; 
 import { addJobPost } from "@/firebaseConfig/companyStore";
 import { EditorState, convertToRaw } from "draft-js";
 import dynamic from "next/dynamic";
@@ -28,6 +28,7 @@ const JobPostForm = () => {
     location: "",
     industry: "",
     requirements: EditorState.createEmpty(),
+    responsibilities: EditorState.createEmpty(),
     benefits: EditorState.createEmpty(),
     salaryMin: "",
     salaryMax: "",
@@ -41,8 +42,30 @@ const JobPostForm = () => {
   };
   const [formData, setFormData] = useState(initialFormData);
 
+  const formatNumberWithCommas = (number) => {
+    return new Intl.NumberFormat("en-US").format(number);
+  };
+
   const handleSaveClick = async (e) => {
     e.preventDefault();
+
+    if (
+      Number(formData.salaryMin) > Number(formData.salaryMax) ||
+      Number(formData.salaryMin) == Number(formData.salaryMax)
+    ) {
+      await showAlert(
+        {
+          type: "error",
+          title: "Validation Error",
+          message: "Minimum salary cannot be greater than the maximum salary.",
+          showCloseButton: true,
+          timeout: 3000,
+        },
+        setAlert
+      );
+      return;
+    }
+
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -67,11 +90,12 @@ const JobPostForm = () => {
       deadline: formatDate(new Date(formData.deadline)), // Format the deadline date to YYYY-MM-DD
       industry: formData.industry,
       jobLevel: formData.jobLevel,
-      salaryMin: formData.salaryMin,
-      salaryMax: formData.salaryMax,
+      salaryMin: formatNumberWithCommas(formData.salaryMin),
+      salaryMax: formatNumberWithCommas(formData.salaryMax),
       jobType: formData.employmentType,
       location: formData.location,
       requirements: draftToHtml(convertToRaw(formData.requirements.getCurrentContent())),
+      responsibilities: draftToHtml(convertToRaw(formData.responsibilities.getCurrentContent())),
       benefits: draftToHtml(convertToRaw(formData.benefits.getCurrentContent())),
       educationExperience: draftToHtml(convertToRaw(formData.educationExperience.getCurrentContent())),
       experience: formData.experience,
@@ -195,6 +219,19 @@ const JobPostForm = () => {
           </div>
 
           <div className={styles.input__wrap}>
+            <label htmlFor="responsibilities">Responsibilities:</label>
+            <Editor
+              name="responsibilities"
+              editorState={formData.responsibilities}
+              onEditorStateChange={(editorState) =>
+                handleEditorChange("responsibilities", editorState)
+              }
+              wrapperClassName={styles.wrapperClassName}
+              editorClassName={styles.editorClassName}
+            />
+          </div>
+
+          <div className={styles.input__wrap}>
             <label htmlFor="benefits">Benefits:</label>
             <Editor
               name="benefits"
@@ -226,15 +263,37 @@ const JobPostForm = () => {
 
           <div className={styles.input__wrap}>
             <label htmlFor="industry">Industry:</label>
-            <input
-              type="text"
-              className={styles.input__field}
+            <select
+              className={styles.select__field}
+              id="industry"
               name="industry"
               value={formData.industry}
               onChange={handleChange}
-              placeholder="e.g. Software Development"
               required
-            />
+            >
+              <option value="">Select Industry</option>
+              <option value="Agriculture">Agriculture</option>
+              <option value="Technology">Technology</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Finance">Finance</option>
+              <option value="Education">Education</option>
+              <option value="Construction">Construction</option>
+              <option value="Retail">Retail</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Transportation">Transportation</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Legal">Legal</option>
+              <option value="Non-profit">Non-profit</option>
+              <option value="FinancialServices">Financial Services</option>
+              <option value="RealEstate">Real Estate</option>
+              <option value="Consulting">Consulting</option>
+              <option value="Telecommunications">Telecommunications</option>
+              <option value="Insurance">Insurance</option>
+              <option value="Energy">Energy</option>
+              <option value="ConsumerGoods">Consumer Goods</option>
+            </select>
           </div>
 
           <div className={styles.input__wrap}>
@@ -283,9 +342,9 @@ const JobPostForm = () => {
               required
             >
               <option value="">Select Salary Type</option>
-              <option value="hourly">Hourly</option>
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
+              <option value="Hourly">Hourly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
             </select>
           </div>
 
@@ -300,9 +359,9 @@ const JobPostForm = () => {
               required
             >
               <option value="">Select Employment Type</option>
-              <option value="full-time">Full Time</option>
-              <option value="part-time">Part Time</option>
-              <option value="contract">Contract</option>
+              <option value="Full-Time">Full Time</option>
+              <option value="Part-Time">Part Time</option>
+              <option value="Contract">Contract</option>
             </select>
           </div>
 
@@ -317,9 +376,9 @@ const JobPostForm = () => {
               required
             >
               <option value="">Select Experience Level</option>
-              <option value="entry-level">Entry Level</option>
-              <option value="mid-level">Mid Level</option>
-              <option value="senior-level">Senior Level</option>
+              <option value="Entry-Level">Entry Level</option>
+              <option value="Mid-Level">Mid Level</option>
+              <option value="Senior-Level">Senior Level</option>
             </select>
           </div>
 
@@ -365,17 +424,12 @@ const JobPostForm = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className={styles.submit__button}
-          >
-            {
-              isLoading
-                ? "Creating Job Post..." 
-                : isSuccess
-                ? "Job Posted" 
-                : "Create Job Post"
-            }
+          <button type="submit" className={styles.submit__button}>
+            {isLoading
+              ? "Creating Job Post..."
+              : isSuccess
+              ? "Job Posted"
+              : "Create Job Post"}
           </button>
         </form>
       </div>

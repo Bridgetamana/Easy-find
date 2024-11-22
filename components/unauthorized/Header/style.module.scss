@@ -241,6 +241,7 @@
                         line-height: $line-height-1-6;
                         transition: all 0.3s ease-in-out;
                         color: $black;
+                        cursor: pointer;
 
                         &:hover {
                             color: $primary;
@@ -256,6 +257,7 @@
                         line-height: $line-height-1-6;
                         transition: all 0.3s ease-in-out;
                         color: $primary;
+                        cursor: pointer;
                     }
 
                     .nav__button {
