@@ -1,21 +1,21 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { CgBriefcase } from "react-icons/cg";
-import { AiOutlineClockCircle } from "react-icons/ai";
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-import Link from "next/link";
+import { getJobs } from "@/firebaseConfig/talentStore";
+import { companyStore } from "@/firebaseConfig/companyStore";
 import styles from "./style.module.scss";
 import JobGrid from "@/components/authorized/JobGrid";
 
-const jobUrl = "https://localhost:3000/job-listings/";
 const words = ['the most exciting', 'remote-friendly', 'your dream', 'the amazing',]
 
-export default function BrowseJobs({ setSearchInput }) {
-  const [jobPostings, setJobPostings] = useState([]);
+export default function BrowseJobs({ setSearchInput, searchInput }) {
+  const [jobs, setJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentWord, setCurrentWord] = useState(words[0]);
   const [fade, setFade] = useState(true);
   const [searchValue, setSearchValue] = useState(""); 
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [noResults, setNoResults] = useState(false);
   
 
   const handleInputChange = (e) => {
@@ -40,19 +40,61 @@ export default function BrowseJobs({ setSearchInput }) {
     return () => clearInterval(intervalId); 
   }, []);
 
+
   useEffect(() => {
+    const fetchJobPostings = async () => {
+      setIsLoading(true); 
+      try {
+        const jobList = await getJobs();
+        
+        const jobsWithCompany = await Promise.all(
+          jobList.map(async (job) => {
+            const companyInfo = await companyStore.getCompanyStoreById(job.companyId);
+            return {
+              ...job,
+              companyInfo: companyInfo || {}
+            };
+          })
+        );
+        
+        setJobs(jobsWithCompany);
+        setFilteredJobs(jobsWithCompany);
+      } catch (error) {
+        console.error("Error fetching jobs and company info:", error);
+      } finally {
+        setIsLoading(false); 
+      }
+    };
+
     fetchJobPostings();
   }, []);
 
-  const fetchJobPostings = async () => {
-    try {
-      const response = await axios.get(jobUrl);
-      const jobListings = response.data.data;
-      setJobPostings(jobListings);
-    } catch (error) {
-      console.error("Failed to fetch job listings:", error);
+  useEffect(() => {
+    if (!searchInput || searchInput.trim() === "") {
+      setFilteredJobs(jobs);
+      setNoResults(false);
+    } else {
+      const searchTerm = searchInput.toLowerCase();
+      const filtered = jobs.filter(
+        (job) =>
+          job.title.toLowerCase().includes(searchTerm) ||
+          job.location.toLowerCase().includes(searchTerm) || 
+          job.jobType.toLowerCase().includes(searchTerm) ||
+          job.jobLevel.toLowerCase().includes(searchTerm) ||
+          job.companyInfo.fullName.toLowerCase().includes(searchTerm) 
+          
+      )
+
+      if (filtered.length > 0) {
+        setFilteredJobs(filtered);
+        setNoResults(false);
+      } else {
+        setFilteredJobs([]);
+        setNoResults(true);
+      }
     }
-  };
+  }, [searchInput, jobs]);
+
 
   return (
     <section className={styles.browseJobs__section}>
@@ -70,10 +112,10 @@ export default function BrowseJobs({ setSearchInput }) {
             value={searchValue} 
             onChange={handleInputChange} 
           />
-          <Link href="/search" className={styles.hero__button}>
+          <button className={styles.hero__button} >
             <HiOutlineArrowNarrowRight className={styles.search__icon} />
             <p>Find Jobs</p>
-          </Link>
+          </button>
         </div>
 
         <div className={styles.jobs__categories}>
@@ -87,7 +129,8 @@ export default function BrowseJobs({ setSearchInput }) {
           </ul>
         </div>
       </div>
-      <JobGrid searchInput={searchValue}/>
+      
+        <JobGrid searchInput={searchValue} jobs={filteredJobs} />
     </section>
   );
 }

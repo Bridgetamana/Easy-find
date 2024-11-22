@@ -1,32 +1,38 @@
 @import "../../../styles/variables.scss";
 
-.settings__section {
-  background-color: $white;
-  margin: 3rem auto;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  border-radius: 1rem;
+.settings__section{
+    background-color: $white;
+    max-width: 750px;
+    margin: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: $accent 1px solid;
+    border-radius: 1rem;
 
-  .settings__container {
-    width: 100%;
-    padding: 2rem;
+    @media screen and (min-width: $breakpoint-3) {
+        padding: 2rem;
+    }
+    
+    .settings__container{
+        background-color: inherit;
+        width: 100%;
+        padding: 2rem;
+
 
     .settings__title {
       @include title;
     }
 
-    .changePassword__section {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1.5rem;
-      margin-top: 2rem;
-      padding: 1rem;
-      border: $accent 1px dashed;
-      border-radius: 1rem;
+        .changePassword__section{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding: 1rem;
+            border: $accent 1px dashed;
+            border-radius: 1rem;
 
       .input__field {
         width: 100%;
@@ -90,29 +96,65 @@
         color: $black;
       }
 
-      .form__group {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
+            .form__group {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+              
+                label {
+                  font-size: $font-sixteen;
+                  font-weight: $font-weight-500;
+                  color: $black;
+                }
+              
+                .password__field {
+                  position: relative;
+                  display: flex;
+                  width: 100%;
+                  background: $secondary;
+                  border-radius: 10px;
+                  padding: 0 1rem;
+              
+                  .changePassword__input {
+                    font-size: $font-sixteen;
+                    font-weight: $font-weight-400;
+                    font-family: inherit;
+                    border: none;
+                    outline: none;
+                    border-radius: 10px;
+                    width: 100%;
+                    background: $secondary; 
+                    padding: 1rem;
+                    padding-right: 2.5rem;
+                    height: 3rem;
+                  }
+              
+                  .showPassword__button {
+                    position: absolute;
+                    top: 50%;
+                    right: 1rem;
+                    width: 20px;
+                    transition: all 0.3s ease-in-out;
+                    cursor: pointer;
+                  }
+                }
+              }
+              
+            
+            .settings__button{
+                width: 100%;
+                background: $primary;
+                color: $white;
+                padding: 1rem;
+                font-size: $font-sixteen;
+                font-weight: $font-weight-500;
+                border-radius: 10px;
+                display: grid;
+                place-items: center;
+            }
 
-        label {
-          font-size: $font-sixteen;
-          font-weight: $font-weight-500;
-          color: $black;
         }
-
-        .error {
-          @include errorMsg;
-          text-align: center;
-        }
-      }
-
-      .settings__button {
-        @include button;
-        width: 11rem;
-      }
-    }
 
     .deleteAccount__section {
       width: 100%;
@@ -148,10 +190,16 @@
         }
       }
 
-      .settings__button {
-        @include button;
-        width: 11rem;
-        background: $error;
+            .settings__button{
+                width: 100%;
+                background: $primary;
+                color: $white;
+                padding: 1rem;
+                font-size: $font-sixteen;
+                font-weight: $font-weight-500;
+                border-radius: 10px;
+                display: grid;
+                place-items: center;
 
         &:hover {
           background: darken($error, 10%);

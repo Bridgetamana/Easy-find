@@ -15,6 +15,8 @@ class MyDocument extends Document {
           {/* <title>{metadata.title}</title> */}
           <meta name="description" content={metadata.description} />
           <meta name="keywords" content={metadata.keywords} />
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="manifest" href="/site.webmanifest" />
         </Head>
         <body>
           <Main />
