@@ -61,8 +61,12 @@ const JobGrid = ({ searchInput }) => {
       const filtered = jobs.filter(
         (job) =>
           job.title.toLowerCase().includes(searchTerm) ||
-          job.location.toLowerCase().includes(searchTerm)
-      );
+          job.location.toLowerCase().includes(searchTerm) || 
+          job.jobType.toLowerCase().includes(searchTerm) ||
+          job.jobLevel.toLowerCase().includes(searchTerm) ||
+          job.companyInfo.fullName.toLowerCase().includes(searchTerm) 
+          
+      )
 
       if (filtered.length > 0) {
         setFilteredJobs(filtered);
