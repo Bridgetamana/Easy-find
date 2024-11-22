@@ -7,7 +7,7 @@ import {
   updateJobDetails,
 } from "@/firebaseConfig/companyStore";
 import dynamic from "next/dynamic";
-
+import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import styles from "./style.module.scss";
 import LoadingScreen from "../../../utils/Loaders/Loader";
 
@@ -22,6 +22,7 @@ const EditJobForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isCoverLetterRequired, setIsCoverLetterRequired] = useState(false);
+  const [alert, setAlert] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(null);
 
@@ -31,6 +32,7 @@ const EditJobForm = () => {
     location: "",
     industry: "",
     requirements: EditorState.createEmpty(),
+    responsibilities: EditorState.createEmpty(),
     benefits: EditorState.createEmpty(),
     salaryMin: "",
     salaryMax: "",
@@ -44,6 +46,10 @@ const EditJobForm = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [htmlToDraft, setHtmlToDraft] = useState(null);
   const [draftToHtml, setDraftToHtml] = useState(null);
+
+  const formatNumberWithCommas = (number) => {
+    return new Intl.NumberFormat("en-US").format(number);
+  };
 
   useEffect(() => {
     const loadLibraries = async () => {
@@ -60,7 +66,9 @@ const EditJobForm = () => {
     if (htmlToDraft) {
       const contentBlock = htmlToDraft(htmlContent);
       if (contentBlock) {
-        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+        const contentState = ContentState.createFromBlockArray(
+          contentBlock.contentBlocks
+        );
         return EditorState.createWithContent(contentState);
       }
     }
@@ -90,7 +98,12 @@ const EditJobForm = () => {
         jobDescription: jobData.description || "",
         requirements: convertHtmlToEditorState(jobData.requirements || ""),
         benefits: convertHtmlToEditorState(jobData.benefits || ""),
-        educationExperience: convertHtmlToEditorState(jobData.educationExperience || ""),
+        responsibilities: convertHtmlToEditorState(
+          jobData.responsibilities || ""
+        ),
+        educationExperience: convertHtmlToEditorState(
+          jobData.educationExperience || ""
+        ),
         location: jobData.location || "",
         industry: jobData.industry || "",
         salaryMin: jobData.salaryMin || "",
@@ -99,7 +112,9 @@ const EditJobForm = () => {
         employmentType: jobData.jobType || "",
         jobLevel: jobData.jobLevel || "",
         experience: jobData.experience || "",
-        deadline: jobData.deadline ? formatDate(new Date(jobData.deadline)) : "",
+        deadline: jobData.deadline
+          ? formatDate(new Date(jobData.deadline))
+          : "",
         coverLetterRequired: jobData.coverLetterRequired || "",
       });
     } catch (error) {
@@ -112,6 +127,24 @@ const EditJobForm = () => {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
+
+    if (
+      Number(formData.salaryMin) > Number(formData.salaryMax) ||
+      Number(formData.salaryMin) == Number(formData.salaryMax)
+    ) {
+      await showAlert(
+        {
+          type: "error",
+          title: "Validation Error",
+          message: "Minimum salary cannot be greater than the maximum salary.",
+          showCloseButton: true,
+          timeout: 3000,
+        },
+        setAlert
+      );
+      return;
+    }
+
     const cleanFormData = {
       title: formData.jobTitle,
       description: formData.jobDescription,
@@ -119,13 +152,16 @@ const EditJobForm = () => {
       industry: formData.industry,
       jobLevel: formData.jobLevel,
       salaryType: formData.salaryType,
-      salaryMin: formData.salaryMin,
-      salaryMax: formData.salaryMax,
+      salaryMin: formatNumberWithCommas(formData.salaryMin),
+      salaryMax: formatNumberWithCommas(formData.salaryMax),
       jobType: formData.employmentType,
       location: formData.location,
       requirements: convertEditorStateToHtml(formData.requirements),
+      responsibilities: convertEditorStateToHtml(formData.responsibilities),
       benefits: convertEditorStateToHtml(formData.benefits),
-      educationExperience: convertEditorStateToHtml(formData.educationExperience),
+      educationExperience: convertEditorStateToHtml(
+        formData.educationExperience
+      ),
       experience: formData.experience,
       createdAt: new Date(),
       active: true,
@@ -133,7 +169,6 @@ const EditJobForm = () => {
     };
 
     setIsLoading(true);
-    setIsSuccess(false);
 
     try {
       await updateJobDetails(jobId, cleanFormData);
@@ -181,6 +216,7 @@ const EditJobForm = () => {
 
   return (
     <section className={styles.jobPostings__section}>
+      {alert && alert.component}
       {isLoading ? (
         <LoadingScreen />
       ) : (
@@ -264,16 +300,52 @@ const EditJobForm = () => {
             </div>
 
             <div className={styles.input__wrap}>
+              <label htmlFor="responsibilities">Responsibilities:</label>
+              <Editor
+                name="responsibilities"
+                editorState={formData.responsibilities}
+                onEditorStateChange={(editorState) =>
+                  handleEditorChange("responsibilities", editorState)
+                }
+                required
+                wrapperClassName={styles.wrapperClassName}
+                editorClassName={styles.editorClassName}
+              />
+            </div>
+
+            <div className={styles.input__wrap}>
               <label htmlFor="industry">Industry:</label>
-              <input
-                type="text"
-                className={styles.input__field}
+              <select
+                className={styles.select__field}
+                id="industry"
                 name="industry"
                 value={formData.industry}
                 onChange={handleChange}
-                placeholder="e.g. Software Development"
                 required
-              />
+              >
+                <option value="">Select Industry</option>
+                <option value="Agriculture">Agriculture</option>
+                <option value="Technology">Technology</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Finance">Finance</option>
+                <option value="Education">Education</option>
+                <option value="Construction">Construction</option>
+                <option value="Retail">Retail</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Hospitality">Hospitality</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Legal">Legal</option>
+                <option value="Nonprofit">Nonprofit</option>
+                <option value="Financial Services">Financial Services</option>
+                <option value="RealEstate">Real Estate</option>
+                <option value="Consulting">Consulting</option>
+                <option value="Telecommunications">Telecommunications</option>
+                <option value="Insurance">Insurance</option>
+                <option value="Energy">Energy</option>
+                <option value="Consumer Goods">Consumer Goods</option>
+              </select>
             </div>
 
             <div className={styles.input__wrap}>
