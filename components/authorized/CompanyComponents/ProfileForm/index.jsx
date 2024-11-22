@@ -168,7 +168,7 @@ export default function CompanyProfileForm() {
     if (!formData.photo) {
       setErrorMsg((prev) => ({ ...prev, photo: "Profile photo is required." }));
       hasError = true;
-    } else if (formData.photo.size > 2 * 1024 * 1024) {
+    } else if (formData.photo instanceof File && formData.photo.size > 2 * 1024 * 1024) {
       setErrorMsg((prev) => ({
         ...prev,
         photo: "Image size must be under 2MB.",
@@ -299,6 +299,7 @@ export default function CompanyProfileForm() {
             <img src="/assets/images/user-icon.png" alt="Default Profile" className={styles.image} />
           )}
         </div>
+        {errorMsg.photo && <p className={styles.error}>{errorMsg.photo}</p>}
 
         <div className={styles.form__group}>
           <label htmlFor="fullName">
@@ -413,16 +414,38 @@ export default function CompanyProfileForm() {
         </div>
         <div className={styles.form__group}>
           <label htmlFor="industry">
-            Industry <span className={styles.required}>*</span>:</label>
-          <input
-            type="text"
+            Industry <span className={styles.required}>*</span>:
+          </label>
+          <select
             name="industry"
             value={formData.industry || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your industry"
             required
-          />
+          >
+            <option value="">Select Industry</option>
+            <option value="Agriculture">Agriculture</option>
+            <option value="Technology">Technology</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Finance">Finance</option>
+            <option value="Education">Education</option>
+            <option value="Construction">Construction</option>
+            <option value="Retail">Retail</option>
+            <option value="Manufacturing">Manufacturing</option>
+            <option value="Transportation">Transportation</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Hospitality">Hospitality</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Legal">Legal</option>
+            <option value="Non-profit">Non-profit</option>
+            <option value="FinancialServices">Financial Services</option>
+            <option value="RealEstate">Real Estate</option>
+            <option value="Consulting">Consulting</option>
+            <option value="Telecommunications">Telecommunications</option>
+            <option value="Insurance">Insurance</option>
+            <option value="Energy">Energy</option>
+            <option value="ConsumerGoods">Consumer Goods</option>
+          </select>
           {errorMsg.industry && (
             <p className={styles.error}>{errorMsg.industry}</p>
           )}

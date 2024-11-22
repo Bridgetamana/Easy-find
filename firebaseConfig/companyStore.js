@@ -165,7 +165,35 @@ export const loginCompany = async (email, password, setUser) => {
   }
 };
 
+export const isCompanyProfileComplete = async (userId) => {
+  try {
+    const companyRef = doc(db, COMPANY, userId);
+    const companySnap = await getDoc(companyRef);
+    
+    if (!companySnap.exists()) {
+      return false;
+    }
 
+    const companyData = companySnap.data();
+    
+    const requiredFields = [
+      'fullName', 
+      'email', 
+      'bio', 
+      'linkedin', 
+      'website',
+      'photo',
+      'industry',
+      'size',
+    ];
+    return requiredFields.every(field => 
+      companyData[field] && companyData[field].trim() !== ''
+    );
+  } catch (error) {
+    console.error("Error checking company profile:", error);
+    return false;
+  }
+};
 
 //Update Company
 export const updateCompany = async (company) => {

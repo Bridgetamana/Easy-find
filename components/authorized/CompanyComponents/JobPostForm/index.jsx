@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { useRouter } from "next/router"; 
-import { addJobPost } from "@/firebaseConfig/companyStore";
+import { addJobPost, isCompanyProfileComplete } from "@/firebaseConfig/companyStore";
 import { EditorState, convertToRaw } from "draft-js";
 import dynamic from "next/dynamic";
 import draftToHtml from "draftjs-to-html";
@@ -80,6 +80,24 @@ const JobPostForm = () => {
         },
         setAlert
       );
+      return;
+    }
+
+    const isProfileComplete = await isCompanyProfileComplete(user.uid);
+    
+    if (!isProfileComplete) {
+      await showAlert(
+        {
+          type: "error",
+          title: "Profile Incomplete",
+          message: "Please complete your company profile before posting a job.",
+          showCloseButton: true,
+          timeout: 3000,
+        },
+        setAlert
+      );
+      
+      router.push("/company/profile");
       return;
     }
 
@@ -404,6 +422,7 @@ const JobPostForm = () => {
               name="deadline"
               value={formData.deadline}
               onChange={handleChange}
+              min={new Date().toISOString().split('T')[0]}
               required
             />
           </div>

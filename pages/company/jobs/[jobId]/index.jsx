@@ -6,7 +6,7 @@ import { AiOutlineEnvironment } from "react-icons/ai";
 import Link from "next/link";
 import Button from "@/components/utils/Button";
 import CompanyLayout from "../../layout";
-import { BiBuilding, BiEdit } from "react-icons/bi";
+import { BiBuilding, BiEdit, BiArrowBack } from "react-icons/bi";
 import LoadingScreen from "../../../../components/utils/Loaders/Loader";
 
 const parseListFromPlainText = (text) => {
@@ -65,7 +65,8 @@ const JobDetailsPage = () => {
       {!loading && !error && jobDetails && (
         <div className={styles.jobDetails__section}>
           <div className={styles.details__header}>
-            <Link href="/company/jobs">
+            <Link href="/company/jobs" className={styles.details__header__link}>
+              <BiArrowBack />
               <Button
                 type="button"
                 title="Back to Jobs"

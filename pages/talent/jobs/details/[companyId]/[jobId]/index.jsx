@@ -13,7 +13,7 @@ import {
 import { companyStore } from "../../../../../../firebaseConfig/companyStore";
 import { db, auth } from "../../../../../../firebaseConfig/firebase";
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
-import { BiBadgeCheck } from "react-icons/bi";
+import { BiBadgeCheck, BiArrowBack } from "react-icons/bi";
 import Button from "@/components/utils/Button";
 import { BsCheck2Circle, BsHeart, BsHeartFill } from "react-icons/bs";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
@@ -227,11 +227,14 @@ const JobDetails = () => {
         {jobDetails && (
           <div className={styles.jobDetails__section}>
             <div className={styles.details__header}>
-              <Link href="/talent/jobs">
+              <Link
+                href="/talent/jobs"
+                className={styles.details__header__link}
+              >
+                <BiArrowBack />
                 <Button
                   type="button"
                   title="Back to Jobs"
-                  icon={<MdKeyboardBackspace fill="#fff" />}
                   variant="details__back"
                 />
               </Link>
@@ -296,7 +299,7 @@ const JobDetails = () => {
                   </div>
                 </div>
 
-                <div className={styles.info__item}>
+                {/* <div className={styles.info__item}>
                   <div className={styles.info__left}>
                     <span className={styles.info__icon}>
                       <HiOutlineBuildingOffice2 />
@@ -308,7 +311,7 @@ const JobDetails = () => {
                       {jobDetails.qualifications || notSpecified}
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className={styles.info__item}>
                   <div className={styles.info__left}>
@@ -319,7 +322,7 @@ const JobDetails = () => {
                   </div>
                   <div className={styles.info__right}>
                     <div className={styles.info__text}>
-                      {jobDetails.minSalary} - {jobDetails.maxSalary}
+                      {jobDetails.salaryMin} - {jobDetails.salaryMax}
                     </div>
                   </div>
                 </div>
@@ -444,6 +447,30 @@ const JobDetails = () => {
                   <p>No benefits listed</p>
                 )}
               </ul>
+              </div>
+            </section>
+
+            {/* <jobResponsibilities/> */}
+            <section className={styles.requiredSkills__section}>
+              <div className={styles.skills__header}>
+                <h2 className={styles.skills__title}>Job Responsibilities</h2>
+              </div>
+              <div className={styles.skills__content}>
+                <ul className={styles.skills__list}>
+                  {Array.isArray(jobDetails?.benefits) &&
+                  jobDetails.responsibilities.length > 0 ? (
+                    jobDetails.responsibilities.map((responsibility, index) => (
+                      <li className={styles.skills__item} key={index}>
+                        <p className={styles.skills__text}>
+                          <BsCheck2Circle fill="#66789c" />
+                          {responsibility}
+                        </p>
+                      </li>
+                    ))
+                  ) : (
+                    <p>No responsibilities listed</p>
+                  )}
+                </ul>
               </div>
             </section>
 
