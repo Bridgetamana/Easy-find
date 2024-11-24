@@ -29,9 +29,22 @@
         gap: 2rem;
         max-width: 700px;
 
-        @media screen and (min-width: $breakpoint-3) {
-            padding: 2rem;
-        }
+        @media screen and (max-width: $breakpoint-6) {
+            max-width: 700px; 
+          }
+        
+          @media screen and (min-width: $breakpoint-5) and (max-width: $breakpoint-7) {
+            max-width: 800px; 
+          }
+        
+          @media screen and (min-width: $breakpoint-7) {
+            max-width: 1200px; 
+            margin: 0 auto;
+          }
+        
+          @media screen and (min-width: $breakpoint-3) {
+            padding: 2rem; 
+          }
 
         .profile__image {
             width: 5rem;
