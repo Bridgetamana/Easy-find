@@ -67,7 +67,7 @@ export default function Signup() {
           {
             type: "success",
             title: "Success!",
-            message: "Registration completed successfully!",
+            message: "Registration completed successfully! Please check your email for verification.",
             showCloseButton: false,
             handleClose: () => setAlert(null),
             timeout: 2000,
@@ -116,7 +116,7 @@ export default function Signup() {
           {
             type: "success",
             title: "Success!",
-            message: "Registration completed successfully!",
+            message: "Registration completed successfully! Please check your email for verification.",
             showCloseButton: false,
             handleClose: () => setAlert(null),
             timeout: 3000,

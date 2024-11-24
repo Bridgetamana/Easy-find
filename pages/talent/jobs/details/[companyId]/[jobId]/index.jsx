@@ -299,20 +299,6 @@ const JobDetails = () => {
                   </div>
                 </div>
 
-                {/* <div className={styles.info__item}>
-                  <div className={styles.info__left}>
-                    <span className={styles.info__icon}>
-                      <HiOutlineBuildingOffice2 />
-                    </span>
-                    <p className={styles.info__title}>Qualification</p>
-                  </div>
-                  <div className={styles.info__right}>
-                    <div className={styles.info__text}>
-                      {jobDetails.qualifications || notSpecified}
-                    </div>
-                  </div>
-                </div> */}
-
                 <div className={styles.info__item}>
                   <div className={styles.info__left}>
                     <span className={styles.info__icon}>
@@ -425,7 +411,6 @@ const JobDetails = () => {
                 </ul>
               </div>
             </section>
-
 
             {/* <JobBenefits/> */}
             <section className={styles.requiredSkills__section}>

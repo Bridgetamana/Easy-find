@@ -121,6 +121,7 @@ export const registerTalent = async (fullName, email, password) => {
       fullName: fullName,
       email: email,
       user: "talent",
+      emailVerified: false,
     });
     return newUserId;
   } catch (error) {
@@ -136,18 +137,35 @@ export const loginUser = async (email, password, setUser) => {
     await setPersistence(auth, browserLocalPersistence); 
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-
+    
+    if (!user.emailVerified) {
+      await auth.signOut(); 
+      throw {
+        success: false,
+        message: "Please verify your email before logging in. Check your inbox for the verification link.",
+        code: "auth/email-not-verified"
+      };
+    }
+    
     // Step 1: Fetch the user's document from Firestore using the user's UID
-    const userDocRef = doc(db, "talentCollection", user.uid); 
+    const userDocRef = doc(db, TALENT, user.uid);
     const userDocSnap = await getDoc(userDocRef);
+    
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
-
+      if (userData.emailVerified !== user.emailVerified) {
+        await setDoc(userDocRef, {
+          ...userData,
+          emailVerified: user.emailVerified
+        }, { merge: true });
+      }
+      
       // Step 2: Set user information in the context with fullName from Firestore
       setUser({
         username: userData.fullName, 
         email: user.email,           
-        uid: user.uid                
+        uid: user.uid,            
+        emailVerified: user.emailVerified
       });
 
       return user;

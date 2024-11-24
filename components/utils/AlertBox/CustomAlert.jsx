@@ -49,7 +49,7 @@ export const CustomAlert = ({
             <div className={styles.alert__message}>{message}</div>
           </div>
           {showCloseButton && (
-            <button className={styles.alert-close-button} onClick={handleClose}>
+            <button className={styles.alert__close__button} onClick={handleClose}>
               Close
             </button>
           )}
