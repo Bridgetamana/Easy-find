@@ -6,6 +6,23 @@
 
     .profile__details {
         max-width: 750px;
+        
+        @media screen and (max-width: $breakpoint-6) {
+            max-width: 750px; 
+          }
+        
+          @media screen and (min-width: $breakpoint-6) and (max-width: $breakpoint-7) {
+            max-width: 850px; 
+          }
+        
+          @media screen and (min-width: $breakpoint-7) {
+            max-width: 1200px; 
+            margin: 0 auto;
+          }
+        
+          @media screen and (min-width: $breakpoint-6) {
+            padding: 2rem; 
+          }
 
         .note {
             font-size: $font-sixteen;

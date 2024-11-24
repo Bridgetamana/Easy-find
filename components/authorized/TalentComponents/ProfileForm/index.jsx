@@ -11,6 +11,8 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage"; 
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import LoadingScreen from "@/components/utils/Loaders/Loader";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
@@ -83,32 +85,44 @@ export default function TalentProfileForm() {
     }
   };
 
-  const handleInputChange = async (e) => {
-    const { name, value, files } = e.target;
+  const handleInputChange = async (e, value) => {
+    // Handle MobileInput
+    if (value !== undefined) {
+      setFormData((prevData) => ({
+        ...prevData,
+        mobile: value, 
+      }));
+      return;
+    }
   
-    if (files && files.length > 0) {
-      const file = files[0];
-      if (name === 'photo') {
+    // Handle other form inputs
+    if (e && e.target) {
+      const { name, value: inputValue, files } = e.target;
+  
+      if (files && files.length > 0) {
+        const file = files[0];
+        if (name === 'photo') {
           const photoRef = ref(storage, `profilePhotos/${id}/${file.name}`);
           await uploadBytes(photoRef, file);
           const photoURL = await getDownloadURL(photoRef);
           setFormData((prevData) => ({
-              ...prevData,
-              photo: photoURL,
+            ...prevData,
+            photo: photoURL,
           }));
         }
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: inputValue, 
+        }));
+      }
     }
   };
   
   const handleSaveClick = async (e) => {
     e.preventDefault();
 
-    if (!formData || !formData.email?.length || !formData.username?.length) {
+    if (!formData || !formData.email?.length || !formData.fullName?.length) {
       setErrorMsg("Email and username must have at least 1 character.");
       setTimeout(() => {
           setErrorMsg("");
@@ -124,6 +138,21 @@ export default function TalentProfileForm() {
       return;
   }
 
+  if (hasError) {
+    showAlert(
+      {
+        type: "error",
+        title: "Error!",
+        message: "Please fix the errors before submitting.",
+        showCloseButton: false,
+        handleClose: () => setAlert(null),
+        timeout: 3000,
+      },
+      setAlert
+    );
+    return;
+  }
+
     try {
       setIsLoading(true);
       let payload = { ...formData, id };
@@ -132,6 +161,9 @@ export default function TalentProfileForm() {
           const jobTitleKeywords = generateKeywords(formData.jobTitle);
           payload.jobTitleKeywords = jobTitleKeywords; 
       }
+      if (!isValidPhoneNumber(formData.mobile)) {
+        alert('Please enter a valid mobile number');
+      }      
 
         if (formData.photo instanceof File) {
             if (formData.photo.size > 5 * 1024 * 1024) {
@@ -229,7 +261,7 @@ export default function TalentProfileForm() {
           <label htmlFor="name">Name:<span className={styles.required}>*</span></label>
           <input
             type="text"
-            name="username"
+            name="fullName"
             value={formData.fullName || ""}
             onChange={handleInputChange}
             className={styles.form__input}
@@ -367,20 +399,21 @@ export default function TalentProfileForm() {
             value={formData.phone || ""}
             onChange={handleInputChange}
             className={styles.form__input}
-            placeholder="Enter your phone number"
-            required
+            placeholder="Enter your mobile number"
           />
         </div>
 
         <div className={styles.form__group}>
           <label htmlFor="mobile">Mobile:</label>
-          <input
-            type="text"
+          <PhoneInput
+            id="mobile"
             name="mobile"
-            value={formData.mobile || ""}
-            onChange={handleInputChange}
+            defaultCountry="US"
+            value={formData.mobile}
+            onChange={(value) => handleInputChange(null, value)}
             className={styles.form__input}
             placeholder="Enter your mobile number"
+            required
           />
         </div>
 
