@@ -9,6 +9,8 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { storage } from "../../../../firebaseConfig/firebase";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import LoadingScreen from "../../../utils/Loaders/Loader";
 import showAlert from "../../../utils/AlertBox/CustomAlert";
 import Spinner from "@/components/utils/Loaders/Spinner";
@@ -77,26 +79,39 @@ export default function CompanyProfileForm() {
     fetchCompanyData();
   }, [id]);
 
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
+  const handleInputChange = async (e, value) => {
+    // Handle PhoneInput
+    if (value !== undefined) {
+      setFormData((prevData) => ({
+        ...prevData,
+        phone: value, 
+      }));
+      return;
+    }
+  
+    // Handle other form inputs
+    if (e && e.target) {
+      const { name, value, files } = e.target;
 
-    if (files && files.length > 0) {
-      const file = files[0];
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: file,
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-      setErrorMsg((prevErrors) => ({
-        ...prevErrors,
-        [name]: "",
-      }));
+      if (files && files.length > 0) {
+        const file = files[0];
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: file,
+        }));
+      } else {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: value,
+        }));
+        setErrorMsg((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
     }
   };
+
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
@@ -367,13 +382,14 @@ export default function CompanyProfileForm() {
         <div className={styles.form__group}>
           <label htmlFor="phone">
             Phone <span className={styles.required}>*</span>:</label>
-          <input
-            type="text"
+          <PhoneInput
+            id="phone"
             name="phone"
-            value={formData.phone || ""}
-            onChange={handleInputChange}
+            defaultCountry="US"
+            value={formData.phone}
+            onChange={(value) => handleInputChange(null, value)}
             className={styles.form__input}
-            placeholder="Enter your phone number"
+            placeholder="Enter your mobile number"
             required
           />
           {errorMsg.phone && <p className={styles.error}>{errorMsg.phone}</p>}
