@@ -1,29 +1,24 @@
 @import "../../../../styles/variables.scss";
 
 .profile__page {
-    margin: 2rem auto;
-    width: 90%;
+    padding: 40px 15px 0;
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto;
+
+    @media screen and (min-width: $breakpoint-4) {
+        padding: 40px 35px 0;
+    }
+
+    @media screen and (min-width: $breakpoint-5) {
+        max-width: 70rem;
+    }
+
+    @media screen and (min-width: $breakpoint-6) {
+        max-width: 76rem;
+    }
 
     .profile__details {
-        max-width: 750px;
-
-        @media screen and (max-width: $breakpoint-6) {
-            max-width: 750px; 
-          }
-        
-          @media screen and (min-width: $breakpoint-6) and (max-width: $breakpoint-7) {
-            max-width: 850px; 
-          }
-        
-          @media screen and (min-width: $breakpoint-7) {
-            max-width: 1200px; 
-            margin: 0 auto;
-          }
-        
-          @media screen and (min-width: $breakpoint-6) {
-            padding: 2rem; 
-          }
-
 
         .note {
             font-size: $font-sixteen;
