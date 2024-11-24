@@ -41,7 +41,6 @@ import {
   updatePassword,
   deleteUser,
 } from "firebase/auth";
-import showAlert from "@/components/utils/AlertBox/CustomAlert";
 
 const COMPANY = "companyCollection";
 
@@ -136,6 +135,7 @@ export const registerCompany = async (fullName, email, password) => {
       fullName: fullName,
       email: email,
       user: "company",
+      emailVerified: false,
     });
     return newUserId;
   } catch (error) {
@@ -152,13 +152,39 @@ export const loginCompany = async (email, password, setUser) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Set user information in context
-    setUser({
-      username: user.email,
-      uid: user.uid
-    });
+    if (!user.emailVerified) {
+      await auth.signOut(); 
+      throw {
+        success: false,
+        message: "Please verify your email before logging in. Check your inbox for the verification link.",
+        code: "auth/email-not-verified"
+      };
+    }
 
-    return user; 
+    // Set user information in context
+    const userDocRef = doc(db, COMPANY, user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      if (userData.emailVerified !== user.emailVerified) {
+        await setDoc(userDocRef, {
+          ...userData,
+          emailVerified: user.emailVerified
+        }, { merge: true });
+      }
+      
+      // Step 2: Set user information in the context with fullName from Firestore
+      setUser({
+        username: user.email,
+        uid: user.uid,            
+        emailVerified: user.emailVerified
+      });
+
+      return user;  
+    } else {
+      throw new Error("User document not found");
+    } 
 
   } catch (error) {
     throw error;

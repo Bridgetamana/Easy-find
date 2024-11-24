@@ -31,6 +31,10 @@
 
             .signout{
                 color: $error;
+
+                &:hover{
+                    color: $error;
+                }
             }
 
         }
