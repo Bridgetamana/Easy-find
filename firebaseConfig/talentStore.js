@@ -273,6 +273,12 @@ export const getJobs = async () => {
     });
   }
 
+  jobs.sort((a, b) => {
+    const dateA = a.createdAt?.toDate() || new Date(0);
+    const dateB = b.createdAt?.toDate() || new Date(0);
+    return dateB - dateA;
+  });
+
   return jobs;
 };
 

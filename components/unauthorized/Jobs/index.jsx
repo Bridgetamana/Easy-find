@@ -117,17 +117,6 @@ export default function BrowseJobs({ setSearchInput, searchInput }) {
             <p>Find Jobs</p>
           </button>
         </div>
-
-        <div className={styles.jobs__categories}>
-          <h2 className={styles.categories__title}>Popular Searches</h2>
-          <ul className={styles.categories__list}>
-            <li className={styles.list__tab}>Human Resources</li>
-            <li className={styles.list__tab}>Software Engineer</li>
-            <li className={styles.list__tab}>Marketing and Sales</li>
-            <li className={styles.list__tab}>Finance</li>
-            <li className={styles.list__tab}>Content Writers</li>
-          </ul>
-        </div>
       </div>
       
         <JobGrid searchInput={searchValue} jobs={filteredJobs} />
