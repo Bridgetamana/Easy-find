@@ -30,10 +30,6 @@ export default function JobHero({ setSearchInput }) {
             value={searchValue} 
             onChange={handleInputChange} 
           />
-          <button  className={styles.hero__button} onClick={() => setSearchValue("")}>
-            <HiOutlineArrowNarrowRight className={styles.search__icon} />
-            <p>Find Jobs</p>
-          </button>
         </div>
       </div>
     </div>
