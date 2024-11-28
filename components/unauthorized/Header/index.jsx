@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CgClose } from "react-icons/cg";
 import { FiMenu } from "react-icons/fi";
 import { BsChevronDown } from "react-icons/bs";
@@ -15,6 +15,9 @@ export default function UnauthorizedHeader() {
   const [showMenu, setShowMenu] = useState(false);
   const [jobDropdown, setJobDropdown] = useState(false);
   const [hireDropdown, setHireDropdown] = useState(false);
+  const menuRef = useRef(null);
+  const jobDropdownRef = useRef(null);
+  const hireDropdownRef = useRef(null);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -34,6 +37,34 @@ export default function UnauthorizedHeader() {
     setShowMenu(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+
+      if (
+        jobDropdownRef.current &&
+        !jobDropdownRef.current.contains(event.target)
+      ) {
+        setJobDropdown(false);
+      }
+
+      if (
+        hireDropdownRef.current &&
+        !hireDropdownRef.current.contains(event.target)
+      ) {
+        setHireDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <header className={styles.unauthorized__header}>
       {/* Desktop Header */}
@@ -51,6 +82,7 @@ export default function UnauthorizedHeader() {
         <nav className={styles.nav__bar}>
           <ul className={styles.nav__list}>
             <li
+              ref={jobDropdownRef}
               className={jobDropdown ? styles.active__menu : styles.nav__menu}
               onClick={toggleJobDropdown}
             >
@@ -61,6 +93,7 @@ export default function UnauthorizedHeader() {
               </div>
             </li>
             <li
+              ref={hireDropdownRef}
               className={hireDropdown ? styles.active__menu : styles.nav__menu}
               onClick={toggleHireDropdown}
             >

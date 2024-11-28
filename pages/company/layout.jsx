@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "@/components/authorized/Footer";
 import CompanyHeader from "@/components/authorized/CompanyComponents/CompanyHeader";
-import styles from "./style.module.scss"; // Import your styles
+import styles from "./style.module.scss"; 
 
 const metadata = {
   title: "EasyFind",
