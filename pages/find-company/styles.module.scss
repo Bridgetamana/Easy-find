@@ -11,7 +11,6 @@
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 10px;
-    height: 70vh;
 
     .section__subtitle {
       text-align: center;
@@ -23,16 +22,15 @@
 
     .hero__searchBar {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
       gap: 1rem;
       margin: 3rem auto;
-      width: 100%;
+      width: 90%;
       background: $white;
       box-shadow: $box-shadow-1;
       border-radius: 0.5rem;
-      padding: 0.75rem 0;
+      padding: 0.75rem 1rem;
+      color: $lightGray;
       z-index: 1;
 
       @media screen and (min-width: $breakpoint-4) {
@@ -42,7 +40,7 @@
 
       .search__bar {
         width: 70%;
-        height: 3.5rem;
+        height: 2.5rem;
         padding-left: 0.5rem;
         display: flex;
         font-size: $font-twenty;
@@ -62,40 +60,19 @@
           }
         }
       }
+    }
+  }
 
-      .hero__button {
-        background-color: $primary;
-        color: $white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        height: 3.5rem;
-        width: 15%;
-        padding: 0.35rem 0.5rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 300ms ease-in-out;
-        box-shadow: $box-shadow-1;
+  .header__left {
+    padding-bottom: 0.5rem;
+        border-bottom: 1px solid $border;
+        width: 90%;
+        margin: 3rem auto;
+    .total__jobs {
+      font-size: $font-fourteen;
 
-        @media screen and (min-width: $breakpoint-3) {
-          margin-right: 0.5rem;
-        }
-
-        p {
-          display: none;
-
-          @media screen and (min-width: $breakpoint-3) {
-            display: block;
-            font-weight: 500;
-            font-size: 14px;
-          }
-        }
-
-        @media screen and (min-width: $breakpoint-3) {
-          width: 20%;
-          font-size: $font-twenty;
-        }
+      .job__number {
+        font-weight: $font-weight-600;
       }
     }
   }

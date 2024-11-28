@@ -9,8 +9,7 @@ export default function TrustedCompanies() {
                 Trusted by companies of all sizes
               </h2>
               <p className="mt-6 text-lg/8 text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam sed. Quam a
-                scelerisque amet ullamcorper eu enim et fermentum, augue.
+              From small startups to global giants, companies trust EasyFind to connect them with exceptional tech talent
               </p>
               <div className="mt-8 flex items-center gap-x-6">
                 <a

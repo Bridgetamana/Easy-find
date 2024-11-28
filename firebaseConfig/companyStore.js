@@ -154,7 +154,7 @@ export const loginCompany = async (email, password, setUser) => {
 
     if (!user.emailVerified) {
       await auth.signOut(); 
-      throw {
+      return {
         success: false,
         message: "Please verify your email before logging in. Check your inbox for the verification link.",
         code: "auth/email-not-verified"
@@ -165,29 +165,48 @@ export const loginCompany = async (email, password, setUser) => {
     const userDocRef = doc(db, COMPANY, user.uid);
     const userDocSnap = await getDoc(userDocRef);
 
-    if (userDocSnap.exists()) {
-      const userData = userDocSnap.data();
-      if (userData.emailVerified !== user.emailVerified) {
-        await setDoc(userDocRef, {
-          ...userData,
-          emailVerified: user.emailVerified
-        }, { merge: true });
-      }
-      
-      // Step 2: Set user information in the context with fullName from Firestore
-      setUser({
-        username: user.email,
-        uid: user.uid,            
-        emailVerified: user.emailVerified
+    // Create a default user document if it doesn't exist
+    if (!userDocSnap.exists()) {
+      await setDoc(userDocRef, {
+        email: user.email,
+        uid: user.uid,
+        emailVerified: user.emailVerified,
+        createdAt: new Date(),
       });
+    }
 
-      return user;  
-    } else {
-      throw new Error("User document not found");
-    } 
+    setUser({
+      username: user.email,
+      uid: user.uid,            
+      emailVerified: user.emailVerified
+    });
+
+    return {
+      success: true,
+      user: user
+    };  
 
   } catch (error) {
-    throw error;
+    switch (error.code) {
+      case 'auth/invalid-credential':
+        return {
+          success: false,
+          message: "Invalid email or password. Please try again.",
+          code: 'auth/invalid-credential'
+        };
+      case 'auth/user-not-found':
+        return {
+          success: false,
+          message: "No account found with this email. Please sign up.",
+          code: 'auth/user-not-found'
+        };
+      default:
+        return {
+          success: false,
+          message: "An unexpected error occurred. Please try again.",
+          code: error.code || 'auth/unknown-error'
+        };
+    }
   }
 };
 
@@ -240,6 +259,7 @@ export const addJobPost = async (companyId, jobData) => {
       ...jobData,
       requirements: stripHtmlTags(jobData.requirements),
       benefits: stripHtmlTags(jobData.benefits),
+      responsibilities: stripHtmlTags(jobData.responsibilities),
       educationExperience: stripHtmlTags(jobData.educationExperience),
       createdAt: new Date(),
     };
@@ -352,6 +372,7 @@ export const updateJobDetails = async (jobId, updatedData) => {
       ...updatedData,
       requirements: stripHtmlTags(updatedData.requirements),
       benefits: stripHtmlTags(updatedData.benefits),
+      responsibilities: stripHtmlTags(updatedData.responsibilities),
       educationExperience: stripHtmlTags(updatedData.educationExperience),
     };
 

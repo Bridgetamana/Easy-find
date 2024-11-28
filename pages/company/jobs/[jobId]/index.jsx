@@ -198,6 +198,22 @@ const JobDetailsPage = () => {
               <p>No benefits specified</p>
             )}
           </section>
+          <section className={styles.jobInfo__section}>
+            <div className={styles.description__header}>
+              <h2 className={styles.description__title}>Job Responsibilities</h2>
+            </div>
+            {parseListFromPlainText(jobDetails.responsibilities) ? (
+              <ul className={styles.checkmark__list}>
+                {parseListFromPlainText(jobDetails.responsibilities).map((responsibility, index) => (
+                  <li key={index} className={styles.checkmark__item}>
+                    {responsibility}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No responsibilities specified</p>
+            )}
+          </section>
         </div>
       )}
     </CompanyLayout>

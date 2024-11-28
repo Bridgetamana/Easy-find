@@ -386,7 +386,7 @@ export default function CompanyProfileForm() {
           <PhoneInput
             id="phone"
             name="phone"
-            defaultCountry="US"
+            defaultCountry="NG"
             value={formData.phone}
             onChange={(value) => handleInputChange(null, value)}
             className={styles.form__input}
