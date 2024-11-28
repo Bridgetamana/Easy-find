@@ -12,6 +12,7 @@ import { getAuth } from "firebase/auth";
 import showAlert from "@/components/utils/AlertBox/CustomAlert";
 import styles from "./style.module.scss";
 import LoadingScreen from "../../../utils/Loaders/Loader";
+import Link from "next/link";
 
 const JobPage = () => {
   const router = useRouter();
@@ -165,6 +166,7 @@ const JobPage = () => {
       {!loading && !jobs.length && (
         <div className={styles.no__jobs__container}>
           <p className={styles.no__jobs__message}>No job posts available.</p>
+          <Link href='/company/jobs/postjobs' className={styles.post__button}>Post Jobs</Link>
         </div>
       )}
 
