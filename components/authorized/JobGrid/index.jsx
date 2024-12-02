@@ -244,10 +244,17 @@ const JobGrid = ({ searchInput }) => {
                   <div className={styles.card__info}>
                     <div className={styles.card__company}>
                       <div className={styles.card__logo}>
-                        <img
-                          src={job.companyInfo?.photo}
-                          alt={job.companyInfo?.fullName || "Company logo"}
-                        />
+                        {job.companyInfo?.photo ? (
+                          <img
+                            src={job.companyInfo?.photo}
+                            alt={job.companyInfo?.fullName}
+                          />
+                        ) : (
+                          <img
+                            src="/assets/images/user-icon.png"
+                            alt={job.companyInfo?.fullName}
+                          />
+                        )}
                         <div className={styles.company__info}>
                           <h5 className={styles.company__name}>
                             {job.companyInfo?.fullName || ""}

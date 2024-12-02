@@ -125,7 +125,17 @@ const FindCompanies = () => {
                   <div className={styles.card__info}>
                     <div className={styles.card__company}>
                       <div className={styles.card__logo}>
-                        <img src={company.photo} alt={company.fullName} />
+                        {company.photo ? (
+                          <img
+                            src={company.photo}
+                            alt={company.fullName}
+                          />
+                        ) : (
+                          <img
+                            src="/assets/images/user-icon.png"
+                            alt={company.fullName}
+                          />
+                        )}
                         <div className={styles.company__info}>
                           <h5 className={styles.company__name}>
                             {company.fullName}

@@ -139,8 +139,8 @@ export const loginUser = async (email, password, setUser) => {
     const user = userCredential.user;
     
     if (!user.emailVerified) {
-      await auth.signOut(); 
-      throw {
+      await auth.signOut();
+      return {
         success: false,
         message: "Please verify your email before logging in. Check your inbox for the verification link.",
         code: "auth/email-not-verified"
@@ -150,31 +150,49 @@ export const loginUser = async (email, password, setUser) => {
     // Step 1: Fetch the user's document from Firestore using the user's UID
     const userDocRef = doc(db, TALENT, user.uid);
     const userDocSnap = await getDoc(userDocRef);
-    
-    if (userDocSnap.exists()) {
-      const userData = userDocSnap.data();
-      if (userData.emailVerified !== user.emailVerified) {
-        await setDoc(userDocRef, {
-          ...userData,
-          emailVerified: user.emailVerified
-        }, { merge: true });
-      }
-      
-      // Step 2: Set user information in the context with fullName from Firestore
-      setUser({
-        username: userData.fullName, 
-        email: user.email,           
-        uid: user.uid,            
-        emailVerified: user.emailVerified
+
+    if (!userDocSnap.exists()) {
+      await setDoc(userDocRef, {
+        email: user.email,
+        uid: user.uid,
+        emailVerified: user.emailVerified,
+        createdAt: new Date(),
       });
+    }
 
-      return user;
-    } else {
-      throw new Error("User document not found");
-    } 
+    // Step 2: Set user information in the context with fullName from Firestore
+    setUser({
+      username: userData.fullName,
+      email: user.email,
+      uid: user.uid,
+      emailVerified: user.emailVerified
+    });
 
+    return {
+      success: true,
+      user: user
+    };
   } catch (error) {
-    throw error;
+    switch (error.code) {
+      case 'auth/invalid-credential':
+        return {
+          success: false,
+          message: "Invalid email or password. Please check and try again.",
+          code: 'auth/invalid-credential'
+        };
+      case 'auth/user-not-found':
+        return {
+          success: false,
+          message: "No account found with this email. Please sign up.",
+          code: 'auth/user-not-found'
+        };
+      default:
+        return {
+          success: false,
+          message: "An unexpected error occurred. Please try again.",
+          code: error.code || 'auth/unknown-error'
+        };
+    }
   }
 };
 
