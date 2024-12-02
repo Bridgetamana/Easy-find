@@ -4,7 +4,7 @@ import Link from "next/link";
 import { companyStore } from "../../firebaseConfig/companyStore";
 import styles from "./styles.module.scss";
 import { AiOutlineEnvironment } from "react-icons/ai";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { HiSearch } from "react-icons/hi";
 import { CgBriefcase } from "react-icons/cg";
 import FindCompaniesLayout from "./layout";
 import LoadingScreen from "../../components/utils/Loaders/Loader";
@@ -84,6 +84,7 @@ const FindCompanies = () => {
               </h3>
             </div>
             <div className={styles.hero__searchBar}>
+              <HiSearch />
               <input
                 type="search"
                 name="search-bar"
@@ -92,10 +93,6 @@ const FindCompanies = () => {
                 value={searchValue}
                 onChange={handleSearch}
               />
-              <button className={styles.hero__button}>
-                <HiOutlineArrowNarrowRight className={styles.search__icon} />
-                <p>Find Company</p>
-              </button>
             </div>
           </div>
 
@@ -107,6 +104,17 @@ const FindCompanies = () => {
               Discover jobs most relevant to you
             </h2>
           </div>
+
+          <div className={styles.header__left}>
+            <h5 className={styles.total__jobs}>
+              Showing{" "}
+              <span className={styles.job__number}>
+                {companies.length}
+              </span>{" "}
+               companies
+            </h5>
+          </div>
+
           <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3 xl:gap-x-8 w-[90%] mx-auto">
             {currentCompanies.length > 0 ? (
               currentCompanies.map((company) => (
@@ -117,7 +125,17 @@ const FindCompanies = () => {
                   <div className={styles.card__info}>
                     <div className={styles.card__company}>
                       <div className={styles.card__logo}>
-                        <img src={company.photo} alt={company.fullName} />
+                        {company.photo ? (
+                          <img
+                            src={company.photo}
+                            alt={company.fullName}
+                          />
+                        ) : (
+                          <img
+                            src="/assets/images/user-icon.png"
+                            alt={company.fullName}
+                          />
+                        )}
                         <div className={styles.company__info}>
                           <h5 className={styles.company__name}>
                             {company.fullName}
@@ -158,20 +176,6 @@ const FindCompanies = () => {
             >
               Previous
             </button>
-
-            {Array.from({ length: pageNumbers }, (_, index) => index + 1).map(
-              (pageNumber) => (
-                <button
-                  className={`pagination__button ${
-                    currentPage === pageNumber ? "pagination__active" : ""
-                  }`}
-                  key={pageNumber}
-                  onClick={() => handleClick(pageNumber)}
-                >
-                  {pageNumber}
-                </button>
-              )
-            )}
 
             <button
               className={styles.pagination__button}

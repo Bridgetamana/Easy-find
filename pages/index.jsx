@@ -26,9 +26,6 @@ export default function Home() {
         <TalentCTA />
         <TrustedCompanies />
         <BlogExerpts />
-        {/* <TalentFeatures /> */}
-        {/* <AboutBlog /> */}
-        {/* <BrowseJobs /> */}
         <TestimonialsSection />
         <CallToAction />
         <Footer />

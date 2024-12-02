@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import { HiSearch } from "react-icons/hi";
 import { getJobs } from "@/firebaseConfig/talentStore";
 import { companyStore } from "@/firebaseConfig/companyStore";
 import styles from "./style.module.scss";
@@ -104,6 +104,7 @@ export default function BrowseJobs({ setSearchInput, searchInput }) {
           <span className={`${styles.rotating__word} ${fade ? styles.fade__in : styles.fade__out}`}>{currentWord}</span> jobs.</h3>
         </div>
         <div className={styles.hero__searchBar}>
+          <HiSearch />
           <input
             type="search"
             name="search-bar"
@@ -112,10 +113,6 @@ export default function BrowseJobs({ setSearchInput, searchInput }) {
             value={searchValue} 
             onChange={handleInputChange} 
           />
-          <button className={styles.hero__button} >
-            <HiOutlineArrowNarrowRight className={styles.search__icon} />
-            <p>Find Jobs</p>
-          </button>
         </div>
       </div>
       

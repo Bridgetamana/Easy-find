@@ -23,28 +23,32 @@ const BlogList = () => {
   const isCompanyPath = router.pathname.startsWith('/company');
   const basePath = isTalentPath ? '/talent' : isCompanyPath ? '/company' : '';
 
-  useEffect(() => {
-    const fetchFeaturedBlog = async () => {
-      try {
-        const blogCollection = collection(db, "blogCollection");
-        const featuredQuery = query(
-          blogCollection,
-          where("isFeatured", "==", true)
-        );
-        const featuredSnapshot = await getDocs(featuredQuery);
-
-        if (!featuredSnapshot.empty) {
+    useEffect(() => {
+      const fetchFeaturedBlog = async () => {
+        try {
+          const blogCollection = collection(db, "blogCollection");
+          const featuredQuery = query(blogCollection, where("isFeatured", "==", true));
+          const featuredSnapshot = await getDocs(featuredQuery);
+    
+          if (featuredSnapshot.empty) {
+            setError("No featured blogs found."); 
+            setLoading(false);
+            return; 
+          }
+    
           const featuredPost = featuredSnapshot.docs[0].data();
           setFeaturedBlog({ id: featuredSnapshot.docs[0].id, ...featuredPost });
+        } catch (err) {
+          console.error("Error fetching featured blog:", err);
+          setError("Failed to load featured blog.");
         }
-      } catch (err) {
-        console.error("Error fetching featured blog:", err);
-        setError("Failed to load featured blog");
-      }
-    };
-
-    fetchFeaturedBlog();
-  }, []);
+      };
+    
+      fetchFeaturedBlog();
+    }, []);
+    
+    
+    
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -110,9 +114,7 @@ const BlogList = () => {
 
   if (loading) {
     return (
-      <div>
         <LoadingScreen />
-      </div>
     );
   }
 

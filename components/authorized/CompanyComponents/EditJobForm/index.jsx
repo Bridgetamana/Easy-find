@@ -58,6 +58,7 @@ const EditJobForm = () => {
       setHtmlToDraft(() => htmlToDraftModule.default);
       setDraftToHtml(() => draftToHtmlModule.default);
     };
+    
     loadLibraries();
   }, []);
 
@@ -128,6 +129,9 @@ const EditJobForm = () => {
   const handleSaveClick = async (e) => {
     e.preventDefault();
 
+    const cleanSalaryMin = formData.salaryMin.replace(/,/g, '');
+    const cleanSalaryMax = formData.salaryMax.replace(/,/g, '');
+
     if (
       Number(formData.salaryMin) > Number(formData.salaryMax) ||
       Number(formData.salaryMin) == Number(formData.salaryMax)
@@ -152,8 +156,8 @@ const EditJobForm = () => {
       industry: formData.industry,
       jobLevel: formData.jobLevel,
       salaryType: formData.salaryType,
-      salaryMin: formatNumberWithCommas(formData.salaryMin),
-      salaryMax: formatNumberWithCommas(formData.salaryMax),
+      salaryMin: formatNumberWithCommas(cleanSalaryMin),
+      salaryMax: formatNumberWithCommas(cleanSalaryMax),
       jobType: formData.employmentType,
       location: formData.location,
       requirements: convertEditorStateToHtml(formData.requirements),

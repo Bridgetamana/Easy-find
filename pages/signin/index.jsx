@@ -29,7 +29,7 @@ export default function Signin() {
     setIsLoading(true);
   
     const isCheckboxSelected = isTalent || isCompany;
-
+  
     try {
       // Check if the user selected a checkbox
       if (!isCheckboxSelected) {
@@ -44,27 +44,37 @@ export default function Signin() {
         }, setAlert);
         return;
       }
-
+  
       let userCredential;
       if (isTalent) {
         userCredential = await loginUser(email, password, setUser);
       } else if (isCompany) {
         userCredential = await loginCompany(email, password, setUser);
       }
-
-      const user = userCredential;
+  
+      if (!userCredential.success) {
+        await showAlert({
+          type: "error",
+          title: "Error",
+          message: userCredential.message,
+          showCloseButton: false,
+          timeout: 4000,
+          handleClose: () => setAlert(null),
+        }, setAlert);
+        setIsLoading(false);
+        return;
+      }
+  
+      const user = userCredential.user;
       const userUID = user.uid;
-  
-      // Determine the collection based on user type
+    
       const userCollection = isTalent ? "talentCollection" : "companyCollection";
-  
-      // Fetch the user's details from the corresponding Firestore collection
+    
       const userRef = doc(db, userCollection, userUID);
       const userDoc = await getDoc(userRef);
-  
-      // Check if the user's type matches the selected checkbox
+    
       const userData = userDoc.data();
-      if (userUID && userDoc.exists() === false ) {
+      if (userUID && userDoc.exists() === false) {
         await showAlert({
           type: "error",
           title: "Error",
@@ -76,7 +86,7 @@ export default function Signin() {
         setIsLoading(false);
         return;
       }
-
+  
       // Check if the user document exists
       if (!userDoc.exists()) {
         await showAlert({
@@ -90,33 +100,31 @@ export default function Signin() {
         setIsLoading(false);
         return;
       }
-  
-      
-  
+    
       // Store the user's token and first name in secure storage
       const token = await user.getIdToken(); 
       secureLocalStorage.setItem("userToken", token); 
       secureLocalStorage.setItem("user_firstName", userData.fullName);
-  
+    
       // Navigate based on user type
       if (isTalent) {
         router.push("/talent");
       } else if (isCompany) {
         router.push("/company");
       }
-  
+    
       // Reset form fields and checkboxes
       setEmail("");
       setPassword("");
       setIsTalent(false);
       setIsCompany(false);
-  
+    
     } catch (error) {
       console.error("Login error:", error);
       await showAlert({
         type: "error",
         title: "Error",
-        message: error.message,
+        message: error.message || "An unexpected error occurred",
         showCloseButton: false,
         timeout: 4000,
         handleClose: () => setAlert(null),

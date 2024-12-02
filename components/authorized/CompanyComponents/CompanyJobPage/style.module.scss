@@ -18,6 +18,17 @@
     justify-content: center;
     padding: 2rem;
     text-align: center;
+
+    .post__button {
+      border: none;
+      background-color: $primary;
+      font-size: $font-fourteen;
+      font-weight: $font-weight-600;
+      color: $white;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+    }
   }
 
   .no__jobs__message {
