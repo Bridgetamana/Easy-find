@@ -140,7 +140,7 @@ const JobGrid = ({ searchInput }) => {
 
   return (
     <section className={` ${styles.job__grid} pt-12 pb-6 bg-white`}>
-      <div className="w-[90%] lg:w-[95%] m-auto">
+      <div className="w-[90%] m-auto">
         <div className="mx-auto max-w-xl text-center my-6">
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Explore the latest job openings

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import { HiSearch } from 'react-icons/hi';
 import styles from './style.module.scss';
 
 export default function JobHero({ setSearchInput }) {
@@ -22,6 +22,7 @@ export default function JobHero({ setSearchInput }) {
         </p>
 
         <div className={styles.hero__searchBar}>
+          <HiSearch />
           <input
             type="search"
             name="search-bar"
