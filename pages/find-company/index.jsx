@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { companyStore } from "../../firebaseConfig/companyStore";
+import { companyStore, isCompanyProfileComplete } from "@/firebaseConfig/companyStore";
 import styles from "./styles.module.scss";
 import { AiOutlineEnvironment } from "react-icons/ai";
 import { HiSearch } from "react-icons/hi";
 import { CgBriefcase } from "react-icons/cg";
 import FindCompaniesLayout from "./layout";
-import LoadingScreen from "../../components/utils/Loaders/Loader";
+import LoadingScreen from "@/components/utils/Loaders/Loader";
 
 const FindCompanies = () => {
   const [companies, setCompanies] = useState([]);
@@ -25,7 +25,17 @@ const FindCompanies = () => {
     const fetchCompanies = async () => {
       try {
         const fetchedCompanies = await companyStore.getCompanyStore();
-        setCompanies(fetchedCompanies);
+        
+        const completedCompanies = await Promise.all(
+          fetchedCompanies.map(async (company) => {
+            const isComplete = await isCompanyProfileComplete(company.companyId);
+            return isComplete ? company : null;
+          })
+        );
+
+        const filteredCompanies = completedCompanies.filter(company => company !== null);
+        
+        setCompanies(filteredCompanies);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching companies:", error);
@@ -42,6 +52,8 @@ const FindCompanies = () => {
   };
 
   const filteredCompanies = companies.filter((company) =>
+    company && 
+    company.fullName && 
     company.fullName.toLowerCase().includes(searchValue.toLowerCase())
   );
 
