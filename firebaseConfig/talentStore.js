@@ -282,10 +282,10 @@ export const getJobs = async () => {
       jobsSnapshot.forEach(jobDoc => {
         const jobData = jobDoc.data();
         const createdAt = jobData.createdAt?.toDate ? jobData.createdAt.toDate() : new Date(jobData.createdAt);
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const sixtyDaysAgo = new Date();
+        sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
 
-        if (createdAt >= thirtyDaysAgo) {
+        if (createdAt >= sixtyDaysAgo) {
           activeJobs.push({
             jobId: jobDoc.id,
             companyId: companyDoc.id,

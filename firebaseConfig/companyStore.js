@@ -635,3 +635,38 @@ export const deleteNotification = async (notificationId) => {
   }
 };
 
+export const checkAndNotifyExpiredJobs = async () => {
+  try {
+    const companiesSnapshot = await getDocs(collection(db, COMPANY));
+
+    for (const companyDoc of companiesSnapshot.docs) {
+      const jobsRef = collection(db, COMPANY, companyDoc.id, "jobs");
+      const jobsQuery = query(jobsRef, where("active", "==", true));
+      
+      const jobsSnapshot = await getDocs(jobsQuery);
+      
+      jobsSnapshot.forEach(async (jobDoc) => {
+        const jobData = jobDoc.data();
+        const createdAt = jobData.createdAt?.toDate ? jobData.createdAt.toDate() : new Date(jobData.createdAt);
+        const sixtyDaysAgo = new Date();
+        sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+        if (createdAt < sixtyDaysAgo) {
+          await updateDoc(jobDoc.ref, { active: false });
+
+          await sendNotification(
+            companyDoc.id, 
+            'jobExpired', 
+            `Your job posting for "${jobData.title}" has expired and been set to inactive. Please review and repost if needed.`, 
+            { 
+              jobId: jobDoc.id, 
+              jobTitle: jobData.title 
+            }
+          );
+        }
+      });
+    }
+  } catch (error) {
+    console.error("Error checking and notifying expired jobs:", error);
+  }
+};

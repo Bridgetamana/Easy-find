@@ -4,7 +4,7 @@ export default function TrustedCompanies() {
       <div className=" py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 items-center gap-x-8 gap-y-16 lg:grid-cols-2">
-            <div className="mx-auto w-full max-w-xl lg:mx-0">
+            <div className="mx-auto w-full max-w-2xl lg:mx-0">
               <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                 Trusted by companies of all sizes
               </h2>
@@ -23,7 +23,7 @@ export default function TrustedCompanies() {
                 </a>
               </div>
             </div>
-            <div className="mx-auto grid w-full max-w-xl grid-cols-2 items-center gap-y-12 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:pl-8">
+            <div className="mx-auto grid w-full max-w-2xl grid-cols-2 items-center gap-y-12 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:pl-8">
               <img
                 alt="Tuple"
                 src="https://tailwindui.com/plus/img/logos/tuple-logo-gray-900.svg"

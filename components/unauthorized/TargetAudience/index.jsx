@@ -3,7 +3,7 @@ import React from "react";
 
 export default function TargetAudience() {
   return (
-    <div className="mx-auto max-w-7xl px-6 sm:px-12 my-16 sm:my-24 lg:my-24">
+    <div className="mx-auto max-w-[90%] px-6 sm:px-12 my-16 sm:my-24 lg:my-24">
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
         <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
           <div className="relative block w-full overflow-hidden p-8 rounded-2xl bg-blue-50 hover:ring-blue-500 shadow-sm">
