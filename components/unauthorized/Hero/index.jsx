@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 lg:mt-24 min-h-[calc(100vh_-_80px_)] lg:min-h-full">
+    <main className="mt-16 px-6 mx-auto max-w-[90%] sm:mt-24 lg:mt-24 min-h-[calc(100vh_-_80px_)] lg:min-h-full">
       <div className="lg:grid lg:grid-cols-12 lg:gap-8">
         <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
           <>
@@ -37,7 +37,7 @@ export default function Hero() {
               />
               <Link
                 href='/browse-jobs'
-                className="mt-3 w-full rounded-md border border-transparent bg-gray-800 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:inline-flex sm:w-auto sm:flex-shrink-0 sm:items-center"
+                className="mt-3 sm:w-auto rounded-md border border-transparent bg-gray-800 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:inline-flex sm:flex-shrink-0 sm:items-center block w-32"
               >
                 Find jobs
               </Link>

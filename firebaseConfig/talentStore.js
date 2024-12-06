@@ -160,7 +160,7 @@ export const loginUser = async (email, password, setUser) => {
       });
     }
 
-    // Step 2: Set user information in the context with fullName from Firestore
+    const userData = userDocSnap.data();
     setUser({
       username: userData.fullName,
       email: user.email,
@@ -269,35 +269,39 @@ const COMPANIES = "companyCollection";
 
 // Fetch jobs from all companies
 export const getJobs = async () => {
-  const companiesSnapshot = await getDocs(collection(db, COMPANIES));
+  try {
+    const companiesSnapshot = await getDocs(collection(db, COMPANIES));
+    const activeJobs = [];
 
-  let jobs = [];
+    for (const companyDoc of companiesSnapshot.docs) {
+      const jobsRef = collection(db, COMPANIES, companyDoc.id, "jobs");
+      const jobsQuery = query(jobsRef, where("active", "==", true));
+      
+      const jobsSnapshot = await getDocs(jobsQuery);
 
-  for (const companyDoc of companiesSnapshot.docs) {
-    const companyId = companyDoc.id;
-    const jobsSnapshot = await getDocs(
-      query(
-        collection(db, `companyCollection/${companyId}/jobs`),
-        where("active", "==", true)
-      )
-    );
+      jobsSnapshot.forEach(jobDoc => {
+        const jobData = jobDoc.data();
+        const createdAt = jobData.createdAt?.toDate ? jobData.createdAt.toDate() : new Date(jobData.createdAt);
+        const sixtyDaysAgo = new Date();
+        sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
 
-    jobsSnapshot.forEach((jobDoc) => {
-      jobs.push({
-        id: jobDoc.id,
-        companyId: companyId, 
-        ...jobDoc.data(),
+        if (createdAt >= sixtyDaysAgo) {
+          activeJobs.push({
+            jobId: jobDoc.id,
+            companyId: companyDoc.id,
+            ...jobData
+          });
+        } else {
+          updateDoc(jobDoc.ref, { active: false });
+        }
       });
-    });
+    }
+
+    return activeJobs;
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    return [];
   }
-
-  jobs.sort((a, b) => {
-    const dateA = a.createdAt?.toDate() || new Date(0);
-    const dateB = b.createdAt?.toDate() || new Date(0);
-    return dateB - dateA;
-  });
-
-  return jobs;
 };
 
 //Fetch jobs by id

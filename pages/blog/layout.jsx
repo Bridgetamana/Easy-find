@@ -1,6 +1,6 @@
 import React from 'react'
 import Footer from '@/components/unauthorized/Footer'
-import BlogHeader from '../../components/unauthorized/BlogHeader'
+import Header from '@/components/unauthorized/Header'
 import { useRouter } from 'next/router';
 
 export default function BlogLayout( { children }) {
@@ -17,7 +17,8 @@ export default function BlogLayout( { children }) {
 
   return (
     <div className='flex flex-col min-h-screen'>
-      <BlogHeader type={headerType}/>
+      {/* <BlogHeader type={headerType}/> */}
+      <Header />
       <main className="main flex-1 justify-center items-center">{children}</main>
       <Footer />
     </div>

@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { companyStore } from "../../../firebaseConfig/companyStore";
+import { convertTimestamp } from "@/firebaseConfig/talentStore";
 import {
   getActiveJobCount,
   getActiveJobIdsFromCompany,
-} from "../../../firebaseConfig/companyStore";
-import LoadingScreen from "../../../components/utils/Loaders/Loader";
+  companyStore
+} from "@/firebaseConfig/companyStore";
+import LoadingScreen from "@/components/utils/Loaders/Loader";
 import Button from "@/components/utils/Button";
 import styles from "./style.module.scss";
 import CompaniesLayout from "./layout";
@@ -16,7 +17,7 @@ import {
 } from "react-icons/ai";
 import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
-import { BiBuilding, BiPhone } from "react-icons/bi";
+import { BiBuilding, BiPhone, BiArrowBack } from "react-icons/bi";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { BsBriefcase } from "react-icons/bs";
 
@@ -59,12 +60,10 @@ const CompanyDetail = () => {
 
       {!loading && !error && company && (
         <div className={styles.companyDetails__section}>
-          <Button
-            type="button"
-            title="Go back"
-            variant="details__back"
-            onClick={() => window.history.back()}
-          />
+          <button onClick={() => window.history.back()} className="flex items-center gap-1">
+            <BiArrowBack />
+            <Button type="button" title="Go back" variant="details__back" />
+          </button>
           <div className={styles.details__header}>
             <div className={styles.profile__image}>
               {company.photo && (
@@ -165,7 +164,7 @@ const CompanyDetail = () => {
               <h2 className={styles.description__title}>Jobs available</h2>
             </div>
             <div
-              className={`grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8`}
+              className={`grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 xl:grid-cols-3 xl:gap-x-8`}
             >
               {jobs.length > 0 ? (
                 jobs.map((job) => (
@@ -176,16 +175,7 @@ const CompanyDetail = () => {
                     <div className={styles.card__info}>
                       <div className={styles.card__company}>
                         <div className={styles.card__logo}>
-                          <img src={job.companyLogo} alt={job.companyName} />
-                          <div className={styles.company__info}>
-                            <h5 className={styles.company__name}>
-                              {job.companyName}
-                            </h5>
-                            <p className={styles.company__location}>
-                              <AiOutlineEnvironment />
-                              {job.location}
-                            </p>
-                          </div>
+                          <div className={styles.company__info}></div>
                         </div>
                       </div>
                       <h4 className={styles.card__title}>{job.title}</h4>
@@ -196,7 +186,11 @@ const CompanyDetail = () => {
                         </p>
                         <p className={styles.card__time}>
                           <AiOutlineClockCircle />
-                          {job.datePosted}
+                          {convertTimestamp(job.createdAt)}
+                        </p>
+                        <p className={styles.card__location}>
+                          <AiOutlineEnvironment />
+                          {job.location}
                         </p>
                       </div>
                     </div>

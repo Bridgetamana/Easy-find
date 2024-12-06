@@ -23,32 +23,32 @@ const BlogList = () => {
   const isCompanyPath = router.pathname.startsWith('/company');
   const basePath = isTalentPath ? '/talent' : isCompanyPath ? '/company' : '';
 
-    useEffect(() => {
-      const fetchFeaturedBlog = async () => {
-        try {
-          const blogCollection = collection(db, "blogCollection");
-          const featuredQuery = query(blogCollection, where("isFeatured", "==", true));
-          const featuredSnapshot = await getDocs(featuredQuery);
-    
-          if (featuredSnapshot.empty) {
-            setError("No featured blogs found."); 
-            setLoading(false);
-            return; 
-          }
-    
-          const featuredPost = featuredSnapshot.docs[0].data();
-          setFeaturedBlog({ id: featuredSnapshot.docs[0].id, ...featuredPost });
-        } catch (err) {
-          console.error("Error fetching featured blog:", err);
-          setError("Failed to load featured blog.");
+  useEffect(() => {
+    const fetchFeaturedBlog = async () => {
+      try {
+        const blogCollection = collection(db, "blogCollection");
+        const featuredQuery = query(
+          blogCollection,
+          where("isFeatured", "==", true)
+        );
+        const featuredSnapshot = await getDocs(featuredQuery);
+
+        if (featuredSnapshot.empty) {
+          setError("No featured blogs found.");
+          setLoading(false);
+          return;
         }
-      };
-    
-      fetchFeaturedBlog();
-    }, []);
-    
-    
-    
+
+        const featuredPost = featuredSnapshot.docs[0].data();
+        setFeaturedBlog({ id: featuredSnapshot.docs[0].id, ...featuredPost });
+      } catch (err) {
+        console.error("Error fetching featured blog:", err);
+        setError("Failed to load featured blog.");
+      }
+    };
+
+    fetchFeaturedBlog();
+  }, []);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -113,9 +113,7 @@ const BlogList = () => {
   }, [blogs]);
 
   if (loading) {
-    return (
-        <LoadingScreen />
-    );
+    return <LoadingScreen />;
   }
 
   if (error) {
@@ -165,7 +163,7 @@ const BlogList = () => {
         <Link
           href={`${basePath}/blog`}
           className={`${styles.category__Link} ${
-            !category ? 'border-b-2 border-blue-500' : ''
+            !category ? "border-b-2 border-blue-500" : ""
           }`}
         >
           All
@@ -173,7 +171,7 @@ const BlogList = () => {
         <Link
           href={`${basePath}/blog?category=job-application`}
           className={`${styles.category__Link} ${
-            category === 'job-application' ? 'border-b-2 border-blue-500' : ''
+            category === "job-application" ? "border-b-2 border-blue-500" : ""
           }`}
         >
           Job Application
@@ -181,7 +179,7 @@ const BlogList = () => {
         <Link
           href={`${basePath}/blog?category=resume-tips`}
           className={`${styles.category__Link} ${
-            category === 'resume-tips' ? 'border-b-2 border-blue-500' : ''
+            category === "resume-tips" ? "border-b-2 border-blue-500" : ""
           }`}
         >
           Resume Tips
@@ -189,7 +187,7 @@ const BlogList = () => {
         <Link
           href={`${basePath}/blog?category=getting-a-job`}
           className={`${styles.category__Link} ${
-            category === 'getting-a-job' ? 'border-b-2 border-blue-500' : ''
+            category === "getting-a-job" ? "border-b-2 border-blue-500" : ""
           }`}
         >
           Getting a Job
@@ -197,12 +195,12 @@ const BlogList = () => {
       </nav>
 
       <div className={styles.featured__content}>
-        <div className={styles.featured__posts}>
+        <div className="mx-auto mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {blogs.map((post, index) => (
             <Link
               href={`${basePath}/blog/${encodeURIComponent(post.id)}`}
               key={`${post.id}-${index}`}
-              className="group"
+              className="flex max-w-xl flex-col items-start justify-between group"
             >
               <div
                 ref={(el) => (postsRef.current[index] = el)}
@@ -220,21 +218,13 @@ const BlogList = () => {
                     }}
                   />
                 </div>
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300">
-                    {post.title}
-                  </h2>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {post.summary}
-                  </p>
-                  <div className="flex justify-between items-center text-sm">
-                    {post.author && (
-                      <span className="font-medium text-gray-900">
-                        {post.author}
-                      </span>
-                    )}
-                    <time className="text-gray-500">
-                      {new Date(
+                <article
+                  key={post.id}
+                  className="flex max-w-xl flex-col items-start justify-between pt-4"
+                >
+                  <div className="flex items-center gap-x-4 text-xs">
+                    <time className="text-gray-500 text-[0.675rem]">
+                    {new Date(
                         post.datePublished.seconds * 1000
                       ).toLocaleDateString("en-US", {
                         month: "short",
@@ -242,8 +232,37 @@ const BlogList = () => {
                         year: "numeric",
                       })}
                     </time>
+                    <a
+                      href={post.category.href}
+                      className="relative z-10 rounded-full bg-gray-100 px-3 py-1.5 font-medium text-gray-600 group-hover:bg-gray-200"
+                    >
+                      {post.category}
+                    </a>
                   </div>
-                </div>
+                  <div className="group relative">
+                    <h3 className="mt-3 text-xl font-semibold text-gray-900 group-hover:text-gray-600">
+                      <a href={post.href}>
+                        <span className="absolute inset-0" />
+                        {post.title}
+                      </a>
+                    </h3>
+                    <p className="mt-2 line-clamp-3 text-sm text-gray-600">
+                      {post.summary}
+                    </p>
+                  </div>
+                  <div className="relative mt-6 flex items-center gap-x-4">
+                    <img alt="" src={post.authorImage} className="h-10 w-10 rounded-full bg-gray-50" />
+                    <div className="text-sm/6">
+                      <p className="font-semibold text-gray-900">
+                        <a href={post.author.href}>
+                          <span className="absolute inset-0" />
+                          {post.author}
+                        </a>
+                      </p>
+                      <p className="text-gray-600">{post.role}</p>
+                    </div>
+                  </div>
+                </article>
               </div>
             </Link>
           ))}
