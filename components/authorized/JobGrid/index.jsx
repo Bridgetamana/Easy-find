@@ -19,7 +19,6 @@ const JobGrid = ({ searchInput }) => {
   const [detailsPage, setDetailsPage] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [filteredJobs, setFilteredJobs] = useState([]);
-  const [jobsWithCompanyInfo, setJobsWithCompanyInfo] = useState([]);
   const [noResults, setNoResults] = useState(false);
   const [filters, setFilters] = useState({
     datePosted: null,
@@ -31,32 +30,33 @@ const JobGrid = ({ searchInput }) => {
   //Display all jobs
   useEffect(() => {
     const fetchJobsAndCompanies = async () => {
-      setIsLoading(true); 
+      setIsLoading(true);
       try {
         const jobList = await getJobs();
-        
+
         const jobsWithCompany = await Promise.all(
           jobList.map(async (job) => {
-            const companyInfo = await companyStore.getCompanyStoreById(job.companyId);
+            const companyInfo = await companyStore.getCompanyStoreById(
+              job.companyId
+            );
             return {
               ...job,
-              companyInfo: companyInfo || {}
+              companyInfo: companyInfo || {},
             };
           })
         );
-        
+
         setJobs(jobsWithCompany);
         setFilteredJobs(jobsWithCompany);
       } catch (error) {
         console.error("Error fetching jobs and company info:", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     };
 
     fetchJobsAndCompanies();
   }, []);
-  
 
   useEffect(() => {
     let result = [...jobs];
@@ -112,7 +112,7 @@ const JobGrid = ({ searchInput }) => {
       [filterType]: prev[filterType] === value ? null : value,
     }));
   };
-  
+
   const isFilterToggled = () => {
     setToggleFilter(!toggleFilter);
     setToggleSort(false);
@@ -172,19 +172,17 @@ const JobGrid = ({ searchInput }) => {
           <div className={styles.header__left}>
             <h5 className={styles.total__jobs}>
               Showing{" "}
-              <span className={styles.job__number}>
-                {jobs.length}
-              </span>{" "}
-               available jobs
+              <span className={styles.job__number}>{currentJobs.length}</span>{" "}
+              of {filteredJobs.length} available jobs
             </h5>
           </div>
 
           <div className={styles.header__right}>
-            <div className={styles.filter}>
+            <div className={styles.filter} 
+              ref={toggleFilterRef}>
               <button
                 className={styles.filter__button}
                 onClick={isFilterToggled}
-                ref={toggleFilterRef}
               >
                 Show Filter
               </button>
@@ -224,20 +222,18 @@ const JobGrid = ({ searchInput }) => {
                 <div className={styles.filter__item}>
                   <label>Job Type:</label>
                   <div className={styles.items}>
-                    {["Full Time", "Part-Time", "Contract"].map(
-                      (jobType) => (
-                        <div key={jobType} className={styles.check__item}>
-                          <input
-                            type="checkbox"
-                            checked={filters.jobType === jobType}
-                            onChange={() =>
-                              handleFilterChange("jobType", jobType)
-                            }
-                          />
-                          <p>{jobType}</p>
-                        </div>
-                      )
-                    )}
+                    {["Full-Time", "Part-Time", "Contract"].map((jobType) => (
+                      <div key={jobType} className={styles.check__item}>
+                        <input
+                          type="checkbox"
+                          checked={filters.jobType === jobType}
+                          onChange={() =>
+                            handleFilterChange("jobType", jobType)
+                          }
+                        />
+                        <p>{jobType}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -259,7 +255,6 @@ const JobGrid = ({ searchInput }) => {
               return (
                 <div
                   className={`${styles.jobs__card} overflow-hidden rounded-xl border border-gray-200`}
-                  key={job.id}
                 >
                   <div className={styles.card__info}>
                     <div className={styles.card__company}>
