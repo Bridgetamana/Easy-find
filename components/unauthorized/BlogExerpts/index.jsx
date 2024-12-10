@@ -53,8 +53,8 @@ export default function BlogExerpts() {
 
   return (
     <div className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0">
+      <div className="mx-auto max-w-[90%] px-6">
+        <div className="mx-auto lg:mx-0">
           <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
             From the blog
           </h2>
@@ -62,7 +62,7 @@ export default function BlogExerpts() {
             Learn how to grow your business with our expert advice.
           </p>
         </div>
-        <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-6 gap-y-14 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+        <div className="mx-auto mt-10 grid grid-cols-1 gap-x-6 gap-y-14 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {blogs.map((post) => (
             <Link 
               key={post.id} 
