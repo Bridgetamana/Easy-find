@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { AiOutlineClockCircle, AiOutlineEnvironment } from "react-icons/ai";
 import { CgBriefcase } from "react-icons/cg";
 import Link from "next/link";
@@ -10,6 +10,8 @@ import styles from "./style.module.scss";
 
 const JobGrid = ({ searchInput }) => {
   const [toggleFilter, setToggleFilter] = useState(false);
+  const menuRef = useRef(null);
+  const toggleFilterRef = useRef(null);
   const [toggleSort, setToggleSort] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [jobs, setJobs] = useState([]);
@@ -122,9 +124,26 @@ const JobGrid = ({ searchInput }) => {
 
   const pageNumbers = Math.ceil(filteredJobs.length / jobsPerPage);
 
-  const handleClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+
+      if (
+        toggleFilterRef.current &&
+        !toggleFilterRef.current.contains(event.target)
+      ) {
+        setToggleFilter(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleNextClick = () => {
     if (currentPage < pageNumbers) {
@@ -165,6 +184,7 @@ const JobGrid = ({ searchInput }) => {
               <button
                 className={styles.filter__button}
                 onClick={isFilterToggled}
+                ref={toggleFilterRef}
               >
                 Show Filter
               </button>
